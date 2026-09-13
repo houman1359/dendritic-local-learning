@@ -25,9 +25,9 @@ FIGURES = [
 # 2026-09-11: the six S3 caption requests applied, then condensed to 18 caption
 # lines: the full requested text overflowed the page by 128.6 pt under the
 # 503.7 pt sheet (make supplement, 'Float too large').
-('utility_signal_noise','si_01_exact',[('S46','ACDE'),('X1','*'),('S5','E'),('X2','*')],
+('utility_signal_noise','si_01_exact',[('N3','*')],
  'Restricted routes trade signal retention against admitted noise, and the one-step quantity is measurable at trained states.',
- r'''\textbf{A}, Fixed-operator one-step utility bound for the update $M(\bm\mu+\bm\xi)$ (zero-mean noise $\bm\xi$): the boxed $U(M)$, the squared positive part of $\bm\mu^{\top}M\bm\mu$ over $2L\,\mathrm{E}\|M(\bm\mu+\bm\xi)\|^{2}$ ($L$, loss smoothness), lower-bounds the expected one-step loss decrease that \textbf{B--D} sweep. \textbf{B}, Subtree-minus-random spectral capture across route budget $K$ and covariance mixture $\rho$, printed per cell (red positive, blue negative, tint by magnitude); $K=16$ and $\rho=0$ are by-construction controls; only the endpoints are isospectral. \textbf{C}, Final quadratic loss against route resolution $D_{\rm r}$ for hierarchies $H_{\rm c}=1$--$4$, constructed so that fine-scale noise favours an interior resolution; $D_{\rm r}=4$ resolves every leaf ($M=I$); bands, 95\% bootstrap intervals, 50 paired seeds. \textbf{D}, Exact one-step projection boundary: retaining signal fraction $f_{\rm sig}$ and noise fraction $f_{\rm noise}$ changes normalized loss by $(f_{\rm noise}-f_{\rm sig})/2$, printed as in \textbf{B}; unequally spaced fractions form equal cells, so the dashed line is the cell-wise sign boundary, not the diagonal. \textbf{E}, Candidate/exact gradient cosine and norm-matched one-step loss decrease at the same 120 valid trained checkpoints (points; two off-scale strict-scalar values are printed at the floor); exact path is 1 by construction. Boxes, medians, quartiles and 1.5-interquartile-range whiskers; diamonds, means with 95\% checkpoint-bootstrap intervals (one held-out batch, relative step $10^{-5}$) narrower than the marker. \textbf{F}, Separate constructed positive control, eight reconstructed arbors: loss reduction after twenty projected steps versus the full-gradient sequence (green, morphology-selected routes; gray, random paths; blue, depth bins; pink, ancestry-shuffled routes); symbols, cell means with hierarchical 95\% bootstrap intervals. \textbf{G}, Illustrative rank--noise trade-off under isotropic noise, $2L$ times the optimized bound $q^2/(q+K\sigma^2)$ for $(K,q)=(1,0.8)$ (solid) and $(2,1)$ (dashed), crossing at $\sigma^2=4/7$ (shaded between); analytic, no data, not an endpoint-selection prediction. Imposed alignment and oracle projections explain the conditional relationship in \textbf{E,F}, which measures neither biological credit nor a long-horizon selector; the bound is local, and endpoint selection fails prospectively (Fig.~\ref{fig:si_original_selector}).'''),
+ r'''Throughout, small dots are individual units and large symbols their mean with 95\% bootstrap whiskers (seeds, \textbf{C}; checkpoints, \textbf{E}; cells then one Monte Carlo stream per cell, \textbf{F}); \textbf{B,D} print each cell (red positive, blue negative, tint by magnitude). \textbf{A}, Fixed-operator one-step bound: the boxed $U(M)=\max(\bm\mu^{\top}M\bm\mu,0)^{2}/(2L\,\mathrm{E}\|M(\bm\mu+\bm\xi)\|^{2})$ ($\bm\xi$, zero-mean noise; $L$, loss smoothness) lower-bounds the expected decrease under the update $M(\bm\mu+\bm\xi)$, swept in \textbf{B--D}. \textbf{B}, Subtree-minus-random spectral capture over route budget $K$ and covariance mixture $\rho$, 50 paired seeds per cell; $K=16$ and $\rho=0$ are by-construction controls, only the endpoints isospectral. \textbf{C}, Final loss against route resolution $D_{\rm r}$ for hierarchies $H_{\rm c}=1$--$4$ (teal, light to dark; circle, square, triangle, diamond); $D_{\rm r}=4$ resolves every leaf ($M=I$); 50 paired seeds per point, dodged by 0.12 of a step. \textbf{D}, Exact projection boundary: retaining signal fraction $f_{\rm sig}$ and noise fraction $f_{\rm noise}$ changes normalized loss by $(f_{\rm noise}-f_{\rm sig})/2$; cells centre on the sampled fractions ($f_{\rm sig}$ 0.25, 0.50, 0.75, 0.90, 1.00; $f_{\rm noise}$ 0.10, 0.25, 0.50, 0.75, 1.00) and the dashed line is the exact boundary $f_{\rm noise}=f_{\rm sig}$, interrupted at printed zeros. \textbf{E}, Gradient cosine and norm-matched one-step progress at 120 trained checkpoints (one held-out batch, relative step $10^{-5}$); strict scalar amber, per neuron salmon; two strict-scalar values below the axis floor are open triangles there, printed. Boxes, medians, quartiles and 1.5-interquartile-range whiskers; open diamonds, means. The dashed dark-red rule is the exact path (1 for both quantities by construction), the dashed grey rule zero. \textbf{F}, Positive control, eight reconstructed arbors: loss reduction over twenty projected steps relative to the full gradient (dashed rule, 1) against credit aligned to the routes (green circles, morphology-selected; grey squares, random paths; blue triangles, depth bins; pink diamonds, ancestry-shuffled), dodged by 2.4 percentage points. \textbf{G}, Analytic rank--noise trade-off under isotropic noise, $2L$ times the optimized bound $q^2/(q+K\sigma^2)$ for $(K,q)=(1,0.8)$ (solid) and $(2,1)$ (dashed), both black, crossing at $\sigma^2=4/7$ (grey shading). Imposed alignment and oracle projections drive \textbf{E,F}, which measure neither biological credit nor a long-horizon selector; the bound is local, and endpoint selection fails prospectively (Fig.~\ref{fig:si_original_selector}).'''),
 ('reliability_gain','si_01_exact',[('S13','AF'),('S24','CD')],
  'Fixed and estimated reliability gains have bounded learning benefits.',
  r'''All panels use positive-rate synthetic tasks with eight parallel, nonserial branch blocks. \textbf{A}, A supplied compensating current preserves branch voltage while a positive shunt reduces input resistance and eligibility. \textbf{B}, Paired control-minus-aligned final-loss contrasts at maximal heterogeneity for the best global, shuffled, anti-aligned and unshunted controls; fixed aligned shunting has no reliable final advantage over unshunted noisy learning. \textbf{C,D}, Adaptive-rule final loss and paired control-minus-adaptive contrasts. Adaptive local gain beats global and shuffled attenuation but loses to no shunt and the fixed oracle. In \textbf{B,D} the dashed line is the aligned or adaptive-local reference, translucent dots are the 50 individual paired seeds, and diamonds with bars are means and 95\% paired-seed bootstrap intervals; an interval narrower than its diamond is hidden by it. The point implementation given identical gains reproduces the conductance final loss exactly in all 50 seeds of each study (paired difference 0, 50/50 ties). Curves and shading in \textbf{C} are means and 95\% paired-seed bootstrap intervals across the same 50 seeds. The supplied compensating current in \textbf{A} and the paired gradient observations from which the adaptive rule in \textbf{C,D} estimates its gains are explicit information resources.'''),
@@ -87,9 +87,9 @@ FIGURES = [
  'Local conductance gating is robust to rate choice but depends on where it is applied.',
  r'''\textbf{A,B}, Aligned tuning at 4,096 and 16,384 updates. \textbf{C,D}, Opposed tuning at the same budgets. Each row is one credit rule and holds three strips, top to bottom the Adam rates 0.01 (triangle up), 0.03 (diamond; the primary rate) and 0.1 (triangle down). In every strip the small dots are the test NMSE at the validation-selected checkpoint within the budget for each of $n=20$ new paired seeds, the marker their arithmetic mean and the whisker its 95\% percentile interval from 20,000 whole-seed bootstrap draws; the x axis is one logarithmic scale shared by all four panels, labelled on \textbf{C} and \textbf{D}. Sixteen of the 96 intervals are narrower than 0.18 decade and lie entirely under their mean marker, so they are not drawn: all six swapped-gate strips in \textbf{C} and \textbf{D}, the 0.03 strips of the exact path and the two oracles in \textbf{A}, and the 0.01 strips of the exact path, both oracles and both local gates plus the 0.03 strips of both local gates in \textbf{C}. Colour is the rule family, as in main Fig.~5: dark red exact path, purple oracle projections, green local gates, amber broadcast, rose gate also proximal, grey swapped gate; the pale band behind each row is that row's colour and the thin rule separates the five rules that learn accurately on both tasks (above) from the three that fail on at least one task (below). Row labels follow main Fig.~5: `Two-profile oracle' is the two leaf patterns with unit proximal credit, `Local distal gate' the hard distal gate and `Shunt-proportional gate' its continuous form. The `Unit broadcast ($\approx$ calibrated)' row draws the unit-broadcast rule only: the calibrated broadcast has a mean equal to it to two significant figures in all twelve task, budget and rate cells, so its row is not repeated; individual seeds differ between the two rules by up to 3.1-fold. In \textbf{B} the gate-also-proximal means ($1.4$--$3.3\times10^{-6}$) sit 17--25-fold above their medians ($0.8$--$2.0\times10^{-7}$, matching the accurate rules' $0.5$--$1.9\times10^{-7}$) because of one or two outlier seeds, the isolated dots right of that row's cloud: an outlier effect, not an aligned-task deficit, so the row sits in the lower block for its opposed-task failure alone. About tenfold outlier inflation likewise moves the two-profile oracle mean at 0.03 and the shunt-proportional gate mean at 0.1 in \textbf{D}.'''),
 # ---------------------------------------------------------------- si_06 ----
-('physical_architecture','si_06_physical_depth',[('S31','BCDG'),('S18','ABCD')],
+('physical_architecture','si_06_physical_depth',[('N22','*')],
  'Task-matched serial computation differs from grouped and flexible point controls.',
- r'''\textbf{A}, Serial D3, resource-identical grouped-point and approximately parameter-matched flexible point networks; only serial and grouped models share modules and contacts. \textbf{B}, Original-budget three-level aligned task across D1--D3 and the five-arm feedback ladder. \textbf{C}, Four-level task including D4 under aligned or reversed sensor placement. \textbf{D}, Serial-minus-grouped accuracy at fixed D3 across nested, flat and local-ratio task families under exact-path LocalCA (backpropagation counterpart, main Fig.~6C). \textbf{E}, Serial-minus-star accuracy at D1--D3, where the star is the resource-identical all-active grouped control; the open marker is the derived aligned-minus-reversed difference of the D3 contrast, and the axis break removes the empty 9--28 pp span. \textbf{F}, Flexible point networks matched to active or to total parameter count, ten seeds per condition drawn (y axis 0.90--1.00); the serial D3 mark is the exact-BP run of \textbf{B}. \textbf{G}, Accuracy across task--sensor alignment $\alpha$ (depth colours ordinal within this panel). \textbf{H}, The D3-minus-D1 advantage at each $\alpha$ with the ten paired seeds behind each mean, on an axis broken between 4.5 and 28.5 pp; from $\alpha=0.25$ to 0.75 the advantage grows by 2.92 points (95\% interval 2.65--3.17). Curves and differences use ten paired seeds per cohort and 95\% paired-seed bootstrap intervals; in \textbf{B} and \textbf{G} most intervals are narrower than the marker. In \textbf{C} the raw-additive arm ran under aligned placement only, so its reversed row is empty, and an outlined cell marks the best depth of a row when its 95\% interval clears the runner-up's. Main Fig.~6A,D re-render the architectures and the three-tier ladder from the same seeds; the two-tier task is in Supplementary Fig.~S24B.'''),
+ r'''Throughout, small dots are the ten seeds per condition, large markers their mean with a 95\% seed-bootstrap interval (paired for differences), series dodged in $x$, and most intervals in \textbf{B,G} narrower than the marker. \textbf{A}, Serial D3 tree ($[2,1,2]$, eight modules in three stages), resource-identical grouped point (the same modules in one stage) and approximately parameter-matched flexible point MLP; blue dots, the eight excitatory class-bearing contacts; open rings, modules; yellow disc, soma; black arrow, somatic error $\delta_0$. \textbf{B}, Original-budget three-tier aligned task, D1--D3, five arms in the main Fig.~6D palette: black dashed circles, serial (exact) BP; dark red triangles, exact-path LocalCA; amber squares, shared-soma LocalCA; grey dashed open diamonds, the grouped point; blue dotted open crosses, raw-additive BP. Grey rule and band, the total-parameter-matched point-network ceiling (99.0\%, 95\% interval); dashed rule, chance (50\%). \textbf{C}, Four-tier task including D4 under aligned sensors or reversed tiers; cells print mean test accuracy (\%), one ramp over the observed 52--87\%, row labels in the arm hues of \textbf{B}; the raw-additive arm ran aligned only (its reversed row, ``not run''). An outlined aligned cell marks a row's best depth, 95\% interval clearing the runner-up's; the reversed block is flat by design (largest lead 0.8 points, serial BP D3 over D1). \textbf{D}, Serial-minus-grouped-point accuracy at D3 for nested-factor (dark teal circles), flat-factor (teal squares) and local-ratio (light teal triangles) families under exact-path LocalCA. \textbf{E}, Serial-minus-star accuracy at D1--D3 under BP, the star the resource-identical all-active grouped control (Source Data \texttt{all\_active\_star}); open marker, derived aligned-minus-reversed D3 difference; axis break, empty 9--28 pp span. \textbf{F}, Flexible point networks matched to active or total parameter count (grey) beside the serial D3 run (black), the exact-BP run of \textbf{B}. \textbf{G}, Serial-BP accuracy against task--sensor alignment $\alpha$ for D1 (dotted, circles), D2 (dashed, squares) and D3 (solid, triangles), all black, labelled at $\alpha=1$. \textbf{H}, The D3-minus-D1 advantage at each $\alpha$, axis broken between 4.5 and 28.5 pp; from $\alpha=0.25$ to 0.75 it grows by 2.92 points (2.65--3.17), within-seed linear slope 25.8 points per unit $\alpha$ (25.4--26.3). Main Fig.~6A,D re-render \textbf{A,B} from the same seeds; the two-tier task is Supplementary Fig.~S24B.'''),
 ('physical_calibration','si_06_physical_depth',[('S15','*')],
  'Transparent calibration of the nonlinear physical-depth operating point.',
  r'''All panels use the three-level hierarchical gain-load task and serial shunting morphologies D1 \([8]\), D2 \([2,3]\) and D3 \([2,1,2]\), each with eight nonsomatic compartments per soma. They test the prerequisite for the main hypothesis: whether the mechanism-matched divisive task is accessible at every depth before comparing depth benefits. \textbf{A}, The original aligned shunting-backpropagation (BP) pilot at signal contrast 0.24 fit the training distribution increasingly with depth but remained at chance under the prespecified severe gain shift (test gain standard deviation (SD) 1.2). Bars grow from chance (0.5) and show two-seed means; colour encodes depth as in \textbf{B--D}, filled bars are the training split, open bars the severe-shift test split, and open circles the individual exploratory seeds. \textbf{B}, With training gain SD fixed at 0.25, increasing unseen test gain variation eroded accessibility at every depth. The dotted line marks the matched train/test condition. \textbf{C}, At matched gain and signal contrast 0.24, stronger child coupling selectively made serial D3 computation accessible; the dotted line marks child conductance 16 used subsequently. \textbf{D}, At matched gain and child conductance 16, increasing excitatory signal contrast moved D1--D3 away from chance without saturating D1 or D2. The shaded window marks the accessibility criterion frozen before the ladder was run: every depth's two-seed mean test accuracy in \([0.60, 0.95]\), each seed above 0.57 and D3 minus D1 at least 0.02 in both seeds. Contrast 0.72 failed it by 0.003 (D1 mean 0.597); the separately run 0.80 boundary (dotted line; D1 mean 0.609) met it and selected the operating point used for the analysis seeds. Lines and filled symbols show two-seed means and small open circles the two exploratory seeds, dodged slightly in \(x\); no confidence interval is drawn. Panels \textbf{A--C} share an expanded ordinate (0.48--0.70); \textbf{D} uses the full range. All pilot, ladder and boundary seeds were excluded from the confirmatory contrasts.'''),
@@ -113,13 +113,13 @@ FIGURES = [
 ('shunt_sensitivity','si_08_shunting',[('S11','A'),('S21','A'),('S11','BC'),('S21','DC')],
  'Dose, cable parameters and input mapping determine focal-shunt selectivity.',
  r'''\textbf{A}, Shunt-minus-current-injection localization across fixed absolute doses at three membrane resistances ($R_m$ of 300, 1,000 and 15,000~$\Omega\,\mathrm{cm}^2$: one lightness step, marker and dash pattern each) and three background-conductance multipliers (column groups), on a symmetric-log axis that is linear within $\pm0.001$. The contrast is close to proportional to dose at every setting, and the $R_m$ ordering reverses with background: with no background the $R_m=15{,}000$ contrast stays near zero (slightly negative at 0.05 and 0.5~nS, an interval spanning zero at 5~nS), whereas at background multiplier four it is the largest of the three at every dose, with 8/8 cells positive. \textbf{B}, Shunt and matched-injection localization (grey lines pair cells) and the true relation against a reassigned foreign template (unpaired); positive favors the shunt or the true relation. \textbf{C}, Transport selectivity $S_k$ against full synaptic-gradient localization at unit input-conductance-normalized dose, 101 sites; descriptive site--regime points, $R_m$ colours as in \textbf{A}, background multipliers 0, 1 and 4 as filled, open and plus markers; dotted line, $S_k=1$. \textbf{D}, Signed census of the same sites at $R_m=1{,}000\,\Omega\,\mathrm{cm}^2$, background multiplier one, unit dose: fraction of descendant gradients attenuated, enhanced or sign reversed by shunt (attenuates only) and matched injection (enhances only), as in all 81 passive conditions. \textbf{E}, All mapped versus directly typed contacts (grey lines pair cells); the contrast increases in 8/8 cells. \textbf{F}, E/I scale and inhibitory-reversal sensitivity by row; open marker and band, the reference condition (E/I 0.35, reversal $-0.2$) and its interval; right column, cells with a positive contrast. \textbf{A,B,E,F}, means and 95\% cell-bootstrap intervals, eight cells.'''),
-('shunt_replication','si_08_shunting',[('S10','FGH'),('S47','AB')],
+('shunt_replication','si_08_shunting',[('N30','*')],
  'Focal-shunt controls replicate structurally and under weak-channel linearization.',
- r'''\textbf{A}, Focal shunt versus baseline-current-matched injection in 45 disjoint same-mouse cells (235 sites). \textbf{B}, True versus reassigned descendant relation templates in forty cells (230 sites); the true-relation column repeats the focal-shunt values of \textbf{A} for the forty cells that have a reassigned-relation partner. \textbf{C}, Direct E/I label coverage and the number of selected focal sites per cell, capped at 16 (one L5ET cell had 47 eligible sites); cell classes are ordinal colours within this panel. \textbf{D,E}, Separate initial eight-cell weak-channel ensemble: localization versus dose (dose divided by local input conductance) and paired shunt-minus-current contrasts. A fixed steady-state Jacobian (solid) is compared with the passive model (dashed); the two means differ by at most 0.010 localization units for the shunt and 0.023 for current injection at every dose, so the passive curve lies under the active one. Shunting attenuates descendants whereas matched current injection enhances them. Sixty-four channel draws and sites are averaged within each cell; intervals bootstrap cells and are narrower than the marker except at dose 4, and the contrast is positive in 8/8 cells at every dose (Wilcoxon $p=0.0078$). Weak conductances test local linearization near the passive response and do not establish robustness to regenerative dynamics or channel kinetics.'''),
+ r'''\textbf{A}, Focal shunt (green) versus baseline-current-matched injection (blue) in 45 disjoint same-mouse cells (235 sites): small dots are cell means joined by a hairline per cell, open diamonds and whiskers the mean and 95\% cell-bootstrap interval (20,000 draws), and the dashed rule is zero; the injection mean (0.013) lies on the zero rule with its interval narrower than the diamond. \textbf{B}, True (green) versus reassigned (rose) descendant relation templates in forty cells (230 sites), drawn as in \textbf{A}; the true-relation column repeats the focal-shunt values of \textbf{A} for the forty cells that have a reassigned-relation partner. \textbf{C}, Direct E/I label coverage and the number of selected focal sites per cell, capped at 16 (one L5ET cell had 47 eligible sites); cell classes are the teal ordinal ramp with distinct markers, L2IT circles (34), L3IT squares (2), L4IT triangles (10) and the one L5ET cell a black diamond. \textbf{D,E}, Separate initial eight-cell weak-channel ensemble with a fixed steady-state Jacobian around each solved weak-channel state. \textbf{D}, Localization versus dose (dose divided by local input conductance) for the focal shunt (green, open circles) and the matched current injection (blue, open squares): small dots are the eight cell means at each dose, markers and whiskers the mean and 95\% cell-bootstrap interval, hidden by the marker except for the shunt at dose 4 and the injection at doses 1 and 4. Shunting attenuates descendants whereas matched current injection enhances them (signed localization negative in 8/8 cells for the shunt and positive in 8/8 for the injection at every dose). Inset, the same eight cells' active-minus-passive localization at each dose (passive model at the same calibration, $R_m = 1{,}000\,\Omega\,\mathrm{cm}^2$, background conductance equal to leak): small dots per cell, open markers the mean difference, dashed rule zero; the mean difference is at most 0.010 localization units for the shunt and 0.023 for the injection. \textbf{E}, Paired shunt-minus-current localization by dose row: small dots are the eight cells, open diamonds and whiskers the mean and 95\% cell-bootstrap interval (hidden by the diamond at dose 0.25), the dashed rule zero, and the contrast is positive in 8/8 cells at every dose (two-sided Wilcoxon $p=0.0078$). Sixty-four channel draws and sites are averaged within each cell. Weak conductances test local linearization near the passive response and do not establish robustness to regenerative dynamics or channel kinetics.'''),
 # ---------------------------------------------------------------- si_09 ----
-('measured_transfer_geometry','si_09_measured',[('S22','A'),('M9','BDE'),('S56','C')],
+('measured_transfer_geometry','si_09_measured',[('N31','*')],
  'The measured-response learning comparison is limited by mapped coverage and transfer geometry.',
- r'''\textbf{A}, The seven targets (one mouse; one selected scan per target): mapped functional presynaptic partners (filled circles), the manually curated subset (open circles) and the split-half repeat reliability of each partner's responses (odd/even repeats, Spearman $r$; small dots, 69 records) with the target median (bar). \textbf{B}, Four-route support for the scan selected by median mapped-input count (target 1, session 4, scan 10; nine mapped inputs); rows are input coordinates and columns selected routes. \textbf{C}, Response-prediction NMSE for exact learning, treeless ridge and restricted dictionaries, with random and shuffled surrogate rows; dots are seven target means, diamonds and bars their means and 95\% target-bootstrap intervals, and the dotted line marks ridge (0.803). \textbf{D}, Common-checkpoint update reconstruction by the unrestricted fixed transfer profile (0.976, interval 0.964--0.986, narrower than the marker), the restricted ancestry profile (0.232) and oracle trialwise ancestry amplitudes (0.244). \textbf{E}, Mean split-half (odd/even repeat) Spearman reliability in 1,000 independent calibration datasets versus the measured value for 125 partner records; the two records with negative measured reliability (orange squares) are assigned zero reliable variance, and the identity line is not fitted. $n$ is seven targets in \textbf{C,D} and 125 partner--scan records in \textbf{E}; intervals are 95\% target-bootstrap intervals in \textbf{C,D}; in \textbf{E} the Monte Carlo standard error over the 1,000 datasets (0.0020--0.0028) is narrower than the marker, and 5 of 125 simulated means differ from the measured value by more than 1.96 standard errors (largest 0.0069); \textbf{A} and \textbf{B} are descriptive. \textbf{B} is the support matrix of main Fig.~9E.'''),
+ r'''\textbf{A}, The seven targets (one mouse; one selected scan per target): mapped functional presynaptic partners (filled circles), the manually curated subset (open circles) and the split-half repeat reliability of each partner's responses (odd/even repeats, Spearman $r$; small dots, 69 records) with the target median (bar). \textbf{B}, Left, the four-route support of the scan selected by median mapped-input count with identifier tie breaking (target 1, session 4, scan 10; nine mapped inputs): rows are input coordinates, columns selected routes, and green cells the four occupied coordinates, one per route (the matrix of main Fig.~9E). Right, input coordinates per route for all thirteen scans (one dot per scan; rows ordered by mapped-input count, which labels each row; the ring marks the scan drawn at left): 6 of 13 supports place one coordinate per route (mean 1.31). \textbf{C}, Response-prediction normalized MSE (held out) for the exact compartment-error fit (dark red), treeless ridge (grey), the ancestry-restricted dictionary (green) and the random-anatomical and site-shuffled surrogate dictionaries (grey); small dots are the seven target means, circles and bars their mean and 95\% target-bootstrap interval (20,000 draws), and the dashed rule marks ridge (0.803). \textbf{D}, Common-checkpoint update reconstruction (1 = exact) by the unrestricted fixed transfer profile (blue; 0.976, interval 0.964--0.986, narrower than the marker), the ancestry-restricted fixed profile (green circle, solid bar; 0.232) and oracle trialwise amplitudes (diamonds, dashed bars) on ancestry (green; 0.244), random-anatomical (grey; 0.385) and site-shuffled routes (grey; 0.468); dots, means and intervals as in \textbf{C}. The unrestricted fixed profile is nearly sufficient because somatic error mainly scales a stable transfer vector, and both surrogates with oracle amplitudes reconstruct the update better than the ancestry restriction. \textbf{E}, Calibration check: mean split-half (odd/even repeat) Spearman reliability in 1,000 independent calibration datasets minus the measured value, against the measured value, for 125 partner records (dots; whiskers, $\pm 1.96$ Monte Carlo standard errors, 0.0020--0.0028); the two records with negative measured reliability (open squares; raw $-0.098$ and $-0.188$) are assigned zero reliable variance and drawn at 0, and the dashed rule is zero difference, not a fit. 5 of 125 simulated means differ from the measured value by more than 1.96 standard errors (largest difference 0.0069). $n$ is seven targets in \textbf{C,D} and 125 partner--scan records in \textbf{E}; \textbf{A} and \textbf{B} are descriptive. Target-level associations for all four topology measures are in main Fig.~9C, and coverage across all thirteen scans is in main Fig.~9F.'''),
 ('measured_predictor_controls','si_09_measured',[('S34','*')],
  'Linear baselines explain most measured-response prediction, and degrading observed inputs worsens performance.',
  r'''Thirteen scans retain the complete-tree analysis's 130 outer stimulus-identity splits. All preprocessing, reliability masks and ridge tuning use training identities only. \textbf{A}, Ordinary least-squares (OLS) and nested ridge-regression baselines against the archived exact compartment-error fit; the dotted line is the training-mean predictor (normalized MSE $=1$ by construction). Lower normalized MSE is better. Below, paired differences from nested ridge (dotted line, zero difference) for each comparator: OLS, ridge on untransformed inputs, the exact compartment-error fit, and the archived route-restricted fits with topology-matched (ancestry), random anatomical and site-shuffled routes, whose absolute errors are in Supplementary Fig.~\ref{fig:si_measured_transfer_geometry}C. The exact fit gives a small additional nonlinear benefit, mean $-0.0152$ (95\% interval $-0.0271$ to $-0.0042$), whereas topology-matched routes ($0.029$; $-0.013$ to $0.074$) are matched by random routes ($0.031$; $-0.009$ to $0.068$). \textbf{B}, Ridge prediction when retaining nested random fractions of observed presynaptic inputs; five masks per split are averaged before inference. Manual-only partners, right of the separator, are the same ridge model under a provenance restriction, not a random retention dose. Empty masks use the training mean and remain included. \textbf{C}, Added Gaussian predictor noise in both training and test data, in units of training input standard deviation (SD) after the quantile transform. \textbf{D}, Reliability filtering based only on training repeats; parentheses give mean retained partner counts. In \textbf{B--D} the dotted horizontal line marks the training-mean predictor (normalized MSE $=1$). Thin traces and small dots show seven target means after averaging splits within scan and scans within target. Larger symbols and bars are means and 95\% target-bootstrap intervals (20,000 draws). All targets come from one mouse. Only ridge is refitted under the sensitivity conditions. Removing observed inputs does not recover unknown partners, establish population power or explain away the absence of preferential ancestry alignment.'''),
@@ -146,8 +146,15 @@ CAPTION_APPEND = {
 
 # Curated labels that must survive a merge as aliases (SI_NUMBERING 3.3).
 ALIAS_EXTRA = {
- 'utility_signal_noise': ['fig:si_checkpoint_geometry'],
- 'measured_transfer_geometry': ['fig:si_measured_topology'],
+ # 2026-09-13: the native renders N3, N22, N30 and N31 replaced the last four
+ # sheets that pasted crops of frozen or training-script renders; the retired
+ # sheets' labels stay as aliases of the figures that now carry their panels.
+ # Old S31's label is main Fig. 6's (ALIAS_BLACKLIST) and old S18's stays with
+ # physical_optimizer, which still pastes its E and F.
+ 'utility_signal_noise': ['fig:si_checkpoint_geometry','fig:supp_utility','fig:supp_alignment'],
+ 'measured_transfer_geometry': ['fig:si_measured_topology','fig:supp_measured_detail',
+                                'fig:supp_measured_alignment_power'],
+ 'shunt_replication': ['fig:supp_weak_channel_linearization'],
  # Native renders N14, N15 and N18 replaced the frozen sheets S43, S44 and S42
  # (2026-09-12); the frozen sheets' labels stay as aliases of the same figures.
  'boolean_capacity': ['fig:supp_boolean_theory'],
@@ -214,42 +221,22 @@ WHOLE_CROPS = {}
 # Audited decorated-panel bounds. Adjacent panels sometimes share margins;
 # their axis fragments must not be imported with the selected panel.
 PANEL_BOUNDS = {
- ('S5','E'):[180.2,157.5,346.95,294.7],
- ('S31','D'):[242,134.5,516,278], ('S31','G'):[327,283,501,408],
  ('S27','B'):[266,10.2,515,188.6], ('S27','D'):[266,208.7,515,380.4],
- ('S12','H'):[135.8,334.8,288.5,466.9], ('S10','F'):[340.6,163.4,504.8,284.2],
- ('M9','D'):[4,285,263,456],
+ ('S12','H'):[135.8,334.8,288.5,466.9],
 }
-PANEL_REDACTIONS = {
- ('S31','D'):[[240,129,517,134.3]],
- ('S31','G'):[[315,300,343,378]],
- ('M9','D'):[[219,415,230,446]],
-}
-# Reuse the actual shared-axis ticks and their original typography. Only the
-# labels are copied; the plotted observations and axes remain those of panel G.
-PANEL_PATCHES = {
- ('S31','G'):[{'source':'S31','bbox':[184,301,205,387],
-              'target_bbox':[340.4,301,361.4,387], 'role':'shared y tick labels'}],
-}
-PANEL_TEXT = {('S31','G'):[{'text':'Serial minus grouped point (pp)',
- 'origin':[336,385], 'fontsize':8.0, 'rotate':90, 'role':'shared y-axis label'}]}
+# 2026-09-13: the crops of old S46, S5 E, X1, X2 (sheet S3), old S31 and S18 A--D
+# (S22), old S10 F--H and S47 (S30) and old S22 A, M9 B/D/E and S56 C (S31) were
+# retired: those four sheets are pasted whole from the native renders N3, N22,
+# N30 and N31, so their paste-layer boxes, redactions, patches and re-set text
+# are gone with them.
+PANEL_REDACTIONS = {}
+PANEL_PATCHES = {}
+PANEL_TEXT = {}
 REMOVED_SHARED_REGIONS['S27']=[[178.5,188.6,391.5,206.7]]
 SHARED_LEGENDS['anatomy_capacity_controls']=[('S27',[178.5,188.6,391.5,206.7])]
-PANEL_BOUNDS[('S31','B')]=[310,4.5,516,136]
 PANEL_BOUNDS[('S20','B')]=[265.8,14.2,514.8,201.3]
 REMOVED_SHARED_REGIONS['S19']=[[217.9,232.3,374.1,241]]
-PANEL_BOUNDS[('M9','E')]=[275.5,283.5,502,455]
-PANEL_REDACTIONS.pop(('M9','D'),None)
-PANEL_BOUNDS[('S31','G')]=[327,283,516,408]
-PANEL_TEXT[('S31','G')][0]['text']='Serial minus grouped (pp)'
 NATIVE_LEGENDS={}
-PANEL_BOUNDS[('S10','G')]=[19.1,307.1,185.2,427.9]
-PANEL_BOUNDS[('S10','H')]=[181.5,307.1,342.0,430.1]
-PANEL_REDACTIONS[('S31','G')].append([343,282,518,296])
-PANEL_TEXT[('S31','G')]=[{'text':'Exact LocalCA: serial advantage (pp)',
- 'origin':[329,292], 'fontsize':8.0, 'role':'quantity and optimizer in panel title'}]
-PANEL_BOUNDS[('S31','G')]=[342,283,516,408]
-PANEL_TEXT[('S31','G')][0]['origin']=[344,292]
 
 # 2026-09-11: paste layer re-measured on the fifteen rebuilt upstream renders
 # (analysis/figure_visual_review_20260910/supplement_wave1_reports.json).
@@ -285,12 +272,6 @@ PANEL_BOUNDS[('S23','A')]=[15.5,23.2,380.1,179.8]
 PANEL_BOUNDS[('S2','A')]=[1.6,18.0,196.0,189.5]
 PANEL_BOUNDS[('S2','D')]=[1.6,202.8,275.0,374.3]
 PANEL_BOUNDS[('S3','C')]=[6.0,187.5,503.9,344.2]
-# Old S46 A, C, D, E (sheet S3): letter-excluded tops (title tops 14.2, 165.2,
-# 165.2 and 336.2), which also takes 10.8 pt off the sheet so its caption fits.
-PANEL_BOUNDS[('S46','A')]=[15.0,12.2,262.4,122.8]
-PANEL_BOUNDS[('S46','C')]=[15.0,163.2,261.8,310.5]
-PANEL_BOUNDS[('S46','D')]=[261.7,163.2,494.3,313.4]
-PANEL_BOUNDS[('S46','E')]=[15.0,334.2,261.8,481.3]
 # Old S1 is pasted whole; these are its provenance rects only.  The letter
 # partition hands old S1 B's y label to A and C's to B (letter 3 pt inside the
 # label column), so the auto rects overlapped by 4-12 pt; split at x 185/349.
@@ -313,13 +294,6 @@ PANEL_BOUNDS[('S1','C')]=[348.2,5.8,505.1,205.5]
 # neighbour's touching text in its own copy.  F, G and H are letter-excluded on
 # the left (F's y label 342.6, G's 21.1) so the three fit one row at scale 1.0
 # (490.8 pt of 498.4); tops keep the letter box like old S47 in the same sheet.
-PANEL_REDACTIONS[('S10','G')]=[[183.5,316.0,193.0,418.6]]   # H's y label
-PANEL_REDACTIONS[('S10','H')]=[[155.0,419.7,183.6,427.0]]   # G's 'relation'
-# Old S47 (frozen): padded on the inner and right blank margins so the S30
-# rows share one left edge (row 1 x 7.8, row 2 x 7.9); ink is 15.8-231.1 and
-# 285.0-497.5.
-PANEL_BOUNDS[('S47','A')]=[13.8,0.0,260.0,177.5]
-PANEL_BOUNDS[('S47','B')]=[270.0,0.0,518.4,177.5]
 # Old S10 B (sheet S25 A): its left neighbour's bar runs to 134.1 and its tick
 # label to 127.6, so the auto box carried them; letter-excluded left (y label
 # 141.7) and title-top 33.1.  The box is padded right to the 249 pt column of
@@ -350,10 +324,6 @@ PANEL_BOUNDS[('S12','G')]=[4.9,334.8,122.7,476.7]
 # so their titles sit 9 pt below the crop top like the re-set title of old
 # S31 G in the same S22 row; C/D likewise (179.4-9).  Old S18 F is padded
 # right (blank page margin) so the S24 rows share one left edge (x 9.5).
-PANEL_BOUNDS[('S18','A')]=[2.0,13.4,234.1,158.6]
-PANEL_BOUNDS[('S18','B')]=[257.7,13.4,489.8,151.6]
-PANEL_BOUNDS[('S18','C')]=[2.0,170.4,234.1,312.2]
-PANEL_BOUNDS[('S18','D')]=[257.7,170.4,489.9,315.7]
 PANEL_BOUNDS[('S18','E')]=[2.0,322.8,234.1,472.7]
 PANEL_BOUNDS[('S18','F')]=[257.7,322.8,516.9,472.7]
 # Old S28 B (S24 C): row labels from x 8.4, x-axis spine to 503.6.
@@ -365,10 +335,6 @@ PANEL_BOUNDS[('S28','B')]=[6.2,209.5,505.6,389.5]
 # 2.5 pt band between the panel title (bottom 150.7) and the subtitle (top
 # 153.6), because MuPDF drops every character whose box touches a redaction,
 # and the title is re-set rotated beside the bar (tick labels end 511.0).
-PANEL_TEXT[('S31','G')][0]['origin']=[357.5,292]
-PANEL_REDACTIONS[('S31','D')].append([474.0,150.9,505.6,153.4])
-PANEL_TEXT[('S31','D')]=[{'text':'accuracy','origin':[516.5,220.7],'fontsize':6.8,'rotate':90,'role':'colourbar title, re-set beside the bar'}]
-PANEL_BOUNDS[('S31','D')]=[242,134.5,518.4,278]
 # Old S11 and S21 (sheet S29): the auto boxes cut the grid and zero lines that
 # run to the axes right edges (S11 B 384.8, S11 C 508.7, S21 A 249.0, S21 D
 # 496.7).
@@ -376,14 +342,6 @@ PANEL_BOUNDS[('S11','B')]=[225.4,5.8,386.8,178.1]
 PANEL_BOUNDS[('S11','C')]=[390.5,5.8,510.7,176.0]
 PANEL_BOUNDS[('S21','A')]=[32.0,4.8,251.0,171.8]
 PANEL_BOUNDS[('S21','D')]=[321.0,201.3,498.7,361.6]
-# Old M9 (frozen, sheet S31): B without the 77 pt blank left margin and D from
-# its 'Shuffled' label; E to its x-axis spine (504.4).  Old S56 C: the in-plot
-# sentence '125 partner records; ...' (text box 59.9-294.6 x 240.6-248.5) is
-# removed; nothing else touches the box.
-PANEL_BOUNDS[('M9','B')]=[80.7,126.6,206.2,264.4]
-PANEL_BOUNDS[('M9','D')]=[33.2,283.5,262.2,454.6]
-PANEL_BOUNDS[('M9','E')]=[275.5,283.5,506.4,455]
-PANEL_REDACTIONS[('S56','C')]=[[58.5,239.5,296.0,249.5]]
 # Old S25 (sheet S27, pasted whole): provenance rects to the axes right edges
 # (B 510.6, C 239.9, D 510.6), which make_bounds misses.
 PANEL_BOUNDS[('S25','B')]=[293.5,16.2,512.6,161.4]
@@ -409,7 +367,6 @@ EXPLICIT_NUMERICAL_SOURCES = {
  ('S25','C'):['source_data/irregular_tree_wavelets/cell_scale_summary.csv',
               'source_data/irregular_tree_wavelets/cohort_scale_summary.csv'],
  ('S25','D'):['source_data/irregular_tree_wavelets/cohort_scale_summary.csv'],
- ('X1','*'):['source_data/prospective_input_validity/mechanism_checkpoint_rows_valid.csv'],
 }
 
 # Per-figure Source Data directories (SI_PLAN 5.6), by new S-number index.
@@ -435,7 +392,7 @@ SOURCE_DATA_DIRS = {
  'conductance_precision':['conductance_credit_demand'],
  'conductance_optimization':['conductance_credit_demand'],
  'local_gate_controls':['conductance_local_gate'],
- 'physical_architecture':['physical_alignment_dose','remaining_physical_experiments','nonlinear_physical_depth_confirmatory','point_dendrite_credit_controls','task_family_alignment'],
+ 'physical_architecture':['physical_alignment_dose','remaining_physical_experiments','nonlinear_physical_depth_confirmatory','physical_depth_h4_factorial','point_dendrite_credit_controls','task_family_alignment'],
  'physical_calibration':['nonlinear_physical_depth_accessibility','nonlinear_physical_depth_boundary','nonlinear_physical_depth_canary','nonlinear_physical_depth_coupling','nonlinear_physical_depth_signal'],
  'physical_optimizer':['remaining_physical_experiments','point_dendrite_credit_controls'],
  'anatomy_capacity_controls':['figure3','microns_v661_replication','pinky_v185_replication'],
@@ -593,26 +550,99 @@ PANEL_CONTENT = {
 # port that removes the exemption, and the reason the crop cannot.  build.py
 # asserts that every below-target figure appears here and writes the table
 # into configs/supplement_consolidation/audit_report.json.
+
+# 2026-09-13: the four sheets that still pasted crops of frozen or
+# training-script renders are now pasted whole from the native renders N3
+# (S3), N22 (S22), N30 (S30) and N31 (S31).  Each crop they retire is
+# recorded here with what it showed and where its numbers are.
+PANEL_CONTENT.update({
+ ('S46','A'): dict(content='Fixed-operator special case: the one-step utility bound U(M) for the update M(mu + xi), with mean alignment and mean squared update named on the schematic.',
+                  reason='Replaced by the native render N3 (scripts/build_supplementary_figure_utility_signal_noise_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S3; no crop of this render is used.',
+                  numbers_at='source_data/credit_phase_theory/'),
+ ('S46','C'): dict(content='Subtree-minus-random spectral capture over route budget K and covariance mixture rho; the endpoints are isospectral and the full-rank contrast is zero.',
+                  reason='Replaced by the native render N3 (scripts/build_supplementary_figure_utility_signal_noise_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S3; no crop of this render is used.',
+                  numbers_at='source_data/credit_phase_theory/spectral_phase_summary.csv'),
+ ('S46','D'): dict(content='Final quadratic loss against route resolution for four hierarchy widths, where amplified fine-scale noise makes an interior resolution the designed optimum.',
+                  reason='Replaced by the native render N3 (scripts/build_supplementary_figure_utility_signal_noise_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S3; no crop of this render is used.',
+                  numbers_at='source_data/credit_phase_theory/depth_training_summary.csv'),
+ ('S46','E'): dict(content='Analytic projected-minus-unprojected one-step loss, (f_noise - f_sig)/2, over the sampled retained signal and noise fractions.',
+                  reason='Replaced by the native render N3 (scripts/build_supplementary_figure_utility_signal_noise_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S3; no crop of this render is used.',
+                  numbers_at='source_data/credit_phase_theory/projection_phase_summary.csv'),
+ ('S5','E'): dict(content='Loss reduction after twenty projected steps, relative to the corresponding full-gradient sequence, in the eight constructed arbors.',
+                  reason='Replaced by the native render N3 (scripts/build_supplementary_figure_utility_signal_noise_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S3; no crop of this render is used.',
+                  numbers_at='source_data/alignment_controlled/cell_alignment_metrics.csv'),
+ ('X1','*'): dict(content='Candidate/exact gradient cosine and norm-matched one-step loss decrease at the same 120 valid trained checkpoints (the SI_PLAN M1 merge of old S9A and S9C).',
+                  reason='Replaced by the native render N3 (scripts/build_supplementary_figure_utility_signal_noise_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S3; no crop of this render is used.',
+                  numbers_at='source_data/prospective_input_validity/mechanism_checkpoint_rows_valid.csv'),
+ ('X2','*'): dict(content='Illustrative rank-noise trade-off: 2L times the optimized one-step bound for two (K, q) pairs (AMENDMENTS B3, demoted out of main Fig. 1C). Analytic, no data.',
+                  reason='Replaced by the native render N3 (scripts/build_supplementary_figure_utility_signal_noise_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S3; no crop of this render is used.',
+                  numbers_at='analytic; no table'),
+ ('S31','B'): dict(content='Serial D3, resource-identical grouped-point and approximately parameter-matched dense multilayer-perceptron controls; only the first two share modules and contacts.',
+                  reason='Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S22; no crop of this render is used.',
+                  numbers_at='source_data/nonlinear_physical_depth_confirmatory/'),
+ ('S31','C'): dict(content='Three-level aligned task across D1--D3 and the five feedback conditions.',
+                  reason='Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S22; no crop of this render is used.',
+                  numbers_at='source_data/nonlinear_physical_depth_confirmatory/condition_summary.csv'),
+ ('S31','D'): dict(content='Four-level task, including D4, with aligned or reversed sensor placement.',
+                  reason='Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S22; no crop of this render is used.',
+                  numbers_at='source_data/physical_depth_h4_factorial/condition_summary.csv'),
+ ('S31','G'): dict(content='Serial-minus-grouped accuracy at fixed D3 across task family and alignment under exact-path local credit assignment.',
+                  reason='Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S22; no crop of this render is used.',
+                  numbers_at='source_data/task_family_alignment/paired_contrasts.csv'),
+ ('S18','A'): dict(content='Serial-minus-grouped-star accuracy effects and the aligned-minus-reversed change in that D3 effect, in percentage points.',
+                  reason='Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S22; no crop of this render is used.',
+                  numbers_at='source_data/point_dendrite_credit_controls/paired_contrasts.csv'),
+ ('S18','B'): dict(content='Flexible point networks matched to active or total parameter count versus serial D3.',
+                  reason='Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S22; no crop of this render is used.',
+                  numbers_at='source_data/point_dendrite_credit_controls/combined_seed_outcomes.csv'),
+ ('S18','C'): dict(content='Accuracy across sensor--task alignment alpha at D1, D2 and D3.',
+                  reason='Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S22; no crop of this render is used.',
+                  numbers_at='source_data/physical_alignment_dose/condition_summary.csv'),
+ ('S18','D'): dict(content='Change in the D3-minus-D1 advantage from alpha = 0.25 to 0.75 and its within-seed fitted slope.',
+                  reason='Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S22; no crop of this render is used.',
+                  numbers_at='source_data/physical_alignment_dose/paired_contrasts.csv'),
+ ('S10','F'): dict(content='Localization of exact-gradient changes after a unit-dose focal shunt and baseline-current-matched current injection (45 cells, 235 sites).',
+                  reason='Replaced by the native render N30 (scripts/build_supplementary_figure_shunt_replication_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S30; no crop of this render is used.',
+                  numbers_at='source_data/microns_v661_replication/supp_figure_focal_cells.csv'),
+ ('S10','G'): dict(content='Localization for true descendant relations and relation templates reassigned to other focal sites (40 cells, 230 sites).',
+                  reason='Replaced by the native render N30 (scripts/build_supplementary_figure_shunt_replication_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S30; no crop of this render is used.',
+                  numbers_at='source_data/microns_v661_replication/supp_figure_focal_cells.csv'),
+ ('S10','H'): dict(content='Direct presynaptic excitatory/inhibitory label coverage and eligible focal sites per cell.',
+                  reason='Replaced by the native render N30 (scripts/build_supplementary_figure_shunt_replication_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S30; no crop of this render is used.',
+                  numbers_at='source_data/microns_v661_replication/cohort_manifest.csv'),
+ ('S47','A'): dict(content='Focal-shunt and baseline-current-matched injection localization across doses relative to local input conductance, for the fixed Jacobian and the passive model at the same calibration.',
+                  reason='Replaced by the native render N30 (scripts/build_supplementary_figure_shunt_replication_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S30; no crop of this render is used.',
+                  numbers_at='source_data/focal_selectivity_active_ensemble/condition_summary.csv'),
+ ('S47','B'): dict(content='Paired shunt-minus-current localization contrasts at the three doses in the eight-cell weak-channel ensemble.',
+                  reason='Replaced by the native render N30 (scripts/build_supplementary_figure_shunt_replication_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S30; no crop of this render is used.',
+                  numbers_at='source_data/focal_selectivity_active_ensemble/paired_contrasts.csv'),
+ ('S22','A'): dict(content='Number of mapped functional presynaptic partners for each of the seven targets.',
+                  reason='Replaced by the native render N31 (scripts/build_supplementary_figure_measured_transfer_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S31; no crop of this render is used.',
+                  numbers_at='source_data/figure5/functional_target_metrics.csv'),
+ ('M9','B'): dict(content='Four-route support for the scan selected by median mapped-input count: rows are input coordinates and columns selected routes.',
+                  reason='Replaced by the native render N31 (scripts/build_supplementary_figure_measured_transfer_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S31; no crop of this render is used.',
+                  numbers_at='source_data/credit_first_figures/figure_08_support.csv'),
+ ('M9','D'): dict(content='Response-prediction normalized MSE for exact learning, treeless ridge and the restricted dictionaries, with the random and shuffled surrogate rows.',
+                  reason='Replaced by the native render N31 (scripts/build_supplementary_figure_measured_transfer_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S31; no crop of this render is used.',
+                  numbers_at='source_data/credit_first_figures/figure_08_prediction_summary.csv'),
+ ('M9','E'): dict(content='Common-checkpoint update reconstruction by the unrestricted fixed transfer profile, the restricted ancestry profile and oracle trialwise amplitudes.',
+                  reason='Replaced by the native render N31 (scripts/build_supplementary_figure_measured_transfer_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S31; no crop of this render is used.',
+                  numbers_at='source_data/fulltree_within_span_oracle/condition_summary.csv'),
+ ('S56','C'): dict(content='Mean split-half Spearman reliability in 1,000 independent calibration datasets against the measured value, for 125 partner records.',
+                  reason='Replaced by the native render N31 (scripts/build_supplementary_figure_measured_transfer_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S31; no crop of this render is used.',
+                  numbers_at='source_data/measured_alignment_power/reliability_calibration_audit.csv'),
+})
+
 SCALE_EXEMPTIONS = {
  # 2026-09-12: the scalar_tree_capacity (S12), conductance_optimization (S20)
  # and finite_horizon (S35) exemptions were cleared by the native renders
- # N12, N20 and N35, pasted whole at scale 1.0.
- 'physical_architecture': dict(
-   figure='S22', native_order='N6 (mandatory, SI_NUMBERING S22 height note)',
-   builder=('scripts/build_supplementary_figures_s17_s20_native.py + '
-            'scripts/build_main_figure_06.py'),
-   reason=('AMENDMENTS B6 keeps eight panels (three copies kept plus R16, R17); four rows of '
-           'about 149 pt need 595 pt of panel band at 1.0 against 448 pt available.')),
+ # N12, N20 and N35, pasted whole at scale 1.0; 2026-09-13 cleared
+ # physical_architecture (S22) and measured_transfer_geometry (S31) the same
+ # way, with N22 and N31.
  'shunt_sensitivity': dict(
    figure='S29', native_order='N7',
    builder=('scripts/build_supplementary_figure_s21_native.py + '
             'scripts/build_focal_selectivity_figure.py (legacy port for old S11)'),
    reason=('The frozen six-panel order of AMENDMENTS B8 with Q3 needs 558.9 pt of panel band '
            'at 1.0. Old S21 is native; old S11A--C is legacy and must be ported.')),
- 'measured_transfer_geometry': dict(
-   figure='S31', native_order='N8',
-   builder=('scripts/build_journal_figures.py + scripts/credit_first_figures/build_measured.py '
-            '+ scripts/measured_alignment_power/report.py'),
-   reason=('Closest to target: 562.8 pt at 1.0, 22.8 pt over the cap, because old S56C is a '
-           '496.4 pt full-width panel that must hold its own row. All three sources are native.')),
 }

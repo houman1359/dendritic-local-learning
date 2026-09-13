@@ -6,7 +6,7 @@
   "specification": "scripts/supplement_consolidation/specification.py",
   "source_registry": "scripts/supplement_consolidation/original_assets.json",
   "frozen_input_hashes": {
-    "scripts/supplement_consolidation/original_assets.json": "4fb4d2a259deceab9841f9f8ff6cc728e6591aa15fdf1348a112e7eec237aca4",
+    "scripts/supplement_consolidation/original_assets.json": "5e13332caedb156b587d8facab99a0902c96fedec53797c0b95d213b74e72742",
     "scripts/supplement_consolidation/original_captions.json": "838b3f4ead564b68639cf68506efe686e12b47e3d846ab230af35c7a6c8f6816",
     "scripts/supplement_consolidation/original_provenance.json": "2eca6cebde706e5af0b222c5675d413d80b4d4acfcfb234abe89d37afb72c90d"
   },
@@ -317,309 +317,194 @@
       "label": "fig:si_utility_signal_noise",
       "panels": [
         {
-          "source": "S46",
+          "source": "N3",
           "source_panel": "A",
           "bbox": [
-            15.0,
-            12.2,
-            262.4,
-            122.8
+            22.0,
+            0.759007453918457,
+            256.10186767578125,
+            133.99234008789062
           ],
-          "width": 247.39999999999998,
-          "height": 110.6,
+          "width": 234.10186767578125,
+          "height": 133.23333263397217,
           "panel": "A",
           "target_rect": [
-            8.099999999999994,
-            19.0,
-            255.49999999999997,
-            129.6
+            22.0,
+            0.759007453918457,
+            256.10186767578125,
+            133.99234008789062
           ],
           "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_S46_utility.pdf",
-          "source_sha256": "6dd9a5ee0c10771d6d9448057031ca5c245c79bbeff61fb94bcb1b9b3fc47a4a",
-          "old_provenance_figure": "figS46",
-          "old_provenance_entry_ids": [
-            "creditfirst.figS46.asset",
-            "creditfirst.panel.46763fb4bc2051bd",
-            "creditfirst.panel.475eb601d1fe15d7",
-            "creditfirst.panel.7fe2e39576a815f1",
-            "creditfirst.panel.97c12f007f55e54b",
-            "creditfirst.panel.9cc5698892c619c2",
-            "creditfirst.panel.9f5f09b3a9c2b2fb",
-            "creditfirst.panel.b915e957f65ea8de",
-            "creditfirst.panel.bfa1a75ec09547c3",
-            "creditfirst.panel.cabd005f33c461c8",
-            "creditfirst.panel.ccae48fd41bf53fc",
-            "creditfirst.panel.fe56f16a8b97b6b2"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/depth_training_seed.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/depth_training_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/projection_phase_seed.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/projection_phase_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/reliability_phase_seed.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/reliability_phase_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/spectral_phase_seed.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/spectral_phase_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/review_evidence_reanalysis/moment_scores.csv"
-          ],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "S46",
-          "source_panel": "C",
-          "bbox": [
-            15.0,
-            163.2,
-            261.8,
-            310.5
-          ],
-          "width": 246.8,
-          "height": 147.3,
-          "panel": "B",
-          "target_rect": [
-            263.5,
-            19.0,
-            510.3,
-            166.3
-          ],
-          "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_S46_utility.pdf",
-          "source_sha256": "6dd9a5ee0c10771d6d9448057031ca5c245c79bbeff61fb94bcb1b9b3fc47a4a",
-          "old_provenance_figure": "figS46",
-          "old_provenance_entry_ids": [
-            "creditfirst.figS46.asset",
-            "creditfirst.panel.46763fb4bc2051bd",
-            "creditfirst.panel.475eb601d1fe15d7",
-            "creditfirst.panel.7fe2e39576a815f1",
-            "creditfirst.panel.97c12f007f55e54b",
-            "creditfirst.panel.9cc5698892c619c2",
-            "creditfirst.panel.9f5f09b3a9c2b2fb",
-            "creditfirst.panel.b915e957f65ea8de",
-            "creditfirst.panel.bfa1a75ec09547c3",
-            "creditfirst.panel.cabd005f33c461c8",
-            "creditfirst.panel.ccae48fd41bf53fc",
-            "creditfirst.panel.fe56f16a8b97b6b2"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/depth_training_seed.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/depth_training_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/projection_phase_seed.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/projection_phase_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/reliability_phase_seed.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/reliability_phase_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/spectral_phase_seed.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/spectral_phase_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/review_evidence_reanalysis/moment_scores.csv"
-          ],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "S46",
-          "source_panel": "D",
-          "bbox": [
-            261.7,
-            163.2,
-            494.3,
-            313.4
-          ],
-          "width": 232.60000000000002,
-          "height": 150.2,
-          "panel": "C",
-          "target_rect": [
-            15.499999999999972,
-            189.3,
-            248.1,
-            339.5
-          ],
-          "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_S46_utility.pdf",
-          "source_sha256": "6dd9a5ee0c10771d6d9448057031ca5c245c79bbeff61fb94bcb1b9b3fc47a4a",
-          "old_provenance_figure": "figS46",
-          "old_provenance_entry_ids": [
-            "creditfirst.figS46.asset",
-            "creditfirst.panel.46763fb4bc2051bd",
-            "creditfirst.panel.475eb601d1fe15d7",
-            "creditfirst.panel.7fe2e39576a815f1",
-            "creditfirst.panel.97c12f007f55e54b",
-            "creditfirst.panel.9cc5698892c619c2",
-            "creditfirst.panel.9f5f09b3a9c2b2fb",
-            "creditfirst.panel.b915e957f65ea8de",
-            "creditfirst.panel.bfa1a75ec09547c3",
-            "creditfirst.panel.cabd005f33c461c8",
-            "creditfirst.panel.ccae48fd41bf53fc",
-            "creditfirst.panel.fe56f16a8b97b6b2"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/depth_training_seed.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/depth_training_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/projection_phase_seed.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/projection_phase_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/reliability_phase_seed.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/reliability_phase_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/spectral_phase_seed.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/spectral_phase_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/review_evidence_reanalysis/moment_scores.csv"
-          ],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "S46",
-          "source_panel": "E",
-          "bbox": [
-            15.0,
-            334.2,
-            261.8,
-            481.3
-          ],
-          "width": 246.8,
-          "height": 147.10000000000002,
-          "panel": "D",
-          "target_rect": [
-            256.1,
-            189.3,
-            502.90000000000003,
-            336.40000000000003
-          ],
-          "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_S46_utility.pdf",
-          "source_sha256": "6dd9a5ee0c10771d6d9448057031ca5c245c79bbeff61fb94bcb1b9b3fc47a4a",
-          "old_provenance_figure": "figS46",
-          "old_provenance_entry_ids": [
-            "creditfirst.figS46.asset",
-            "creditfirst.panel.46763fb4bc2051bd",
-            "creditfirst.panel.475eb601d1fe15d7",
-            "creditfirst.panel.7fe2e39576a815f1",
-            "creditfirst.panel.97c12f007f55e54b",
-            "creditfirst.panel.9cc5698892c619c2",
-            "creditfirst.panel.9f5f09b3a9c2b2fb",
-            "creditfirst.panel.b915e957f65ea8de",
-            "creditfirst.panel.bfa1a75ec09547c3",
-            "creditfirst.panel.cabd005f33c461c8",
-            "creditfirst.panel.ccae48fd41bf53fc",
-            "creditfirst.panel.fe56f16a8b97b6b2"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/depth_training_seed.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/depth_training_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/projection_phase_seed.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/projection_phase_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/reliability_phase_seed.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/reliability_phase_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/spectral_phase_seed.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/spectral_phase_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/review_evidence_reanalysis/moment_scores.csv"
-          ],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "X1",
-          "source_panel": "*",
-          "bbox": [
-            0.0,
-            0.0,
-            163.0,
-            137.1999969482422
-          ],
-          "width": 163.0,
-          "height": 137.1999969482422,
-          "panel": "E",
-          "target_rect": [
-            6.824999999999989,
-            362.5,
-            169.825,
-            499.6999969482422
-          ],
-          "scale": 1.0,
-          "source_asset": "figures/supplementary/components/si_checkpoint_merged.pdf",
-          "source_sha256": "9cb82f624b337523b74e0010fabf1e485938c6fdd49d757c4364c2c51c7526f1",
-          "old_provenance_figure": "figX1",
-          "old_provenance_entry_ids": [],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/mechanism_checkpoint_rows_valid.csv"
-          ],
-          "explicit_numerical_source_hashes": {
-            "source_data/prospective_input_validity/mechanism_checkpoint_rows_valid.csv": "10fb629c9eb0a946b700a0b699139e006aefd2dff389ab06ba4cd6bc01ce8e77"
-          },
-          "record_type": "native supplement panel",
-          "builder": "scripts/build_si_restored_panels.py::checkpoint_merged"
-        },
-        {
-          "source": "S5",
-          "source_panel": "E",
-          "bbox": [
-            180.2,
-            157.5,
-            346.95,
-            294.7
-          ],
-          "width": 166.75,
-          "height": 137.2,
-          "panel": "F",
-          "target_rect": [
-            175.825,
-            362.5,
-            342.575,
-            499.7
-          ],
-          "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_S05_panels_A-H.pdf",
-          "source_sha256": "c2c79a27e0cfa2a40cdaea956db33e0abe1060efe7e73e31f98ea35795a6572a",
-          "old_provenance_figure": "figS5",
-          "old_provenance_entry_ids": [
-            "fig7.asset",
-            "fig7.b-c",
-            "fig7.contrasts",
-            "fig7.d",
-            "fig7.dictionary",
-            "fig7.summary",
-            "fig8.alignment.cells",
-            "fig8.alignment.dictionary"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/alignment_controlled_curves.csv",
-            "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/cell_alignment_metrics.csv",
-            "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/cell_paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/dictionary_audit.csv",
-            "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/summary.json"
-          ],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "X2",
-          "source_panel": "*",
-          "bbox": [
-            0.0,
-            0.0,
-            163.0,
-            137.1999969482422
-          ],
-          "width": 163.0,
-          "height": 137.1999969482422,
-          "panel": "G",
-          "target_rect": [
-            348.575,
-            362.5,
-            511.575,
-            499.6999969482422
-          ],
-          "scale": 1.0,
-          "source_asset": "figures/supplementary/components/si_utility_bound.pdf",
-          "source_sha256": "6ab066fb79446686e545e3c2427218a1467785b28c70f61827000b359ca3afb0",
-          "old_provenance_figure": "figX2",
+          "source_asset": "figures/supplementary/figure_utility_signal_noise_native.pdf",
+          "source_sha256": "b14839997895ed78e12ed8c900d653fdba138b4bca5b961d336c63694d22c7c0",
+          "old_provenance_figure": "figN3",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {},
-          "record_type": "native supplement panel",
-          "builder": "scripts/build_si_restored_panels.py::utility_bound"
+          "explicit_numerical_source_hashes": {}
+        },
+        {
+          "source": "N3",
+          "source_panel": "B",
+          "bbox": [
+            268.6929931640625,
+            0.759007453918457,
+            504.55999755859375,
+            150.46798706054688
+          ],
+          "width": 235.86700439453125,
+          "height": 149.70897960662842,
+          "panel": "B",
+          "target_rect": [
+            268.6929931640625,
+            0.759007453918457,
+            504.55999755859375,
+            150.46798706054688
+          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_utility_signal_noise_native.pdf",
+          "source_sha256": "b14839997895ed78e12ed8c900d653fdba138b4bca5b961d336c63694d22c7c0",
+          "old_provenance_figure": "figN3",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
+          "explicit_numerical_source_hashes": {}
+        },
+        {
+          "source": "N3",
+          "source_panel": "C",
+          "bbox": [
+            12.102375984191895,
+            148.75900268554688,
+            255.09523010253906,
+            317.4367370605469
+          ],
+          "width": 242.99285411834717,
+          "height": 168.677734375,
+          "panel": "C",
+          "target_rect": [
+            12.102375984191895,
+            148.75900268554688,
+            255.09523010253906,
+            317.4367370605469
+          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_utility_signal_noise_native.pdf",
+          "source_sha256": "b14839997895ed78e12ed8c900d653fdba138b4bca5b961d336c63694d22c7c0",
+          "old_provenance_figure": "figN3",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
+          "explicit_numerical_source_hashes": {}
+        },
+        {
+          "source": "N3",
+          "source_panel": "D",
+          "bbox": [
+            268.6929931640625,
+            148.75900268554688,
+            504.55999755859375,
+            314.4679870605469
+          ],
+          "width": 235.86700439453125,
+          "height": 165.708984375,
+          "panel": "D",
+          "target_rect": [
+            268.6929931640625,
+            148.75900268554688,
+            504.55999755859375,
+            314.4679870605469
+          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_utility_signal_noise_native.pdf",
+          "source_sha256": "b14839997895ed78e12ed8c900d653fdba138b4bca5b961d336c63694d22c7c0",
+          "old_provenance_figure": "figN3",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
+          "explicit_numerical_source_hashes": {}
+        },
+        {
+          "source": "N3",
+          "source_panel": "E",
+          "bbox": [
+            15.789875030517578,
+            315.718994140625,
+            181.11734008789062,
+            484.0063781738281
+          ],
+          "width": 165.32746505737305,
+          "height": 168.28738403320312,
+          "panel": "E",
+          "target_rect": [
+            15.789875030517578,
+            315.718994140625,
+            181.11734008789062,
+            484.0063781738281
+          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_utility_signal_noise_native.pdf",
+          "source_sha256": "b14839997895ed78e12ed8c900d653fdba138b4bca5b961d336c63694d22c7c0",
+          "old_provenance_figure": "figN3",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
+          "explicit_numerical_source_hashes": {}
+        },
+        {
+          "source": "N3",
+          "source_panel": "F",
+          "bbox": [
+            182.22633361816406,
+            315.718994140625,
+            338.1122741699219,
+            477.4367370605469
+          ],
+          "width": 155.8859405517578,
+          "height": 161.71774291992188,
+          "panel": "F",
+          "target_rect": [
+            182.22633361816406,
+            315.718994140625,
+            338.1122741699219,
+            477.4367370605469
+          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_utility_signal_noise_native.pdf",
+          "source_sha256": "b14839997895ed78e12ed8c900d653fdba138b4bca5b961d336c63694d22c7c0",
+          "old_provenance_figure": "figN3",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
+          "explicit_numerical_source_hashes": {}
+        },
+        {
+          "source": "N3",
+          "source_panel": "G",
+          "bbox": [
+            348.35968017578125,
+            315.718994140625,
+            509.2628173828125,
+            477.4367370605469
+          ],
+          "width": 160.90313720703125,
+          "height": 161.71774291992188,
+          "panel": "G",
+          "target_rect": [
+            348.35968017578125,
+            315.718994140625,
+            509.2628173828125,
+            477.4367370605469
+          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_utility_signal_noise_native.pdf",
+          "source_sha256": "b14839997895ed78e12ed8c900d653fdba138b4bca5b961d336c63694d22c7c0",
+          "old_provenance_figure": "figN3",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
+          "explicit_numerical_source_hashes": {}
         }
       ],
       "ancillary_elements": [],
-      "whole_source_sheet": false,
+      "whole_source_sheet": true,
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
-      "height_pt": 503.70001220703125,
-      "sha256": "f4f4d67bda68811fe0d2764773a6176656a05be086db1ffc2530bc44425e4117",
+      "height_pt": 490.0,
+      "sha256": "1b38d8cfe0d27d6546a628112a8a3a07848f23a2d96b2595c077689a005cf1c7",
       "source_data_directories": [
         "source_data/credit_phase_theory",
         "source_data/review_evidence_reanalysis",
@@ -4447,501 +4332,225 @@
       "label": "fig:si_physical_architecture",
       "panels": [
         {
-          "source": "S31",
-          "source_panel": "B",
-          "bbox": [
-            310.0,
-            4.5,
-            516.0,
-            136.0
-          ],
-          "width": 206.0,
-          "height": 131.5,
-          "panel": "A",
-          "target_rect": [
-            178.76251958633657,
-            19.0,
-            339.6374804136634,
-            121.6944531494829
-          ],
-          "scale": 0.78094641178314,
-          "source_asset": "figures/supplementary/figure_S31_panels_A-G.pdf",
-          "source_sha256": "9bc3a51813bead71578fdc6a7ee00a6ee92395323e8f88c1f13cb32482939819",
-          "old_provenance_figure": "figS31",
-          "old_provenance_entry_ids": [
-            "completion.source_data.point_dendrite_credit_controls.combined_seed_outcomes.csv",
-            "completion.source_data.point_dendrite_credit_controls.paired_contrasts.csv",
-            "physical.asset",
-            "physical.audit",
-            "physical.conditions",
-            "physical.contrasts",
-            "physical.h4.asset",
-            "physical.mechanism",
-            "physical.mechanism_audit",
-            "physical.outcomes",
-            "physical.schematic",
-            "pointcredit.asset",
-            "pointcredit.audit",
-            "pointcredit.conditions",
-            "pointcredit.contrasts",
-            "pointcredit.outcomes",
-            "taskfamily.asset",
-            "taskfamily.audit",
-            "taskfamily.conditions",
-            "taskfamily.contrasts",
-            "taskfamily.outcomes"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/mechanism_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/mechanism_gradient_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/seed_outcomes.csv",
-            "drafts/dendritic-local-learning/journal/source_data/point_dendrite_credit_controls/audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/point_dendrite_credit_controls/combined_seed_outcomes.csv",
-            "drafts/dendritic-local-learning/journal/source_data/point_dendrite_credit_controls/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/point_dendrite_credit_controls/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/task_family_alignment/audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/task_family_alignment/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/task_family_alignment/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/task_family_alignment/seed_outcomes.csv"
-          ],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "S31",
-          "source_panel": "C",
-          "bbox": [
-            4.0,
-            132.35499572753906,
-            240.6999969482422,
-            281.6189880371094
-          ],
-          "width": 236.6999969482422,
-          "height": 149.2639923095703,
-          "panel": "B",
-          "target_rect": [
-            54.84819924866508,
-            144.6944531494829,
-            239.698212534475,
-            261.26163235206803
-          ],
-          "scale": 0.78094641178314,
-          "source_asset": "figures/supplementary/figure_S31_panels_A-G.pdf",
-          "source_sha256": "9bc3a51813bead71578fdc6a7ee00a6ee92395323e8f88c1f13cb32482939819",
-          "old_provenance_figure": "figS31",
-          "old_provenance_entry_ids": [
-            "completion.source_data.point_dendrite_credit_controls.combined_seed_outcomes.csv",
-            "completion.source_data.point_dendrite_credit_controls.paired_contrasts.csv",
-            "physical.asset",
-            "physical.audit",
-            "physical.conditions",
-            "physical.contrasts",
-            "physical.h4.asset",
-            "physical.mechanism",
-            "physical.mechanism_audit",
-            "physical.outcomes",
-            "physical.schematic",
-            "pointcredit.asset",
-            "pointcredit.audit",
-            "pointcredit.conditions",
-            "pointcredit.contrasts",
-            "pointcredit.outcomes",
-            "taskfamily.asset",
-            "taskfamily.audit",
-            "taskfamily.conditions",
-            "taskfamily.contrasts",
-            "taskfamily.outcomes"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/mechanism_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/mechanism_gradient_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/seed_outcomes.csv",
-            "drafts/dendritic-local-learning/journal/source_data/point_dendrite_credit_controls/audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/point_dendrite_credit_controls/combined_seed_outcomes.csv",
-            "drafts/dendritic-local-learning/journal/source_data/point_dendrite_credit_controls/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/point_dendrite_credit_controls/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/task_family_alignment/audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/task_family_alignment/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/task_family_alignment/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/task_family_alignment/seed_outcomes.csv"
-          ],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "S31",
-          "source_panel": "D",
-          "bbox": [
-            242.0,
-            134.5,
-            518.4,
-            278.0
-          ],
-          "width": 276.4,
-          "height": 143.5,
-          "panel": "C",
-          "target_rect": [
-            247.698212534475,
-            144.6944531494829,
-            463.5518007513349,
-            256.7602632403635
-          ],
-          "scale": 0.78094641178314,
-          "source_asset": "figures/supplementary/figure_S31_panels_A-G.pdf",
-          "source_sha256": "9bc3a51813bead71578fdc6a7ee00a6ee92395323e8f88c1f13cb32482939819",
-          "old_provenance_figure": "figS31",
-          "old_provenance_entry_ids": [
-            "completion.source_data.point_dendrite_credit_controls.combined_seed_outcomes.csv",
-            "completion.source_data.point_dendrite_credit_controls.paired_contrasts.csv",
-            "physical.asset",
-            "physical.audit",
-            "physical.conditions",
-            "physical.contrasts",
-            "physical.h4.asset",
-            "physical.mechanism",
-            "physical.mechanism_audit",
-            "physical.outcomes",
-            "physical.schematic",
-            "pointcredit.asset",
-            "pointcredit.audit",
-            "pointcredit.conditions",
-            "pointcredit.contrasts",
-            "pointcredit.outcomes",
-            "taskfamily.asset",
-            "taskfamily.audit",
-            "taskfamily.conditions",
-            "taskfamily.contrasts",
-            "taskfamily.outcomes"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/mechanism_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/mechanism_gradient_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/seed_outcomes.csv",
-            "drafts/dendritic-local-learning/journal/source_data/point_dendrite_credit_controls/audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/point_dendrite_credit_controls/combined_seed_outcomes.csv",
-            "drafts/dendritic-local-learning/journal/source_data/point_dendrite_credit_controls/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/point_dendrite_credit_controls/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/task_family_alignment/audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/task_family_alignment/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/task_family_alignment/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/task_family_alignment/seed_outcomes.csv"
-          ],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "S31",
-          "source_panel": "G",
-          "bbox": [
-            342.0,
-            283.0,
-            516.0,
-            408.0
-          ],
-          "width": 174.0,
-          "height": 125.0,
-          "panel": "D",
-          "target_rect": [
-            4.0,
-            284.26163235206803,
-            139.88467565026636,
-            381.8799338249605
-          ],
-          "scale": 0.78094641178314,
-          "source_asset": "figures/supplementary/figure_S31_panels_A-G.pdf",
-          "source_sha256": "9bc3a51813bead71578fdc6a7ee00a6ee92395323e8f88c1f13cb32482939819",
-          "old_provenance_figure": "figS31",
-          "old_provenance_entry_ids": [
-            "completion.source_data.point_dendrite_credit_controls.combined_seed_outcomes.csv",
-            "completion.source_data.point_dendrite_credit_controls.paired_contrasts.csv",
-            "physical.asset",
-            "physical.audit",
-            "physical.conditions",
-            "physical.contrasts",
-            "physical.h4.asset",
-            "physical.mechanism",
-            "physical.mechanism_audit",
-            "physical.outcomes",
-            "physical.schematic",
-            "pointcredit.asset",
-            "pointcredit.audit",
-            "pointcredit.conditions",
-            "pointcredit.contrasts",
-            "pointcredit.outcomes",
-            "taskfamily.asset",
-            "taskfamily.audit",
-            "taskfamily.conditions",
-            "taskfamily.contrasts",
-            "taskfamily.outcomes"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/mechanism_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/mechanism_gradient_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/seed_outcomes.csv",
-            "drafts/dendritic-local-learning/journal/source_data/point_dendrite_credit_controls/audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/point_dendrite_credit_controls/combined_seed_outcomes.csv",
-            "drafts/dendritic-local-learning/journal/source_data/point_dendrite_credit_controls/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/point_dendrite_credit_controls/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/task_family_alignment/audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/task_family_alignment/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/task_family_alignment/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/task_family_alignment/seed_outcomes.csv"
-          ],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "S18",
+          "source": "N22",
           "source_panel": "A",
           "bbox": [
-            2.0,
-            13.4,
-            234.1,
-            158.6
+            8.0,
+            4.759007453918457,
+            154.30311584472656,
+            157.68606567382812
           ],
-          "width": 232.1,
-          "height": 145.2,
-          "panel": "E",
+          "width": 146.30311584472656,
+          "height": 152.92705821990967,
+          "panel": "A",
           "target_rect": [
-            145.88467565026636,
-            284.26163235206803,
-            327.14233782513315,
-            397.65505134297996
+            8.0,
+            4.759007453918457,
+            154.30311584472656,
+            157.68606567382812
           ],
-          "scale": 0.78094641178314,
-          "source_asset": "figures/supplementary/figure_S18_panels_A-K.pdf",
-          "source_sha256": "1724745817a41637c1ea2694a56172a50755e3b5b864112dc3a4256246353f5a",
-          "old_provenance_figure": "figS18",
-          "old_provenance_entry_ids": [
-            "alignmentdose.asset",
-            "alignmentdose.audit",
-            "alignmentdose.conditions",
-            "alignmentdose.contrasts",
-            "alignmentdose.outcomes",
-            "remainingphysical.asset",
-            "remainingphysical.audit",
-            "remainingphysical.conditions",
-            "remainingphysical.contrasts",
-            "remainingphysical.outcomes"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/physical_alignment_dose/audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/physical_alignment_dose/combined_seed_outcomes.csv",
-            "drafts/dendritic-local-learning/journal/source_data/physical_alignment_dose/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/physical_alignment_dose/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/remaining_physical_experiments/audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/remaining_physical_experiments/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/remaining_physical_experiments/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/remaining_physical_experiments/seed_outcomes_with_h3_reference.csv"
-          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
+          "source_sha256": "ba9393961e1dc134e3d8f5ffb54eaaba0af53fa84a2437dbb1bf9bb969a20f95",
+          "old_provenance_figure": "figN22",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
           "explicit_numerical_source_hashes": {}
         },
         {
-          "source": "S18",
+          "source": "N22",
           "source_panel": "B",
           "bbox": [
-            257.7,
-            13.4,
-            489.8,
-            151.6
+            170.8000030517578,
+            4.759007453918457,
+            324.0987548828125,
+            182.97219848632812
           ],
-          "width": 232.10000000000002,
-          "height": 138.2,
-          "panel": "F",
+          "width": 153.2987518310547,
+          "height": 178.21319103240967,
+          "panel": "B",
           "target_rect": [
-            333.14233782513315,
-            284.26163235206803,
-            514.4,
-            392.18842646049796
+            170.8000030517578,
+            4.759007453918457,
+            324.0987548828125,
+            182.97219848632812
           ],
-          "scale": 0.78094641178314,
-          "source_asset": "figures/supplementary/figure_S18_panels_A-K.pdf",
-          "source_sha256": "1724745817a41637c1ea2694a56172a50755e3b5b864112dc3a4256246353f5a",
-          "old_provenance_figure": "figS18",
-          "old_provenance_entry_ids": [
-            "alignmentdose.asset",
-            "alignmentdose.audit",
-            "alignmentdose.conditions",
-            "alignmentdose.contrasts",
-            "alignmentdose.outcomes",
-            "remainingphysical.asset",
-            "remainingphysical.audit",
-            "remainingphysical.conditions",
-            "remainingphysical.contrasts",
-            "remainingphysical.outcomes"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/physical_alignment_dose/audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/physical_alignment_dose/combined_seed_outcomes.csv",
-            "drafts/dendritic-local-learning/journal/source_data/physical_alignment_dose/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/physical_alignment_dose/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/remaining_physical_experiments/audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/remaining_physical_experiments/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/remaining_physical_experiments/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/remaining_physical_experiments/seed_outcomes_with_h3_reference.csv"
-          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
+          "source_sha256": "ba9393961e1dc134e3d8f5ffb54eaaba0af53fa84a2437dbb1bf9bb969a20f95",
+          "old_provenance_figure": "figN22",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
           "explicit_numerical_source_hashes": {}
         },
         {
-          "source": "S18",
+          "source": "N22",
           "source_panel": "C",
           "bbox": [
-            2.0,
-            170.4,
-            234.1,
-            312.2
+            333.6000061035156,
+            4.759007453918457,
+            509.88763427734375,
+            182.97219848632812
           ],
-          "width": 232.1,
-          "height": 141.79999999999998,
-          "panel": "G",
+          "width": 176.28762817382812,
+          "height": 178.21319103240967,
+          "panel": "C",
           "target_rect": [
-            73.90329050454406,
-            420.65505134297996,
-            255.16095267941083,
-            531.3932525338291
+            333.6000061035156,
+            4.759007453918457,
+            509.88763427734375,
+            182.97219848632812
           ],
-          "scale": 0.78094641178314,
-          "source_asset": "figures/supplementary/figure_S18_panels_A-K.pdf",
-          "source_sha256": "1724745817a41637c1ea2694a56172a50755e3b5b864112dc3a4256246353f5a",
-          "old_provenance_figure": "figS18",
-          "old_provenance_entry_ids": [
-            "alignmentdose.asset",
-            "alignmentdose.audit",
-            "alignmentdose.conditions",
-            "alignmentdose.contrasts",
-            "alignmentdose.outcomes",
-            "remainingphysical.asset",
-            "remainingphysical.audit",
-            "remainingphysical.conditions",
-            "remainingphysical.contrasts",
-            "remainingphysical.outcomes"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/physical_alignment_dose/audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/physical_alignment_dose/combined_seed_outcomes.csv",
-            "drafts/dendritic-local-learning/journal/source_data/physical_alignment_dose/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/physical_alignment_dose/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/remaining_physical_experiments/audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/remaining_physical_experiments/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/remaining_physical_experiments/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/remaining_physical_experiments/seed_outcomes_with_h3_reference.csv"
-          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
+          "source_sha256": "ba9393961e1dc134e3d8f5ffb54eaaba0af53fa84a2437dbb1bf9bb969a20f95",
+          "old_provenance_figure": "figN22",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
           "explicit_numerical_source_hashes": {}
         },
         {
-          "source": "S18",
+          "source": "N22",
           "source_panel": "D",
           "bbox": [
-            257.7,
-            170.4,
-            489.9,
-            315.7
+            8.0,
+            181.75900268554688,
+            153.7069549560547,
+            319.4367370605469
           ],
-          "width": 232.2,
-          "height": 145.29999999999998,
+          "width": 145.7069549560547,
+          "height": 137.677734375,
+          "panel": "D",
+          "target_rect": [
+            8.0,
+            181.75900268554688,
+            153.7069549560547,
+            319.4367370605469
+          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
+          "source_sha256": "ba9393961e1dc134e3d8f5ffb54eaaba0af53fa84a2437dbb1bf9bb969a20f95",
+          "old_provenance_figure": "figN22",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
+          "explicit_numerical_source_hashes": {}
+        },
+        {
+          "source": "N22",
+          "source_panel": "E",
+          "bbox": [
+            170.8000030517578,
+            181.75900268554688,
+            315.0625,
+            325.59613037109375
+          ],
+          "width": 144.2624969482422,
+          "height": 143.83712768554688,
+          "panel": "E",
+          "target_rect": [
+            170.8000030517578,
+            181.75900268554688,
+            315.0625,
+            325.59613037109375
+          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
+          "source_sha256": "ba9393961e1dc134e3d8f5ffb54eaaba0af53fa84a2437dbb1bf9bb969a20f95",
+          "old_provenance_figure": "figN22",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
+          "explicit_numerical_source_hashes": {}
+        },
+        {
+          "source": "N22",
+          "source_panel": "F",
+          "bbox": [
+            333.6000061035156,
+            181.75900268554688,
+            470.6490783691406,
+            317.4688720703125
+          ],
+          "width": 137.049072265625,
+          "height": 135.70986938476562,
+          "panel": "F",
+          "target_rect": [
+            333.6000061035156,
+            181.75900268554688,
+            470.6490783691406,
+            317.4688720703125
+          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
+          "source_sha256": "ba9393961e1dc134e3d8f5ffb54eaaba0af53fa84a2437dbb1bf9bb969a20f95",
+          "old_provenance_figure": "figN22",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
+          "explicit_numerical_source_hashes": {}
+        },
+        {
+          "source": "N22",
+          "source_panel": "G",
+          "bbox": [
+            8.0,
+            328.03900146484375,
+            231.38258361816406,
+            480.7657470703125
+          ],
+          "width": 223.38258361816406,
+          "height": 152.72674560546875,
+          "panel": "G",
+          "target_rect": [
+            8.0,
+            328.03900146484375,
+            231.38258361816406,
+            480.7657470703125
+          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
+          "source_sha256": "ba9393961e1dc134e3d8f5ffb54eaaba0af53fa84a2437dbb1bf9bb969a20f95",
+          "old_provenance_figure": "figN22",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
+          "explicit_numerical_source_hashes": {}
+        },
+        {
+          "source": "N22",
+          "source_panel": "H",
+          "bbox": [
+            249.1999969482422,
+            328.03900146484375,
+            474.564697265625,
+            480.7657470703125
+          ],
+          "width": 225.3647003173828,
+          "height": 152.72674560546875,
           "panel": "H",
           "target_rect": [
-            263.1609526794108,
-            420.65505134297996,
-            444.4967094954559,
-            534.1265649750702
+            249.1999969482422,
+            328.03900146484375,
+            474.564697265625,
+            480.7657470703125
           ],
-          "scale": 0.78094641178314,
-          "source_asset": "figures/supplementary/figure_S18_panels_A-K.pdf",
-          "source_sha256": "1724745817a41637c1ea2694a56172a50755e3b5b864112dc3a4256246353f5a",
-          "old_provenance_figure": "figS18",
-          "old_provenance_entry_ids": [
-            "alignmentdose.asset",
-            "alignmentdose.audit",
-            "alignmentdose.conditions",
-            "alignmentdose.contrasts",
-            "alignmentdose.outcomes",
-            "remainingphysical.asset",
-            "remainingphysical.audit",
-            "remainingphysical.conditions",
-            "remainingphysical.contrasts",
-            "remainingphysical.outcomes"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/physical_alignment_dose/audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/physical_alignment_dose/combined_seed_outcomes.csv",
-            "drafts/dendritic-local-learning/journal/source_data/physical_alignment_dose/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/physical_alignment_dose/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/remaining_physical_experiments/audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/remaining_physical_experiments/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/remaining_physical_experiments/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/remaining_physical_experiments/seed_outcomes_with_h3_reference.csv"
-          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
+          "source_sha256": "ba9393961e1dc134e3d8f5ffb54eaaba0af53fa84a2437dbb1bf9bb969a20f95",
+          "old_provenance_figure": "figN22",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
           "explicit_numerical_source_hashes": {}
         }
       ],
-      "ancillary_elements": [
-        {
-          "text": "accuracy",
-          "origin": [
-            516.5,
-            220.7
-          ],
-          "fontsize": 6.8,
-          "rotate": 90,
-          "role": "colourbar title, re-set beside the bar",
-          "target_source_panel": "S31D",
-          "target_origin": [
-            462.0680025689469,
-            212.01203384518956
-          ]
-        },
-        {
-          "source": "S31",
-          "bbox": [
-            184,
-            301,
-            205,
-            387
-          ],
-          "target_bbox": [
-            340.4,
-            301,
-            361.4,
-            387
-          ],
-          "role": "shared y tick labels",
-          "target_source_panel": "S31G",
-          "source_asset": "figures/supplementary/figure_S31_panels_A-G.pdf",
-          "source_sha256": "9bc3a51813bead71578fdc6a7ee00a6ee92395323e8f88c1f13cb32482939819"
-        },
-        {
-          "text": "Exact LocalCA: serial advantage (pp)",
-          "origin": [
-            357.5,
-            292
-          ],
-          "fontsize": 8.0,
-          "role": "quantity and optimizer in panel title",
-          "target_source_panel": "S31G",
-          "target_origin": [
-            16.10466938263867,
-            291.2901500581163
-          ]
-        }
-      ],
-      "whole_source_sheet": false,
-      "paste_scale": 0.7809,
+      "ancillary_elements": [],
+      "whole_source_sheet": true,
+      "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
-      "height_pt": 538.1265869140625,
-      "sha256": "97ee94db80be311cdf9529d2c7bfabd940da15239e967423a723fd1a9ae04654",
+      "height_pt": 484.0,
+      "sha256": "e8d82f51bbc225dd1e545c73d001c5d81afa577ceaeecb71b495fa881b9bbb88",
       "source_data_directories": [
         "source_data/physical_alignment_dose",
         "source_data/remaining_physical_experiments",
         "source_data/nonlinear_physical_depth_confirmatory",
+        "source_data/physical_depth_h4_factorial",
         "source_data/point_dendrite_credit_controls",
         "source_data/task_family_alignment"
       ]
@@ -6434,197 +6043,142 @@
       "label": "fig:si_shunt_replication",
       "panels": [
         {
-          "source": "S10",
-          "source_panel": "F",
-          "bbox": [
-            340.6,
-            163.4,
-            504.8,
-            284.2
-          ],
-          "width": 164.2,
-          "height": 120.79999999999998,
-          "panel": "A",
-          "target_rect": [
-            7.800000000000011,
-            19.0,
-            172.0,
-            139.79999999999998
-          ],
-          "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_S10_panels_A-H.pdf",
-          "source_sha256": "03b4bee94e11ffb8bb2eb51b3a61862dd3eb5b2ebb28a1b4b8e303aa673a0ba7",
-          "old_provenance_figure": "figS10",
-          "old_provenance_entry_ids": [
-            "fig5.a-b",
-            "fig5.asset",
-            "fig5.c-d",
-            "fig5.cohort",
-            "fig5.summary"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/cohort_manifest.csv",
-            "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/replication_summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/supp_figure_focal_cells.csv",
-            "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/supp_figure_routing_curves.csv"
-          ],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "S10",
-          "source_panel": "G",
-          "bbox": [
-            19.1,
-            307.1,
-            185.2,
-            427.9
-          ],
-          "width": 166.1,
-          "height": 120.79999999999995,
-          "panel": "B",
-          "target_rect": [
-            178.0,
-            19.0,
-            344.1,
-            139.79999999999995
-          ],
-          "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_S10_panels_A-H.pdf",
-          "source_sha256": "03b4bee94e11ffb8bb2eb51b3a61862dd3eb5b2ebb28a1b4b8e303aa673a0ba7",
-          "old_provenance_figure": "figS10",
-          "old_provenance_entry_ids": [
-            "fig5.a-b",
-            "fig5.asset",
-            "fig5.c-d",
-            "fig5.cohort",
-            "fig5.summary"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/cohort_manifest.csv",
-            "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/replication_summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/supp_figure_focal_cells.csv",
-            "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/supp_figure_routing_curves.csv"
-          ],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "S10",
-          "source_panel": "H",
-          "bbox": [
-            181.5,
-            307.1,
-            342.0,
-            430.1
-          ],
-          "width": 160.5,
-          "height": 123.0,
-          "panel": "C",
-          "target_rect": [
-            350.1,
-            19.0,
-            510.6,
-            142.0
-          ],
-          "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_S10_panels_A-H.pdf",
-          "source_sha256": "03b4bee94e11ffb8bb2eb51b3a61862dd3eb5b2ebb28a1b4b8e303aa673a0ba7",
-          "old_provenance_figure": "figS10",
-          "old_provenance_entry_ids": [
-            "fig5.a-b",
-            "fig5.asset",
-            "fig5.c-d",
-            "fig5.cohort",
-            "fig5.summary"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/cohort_manifest.csv",
-            "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/replication_summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/supp_figure_focal_cells.csv",
-            "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/supp_figure_routing_curves.csv"
-          ],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "S47",
+          "source": "N30",
           "source_panel": "A",
           "bbox": [
-            13.8,
-            0.0,
-            260.0,
-            177.5
+            26.0,
+            0.518986701965332,
+            158.1841278076172,
+            189.16888427734375
           ],
-          "width": 246.2,
-          "height": 177.5,
-          "panel": "D",
+          "width": 132.1841278076172,
+          "height": 188.64989757537842,
+          "panel": "A",
           "target_rect": [
-            7.900000000000006,
-            165.0,
-            254.1,
-            342.5
+            26.0,
+            0.518986701965332,
+            158.1841278076172,
+            189.16888427734375
           ],
           "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_shunt_weak_channels.pdf",
-          "source_sha256": "a1bd1b48ad19ed673aab157fcbc44ac5cc2d167a39a87a9c21a6cd739f231417",
-          "old_provenance_figure": "figS47",
-          "old_provenance_entry_ids": [
-            "creditfirst.figS47.asset",
-            "creditfirst.panel.311a335f588f254d",
-            "creditfirst.panel.f8fe8d4b72914f0e",
-            "creditfirst.panel.f9cfda40384e1b8e",
-            "creditfirst.panel.fb283f75911cb8a3"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/focal_selectivity_active_ensemble/cell_condition_metrics.csv",
-            "drafts/dendritic-local-learning/journal/source_data/focal_selectivity_active_ensemble/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/focal_selectivity_active_ensemble/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/focal_selectivity_phase1/condition_summary.csv"
-          ],
+          "source_asset": "figures/supplementary/figure_shunt_replication_native.pdf",
+          "source_sha256": "da213201310dce1c03a84a3b7720c189c69b62d58f1213f7ba8435cdcf54591b",
+          "old_provenance_figure": "figN30",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
           "explicit_numerical_source_hashes": {}
         },
         {
-          "source": "S47",
+          "source": "N30",
           "source_panel": "B",
           "bbox": [
-            270.0,
-            0.0,
-            518.4,
-            177.5
+            192.13333129882812,
+            0.518986701965332,
+            340.169677734375,
+            189.16888427734375
           ],
-          "width": 248.39999999999998,
-          "height": 177.5,
-          "panel": "E",
+          "width": 148.03634643554688,
+          "height": 188.64989757537842,
+          "panel": "B",
           "target_rect": [
-            262.1,
-            165.0,
-            510.5,
-            342.5
+            192.13333129882812,
+            0.518986701965332,
+            340.169677734375,
+            189.16888427734375
           ],
           "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_shunt_weak_channels.pdf",
-          "source_sha256": "a1bd1b48ad19ed673aab157fcbc44ac5cc2d167a39a87a9c21a6cd739f231417",
-          "old_provenance_figure": "figS47",
-          "old_provenance_entry_ids": [
-            "creditfirst.figS47.asset",
-            "creditfirst.panel.311a335f588f254d",
-            "creditfirst.panel.f8fe8d4b72914f0e",
-            "creditfirst.panel.f9cfda40384e1b8e",
-            "creditfirst.panel.fb283f75911cb8a3"
+          "source_asset": "figures/supplementary/figure_shunt_replication_native.pdf",
+          "source_sha256": "da213201310dce1c03a84a3b7720c189c69b62d58f1213f7ba8435cdcf54591b",
+          "old_provenance_figure": "figN30",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
+          "explicit_numerical_source_hashes": {}
+        },
+        {
+          "source": "N30",
+          "source_panel": "C",
+          "bbox": [
+            358.26666259765625,
+            0.518986701965332,
+            504.1910400390625,
+            193.43675231933594
           ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/focal_selectivity_active_ensemble/cell_condition_metrics.csv",
-            "drafts/dendritic-local-learning/journal/source_data/focal_selectivity_active_ensemble/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/focal_selectivity_active_ensemble/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/focal_selectivity_phase1/condition_summary.csv"
+          "width": 145.92437744140625,
+          "height": 192.9177656173706,
+          "panel": "C",
+          "target_rect": [
+            358.26666259765625,
+            0.518986701965332,
+            504.1910400390625,
+            193.43675231933594
           ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_shunt_replication_native.pdf",
+          "source_sha256": "da213201310dce1c03a84a3b7720c189c69b62d58f1213f7ba8435cdcf54591b",
+          "old_provenance_figure": "figN30",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
+          "explicit_numerical_source_hashes": {}
+        },
+        {
+          "source": "N30",
+          "source_panel": "D",
+          "bbox": [
+            26.0,
+            192.75900268554688,
+            288.8602600097656,
+            401.4367370605469
+          ],
+          "width": 262.8602600097656,
+          "height": 208.677734375,
+          "panel": "D",
+          "target_rect": [
+            26.0,
+            192.75900268554688,
+            288.8602600097656,
+            401.4367370605469
+          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_shunt_replication_native.pdf",
+          "source_sha256": "da213201310dce1c03a84a3b7720c189c69b62d58f1213f7ba8435cdcf54591b",
+          "old_provenance_figure": "figN30",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
+          "explicit_numerical_source_hashes": {}
+        },
+        {
+          "source": "N30",
+          "source_panel": "E",
+          "bbox": [
+            316.73333740234375,
+            192.75900268554688,
+            493.94439697265625,
+            401.4367370605469
+          ],
+          "width": 177.2110595703125,
+          "height": 208.677734375,
+          "panel": "E",
+          "target_rect": [
+            316.73333740234375,
+            192.75900268554688,
+            493.94439697265625,
+            401.4367370605469
+          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_shunt_replication_native.pdf",
+          "source_sha256": "da213201310dce1c03a84a3b7720c189c69b62d58f1213f7ba8435cdcf54591b",
+          "old_provenance_figure": "figN30",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
           "explicit_numerical_source_hashes": {}
         }
       ],
       "ancillary_elements": [],
-      "whole_source_sheet": false,
+      "whole_source_sheet": true,
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
-      "height_pt": 346.5,
-      "sha256": "210c8f163eade7645dbd26e983ea70c4814176288a50831672e20ba0e522c967",
+      "height_pt": 414.0,
+      "sha256": "20c34e923f938b2f4088002710e03b185d4bb344606e8e8e40c0038d69488de7",
       "source_data_directories": [
         "source_data/focal_selectivity_active_ensemble",
         "source_data/focal_selectivity_phase1",
@@ -6639,497 +6193,142 @@
       "label": "fig:si_measured_transfer_geometry",
       "panels": [
         {
-          "source": "S22",
+          "source": "N31",
           "source_panel": "A",
           "bbox": [
-            18.402000427246094,
-            7.759007453918457,
-            180.0094757080078,
-            135.86801147460938
+            0.5,
+            0.518986701965332,
+            202.15028381347656,
+            179.46800231933594
           ],
-          "width": 161.60747528076172,
-          "height": 128.10900402069092,
+          "width": 201.65028381347656,
+          "height": 178.9490156173706,
           "panel": "A",
           "target_rect": [
-            116.55021489011534,
-            19.0,
-            272.63700223633134,
-            142.73266046619264
+            0.5,
+            0.518986701965332,
+            202.15028381347656,
+            179.46800231933594
           ],
-          "scale": 0.9658389073589906,
-          "source_asset": "figures/supplementary/figure_S22_panels_A-J.pdf",
-          "source_sha256": "df6ea1187ff6cbc2c17143d260478c347397483a42115b67e076aef6fa6746e1",
-          "old_provenance_figure": "figS22",
-          "old_provenance_entry_ids": [
-            "fig6.b-d",
-            "fig6.e.ch1",
-            "fig6.e.ch1.targets",
-            "fig6.e.ch2",
-            "fig6.e.ch2.targets",
-            "fig6.e.ch4",
-            "fig6.e.ch8",
-            "fig6.e.ch8.targets",
-            "measured.detail.asset"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/figure5/task_summary_ch1.json",
-            "drafts/dendritic-local-learning/journal/source_data/figure5/task_summary_ch2.json",
-            "drafts/dendritic-local-learning/journal/source_data/figure5/task_summary_ch4.json",
-            "drafts/dendritic-local-learning/journal/source_data/figure5/task_summary_ch8.json",
-            "drafts/dendritic-local-learning/journal/source_data/figure5/task_target_method_means_ch1.csv",
-            "drafts/dendritic-local-learning/journal/source_data/figure5/task_target_method_means_ch2.csv",
-            "drafts/dendritic-local-learning/journal/source_data/figure5/task_target_method_means_ch4.csv",
-            "drafts/dendritic-local-learning/journal/source_data/figure5/task_target_method_means_ch8.csv"
-          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_measured_transfer_geometry_native.pdf",
+          "source_sha256": "30e016141864d9cbb1bd37a2d7599f2630a084a5d028e45afda378bbcbb22608",
+          "old_provenance_figure": "figN31",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
           "explicit_numerical_source_hashes": {}
         },
         {
-          "source": "M9",
+          "source": "N31",
           "source_panel": "B",
           "bbox": [
-            80.7,
-            126.6,
-            206.2,
-            264.4
+            212.1666717529297,
+            0.518986701965332,
+            347.0517883300781,
+            179.43675231933594
           ],
-          "width": 125.49999999999999,
-          "height": 137.79999999999998,
+          "width": 134.88511657714844,
+          "height": 178.9177656173706,
           "panel": "B",
           "target_rect": [
-            280.63700223633134,
-            19.0,
-            401.84978510988464,
-            152.09260143406888
+            212.1666717529297,
+            0.518986701965332,
+            347.0517883300781,
+            179.43675231933594
           ],
-          "scale": 0.9658389073589906,
-          "source_asset": "figures/supplementary/frozen/credit_first_figure_08_M9.pdf",
-          "source_sha256": "131b9b04b89c29f711b83a4121efa03e97f76dff6629ea5fb0e4e17002b61bb7",
-          "old_provenance_figure": "fig9",
-          "old_provenance_entry_ids": [
-            "creditfirst.fig9.asset",
-            "creditfirst.panel.386acfb081d763e7",
-            "creditfirst.panel.54883de9fefa5334",
-            "creditfirst.panel.5de05905762d5d36",
-            "creditfirst.panel.7595cfe48fbcb319",
-            "creditfirst.panel.859d48bddcb9e261",
-            "creditfirst.panel.bb9f77e136eb9b62",
-            "creditfirst.panel.e4b8b6a6919540f6",
-            "creditfirst.panel.ed4803783a512493",
-            "creditfirst.panel.f90062af22636849",
-            "creditfirst.panel.fc214a30df2639e0"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/credit_first_figures/figure_08_actual_support.npz",
-            "drafts/dendritic-local-learning/journal/source_data/credit_first_figures/figure_08_prediction_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_first_figures/figure_08_support.csv",
-            "drafts/dendritic-local-learning/journal/source_data/figure3/segment_metrics.csv",
-            "drafts/dendritic-local-learning/journal/source_data/fulltree_boundary/output/dictionary_and_validation_metadata.jsonl",
-            "drafts/dendritic-local-learning/journal/source_data/fulltree_within_span_oracle/cell_metrics.csv",
-            "drafts/dendritic-local-learning/journal/source_data/fulltree_within_span_oracle/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/review_evidence_reanalysis/functional_native_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/review_evidence_reanalysis/functional_native_target_effects.csv",
-            "drafts/dendritic-local-learning/journal/source_data/review_response_baselines/target_metrics.csv"
-          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_measured_transfer_geometry_native.pdf",
+          "source_sha256": "30e016141864d9cbb1bd37a2d7599f2630a084a5d028e45afda378bbcbb22608",
+          "old_provenance_figure": "figN31",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
           "explicit_numerical_source_hashes": {}
         },
         {
-          "source": "M9",
-          "source_panel": "D",
-          "bbox": [
-            33.2,
-            283.5,
-            262.2,
-            454.6
-          ],
-          "width": 229.0,
-          "height": 171.10000000000002,
-          "panel": "C",
-          "target_rect": [
-            33.10534325280011,
-            175.09260143406888,
-            254.28245303800895,
-            340.3476384831922
-          ],
-          "scale": 0.9658389073589906,
-          "source_asset": "figures/supplementary/frozen/credit_first_figure_08_M9.pdf",
-          "source_sha256": "131b9b04b89c29f711b83a4121efa03e97f76dff6629ea5fb0e4e17002b61bb7",
-          "old_provenance_figure": "fig9",
-          "old_provenance_entry_ids": [
-            "creditfirst.fig9.asset",
-            "creditfirst.panel.386acfb081d763e7",
-            "creditfirst.panel.54883de9fefa5334",
-            "creditfirst.panel.5de05905762d5d36",
-            "creditfirst.panel.7595cfe48fbcb319",
-            "creditfirst.panel.859d48bddcb9e261",
-            "creditfirst.panel.bb9f77e136eb9b62",
-            "creditfirst.panel.e4b8b6a6919540f6",
-            "creditfirst.panel.ed4803783a512493",
-            "creditfirst.panel.f90062af22636849",
-            "creditfirst.panel.fc214a30df2639e0"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/credit_first_figures/figure_08_actual_support.npz",
-            "drafts/dendritic-local-learning/journal/source_data/credit_first_figures/figure_08_prediction_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_first_figures/figure_08_support.csv",
-            "drafts/dendritic-local-learning/journal/source_data/figure3/segment_metrics.csv",
-            "drafts/dendritic-local-learning/journal/source_data/fulltree_boundary/output/dictionary_and_validation_metadata.jsonl",
-            "drafts/dendritic-local-learning/journal/source_data/fulltree_within_span_oracle/cell_metrics.csv",
-            "drafts/dendritic-local-learning/journal/source_data/fulltree_within_span_oracle/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/review_evidence_reanalysis/functional_native_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/review_evidence_reanalysis/functional_native_target_effects.csv",
-            "drafts/dendritic-local-learning/journal/source_data/review_response_baselines/target_metrics.csv"
-          ],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "M9",
-          "source_panel": "E",
-          "bbox": [
-            275.5,
-            283.5,
-            506.4,
-            455.0
-          ],
-          "width": 230.89999999999998,
-          "height": 171.5,
-          "panel": "D",
-          "target_rect": [
-            262.28245303800895,
-            175.09260143406888,
-            485.29465674719984,
-            340.73397404613576
-          ],
-          "scale": 0.9658389073589906,
-          "source_asset": "figures/supplementary/frozen/credit_first_figure_08_M9.pdf",
-          "source_sha256": "131b9b04b89c29f711b83a4121efa03e97f76dff6629ea5fb0e4e17002b61bb7",
-          "old_provenance_figure": "fig9",
-          "old_provenance_entry_ids": [
-            "creditfirst.fig9.asset",
-            "creditfirst.panel.386acfb081d763e7",
-            "creditfirst.panel.54883de9fefa5334",
-            "creditfirst.panel.5de05905762d5d36",
-            "creditfirst.panel.7595cfe48fbcb319",
-            "creditfirst.panel.859d48bddcb9e261",
-            "creditfirst.panel.bb9f77e136eb9b62",
-            "creditfirst.panel.e4b8b6a6919540f6",
-            "creditfirst.panel.ed4803783a512493",
-            "creditfirst.panel.f90062af22636849",
-            "creditfirst.panel.fc214a30df2639e0"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/credit_first_figures/figure_08_actual_support.npz",
-            "drafts/dendritic-local-learning/journal/source_data/credit_first_figures/figure_08_prediction_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/credit_first_figures/figure_08_support.csv",
-            "drafts/dendritic-local-learning/journal/source_data/figure3/segment_metrics.csv",
-            "drafts/dendritic-local-learning/journal/source_data/fulltree_boundary/output/dictionary_and_validation_metadata.jsonl",
-            "drafts/dendritic-local-learning/journal/source_data/fulltree_within_span_oracle/cell_metrics.csv",
-            "drafts/dendritic-local-learning/journal/source_data/fulltree_within_span_oracle/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/review_evidence_reanalysis/functional_native_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/review_evidence_reanalysis/functional_native_target_effects.csv",
-            "drafts/dendritic-local-learning/journal/source_data/review_response_baselines/target_metrics.csv"
-          ],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "S56",
+          "source": "N31",
           "source_panel": "C",
           "bbox": [
-            4.0,
-            214.2515411376953,
+            344.26666259765625,
+            0.518986701965332,
             500.3999938964844,
-            392.6105041503906
+            179.43675231933594
           ],
-          "width": 496.3999938964844,
-          "height": 178.3589630126953,
+          "width": 156.13333129882812,
+          "height": 178.9177656173706,
+          "panel": "C",
+          "target_rect": [
+            344.26666259765625,
+            0.518986701965332,
+            500.3999938964844,
+            179.43675231933594
+          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_measured_transfer_geometry_native.pdf",
+          "source_sha256": "30e016141864d9cbb1bd37a2d7599f2630a084a5d028e45afda378bbcbb22608",
+          "old_provenance_figure": "figN31",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
+          "explicit_numerical_source_hashes": {}
+        },
+        {
+          "source": "N31",
+          "source_panel": "D",
+          "bbox": [
+            0.5,
+            183.75900268554688,
+            249.18063354492188,
+            396.4367370605469
+          ],
+          "width": 248.68063354492188,
+          "height": 212.677734375,
+          "panel": "D",
+          "target_rect": [
+            0.5,
+            183.75900268554688,
+            249.18063354492188,
+            396.4367370605469
+          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_measured_transfer_geometry_native.pdf",
+          "source_sha256": "30e016141864d9cbb1bd37a2d7599f2630a084a5d028e45afda378bbcbb22608",
+          "old_provenance_figure": "figN31",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
+          "explicit_numerical_source_hashes": {}
+        },
+        {
+          "source": "N31",
+          "source_panel": "E",
+          "bbox": [
+            256.20001220703125,
+            176.1804962158203,
+            505.2628173828125,
+            396.4679870605469
+          ],
+          "width": 249.06280517578125,
+          "height": 220.28749084472656,
           "panel": "E",
           "target_rect": [
-            19.478786141004946,
-            363.73397404613576,
-            498.92121385899503,
-            536.0
+            256.20001220703125,
+            176.1804962158203,
+            505.2628173828125,
+            396.4679870605469
           ],
-          "scale": 0.9658389073589906,
-          "source_asset": "figures/supplementary/figure_S56_measured_alignment_power.pdf",
-          "source_sha256": "a76a96a1ae5520b906700a788786bc13e99545f055c2bf2e95fa29c2a5caec2b",
-          "old_provenance_figure": "figS56",
-          "old_provenance_entry_ids": [
-            "creditfirst.figS56.asset",
-            "creditfirst.panel.0130b633e8a3a40f",
-            "creditfirst.panel.3e21fead5749c9a1",
-            "creditfirst.panel.57916fb5fd32882f",
-            "creditfirst.panel.93bc36b38956da28",
-            "creditfirst.support.0052bbc40f61c987",
-            "creditfirst.support.00c713e11864c085",
-            "creditfirst.support.019e65109e63380a",
-            "creditfirst.support.033228c222f1e997",
-            "creditfirst.support.059c147a78b42568",
-            "creditfirst.support.062e37fa7de3a3c1",
-            "creditfirst.support.07c333888e4b7807",
-            "creditfirst.support.089617b4979d5bbf",
-            "creditfirst.support.0c3b648b9dd538e4",
-            "creditfirst.support.0c7183495cc561ac",
-            "creditfirst.support.1172f3f572706b07",
-            "creditfirst.support.12abf7107af3fdb1",
-            "creditfirst.support.133d9c3aefecb83e",
-            "creditfirst.support.13ec95ee56505895",
-            "creditfirst.support.14a1da103755f473",
-            "creditfirst.support.16238c4c4c72b0e2",
-            "creditfirst.support.18c387091d0b2d75",
-            "creditfirst.support.1ab702c4a6ec2bb4",
-            "creditfirst.support.1ada9b4f99ff614f",
-            "creditfirst.support.1ed260388d66e9cf",
-            "creditfirst.support.1fee160844cde348",
-            "creditfirst.support.2165823b05ad6504",
-            "creditfirst.support.23d192d60f5d2b94",
-            "creditfirst.support.261f7adb7948949f",
-            "creditfirst.support.2cbdfa19fb15c6b0",
-            "creditfirst.support.31061888ec659e09",
-            "creditfirst.support.321509c334c6776b",
-            "creditfirst.support.327eec8b0e80e3e7",
-            "creditfirst.support.332f1c4f36c4e617",
-            "creditfirst.support.35482c8d25d03b08",
-            "creditfirst.support.3593c8baf0096357",
-            "creditfirst.support.3a608de4cdcc0b35",
-            "creditfirst.support.3a85951f5d931fab",
-            "creditfirst.support.3b1926aaeb189c2d",
-            "creditfirst.support.3b3752274f51626a",
-            "creditfirst.support.3e628f37e15aeff8",
-            "creditfirst.support.436e6e9dfbfaa4f3",
-            "creditfirst.support.441b5a86c198accc",
-            "creditfirst.support.4852d1c00f27f616",
-            "creditfirst.support.4a792b6bda8be749",
-            "creditfirst.support.4a929c480da04c13",
-            "creditfirst.support.573a62d1d625c061",
-            "creditfirst.support.5f374e356a763102",
-            "creditfirst.support.60a8a59bffd1b462",
-            "creditfirst.support.6416ffef62ba12f7",
-            "creditfirst.support.664bc0c844f3ef69",
-            "creditfirst.support.6ced9ca5b5028b71",
-            "creditfirst.support.6d817d2f6c2c9f24",
-            "creditfirst.support.72528dd1c3e9c19b",
-            "creditfirst.support.72d99f3472afb31b",
-            "creditfirst.support.7563049d68808883",
-            "creditfirst.support.79809798af1535cd",
-            "creditfirst.support.79c5007577dd13e6",
-            "creditfirst.support.79f5b2c88492517b",
-            "creditfirst.support.7ecef649deb446b8",
-            "creditfirst.support.80ba32bd6fb0520e",
-            "creditfirst.support.84888c7912159010",
-            "creditfirst.support.85855b3e2f5b8400",
-            "creditfirst.support.85cf2e5d8d6ac84a",
-            "creditfirst.support.86f0cf17f6ea4e64",
-            "creditfirst.support.87dcc00a4839ec32",
-            "creditfirst.support.898bd400da2c1cf1",
-            "creditfirst.support.8b8435646bee79b7",
-            "creditfirst.support.8e03f1e579a8bf3b",
-            "creditfirst.support.941ea655f1fa5444",
-            "creditfirst.support.942f6d6a6391fcc4",
-            "creditfirst.support.98106f46f8ed80a4",
-            "creditfirst.support.99a0325cfde7dfc4",
-            "creditfirst.support.9d1b3f98a2874e43",
-            "creditfirst.support.9df2b0cbf691c5f5",
-            "creditfirst.support.9e67728b25f55229",
-            "creditfirst.support.9f6781989b237a3d",
-            "creditfirst.support.9fa5d2247e2f5c8d",
-            "creditfirst.support.a0001e5c9716a364",
-            "creditfirst.support.a21156edd8b1fdbe",
-            "creditfirst.support.a269c4ae2a0c4ee8",
-            "creditfirst.support.a6c92fafd6fc64cd",
-            "creditfirst.support.a70b23e4f361cb2d",
-            "creditfirst.support.a7ca67f441a24822",
-            "creditfirst.support.a9af71bd328eea9e",
-            "creditfirst.support.aa6f4c01c21a126f",
-            "creditfirst.support.aca6c0964e22ccd0",
-            "creditfirst.support.ad0e6f2bd4ef5f0f",
-            "creditfirst.support.adb73da49b131351",
-            "creditfirst.support.ae22ba107cbd6035",
-            "creditfirst.support.b2fcc97fd62807f9",
-            "creditfirst.support.b366180b3deec830",
-            "creditfirst.support.b46d101e537adbbf",
-            "creditfirst.support.b67b55021918222f",
-            "creditfirst.support.b6b9e2209f9a6322",
-            "creditfirst.support.b81b0bd3671c5ad3",
-            "creditfirst.support.b8f965b47adb71d1",
-            "creditfirst.support.bded1e3358aecb99",
-            "creditfirst.support.c0920498f3710789",
-            "creditfirst.support.c10b46cc6c654c3b",
-            "creditfirst.support.cc9cb40a558a8f61",
-            "creditfirst.support.ccf4a42539f14b27",
-            "creditfirst.support.d17c8bd265401e9b",
-            "creditfirst.support.d1a71e11814431c3",
-            "creditfirst.support.d36e4968fdb67320",
-            "creditfirst.support.d73f2d11c302de45",
-            "creditfirst.support.d88cd718e976ea90",
-            "creditfirst.support.d92a2072da467244",
-            "creditfirst.support.d95b857cd625f314",
-            "creditfirst.support.d97579dabf082591",
-            "creditfirst.support.da182e08cc897615",
-            "creditfirst.support.da3042302f693fab",
-            "creditfirst.support.db4063d2b28ad1d4",
-            "creditfirst.support.db8edec3526196d3",
-            "creditfirst.support.e12612cf42963ff3",
-            "creditfirst.support.e30efd4954b3ef13",
-            "creditfirst.support.e35f98af88ab0781",
-            "creditfirst.support.e67103a04c4aced2",
-            "creditfirst.support.e9112684cbe93ec9",
-            "creditfirst.support.eba5c6ffb6a56848",
-            "creditfirst.support.ebb189abeac35c5b",
-            "creditfirst.support.ee1159a80d6004f5",
-            "creditfirst.support.f0030da366b7d472",
-            "creditfirst.support.f05998fc7354a965",
-            "creditfirst.support.f165209cc725594d",
-            "creditfirst.support.f5ccd897ff10245a",
-            "creditfirst.support.f5f9662668e84cf2",
-            "creditfirst.support.f83d0a25c2c2be37",
-            "creditfirst.support.fc3cf340ef5a2548",
-            "creditfirst.support.fc611e9794177681",
-            "creditfirst.support.fc7f714b90231c8e",
-            "creditfirst.support.fcda942d0616b7a2",
-            "creditfirst.support.fe6c3c13c78017ee"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/PROTOCOL.md",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/README.md",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/RESULTS.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/RESULTS.md",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/figure_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/figure_provenance.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/fixture_portability_validation.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/independent_arithmetic_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/input_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/input_manifest.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/ancestral_segment_closure.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/original_functional_topology_analysis.py",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/original_target_aggregation.py",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/partner_index.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/scan_index.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256456_ses4_scan10_automatic_conservative/functional_contact_pairs.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256456_ses4_scan10_automatic_conservative/functional_contacts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256456_ses4_scan10_automatic_conservative/observed_partner_responses.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256456_ses4_scan10_automatic_conservative/recording_identity.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256456_ses4_scan10_automatic_conservative/summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256456_ses6_scan4_automatic_conservative/functional_contact_pairs.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256456_ses6_scan4_automatic_conservative/functional_contacts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256456_ses6_scan4_automatic_conservative/observed_partner_responses.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256456_ses6_scan4_automatic_conservative/recording_identity.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256456_ses6_scan4_automatic_conservative/summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256456_ses6_scan6_automatic_conservative/functional_contact_pairs.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256456_ses6_scan6_automatic_conservative/functional_contacts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256456_ses6_scan6_automatic_conservative/observed_partner_responses.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256456_ses6_scan6_automatic_conservative/recording_identity.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256456_ses6_scan6_automatic_conservative/summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256456_ses7_scan4_automatic_conservative/functional_contact_pairs.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256456_ses7_scan4_automatic_conservative/functional_contacts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256456_ses7_scan4_automatic_conservative/observed_partner_responses.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256456_ses7_scan4_automatic_conservative/recording_identity.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256456_ses7_scan4_automatic_conservative/summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256550_ses5_scan6_automatic_conservative/functional_contact_pairs.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256550_ses5_scan6_automatic_conservative/functional_contacts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256550_ses5_scan6_automatic_conservative/observed_partner_responses.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256550_ses5_scan6_automatic_conservative/recording_identity.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256550_ses5_scan6_automatic_conservative/summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256550_ses5_scan7_automatic_conservative/functional_contact_pairs.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256550_ses5_scan7_automatic_conservative/functional_contacts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256550_ses5_scan7_automatic_conservative/observed_partner_responses.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256550_ses5_scan7_automatic_conservative/recording_identity.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256550_ses5_scan7_automatic_conservative/summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256550_ses9_scan4_automatic_conservative/functional_contact_pairs.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256550_ses9_scan4_automatic_conservative/functional_contacts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256550_ses9_scan4_automatic_conservative/observed_partner_responses.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256550_ses9_scan4_automatic_conservative/recording_identity.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target256550_ses9_scan4_automatic_conservative/summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target258209_ses4_scan7_automatic_conservative/functional_contact_pairs.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target258209_ses4_scan7_automatic_conservative/functional_contacts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target258209_ses4_scan7_automatic_conservative/observed_partner_responses.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target258209_ses4_scan7_automatic_conservative/recording_identity.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target258209_ses4_scan7_automatic_conservative/summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target258209_ses8_scan5_automatic_conservative/functional_contact_pairs.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target258209_ses8_scan5_automatic_conservative/functional_contacts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target258209_ses8_scan5_automatic_conservative/observed_partner_responses.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target258209_ses8_scan5_automatic_conservative/recording_identity.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target258209_ses8_scan5_automatic_conservative/summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target264871_ses7_scan3_automatic_conservative/functional_contact_pairs.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target264871_ses7_scan3_automatic_conservative/functional_contacts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target264871_ses7_scan3_automatic_conservative/observed_partner_responses.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target264871_ses7_scan3_automatic_conservative/recording_identity.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target264871_ses7_scan3_automatic_conservative/summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target264888_ses7_scan3_automatic_conservative/functional_contact_pairs.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target264888_ses7_scan3_automatic_conservative/functional_contacts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target264888_ses7_scan3_automatic_conservative/observed_partner_responses.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target264888_ses7_scan3_automatic_conservative/recording_identity.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target264888_ses7_scan3_automatic_conservative/summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target264889_ses6_scan6_automatic_conservative/functional_contact_pairs.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target264889_ses6_scan6_automatic_conservative/functional_contacts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target264889_ses6_scan6_automatic_conservative/observed_partner_responses.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target264889_ses6_scan6_automatic_conservative/recording_identity.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target264889_ses6_scan6_automatic_conservative/summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target291111_ses6_scan4_automatic_conservative/functional_contact_pairs.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target291111_ses6_scan4_automatic_conservative/functional_contacts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target291111_ses6_scan4_automatic_conservative/observed_partner_responses.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target291111_ses6_scan4_automatic_conservative/recording_identity.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/inputs/target291111_ses6_scan4_automatic_conservative/summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/null_scan_correlation_measured.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/null_scan_correlation_perfect.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/null_target_correlation_measured.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/null_target_correlation_perfect.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/portable_replay_validation.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/power_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/protocol_freeze.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/reliability_calibration_audit.csv",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/reliability_calibration_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_00.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_00.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_01.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_01.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_02.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_02.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_03.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_03.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_04.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_04.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_05.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_05.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_06.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_06.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_07.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_07.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_08.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_08.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_09.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_09.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_10.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_10.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_11.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_11.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_12.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_12.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_13.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_13.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_14.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_14.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_15.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_15.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_16.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_16.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_17.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_17.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_18.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_18.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_19.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/runs/chunk_19.npz",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/scheduling_amendments.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/submission_record.json",
-            "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/target_sensitivity_summary.csv"
-          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_measured_transfer_geometry_native.pdf",
+          "source_sha256": "30e016141864d9cbb1bd37a2d7599f2630a084a5d028e45afda378bbcbb22608",
+          "old_provenance_figure": "figN31",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
           "explicit_numerical_source_hashes": {}
         }
       ],
       "ancillary_elements": [],
-      "whole_source_sheet": false,
-      "paste_scale": 0.9658,
+      "whole_source_sheet": true,
+      "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
-      "height_pt": 540.0,
-      "sha256": "c13bad8f4f0b3478e867e175f031828e590e55148202cc7742c7dca508f8d83c",
+      "height_pt": 403.0,
+      "sha256": "14f402a4279cb09575d0d3cb5a2183cec2baf59d04ff7e4851c64ca0178fcda9",
       "source_data_directories": [
         "source_data/figure5",
         "source_data/measured_alignment_power",
@@ -9677,11 +8876,9 @@
     ],
     "S5": [
       {
-        "figure": "S3",
+        "kind": "section",
         "label": "fig:si_utility_signal_noise",
-        "panel": "F",
-        "source_panel": "E",
-        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
+        "note": "Panel E is redrawn in the native render N3 from the same alignment-controlled tables and pasted whole as Supplementary Fig. S3F; the training builder is never run."
       }
     ],
     "S6": [
@@ -9751,27 +8948,6 @@
         "panel": "A",
         "source_panel": "B",
         "path": "figures/supplementary/curated/anatomy_capacity_controls.pdf"
-      },
-      {
-        "figure": "S30",
-        "label": "fig:si_shunt_replication",
-        "panel": "A",
-        "source_panel": "F",
-        "path": "figures/supplementary/curated/shunt_replication.pdf"
-      },
-      {
-        "figure": "S30",
-        "label": "fig:si_shunt_replication",
-        "panel": "B",
-        "source_panel": "G",
-        "path": "figures/supplementary/curated/shunt_replication.pdf"
-      },
-      {
-        "figure": "S30",
-        "label": "fig:si_shunt_replication",
-        "panel": "C",
-        "source_panel": "H",
-        "path": "figures/supplementary/curated/shunt_replication.pdf"
       }
     ],
     "S11": [
@@ -9949,34 +9125,6 @@
     ],
     "S18": [
       {
-        "figure": "S22",
-        "label": "fig:si_physical_architecture",
-        "panel": "E",
-        "source_panel": "A",
-        "path": "figures/supplementary/curated/physical_architecture.pdf"
-      },
-      {
-        "figure": "S22",
-        "label": "fig:si_physical_architecture",
-        "panel": "F",
-        "source_panel": "B",
-        "path": "figures/supplementary/curated/physical_architecture.pdf"
-      },
-      {
-        "figure": "S22",
-        "label": "fig:si_physical_architecture",
-        "panel": "G",
-        "source_panel": "C",
-        "path": "figures/supplementary/curated/physical_architecture.pdf"
-      },
-      {
-        "figure": "S22",
-        "label": "fig:si_physical_architecture",
-        "panel": "H",
-        "source_panel": "D",
-        "path": "figures/supplementary/curated/physical_architecture.pdf"
-      },
-      {
         "figure": "S24",
         "label": "fig:si_physical_optimizer",
         "panel": "A",
@@ -10034,11 +9182,9 @@
     ],
     "S22": [
       {
-        "figure": "S31",
+        "kind": "section",
         "label": "fig:si_measured_transfer_geometry",
-        "panel": "A",
-        "source_panel": "A",
-        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
+        "note": "Replaced by the native render N31, drawn from the same source tables and pasted whole as Supplementary Fig. S31A."
       }
     ],
     "S23": [
@@ -10169,32 +9315,9 @@
     ],
     "S31": [
       {
-        "figure": "S22",
+        "kind": "section",
         "label": "fig:si_physical_architecture",
-        "panel": "A",
-        "source_panel": "B",
-        "path": "figures/supplementary/curated/physical_architecture.pdf"
-      },
-      {
-        "figure": "S22",
-        "label": "fig:si_physical_architecture",
-        "panel": "B",
-        "source_panel": "C",
-        "path": "figures/supplementary/curated/physical_architecture.pdf"
-      },
-      {
-        "figure": "S22",
-        "label": "fig:si_physical_architecture",
-        "panel": "C",
-        "source_panel": "D",
-        "path": "figures/supplementary/curated/physical_architecture.pdf"
-      },
-      {
-        "figure": "S22",
-        "label": "fig:si_physical_architecture",
-        "panel": "D",
-        "source_panel": "G",
-        "path": "figures/supplementary/curated/physical_architecture.pdf"
+        "note": "Replaced by the native render N22, drawn from the same source tables and pasted whole as Supplementary Fig. S22."
       }
     ],
     "S32": [
@@ -10396,48 +9519,16 @@
     ],
     "S46": [
       {
-        "figure": "S3",
+        "kind": "section",
         "label": "fig:si_utility_signal_noise",
-        "panel": "A",
-        "source_panel": "A",
-        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
-      },
-      {
-        "figure": "S3",
-        "label": "fig:si_utility_signal_noise",
-        "panel": "B",
-        "source_panel": "C",
-        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
-      },
-      {
-        "figure": "S3",
-        "label": "fig:si_utility_signal_noise",
-        "panel": "C",
-        "source_panel": "D",
-        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
-      },
-      {
-        "figure": "S3",
-        "label": "fig:si_utility_signal_noise",
-        "panel": "D",
-        "source_panel": "E",
-        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
+        "note": "Replaced by the native render N3, drawn from the same source tables and pasted whole as Supplementary Fig. S3."
       }
     ],
     "S47": [
       {
-        "figure": "S30",
+        "kind": "section",
         "label": "fig:si_shunt_replication",
-        "panel": "D",
-        "source_panel": "A",
-        "path": "figures/supplementary/curated/shunt_replication.pdf"
-      },
-      {
-        "figure": "S30",
-        "label": "fig:si_shunt_replication",
-        "panel": "E",
-        "source_panel": "B",
-        "path": "figures/supplementary/curated/shunt_replication.pdf"
+        "note": "Replaced by the native render N30, drawn from the same source tables and pasted whole as Supplementary Fig. S30D,E."
       }
     ],
     "S48": [
@@ -10498,34 +9589,16 @@
     ],
     "S56": [
       {
-        "figure": "S31",
+        "kind": "section",
         "label": "fig:si_measured_transfer_geometry",
-        "panel": "E",
-        "source_panel": "C",
-        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
+        "note": "Replaced by the native render N31, drawn from the same calibration table and pasted whole as Supplementary Fig. S31E."
       }
     ],
     "M9": [
       {
-        "figure": "S31",
+        "kind": "section",
         "label": "fig:si_measured_transfer_geometry",
-        "panel": "B",
-        "source_panel": "B",
-        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
-      },
-      {
-        "figure": "S31",
-        "label": "fig:si_measured_transfer_geometry",
-        "panel": "C",
-        "source_panel": "D",
-        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
-      },
-      {
-        "figure": "S31",
-        "label": "fig:si_measured_transfer_geometry",
-        "panel": "D",
-        "source_panel": "E",
-        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
+        "note": "Replaced by the native render N31, drawn from the same source tables and pasted whole as Supplementary Fig. S31B--D."
       }
     ],
     "N14": [
@@ -11088,22 +10161,201 @@
         "path": "figures/supplementary/curated/morphology_estimation.pdf"
       }
     ],
-    "X1": [
+    "N3": [
+      {
+        "figure": "S3",
+        "label": "fig:si_utility_signal_noise",
+        "panel": "A",
+        "source_panel": "A",
+        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
+      },
+      {
+        "figure": "S3",
+        "label": "fig:si_utility_signal_noise",
+        "panel": "B",
+        "source_panel": "B",
+        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
+      },
+      {
+        "figure": "S3",
+        "label": "fig:si_utility_signal_noise",
+        "panel": "C",
+        "source_panel": "C",
+        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
+      },
+      {
+        "figure": "S3",
+        "label": "fig:si_utility_signal_noise",
+        "panel": "D",
+        "source_panel": "D",
+        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
+      },
       {
         "figure": "S3",
         "label": "fig:si_utility_signal_noise",
         "panel": "E",
-        "source_panel": "*",
+        "source_panel": "E",
         "path": "figures/supplementary/curated/utility_signal_noise.pdf"
-      }
-    ],
-    "X2": [
+      },
+      {
+        "figure": "S3",
+        "label": "fig:si_utility_signal_noise",
+        "panel": "F",
+        "source_panel": "F",
+        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
+      },
       {
         "figure": "S3",
         "label": "fig:si_utility_signal_noise",
         "panel": "G",
-        "source_panel": "*",
+        "source_panel": "G",
         "path": "figures/supplementary/curated/utility_signal_noise.pdf"
+      }
+    ],
+    "N22": [
+      {
+        "figure": "S22",
+        "label": "fig:si_physical_architecture",
+        "panel": "A",
+        "source_panel": "A",
+        "path": "figures/supplementary/curated/physical_architecture.pdf"
+      },
+      {
+        "figure": "S22",
+        "label": "fig:si_physical_architecture",
+        "panel": "B",
+        "source_panel": "B",
+        "path": "figures/supplementary/curated/physical_architecture.pdf"
+      },
+      {
+        "figure": "S22",
+        "label": "fig:si_physical_architecture",
+        "panel": "C",
+        "source_panel": "C",
+        "path": "figures/supplementary/curated/physical_architecture.pdf"
+      },
+      {
+        "figure": "S22",
+        "label": "fig:si_physical_architecture",
+        "panel": "D",
+        "source_panel": "D",
+        "path": "figures/supplementary/curated/physical_architecture.pdf"
+      },
+      {
+        "figure": "S22",
+        "label": "fig:si_physical_architecture",
+        "panel": "E",
+        "source_panel": "E",
+        "path": "figures/supplementary/curated/physical_architecture.pdf"
+      },
+      {
+        "figure": "S22",
+        "label": "fig:si_physical_architecture",
+        "panel": "F",
+        "source_panel": "F",
+        "path": "figures/supplementary/curated/physical_architecture.pdf"
+      },
+      {
+        "figure": "S22",
+        "label": "fig:si_physical_architecture",
+        "panel": "G",
+        "source_panel": "G",
+        "path": "figures/supplementary/curated/physical_architecture.pdf"
+      },
+      {
+        "figure": "S22",
+        "label": "fig:si_physical_architecture",
+        "panel": "H",
+        "source_panel": "H",
+        "path": "figures/supplementary/curated/physical_architecture.pdf"
+      }
+    ],
+    "N30": [
+      {
+        "figure": "S30",
+        "label": "fig:si_shunt_replication",
+        "panel": "A",
+        "source_panel": "A",
+        "path": "figures/supplementary/curated/shunt_replication.pdf"
+      },
+      {
+        "figure": "S30",
+        "label": "fig:si_shunt_replication",
+        "panel": "B",
+        "source_panel": "B",
+        "path": "figures/supplementary/curated/shunt_replication.pdf"
+      },
+      {
+        "figure": "S30",
+        "label": "fig:si_shunt_replication",
+        "panel": "C",
+        "source_panel": "C",
+        "path": "figures/supplementary/curated/shunt_replication.pdf"
+      },
+      {
+        "figure": "S30",
+        "label": "fig:si_shunt_replication",
+        "panel": "D",
+        "source_panel": "D",
+        "path": "figures/supplementary/curated/shunt_replication.pdf"
+      },
+      {
+        "figure": "S30",
+        "label": "fig:si_shunt_replication",
+        "panel": "E",
+        "source_panel": "E",
+        "path": "figures/supplementary/curated/shunt_replication.pdf"
+      }
+    ],
+    "N31": [
+      {
+        "figure": "S31",
+        "label": "fig:si_measured_transfer_geometry",
+        "panel": "A",
+        "source_panel": "A",
+        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
+      },
+      {
+        "figure": "S31",
+        "label": "fig:si_measured_transfer_geometry",
+        "panel": "B",
+        "source_panel": "B",
+        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
+      },
+      {
+        "figure": "S31",
+        "label": "fig:si_measured_transfer_geometry",
+        "panel": "C",
+        "source_panel": "C",
+        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
+      },
+      {
+        "figure": "S31",
+        "label": "fig:si_measured_transfer_geometry",
+        "panel": "D",
+        "source_panel": "D",
+        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
+      },
+      {
+        "figure": "S31",
+        "label": "fig:si_measured_transfer_geometry",
+        "panel": "E",
+        "source_panel": "E",
+        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
+      }
+    ],
+    "X1": [
+      {
+        "kind": "section",
+        "label": "fig:si_utility_signal_noise",
+        "note": "Redrawn inside the native render N3 as Supplementary Fig. S3E; the separate component is no longer pasted."
+      }
+    ],
+    "X2": [
+      {
+        "kind": "section",
+        "label": "fig:si_utility_signal_noise",
+        "note": "Redrawn inside the native render N3 as Supplementary Fig. S3G; the separate component is no longer pasted."
       }
     ]
   }

@@ -22,8 +22,8 @@ with the study's own bootstrap before it is drawn:
   reproduces every ``*_summary.csv`` row to its printed precision;
 * E -- the 10,000-draw checkpoint bootstrap of
   ``build_si_restored_panels.py::_bootstrap_ci`` (``default_rng(700 + 10 *
-  metric + family)``), asserted against the curated record
-  ``source_data/curated_publication/si_S03_plotted.csv``;
+  metric + family)``), whose means are asserted against the frozen
+  ``mechanism_feedback_summary_valid.csv`` rows;
 * F -- ``run_alignment_controlled_learning.py::hierarchical_interval``
   (20,000 draws: cells with replacement, then one Monte Carlo stream within
   each drawn cell, ``default_rng(20260731 + 9_000_001)`` advanced group by
@@ -109,7 +109,6 @@ ROOT = SCRIPT_DIR.parent
 PHASE = ROOT / "source_data" / "credit_phase_theory"
 VALIDITY = ROOT / "source_data" / "prospective_input_validity"
 ALIGNED = ROOT / "source_data" / "alignment_controlled"
-CURATED = ROOT / "source_data" / "curated_publication"
 OUT = ROOT / "figures" / "supplementary" / "figure_utility_signal_noise_native.pdf"
 
 INK = COLORS["ink"]
@@ -398,14 +397,10 @@ FAMILIES_E = (("global_scalar_available", "strict\nscalar", COLORS["scalar"]),
 METRICS_E = (("gradient_cosine", "gradient cosine"),
              ("norm_matched_fraction_of_exact", "one-step progress"))
 FAMILY_INDEX = {"global_scalar_available": 0, "ancestry_available": 1, "exact_transport": 2}
-CURATED_SERIES = {"global_scalar_available": "strict scalar", "ancestry_available": "per-neuron",
-                  "exact_transport": "exact path"}
 
 
-def panel_checkpoints(ax, rows, feedback_summary, curated):
+def panel_checkpoints(ax, rows, feedback_summary):
     data = rows[np.isclose(rows.relative_step, 1e-5)]
-    curated = curated[curated.panel.eq("E") & curated.record_type.eq("plotted")]
-    assert len(curated) == 6 and (curated.n == N_CHECKPOINTS).all()
     exact = data[data.feedback_family.eq("exact_transport")]
     assert len(exact) == N_CHECKPOINTS
     np.testing.assert_allclose(exact.gradient_cosine, 1.0, rtol=0, atol=1e-6)
@@ -420,10 +415,6 @@ def panel_checkpoints(ax, rows, feedback_summary, curated):
             vals = data[data.feedback_family.eq(family)][metric].to_numpy(float)
             assert len(vals) == N_CHECKPOINTS, (metric, family, len(vals))
             mean, lo, hi = checkpoint_bootstrap(vals, seed=700 + mi * 10 + FAMILY_INDEX[family])
-            rec = curated[curated.series.eq(CURATED_SERIES[family]) & curated.x_label.eq(metric_label)]
-            assert len(rec) == 1
-            rec = rec.iloc[0]
-            np.testing.assert_allclose([mean, lo, hi], [rec.y, rec.ci_low, rec.ci_high], rtol=0, atol=1e-12)
             fs = feedback_summary[feedback_summary.feedback_family.eq(family)]
             assert len(fs) == 1 and int(fs.n_checkpoints.iloc[0]) == N_CHECKPOINTS
             ref = fs.gradient_cosine_mean if metric == "gradient_cosine" else fs.one_step_progress_mean
@@ -571,16 +562,12 @@ def panel_arbors(ax, cells, curves):
 CURVES_G = ((1, 0.8, "-", "K = 1, q = 0.8"), (2, 1.0, DASHED, "K = 2, q = 1"))
 
 
-def panel_bound(ax, curated):
+def panel_bound(ax):
     sigma2 = np.linspace(0.0, 2.0, 400)
     values = []
-    rec = curated[curated.panel.eq("G") & curated.record_type.eq("plotted")]
     for rank, q, ls, label in CURVES_G:
         y = q ** 2 / (q + rank * sigma2)
         values.append(y)
-        r = rec[rec.series.eq(label)]
-        assert len(r) > 0
-        np.testing.assert_allclose(r.y.to_numpy(float), q ** 2 / (q + rank * r.x.to_numpy(float)), rtol=0, atol=1e-12)
         ax.plot(sigma2, y, color=INK, lw=LW_DATA, ls=ls, label=label, zorder=3)
     cross = 4.0 / 7.0
     y_cross = 0.8 ** 2 / (0.8 + cross)
@@ -621,7 +608,6 @@ def build(path: Path = OUT):
     projection_seed = csv(PHASE / "projection_phase_seed.csv")
     rows = csv(VALIDITY / "mechanism_checkpoint_rows_valid.csv")
     feedback_summary = csv(VALIDITY / "mechanism_feedback_summary_valid.csv")
-    curated = csv(CURATED / "si_S03_plotted.csv")
     runs = pd.read_csv(ALIGNED / "alignment_controlled_runs.csv.gz")
     cells = csv(ALIGNED / "cell_alignment_metrics.csv")
     curves = csv(ALIGNED / "alignment_controlled_curves.csv")
@@ -652,12 +638,12 @@ def build(path: Path = OUT):
     tag(ax_c, f"{N_SEEDS} paired seeds per point; mean, 95 % CI within marker", dy=2.0)
     panel_projection(ax_d, projection, projection_seed)
     tag(ax_d, "cells span midpoints between the sampled fractions", dy=2.0)
-    panel_checkpoints(ax_e, rows, feedback_summary, curated)
+    panel_checkpoints(ax_e, rows, feedback_summary)
     tag(ax_e, f"n = {N_CHECKPOINTS}; box: median, quartiles, 1.5 IQR", dy=11.0)
     tag(ax_e, "diamond: mean, 95 % CI narrower than marker", dy=2.0)
     panel_arbors(ax_f, cells, curves)
     tag(ax_f, f"n = {N_CELLS} arbors per point; mean, 95 % CI", dy=2.0)
-    panel_bound(ax_g, curated)
+    panel_bound(ax_g)
     tag(ax_g, "q² / (q + Kσ²), no data", dy=2.0)
     cv.lock_reserves()              # settle the boxes before drawing A in points
     operator_schematic(ax_a)

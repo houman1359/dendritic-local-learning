@@ -292,7 +292,17 @@ def main():
              'S53':('fig:si_local_gate_controls','Replaced by the native render N21, drawn from the same source tables and pasted whole as Supplementary Fig. S21.'),
              'S38':('fig:si_finite_horizon','Replaced by the native render N35, drawn from the same source tables and pasted whole as Supplementary Fig. S35.'),
              'S39':('fig:si_finite_horizon','Replaced by the native render N35, drawn from the same source tables and pasted whole as Supplementary Fig. S35.'),
-             'S41':('fig:si_morphology_estimation','Replaced by the native render N36, drawn from the same source tables and pasted whole as Supplementary Fig. S36.')}.get(key)
+             'S41':('fig:si_morphology_estimation','Replaced by the native render N36, drawn from the same source tables and pasted whole as Supplementary Fig. S36.'),
+             # 2026-09-13: the last four sheets that pasted crops of frozen or training-script renders are pasted whole from native renders; the retired keys keep their provenance entries.
+             'S46':('fig:si_utility_signal_noise','Replaced by the native render N3, drawn from the same source tables and pasted whole as Supplementary Fig. S3.'),
+             'S5':('fig:si_utility_signal_noise','Panel E is redrawn in the native render N3 from the same alignment-controlled tables and pasted whole as Supplementary Fig. S3F; the training builder is never run.'),
+             'X1':('fig:si_utility_signal_noise','Redrawn inside the native render N3 as Supplementary Fig. S3E; the separate component is no longer pasted.'),
+             'X2':('fig:si_utility_signal_noise','Redrawn inside the native render N3 as Supplementary Fig. S3G; the separate component is no longer pasted.'),
+             'S31':('fig:si_physical_architecture','Replaced by the native render N22, drawn from the same source tables and pasted whole as Supplementary Fig. S22.'),
+             'S47':('fig:si_shunt_replication','Replaced by the native render N30, drawn from the same source tables and pasted whole as Supplementary Fig. S30D,E.'),
+             'S22':('fig:si_measured_transfer_geometry','Replaced by the native render N31, drawn from the same source tables and pasted whole as Supplementary Fig. S31A.'),
+             'M9':('fig:si_measured_transfer_geometry','Replaced by the native render N31, drawn from the same source tables and pasted whole as Supplementary Fig. S31B--D.'),
+             'S56':('fig:si_measured_transfer_geometry','Replaced by the native render N31, drawn from the same calibration table and pasted whole as Supplementary Fig. S31E.')}.get(key)
    if not fallback:raise ValueError('No destination: '+key)
    mapping[key]=[{'kind':'table' if key in ['S26'] else 'section','label':fallback[0],'note':fallback[1]}]
  manifest={'schema':'supplement-consolidation/1','selection_is_editorial':True,'numerical_results_changed':False,'builder':'scripts/supplement_consolidation/build.py','specification':'scripts/supplement_consolidation/specification.py','source_registry':'scripts/supplement_consolidation/original_assets.json','frozen_input_hashes':{str(p.relative_to(J)):sha(p) for p in [HERE/'original_assets.json',HERE/'original_captions.json',HERE/'original_provenance.json']},'paste_scale_target':PASTE_SCALE,'height_cap_pt':HEIGHT_CAP,'assets':assets,'old_to_new':mapping}

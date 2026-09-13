@@ -156,14 +156,8 @@
     "old_label": "fig:supp_alignment",
     "original_asset": "figures/supplementary/figure_S05_panels_A-H.pdf",
     "original_sha256": "c2c79a27e0cfa2a40cdaea956db33e0abe1060efe7e73e31f98ea35795a6572a",
-    "primary_destination": "S3",
-    "panels": {
-      "E": {
-        "figure": "S3",
-        "panel": "F",
-        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
-      }
-    },
+    "primary_destination": "fig:si_utility_signal_noise",
+    "panels": {},
     "omitted_panel_status": {
       "A": {
         "content": "A fixed eight-route dictionary on a reconstructed tree.",
@@ -204,6 +198,11 @@
           "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/cell_paired_contrasts.csv",
           "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/dictionary_audit.csv"
         ]
+      },
+      "E": {
+        "content": "Loss reduction after twenty projected steps, relative to the corresponding full-gradient sequence, in the eight constructed arbors.",
+        "reason": "Replaced by the native render N3 (scripts/build_supplementary_figure_utility_signal_noise_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S3; no crop of this render is used.",
+        "numbers_at": "source_data/alignment_controlled/cell_alignment_metrics.csv"
       },
       "F": {
         "content": "Ancestry-route capture relative to random paths, depth bins and ancestry shuffling.",
@@ -412,21 +411,6 @@
         "figure": "S25",
         "panel": "A",
         "path": "figures/supplementary/curated/anatomy_capacity_controls.pdf"
-      },
-      "F": {
-        "figure": "S30",
-        "panel": "A",
-        "path": "figures/supplementary/curated/shunt_replication.pdf"
-      },
-      "G": {
-        "figure": "S30",
-        "panel": "B",
-        "path": "figures/supplementary/curated/shunt_replication.pdf"
-      },
-      "H": {
-        "figure": "S30",
-        "panel": "C",
-        "path": "figures/supplementary/curated/shunt_replication.pdf"
       }
     },
     "omitted_panel_status": {
@@ -469,6 +453,21 @@
           "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/supp_figure_focal_cells.csv",
           "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/supp_figure_routing_curves.csv"
         ]
+      },
+      "F": {
+        "content": "Localization of exact-gradient changes after a unit-dose focal shunt and baseline-current-matched current injection (45 cells, 235 sites).",
+        "reason": "Replaced by the native render N30 (scripts/build_supplementary_figure_shunt_replication_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S30; no crop of this render is used.",
+        "numbers_at": "source_data/microns_v661_replication/supp_figure_focal_cells.csv"
+      },
+      "G": {
+        "content": "Localization for true descendant relations and relation templates reassigned to other focal sites (40 cells, 230 sites).",
+        "reason": "Replaced by the native render N30 (scripts/build_supplementary_figure_shunt_replication_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S30; no crop of this render is used.",
+        "numbers_at": "source_data/microns_v661_replication/supp_figure_focal_cells.csv"
+      },
+      "H": {
+        "content": "Direct presynaptic excitatory/inhibitory label coverage and eligible focal sites per cell.",
+        "reason": "Replaced by the native render N30 (scripts/build_supplementary_figure_shunt_replication_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S30; no crop of this render is used.",
+        "numbers_at": "source_data/microns_v661_replication/cohort_manifest.csv"
       }
     }
   },
@@ -762,28 +761,8 @@
     "old_label": "fig:supp_physical_depth_controls",
     "original_asset": "figures/supplementary/figure_S18_panels_A-K.pdf",
     "original_sha256": "1724745817a41637c1ea2694a56172a50755e3b5b864112dc3a4256246353f5a",
-    "primary_destination": "S22",
+    "primary_destination": "S24",
     "panels": {
-      "A": {
-        "figure": "S22",
-        "panel": "E",
-        "path": "figures/supplementary/curated/physical_architecture.pdf"
-      },
-      "B": {
-        "figure": "S22",
-        "panel": "F",
-        "path": "figures/supplementary/curated/physical_architecture.pdf"
-      },
-      "C": {
-        "figure": "S22",
-        "panel": "G",
-        "path": "figures/supplementary/curated/physical_architecture.pdf"
-      },
-      "D": {
-        "figure": "S22",
-        "panel": "H",
-        "path": "figures/supplementary/curated/physical_architecture.pdf"
-      },
       "E": {
         "figure": "S24",
         "panel": "A",
@@ -795,7 +774,28 @@
         "path": "figures/supplementary/curated/physical_optimizer.pdf"
       }
     },
-    "omitted_panel_status": {}
+    "omitted_panel_status": {
+      "A": {
+        "content": "Serial-minus-grouped-star accuracy effects and the aligned-minus-reversed change in that D3 effect, in percentage points.",
+        "reason": "Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S22; no crop of this render is used.",
+        "numbers_at": "source_data/point_dendrite_credit_controls/paired_contrasts.csv"
+      },
+      "B": {
+        "content": "Flexible point networks matched to active or total parameter count versus serial D3.",
+        "reason": "Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S22; no crop of this render is used.",
+        "numbers_at": "source_data/point_dendrite_credit_controls/combined_seed_outcomes.csv"
+      },
+      "C": {
+        "content": "Accuracy across sensor--task alignment alpha at D1, D2 and D3.",
+        "reason": "Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S22; no crop of this render is used.",
+        "numbers_at": "source_data/physical_alignment_dose/condition_summary.csv"
+      },
+      "D": {
+        "content": "Change in the D3-minus-D1 advantage from alpha = 0.25 to 0.75 and its within-seed fitted slope.",
+        "reason": "Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S22; no crop of this render is used.",
+        "numbers_at": "source_data/physical_alignment_dose/paired_contrasts.csv"
+      }
+    }
   },
   "S19": {
     "old_label": "fig:supp_prospective_diagnostics",
@@ -878,15 +878,14 @@
     "old_label": "fig:supp_measured_detail",
     "original_asset": "figures/supplementary/figure_S22_panels_A-J.pdf",
     "original_sha256": "df6ea1187ff6cbc2c17143d260478c347397483a42115b67e076aef6fa6746e1",
-    "primary_destination": "S31",
-    "panels": {
-      "A": {
-        "figure": "S31",
-        "panel": "A",
-        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
-      }
-    },
+    "primary_destination": "fig:si_measured_transfer_geometry",
+    "panels": {},
     "omitted_panel_status": {
+      "A": {
+        "content": "Number of mapped functional presynaptic partners for each of the seven targets.",
+        "reason": "Replaced by the native render N31 (scripts/build_supplementary_figure_measured_transfer_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S31; no crop of this render is used.",
+        "numbers_at": "source_data/figure5/functional_target_metrics.csv"
+      },
       "B": {
         "content": "Shared-ancestry/response rank correlation after controlling Euclidean separation and soma-to-contact depth differences.",
         "reason": "Deleted in the M2 merge: it duplicates main Fig. 9A,B.",
@@ -1217,29 +1216,8 @@
     "old_label": "fig:physicaldepth",
     "original_asset": "figures/supplementary/figure_S31_panels_A-G.pdf",
     "original_sha256": "9bc3a51813bead71578fdc6a7ee00a6ee92395323e8f88c1f13cb32482939819",
-    "primary_destination": "S22",
-    "panels": {
-      "B": {
-        "figure": "S22",
-        "panel": "A",
-        "path": "figures/supplementary/curated/physical_architecture.pdf"
-      },
-      "C": {
-        "figure": "S22",
-        "panel": "B",
-        "path": "figures/supplementary/curated/physical_architecture.pdf"
-      },
-      "D": {
-        "figure": "S22",
-        "panel": "C",
-        "path": "figures/supplementary/curated/physical_architecture.pdf"
-      },
-      "G": {
-        "figure": "S22",
-        "panel": "D",
-        "path": "figures/supplementary/curated/physical_architecture.pdf"
-      }
-    },
+    "primary_destination": "fig:si_physical_architecture",
+    "panels": {},
     "omitted_panel_status": {
       "A": {
         "content": "Nested factors use 4/2/1 spatial groups; independent flat factors share an eight-group partition; \\(h_\\ell\\) are gain factors and \\(m_i\\) the class-dependent signal; local excitatory/inhibitory (E/I) ratios \\(R_\\ell=x_\\ell^{\\rm E}/x_\\ell^{\\rm I}\\) allow cancellation within modules. \\(\\alpha\\) is factor--sensor correlation.",
@@ -1250,6 +1228,21 @@
           "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/mechanism_audit.json",
           "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/mechanism_gradient_summary.csv"
         ]
+      },
+      "B": {
+        "content": "Serial D3, resource-identical grouped-point and approximately parameter-matched dense multilayer-perceptron controls; only the first two share modules and contacts.",
+        "reason": "Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S22; no crop of this render is used.",
+        "numbers_at": "source_data/nonlinear_physical_depth_confirmatory/"
+      },
+      "C": {
+        "content": "Three-level aligned task across D1--D3 and the five feedback conditions.",
+        "reason": "Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S22; no crop of this render is used.",
+        "numbers_at": "source_data/nonlinear_physical_depth_confirmatory/condition_summary.csv"
+      },
+      "D": {
+        "content": "Four-level task, including D4, with aligned or reversed sensor placement.",
+        "reason": "Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S22; no crop of this render is used.",
+        "numbers_at": "source_data/physical_depth_h4_factorial/condition_summary.csv"
       },
       "E": {
         "content": "Descriptive depth optima across independent two-, three- and four-level cohorts.",
@@ -1265,6 +1258,11 @@
           "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/mechanism_audit.json",
           "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/mechanism_gradient_summary.csv"
         ]
+      },
+      "G": {
+        "content": "Serial-minus-grouped accuracy at fixed D3 across task family and alignment under exact-path local credit assignment.",
+        "reason": "Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S22; no crop of this render is used.",
+        "numbers_at": "source_data/task_family_alignment/paired_contrasts.csv"
       },
       "H": {
         "content": "Credit-resolution effects: BP minus soma-broadcast, and exact-path minus shared-soma under LocalCA.",
@@ -2064,30 +2062,14 @@
     "old_label": "fig:supp_utility",
     "original_asset": "figures/supplementary/figure_S46_utility.pdf",
     "original_sha256": "6dd9a5ee0c10771d6d9448057031ca5c245c79bbeff61fb94bcb1b9b3fc47a4a",
-    "primary_destination": "S3",
-    "panels": {
-      "A": {
-        "figure": "S3",
-        "panel": "A",
-        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
-      },
-      "C": {
-        "figure": "S3",
-        "panel": "B",
-        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
-      },
-      "D": {
-        "figure": "S3",
-        "panel": "C",
-        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
-      },
-      "E": {
-        "figure": "S3",
-        "panel": "D",
-        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
-      }
-    },
+    "primary_destination": "fig:si_utility_signal_noise",
+    "panels": {},
     "omitted_panel_status": {
+      "A": {
+        "content": "Fixed-operator special case: the one-step utility bound U(M) for the update M(mu + xi), with mean alignment and mean squared update named on the schematic.",
+        "reason": "Replaced by the native render N3 (scripts/build_supplementary_figure_utility_signal_noise_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S3; no crop of this render is used.",
+        "numbers_at": "source_data/credit_phase_theory/"
+      },
       "B": {
         "content": "Eight-terminal illustration of signal hierarchy \\(H_{\\rm c}\\) and feedback resolution \\(D_{\\rm r}\\). Quantitative screens use 16 Haar coordinates and no forward neuron.",
         "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
@@ -2097,6 +2079,21 @@
           "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/projection_phase_seed.csv",
           "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/projection_phase_summary.csv"
         ]
+      },
+      "C": {
+        "content": "Subtree-minus-random spectral capture over route budget K and covariance mixture rho; the endpoints are isospectral and the full-rank contrast is zero.",
+        "reason": "Replaced by the native render N3 (scripts/build_supplementary_figure_utility_signal_noise_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S3; no crop of this render is used.",
+        "numbers_at": "source_data/credit_phase_theory/spectral_phase_summary.csv"
+      },
+      "D": {
+        "content": "Final quadratic loss against route resolution for four hierarchy widths, where amplified fine-scale noise makes an interior resolution the designed optimum.",
+        "reason": "Replaced by the native render N3 (scripts/build_supplementary_figure_utility_signal_noise_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S3; no crop of this render is used.",
+        "numbers_at": "source_data/credit_phase_theory/depth_training_summary.csv"
+      },
+      "E": {
+        "content": "Analytic projected-minus-unprojected one-step loss, (f_noise - f_sig)/2, over the sampled retained signal and noise fractions.",
+        "reason": "Replaced by the native render N3 (scripts/build_supplementary_figure_utility_signal_noise_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S3; no crop of this render is used.",
+        "numbers_at": "source_data/credit_phase_theory/projection_phase_summary.csv"
       },
       "F": {
         "content": "Gains matched to signal-to-noise ratio (SNR), a common global gain, shuffled gains and reversed gains over eight blocks; a point implementation supplied with identical gains matches.",
@@ -2124,20 +2121,20 @@
     "old_label": "fig:supp_weak_channel_linearization",
     "original_asset": "figures/supplementary/figure_shunt_weak_channels.pdf",
     "original_sha256": "a1bd1b48ad19ed673aab157fcbc44ac5cc2d167a39a87a9c21a6cd739f231417",
-    "primary_destination": "S30",
-    "panels": {
+    "primary_destination": "fig:si_shunt_replication",
+    "panels": {},
+    "omitted_panel_status": {
       "A": {
-        "figure": "S30",
-        "panel": "D",
-        "path": "figures/supplementary/curated/shunt_replication.pdf"
+        "content": "Focal-shunt and baseline-current-matched injection localization across doses relative to local input conductance, for the fixed Jacobian and the passive model at the same calibration.",
+        "reason": "Replaced by the native render N30 (scripts/build_supplementary_figure_shunt_replication_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S30; no crop of this render is used.",
+        "numbers_at": "source_data/focal_selectivity_active_ensemble/condition_summary.csv"
       },
       "B": {
-        "figure": "S30",
-        "panel": "E",
-        "path": "figures/supplementary/curated/shunt_replication.pdf"
+        "content": "Paired shunt-minus-current localization contrasts at the three doses in the eight-cell weak-channel ensemble.",
+        "reason": "Replaced by the native render N30 (scripts/build_supplementary_figure_shunt_replication_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S30; no crop of this render is used.",
+        "numbers_at": "source_data/focal_selectivity_active_ensemble/paired_contrasts.csv"
       }
-    },
-    "omitted_panel_status": {}
+    }
   },
   "S48": {
     "old_label": "fig:supp_normalized_shunt_dose",
@@ -2475,14 +2472,8 @@
     "old_label": "fig:supp_measured_alignment_power",
     "original_asset": "figures/supplementary/figure_S56_measured_alignment_power.pdf",
     "original_sha256": "a76a96a1ae5520b906700a788786bc13e99545f055c2bf2e95fa29c2a5caec2b",
-    "primary_destination": "S31",
-    "panels": {
-      "C": {
-        "figure": "S31",
-        "panel": "E",
-        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
-      }
-    },
+    "primary_destination": "fig:si_measured_transfer_geometry",
+    "panels": {},
     "omitted_panel_status": {
       "A": {
         "content": "Detection of positive alignment as the fraction of reliable tuning variance carried by a shared-path covariance increases. Every simulated dataset preserves the thirteen scans, seven targets, observed partners, stimulus identities and repeats. Green uses measured repeat reliabilities; gray removes measurement noise.",
@@ -2503,6 +2494,11 @@
           "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/RESULTS.json",
           "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/RESULTS.md"
         ]
+      },
+      "C": {
+        "content": "Mean split-half Spearman reliability in 1,000 independent calibration datasets against the measured value, for 125 partner records.",
+        "reason": "Replaced by the native render N31 (scripts/build_supplementary_figure_measured_transfer_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S31; no crop of this render is used.",
+        "numbers_at": "source_data/measured_alignment_power/reliability_calibration_audit.csv"
       }
     }
   },
@@ -2510,34 +2506,33 @@
     "old_label": "fig:measured",
     "original_asset": "figures/supplementary/frozen/credit_first_figure_08_M9.pdf",
     "original_sha256": "131b9b04b89c29f711b83a4121efa03e97f76dff6629ea5fb0e4e17002b61bb7",
-    "primary_destination": "S31",
-    "panels": {
-      "B": {
-        "figure": "S31",
-        "panel": "B",
-        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
-      },
-      "D": {
-        "figure": "S31",
-        "panel": "C",
-        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
-      },
-      "E": {
-        "figure": "S31",
-        "panel": "D",
-        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
-      }
-    },
+    "primary_destination": "fig:si_measured_transfer_geometry",
+    "panels": {},
     "omitted_panel_status": {
       "A": {
         "content": "Schematic of the measured-response prediction model on a reconstructed target.",
         "reason": "Omitted; the same construction is drawn at the main-text type scale in main Fig. 9.",
         "numbers_at": "source_data/credit_first_figures/"
       },
+      "B": {
+        "content": "Four-route support for the scan selected by median mapped-input count: rows are input coordinates and columns selected routes.",
+        "reason": "Replaced by the native render N31 (scripts/build_supplementary_figure_measured_transfer_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S31; no crop of this render is used.",
+        "numbers_at": "source_data/credit_first_figures/figure_08_support.csv"
+      },
       "C": {
         "content": "Input coverage in all thirteen scans, ordered by input count (48.0% of mapped inputs reached).",
         "reason": "Promoted to main Fig. 9F.",
         "numbers_at": "source_data/credit_first_figures/"
+      },
+      "D": {
+        "content": "Response-prediction normalized MSE for exact learning, treeless ridge and the restricted dictionaries, with the random and shuffled surrogate rows.",
+        "reason": "Replaced by the native render N31 (scripts/build_supplementary_figure_measured_transfer_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S31; no crop of this render is used.",
+        "numbers_at": "source_data/credit_first_figures/figure_08_prediction_summary.csv"
+      },
+      "E": {
+        "content": "Common-checkpoint update reconstruction by the unrestricted fixed transfer profile, the restricted ancestry profile and oracle trialwise amplitudes.",
+        "reason": "Replaced by the native render N31 (scripts/build_supplementary_figure_measured_transfer_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S31; no crop of this render is used.",
+        "numbers_at": "source_data/fulltree_within_span_oracle/condition_summary.csv"
       }
     }
   },
@@ -3047,32 +3042,193 @@
     },
     "omitted_panel_status": {}
   },
-  "X1": {
-    "old_label": "fig:si_checkpoint_merged_panel",
-    "original_asset": "figures/supplementary/components/si_checkpoint_merged.pdf",
-    "original_sha256": "9cb82f624b337523b74e0010fabf1e485938c6fdd49d757c4364c2c51c7526f1",
+  "N3": {
+    "old_label": "fig:si_utility_signal_noise",
+    "original_asset": "figures/supplementary/figure_utility_signal_noise_native.pdf",
+    "original_sha256": "b14839997895ed78e12ed8c900d653fdba138b4bca5b961d336c63694d22c7c0",
     "primary_destination": "S3",
     "panels": {
-      "*": {
+      "A": {
+        "figure": "S3",
+        "panel": "A",
+        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
+      },
+      "B": {
+        "figure": "S3",
+        "panel": "B",
+        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
+      },
+      "C": {
+        "figure": "S3",
+        "panel": "C",
+        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
+      },
+      "D": {
+        "figure": "S3",
+        "panel": "D",
+        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
+      },
+      "E": {
         "figure": "S3",
         "panel": "E",
         "path": "figures/supplementary/curated/utility_signal_noise.pdf"
-      }
-    },
-    "omitted_panel_status": {}
-  },
-  "X2": {
-    "old_label": "fig:si_utility_bound_panel",
-    "original_asset": "figures/supplementary/components/si_utility_bound.pdf",
-    "original_sha256": "6ab066fb79446686e545e3c2427218a1467785b28c70f61827000b359ca3afb0",
-    "primary_destination": "S3",
-    "panels": {
-      "*": {
+      },
+      "F": {
+        "figure": "S3",
+        "panel": "F",
+        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
+      },
+      "G": {
         "figure": "S3",
         "panel": "G",
         "path": "figures/supplementary/curated/utility_signal_noise.pdf"
       }
     },
     "omitted_panel_status": {}
+  },
+  "N22": {
+    "old_label": "fig:si_physical_architecture",
+    "original_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
+    "original_sha256": "ba9393961e1dc134e3d8f5ffb54eaaba0af53fa84a2437dbb1bf9bb969a20f95",
+    "primary_destination": "S22",
+    "panels": {
+      "A": {
+        "figure": "S22",
+        "panel": "A",
+        "path": "figures/supplementary/curated/physical_architecture.pdf"
+      },
+      "B": {
+        "figure": "S22",
+        "panel": "B",
+        "path": "figures/supplementary/curated/physical_architecture.pdf"
+      },
+      "C": {
+        "figure": "S22",
+        "panel": "C",
+        "path": "figures/supplementary/curated/physical_architecture.pdf"
+      },
+      "D": {
+        "figure": "S22",
+        "panel": "D",
+        "path": "figures/supplementary/curated/physical_architecture.pdf"
+      },
+      "E": {
+        "figure": "S22",
+        "panel": "E",
+        "path": "figures/supplementary/curated/physical_architecture.pdf"
+      },
+      "F": {
+        "figure": "S22",
+        "panel": "F",
+        "path": "figures/supplementary/curated/physical_architecture.pdf"
+      },
+      "G": {
+        "figure": "S22",
+        "panel": "G",
+        "path": "figures/supplementary/curated/physical_architecture.pdf"
+      },
+      "H": {
+        "figure": "S22",
+        "panel": "H",
+        "path": "figures/supplementary/curated/physical_architecture.pdf"
+      }
+    },
+    "omitted_panel_status": {}
+  },
+  "N30": {
+    "old_label": "fig:si_shunt_replication",
+    "original_asset": "figures/supplementary/figure_shunt_replication_native.pdf",
+    "original_sha256": "da213201310dce1c03a84a3b7720c189c69b62d58f1213f7ba8435cdcf54591b",
+    "primary_destination": "S30",
+    "panels": {
+      "A": {
+        "figure": "S30",
+        "panel": "A",
+        "path": "figures/supplementary/curated/shunt_replication.pdf"
+      },
+      "B": {
+        "figure": "S30",
+        "panel": "B",
+        "path": "figures/supplementary/curated/shunt_replication.pdf"
+      },
+      "C": {
+        "figure": "S30",
+        "panel": "C",
+        "path": "figures/supplementary/curated/shunt_replication.pdf"
+      },
+      "D": {
+        "figure": "S30",
+        "panel": "D",
+        "path": "figures/supplementary/curated/shunt_replication.pdf"
+      },
+      "E": {
+        "figure": "S30",
+        "panel": "E",
+        "path": "figures/supplementary/curated/shunt_replication.pdf"
+      }
+    },
+    "omitted_panel_status": {}
+  },
+  "N31": {
+    "old_label": "fig:si_measured_transfer_geometry",
+    "original_asset": "figures/supplementary/figure_measured_transfer_geometry_native.pdf",
+    "original_sha256": "30e016141864d9cbb1bd37a2d7599f2630a084a5d028e45afda378bbcbb22608",
+    "primary_destination": "S31",
+    "panels": {
+      "A": {
+        "figure": "S31",
+        "panel": "A",
+        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
+      },
+      "B": {
+        "figure": "S31",
+        "panel": "B",
+        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
+      },
+      "C": {
+        "figure": "S31",
+        "panel": "C",
+        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
+      },
+      "D": {
+        "figure": "S31",
+        "panel": "D",
+        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
+      },
+      "E": {
+        "figure": "S31",
+        "panel": "E",
+        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
+      }
+    },
+    "omitted_panel_status": {}
+  },
+  "X1": {
+    "old_label": "fig:si_checkpoint_merged_panel",
+    "original_asset": "figures/supplementary/components/si_checkpoint_merged.pdf",
+    "original_sha256": "9cb82f624b337523b74e0010fabf1e485938c6fdd49d757c4364c2c51c7526f1",
+    "primary_destination": "fig:si_utility_signal_noise",
+    "panels": {},
+    "omitted_panel_status": {
+      "*": {
+        "content": "Candidate/exact gradient cosine and norm-matched one-step loss decrease at the same 120 valid trained checkpoints (the SI_PLAN M1 merge of old S9A and S9C).",
+        "reason": "Replaced by the native render N3 (scripts/build_supplementary_figure_utility_signal_noise_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S3; no crop of this render is used.",
+        "numbers_at": "source_data/prospective_input_validity/mechanism_checkpoint_rows_valid.csv"
+      }
+    }
+  },
+  "X2": {
+    "old_label": "fig:si_utility_bound_panel",
+    "original_asset": "figures/supplementary/components/si_utility_bound.pdf",
+    "original_sha256": "6ab066fb79446686e545e3c2427218a1467785b28c70f61827000b359ca3afb0",
+    "primary_destination": "fig:si_utility_signal_noise",
+    "panels": {},
+    "omitted_panel_status": {
+      "*": {
+        "content": "Illustrative rank-noise trade-off: 2L times the optimized one-step bound for two (K, q) pairs (AMENDMENTS B3, demoted out of main Fig. 1C). Analytic, no data.",
+        "reason": "Replaced by the native render N3 (scripts/build_supplementary_figure_utility_signal_noise_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S3; no crop of this render is used.",
+        "numbers_at": "analytic; no table"
+      }
+    }
   }
 }
