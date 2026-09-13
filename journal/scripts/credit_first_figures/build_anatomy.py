@@ -1585,7 +1585,7 @@ def panel_h(ax, tables, inclusion):
         f"{int(eligible.n_e_sites.max())} sites per cell, "
         f"{len(eligible)} of {int(inclusion.inherited_qc_included.sum())} "
         "cells",
-        "one mouse per cohort; n = 8, 47, 8 cells",
+        "two mice: initial and disjoint share one; n = 8, 47, 8 cells",
     ]
     width = ax.get_position().width * 518.4
     block = "\n".join(wrap_pt(ax, line, PT_BASE, width) for line in lines)
