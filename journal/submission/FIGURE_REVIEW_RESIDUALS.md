@@ -134,6 +134,60 @@ short sheets whose page is wider than the 1.55 aspect the canvas prefers. Both
 are consequences of pasting panel crops rather than drawing the sheet, so they
 would close only by rebuilding those seventeen sheets natively as well.
 
+## The nine main legends, read four times (2026-09-13)
+
+The legends of the nine main figures had never been checked claim by claim
+against what the figures draw. Four independent readings were run, each
+recomputing every number from the frozen tables and reading the rendered
+figure rather than trusting the builder:
+
+| reading | claims checked | issues found | blocking | major |
+|---|---:|---:|---:|---:|
+| first | 620 | 61 | 2 | 13 |
+| second, of the corrections | -- | 32 | 0 | 2 |
+| third, cold | 541 | 46 | 0 | 17 |
+| fourth, cold | 556 | 4 | 0 | 0 |
+
+All 143 are fixed. The count rose at the third reading because fresh readers
+found long-standing defects the first pass had missed, and fell to four at the
+fourth, every one of them a small regression the third round's own edits had
+introduced. That is the convergence this record claims: not that the legends
+are perfect, but that two independent cold readings in a row now find nothing
+false in them.
+
+**What a reader would have been told wrongly.** Figure 2's caption gave the
+sign of its grey tags backwards, so a reader following the caption would have
+concluded that the deranged route is 25 points *better* than branch-specific
+selection. Figure 4 named its pooled marker a black diamond where the panel
+draws a plus, and described panel H as an NMSE when it plots a
+shuffled-minus-compatible difference. Figure 1 told the reader that every
+interval in two panels is a seed bootstrap; the CIFAR-10 rows are paired
+Student-$t$ intervals, which the tables reproduce to one part in $10^{10}$.
+Figure 8 listed the shunt conductance $\kappa=0.390$ among the per-block gains.
+Figure 5 called its inset the teacher voltage when it draws the teacher's
+terminal voltage, and left the green of its addressed subtree undefined.
+Eleven body sentences pointed at panels that do not hold what they cite.
+
+**Three corrections changed the artwork, because the figure itself made the
+false claim.** Figure 1's panel titles asserted bounds its own points violate
+("Resolution: $\le$ 0.2 pp" against a drawn $-0.86$); they now state the drawn
+range. Figure 7's panel H printed "one mouse per cohort" beside a caption that
+had been corrected to two mice. Figure 6's panel drew and labelled its
+unresolved-crossing window as epochs 300--330, five epochs past the last epoch
+whose interval straddles zero; the band and its label now end at 325.
+
+**Source Data.** Figure 7's released plotted table was a stale 114-row
+truncation of the builder's own 620-row record: it held neither panel G's 188
+per-cell differences nor panel H's random-route series, both of which the
+figure draws. The builder now writes the released copy itself, so the caption's
+pointer resolves to a file that contains what the panels show.
+
+**A reproducibility trap found on the way.** Of the five figure entry points in
+`build_restored_main.py`, three (Figures 1, 7 and 9) were superseded by their
+own builders during the overhaul and crashed with an `AttributeError` on a
+helper that had moved. They now exit with the name of the builder that draws
+each figure.
+
 ## Deferred with a reason
 
 144 findings across the main figures and rebuildable sheets were deferred by
