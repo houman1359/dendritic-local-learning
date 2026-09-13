@@ -430,7 +430,7 @@ Partners with more shared dendritic ancestry did not have reliably more similar 
 
 To establish the sensitivity of this small sample, response-level simulations preserved observed partners, shared inputs, repeated stimuli and seven-target inference, with noise calibrated to measured repeat reliabilities. Under the specified Gaussian ancestry-signal model, 80\% detection required a mean simulated target-level partial rank correlation of approximately 0.25 (0.249 by interpolation, or $\lambda=0.65$ once the Monte Carlo interval is respected), and the observed estimate and its whole interval lie below that point (Fig.~\ref{fig:boundary}D). With perfect reliability the same threshold falls only to 0.248, so the limit is the seven-target sample rather than measurement noise. The observed repeat reliabilities used for attenuation vary across recordings (Fig.~\ref{fig:boundary}D, inset). This conditional threshold leaves weaker effects, different signal geometries and unobserved partners unresolved (Methods; Supplementary Section~S9).
 
-A separate passive-tree model predicted each target's responses from its recorded partners. Its selected ancestry routes reached only 48.0\% of mapped inputs, and in six of the thirteen scans every route reached a single input (Fig.~\ref{fig:boundary}E,F), so restricting the transfer profile to these supports tests transfer geometry more than example-dependent credit. Held-out prediction, input-removal and reconstruction controls are grouped in SI (Supplementary Figs.~S31--S32), where the ancestry-minus-ridge difference (0.029; 95\% target-bootstrap interval, $-0.013$ to 0.074) is matched by random anatomical routes (0.031; $-0.009$ to 0.068). This model diagnostic and the measured ancestry-similarity test constrain different parts of the anatomical proposal.
+A separate passive-tree model predicted each target's responses from its recorded partners. Its selected ancestry routes reached only 48.0\% of mapped inputs, and in six of the thirteen scans every route reached a single input (Fig.~\ref{fig:boundary}E,F), so restricting the transfer profile to these supports tests transfer geometry more than example-dependent credit, and no measured positive control exists for this comparison. Held-out prediction, input-removal and reconstruction controls are grouped in SI (Supplementary Figs.~S31--S32), where the ancestry-minus-ridge difference (0.029; 95\% target-bootstrap interval, $-0.013$ to 0.074) is matched by random anatomical routes (0.031; $-0.009$ to 0.068). This model diagnostic and the measured ancestry-similarity test constrain different parts of the anatomical proposal.
 
 \begin{figure}[tbp]
 \centering
@@ -440,26 +440,21 @@ A separate passive-tree model predicted each target's responses from its recorde
 sample detects only effects above a partial rank correlation of about 0.25.}
 \textbf{A}, The comparison: two contact pairs on one arbor, one sharing a soma-to-ancestor path
 (green patch), the other linked to the soma by dashed hairlines; filled blue discs, excitatory
-contacts; open magenta ring, an inhibitory partner; insets, their responses. No data: these are stimulus recordings, with no $\delta_0$.
-\textbf{B}, Ancestry--response partial rank correlation, selected-scan cohort; dots, the seven
+contacts; open magenta ring, an inhibitory partner; insets, their responses. No data: stimulus recordings, no $\delta_0$.
+\textbf{B}, Ancestry--response partial rank correlation, selected scans; dots, the seven
 target values; open circles, the thirteen all-eligible-scan values (same targets, stacked where
 they would overlap); diamond, mean with 95\% target-bootstrap interval ($n=7$): $-0.069\,[-0.251, 0.106]$.
-\textbf{C}, Same inference, four topology measures, all thirteen scans; means and 95\%
-target-bootstrap intervals ($n=7$). Top row, the all-eligible-scan partial rank
-correlation, $-0.048\,[-0.224, 0.118]$. Tree distance is sign-flipped, so positive means closer. Below the rule, same-major-branch $\Delta$ is a difference in mean
-similarity, not a correlation; its narrower interval reflects smaller units, not precision.
+\textbf{C}, Same inference, four topology measures, all thirteen scans ($n=7$; 95\%
+target-bootstrap intervals). Top row, the all-eligible-scan partial rank correlation, $-0.048\,[-0.224, 0.118]$. Tree distance is sign-flipped, so positive means closer. Below the rule, same-major-branch $\Delta$ is a difference in mean
+similarity, not a correlation; its narrower interval reflects smaller units.
 \textbf{D}, Detection probability against the frozen model's mean simulated partial rank
-correlation; shaded 95\% Wilson Monte Carlo intervals (half-width $\leq0.016$, narrower than the stroke); the measured-reliability intercept is its false-detection rate, 0.025 (0.030 for perfect reliability). The rug locates the observed
-estimate ($n=7$, 95\% target bootstrap), not power. Inset, split-half repeat
-reliability, 123 of the 125 partner--scan records (102 partners), the two with negative $r$ omitted.
-\textbf{E}, Representative scan (median mapped-input count, no outcome selection): nine mapped
+correlation; shaded 95\% Wilson Monte Carlo intervals (half-width $\leq0.016$, narrower than the stroke); the measured-reliability intercept is its false-detection rate, 0.025 (perfect reliability, 0.030). The rug is the observed estimate ($n=7$, 95\% target bootstrap), not power. Inset, split-half repeat reliability, 123 of the 125 partner--scan records (102 partners), the two with negative $r$ omitted.
+\textbf{E}, Representative scan (median mapped-input count, not outcome-selected): nine mapped
 inputs placed by ancestry beside the realized $9\times4$ support, $\widehat{\bm\delta}=A\bm c$
-imposed rather than observed (schematic; dashed $\delta_0$). Route-capsule tints aid separability
-and the \emph{local rule} badge applies to the whole card; neither encodes a per-route property.
+imposed, not observed (schematic; dashed $\delta_0$). Route-capsule tints aid separability
+and the \emph{local rule} badge covers the card; neither encodes a per-route property.
 \textbf{F}, Mapped inputs reached per scan; open, the six scans whose four routes each reached
-one input; dashed, $4/n$, coverage when four routes reach distinct inputs. Not a ceiling: two scans fall below it (repeated inputs), three above (multi-input routes).
-Coincident scans are offset $\pm0.2$ horizontally; $n=13$ scans from seven targets, descriptive.
-No measured positive control exists.
+one input; dashed, $4/n$, coverage when four routes reach distinct inputs. Not a ceiling: two scans fall below (repeated inputs), three above (multi-input routes). Coincident scans are offset $\pm0.2$; $n=13$ scans from seven targets, descriptive.
 Source Data: \texttt{source\_data/curated\_publication/figure\_09\_plotted.csv}, \texttt{source\_data/functional\_topology\_all\_scans/}, \texttt{source\_data/credit\_first\_figures/} (\texttt{figure\_08\_sources.json}, \texttt{figure\_08\_support.csv} and \texttt{figure\_08\_actual\_support.npz}).}
 \label{fig:boundary}
 \end{figure}
