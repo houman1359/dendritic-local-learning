@@ -220,10 +220,17 @@ def main():
     for q in sub:
      key=q['source'];oldletter=q['source_panel'];source=fitz.open(J/REG[key]['path']);sp=source[0]
      # Remove only the source's original panel letters; underlying vectors remain.
+     # fill=None: a filled redaction box is painted as a STROKED rectangle at the
+     # PDF default width of 1.0 pt, which is not a line-weight token and put one
+     # stray path per redaction into every cropped sheet.  The text still goes;
+     # the regions that must also hide line art are masked below, unstroked.
+     masks=[]
      for letter in REG[key]['letters']:
-      rr=fitz.Rect(letter['bbox']);sp.add_redact_annot(rr,fill=(1,1,1))
-     for rr in REMOVED_SHARED_REGIONS.get(key,[])+PANEL_REDACTIONS.get((key,oldletter),[]):sp.add_redact_annot(rr,fill=(1,1,1))
+      rr=fitz.Rect(letter['bbox']);sp.add_redact_annot(rr,fill=None)
+     for rr in REMOVED_SHARED_REGIONS.get(key,[])+PANEL_REDACTIONS.get((key,oldletter),[]):
+      sp.add_redact_annot(fitz.Rect(rr),fill=None);masks.append(fitz.Rect(rr))
      if REG[key]['letters'] or key in REMOVED_SHARED_REGIONS or (key,oldletter) in PANEL_REDACTIONS:sp.apply_redactions(images=0,graphics=0,text=0)
+     for rr in masks:sp.draw_rect(rr,color=None,fill=(1,1,1),width=0)
      for patch in PANEL_PATCHES.get((key,oldletter),[]):
       aux=fitz.open(J/REG[patch['source']]['path']);sp.show_pdf_page(fitz.Rect(patch['target_bbox']),aux,0,clip=fitz.Rect(patch['bbox']));ancillary.append(dict(patch,target_source_panel=key+oldletter,source_asset=REG[patch['source']]['path'],source_sha256=REG[patch['source']]['sha256']))
      clip=fitz.Rect(q['bbox']);target=fitz.Rect(x,y+LETTER_BAND,x+clip.width*scale,y+LETTER_BAND+clip.height*scale)

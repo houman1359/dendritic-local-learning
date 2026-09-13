@@ -54,9 +54,8 @@
     },
     "credit_validation": {
       "figure": "S2",
-      "violations": 2,
+      "violations": 1,
       "by_kind": {
-        "stroke-width": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": []
@@ -71,11 +70,11 @@
     },
     "reliability_gain": {
       "figure": "S4",
-      "violations": 9,
+      "violations": 8,
       "by_kind": {
         "font-family": 2,
         "text-floor": 1,
-        "stroke-width": 4,
+        "stroke-width": 3,
         "fill-width": 1,
         "manifest-missing": 1
       },
@@ -85,18 +84,16 @@
     },
     "same_span_conditioning": {
       "figure": "S5",
-      "violations": 2,
+      "violations": 1,
       "by_kind": {
-        "stroke-width": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": []
     },
     "image_generalization": {
       "figure": "S6",
-      "violations": 2,
+      "violations": 1,
       "by_kind": {
-        "stroke-width": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": []
@@ -119,10 +116,10 @@
     },
     "input_coverage_depth": {
       "figure": "S9",
-      "violations": 7,
+      "violations": 6,
       "by_kind": {
         "canvas-aspect": 1,
-        "stroke-width": 4,
+        "stroke-width": 3,
         "area-stroke": 1,
         "manifest-missing": 1
       },
@@ -130,9 +127,8 @@
     },
     "branch_conflict_controls": {
       "figure": "S10",
-      "violations": 3,
+      "violations": 2,
       "by_kind": {
-        "stroke-width": 1,
         "fill-width": 1,
         "manifest-missing": 1
       },
@@ -248,9 +244,8 @@
     },
     "physical_optimizer": {
       "figure": "S24",
-      "violations": 2,
+      "violations": 1,
       "by_kind": {
-        "stroke-width": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": []

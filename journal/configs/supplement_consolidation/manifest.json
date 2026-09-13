@@ -304,7 +304,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 374.20001220703125,
-      "sha256": "887ef4ba61b4d3f34bc7c0f8baebcb1580f1b0436fdd794d4cf0a49a0d49ee05",
+      "sha256": "9a41b959c1c9ce021008b5488749f15fd4914f5a052782ecfce20cbe03611b51",
       "source_data_directories": [
         "source_data/figure2"
       ]
@@ -661,7 +661,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 344.90631103515625,
-      "sha256": "564503023121e38bc4d044d6ad10b6340b4a4a2c36d005cc2a0fbcf063494862",
+      "sha256": "04a10439718e6cfc9c923218c92059eb32cf533b9d94918ccc666b0ed14751b3",
       "source_data_directories": [
         "source_data/positive_conductance_reliability_step_consistent"
       ]
@@ -835,7 +835,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 381.8999938964844,
-      "sha256": "ccc1a7ef31a4b56e37839336d3c6fe20a1bd81d28101d036a65b644e04776f75",
+      "sha256": "505787219e2521a2e7e52ad89a326325b457d4a38828490fd31ef16f0fec5feb",
       "source_data_directories": [
         "source_data/same_span_coefficient_learning"
       ]
@@ -1132,7 +1132,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 354.448486328125,
-      "sha256": "e4ca0f4902b5c1c7c75bb132a2d193c2d1b0a7cd268ec212c29ba61fc55be005",
+      "sha256": "f135ffd986408542c4251b878aee193c3c1c002714c85a743d736eea6fc820f9",
       "source_data_directories": [
         "source_data/cifar10_additive_feedback_ladder_confirmatory",
         "source_data/fashion_feedback_ladder",
@@ -1577,7 +1577,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 319.0,
-      "sha256": "332df2945c53a27837c68c6bcc9bd797b440de144ebfebb51bf7818f89cc79a8",
+      "sha256": "d6aa197873d2fccbf38a718ec2ed223a76a458be4970cc9e6f9b4240e616720c",
       "source_data_directories": [
         "source_data/spatial_topology_audit",
         "source_data/prospective_input_validity"
@@ -2203,7 +2203,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 449.2816467285156,
-      "sha256": "5a25b950c74206a752f4b031e93de06f1336021e6a8790a10eacf81bae824881",
+      "sha256": "0c94e3b4fc4d436d11e070021f974efa9dd793d9c07ccb74dae838a19b6a31e6",
       "source_data_directories": [
         "source_data/path_necessity_fashion",
         "source_data/review_branch_trajectories",
@@ -2706,7 +2706,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 382.6850891113281,
-      "sha256": "017361444b7bb86332dfc64399221978c363c63c84898fe5d6e0ed36f1cc23c8",
+      "sha256": "82dabf27648b277eaaac94e63255093ee4e3d86385c5403f03694d006bb2318d",
       "source_data_directories": [
         "source_data/review_coefficient_encoder",
         "source_data/review_coefficient_hard_readout",
@@ -4866,7 +4866,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 375.8999938964844,
-      "sha256": "6c4d2aa335bf72edf1c844358eb41b6a4288ea7da910efb4de9a19dc2c09bef1",
+      "sha256": "0ec8ac26a9415cf6d36fdb01c4a74d390f09aacf9cd78634d8827b7b3bf7139d",
       "source_data_directories": [
         "source_data/remaining_physical_experiments",
         "source_data/point_dendrite_credit_controls"
@@ -5047,7 +5047,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 439.6000061035156,
-      "sha256": "7db052ac28754e1b98c4f634aa451be60776b0edeb632df820472bf7f91815b8",
+      "sha256": "53ff6eb41b3665add28a33957d7ad0eca00bf4b1d4dcc90a5cf241f7b032f124",
       "source_data_directories": [
         "source_data/figure3",
         "source_data/microns_v661_replication",
@@ -5314,7 +5314,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 469.29998779296875,
-      "sha256": "af054dca8d4460839a3761983cd82b8b23c7326279e6bc5f329f25a1e20518e7",
+      "sha256": "692df3a93cee1194fdbb3be1456faeb097b0efb2d4afb54482379c1cdada885c",
       "source_data_directories": [
         "source_data/microns_inhibitory_routes"
       ]
