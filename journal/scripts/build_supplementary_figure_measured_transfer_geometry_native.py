@@ -543,8 +543,8 @@ def panel_reconstruction(ax):
         whisker_h(ax, y, lo, hi, color, dashed=oracle)
         mean_marker(ax, m, y, color, marker, ms=MARKER_MS * (0.85 if oracle else 1.0))
         labels.append(row_label(ax, y, label, color, marker))
-    # the top row's interval is narrower than its marker: say so on the row
-    ax.annotate(f"CI {top[4]:.3f}–{top[5]:.3f} hidden by marker",
+    # the top row's interval is narrower than its marker, which covers its bar
+    ax.annotate(f"CI {top[4]:.3f}–{top[5]:.3f}",
                 xy=(top[2].min(), 0), xycoords="data", xytext=(-8.0, 0.0),
                 textcoords="offset points", ha="right", va="center", fontsize=PT_BASE,
                 color=MUTE)

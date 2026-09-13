@@ -163,8 +163,9 @@ def fan_v(ax, x, values, color, *, half=0.0, ms=SEED_MS, alpha=SEED_ALPHA, zorde
 
 def hollow_mean(ax, x, mean, lo, hi, color, marker, *, ms=MEAN_MS, zorder=5.0, horizontal=False):
     err = [[mean - lo], [hi - mean]]
-    # the face is open, so the per-cell fan behind the mean stays visible
-    kw = dict(marker=marker, ms=ms, color=color, markerfacecolor="none",
+    # an opaque white face: the per-cell fan reads behind the mean rather than
+    # filling its hollow face (panel A's injection column piles 45 dots there)
+    kw = dict(marker=marker, ms=ms, color=color, markerfacecolor="white",
               markeredgecolor=color, markeredgewidth=LW_ERR, elinewidth=LW_ERR,
               capsize=ERR_CAPSIZE, capthick=LW_ERR, linestyle="none", zorder=zorder)
     if horizontal:

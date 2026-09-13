@@ -5467,7 +5467,7 @@
   },
   "N30": {
     "path": "figures/supplementary/figure_shunt_replication_native.pdf",
-    "sha256": "da213201310dce1c03a84a3b7720c189c69b62d58f1213f7ba8435cdcf54591b",
+    "sha256": "2560f5fc0100efbf7f02a4675476f750f49ae79e7f803dfac97a4635d986c167",
     "old_label": "fig:si_shunt_replication",
     "width": 518.4000244140625,
     "height": 414.0,
@@ -5541,7 +5541,7 @@
   },
   "N31": {
     "path": "figures/supplementary/figure_measured_transfer_geometry_native.pdf",
-    "sha256": "30e016141864d9cbb1bd37a2d7599f2630a084a5d028e45afda378bbcbb22608",
+    "sha256": "32d8fe80ccec984eaedef82a640699a141ffd13b876a039ec17a2069ab266f19",
     "old_label": "fig:si_measured_transfer_geometry",
     "width": 518.4000244140625,
     "height": 403.0,
