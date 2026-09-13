@@ -132,6 +132,13 @@ def utility(ax,rows):
 
 
 def figure1():
+    # Superseded 2026-09-08: main Figure 1 is drawn by
+    # scripts/credit_first_figures/build_framework.py.  The body below predates
+    # that move and calls framework.read_fresh() with the old three-value
+    # contract, so it cannot run; it is kept for the record of the earlier
+    # layout, not as a live path.
+    raise SystemExit('main Figure 1 is built by scripts/credit_first_figures/'
+                     'build_framework.py; this entry point is superseded')
     conditions,seeds,paired=framework.read_fresh();rows=[]
     c=NativeCanvas(535/72,4,row_weights=[113,127,108,55],hgutter_pt=39,vgutter_pt=39,
                    margins=Margins(left=43,right=16,top=24,bottom=35))
@@ -2441,6 +2448,11 @@ def dictionary_cartoon(ax):
 
 
 def figure7():
+    # Superseded 2026-09-08: main Figure 7 is drawn by
+    # scripts/credit_first_figures/build_anatomy.py, which replaced the
+    # commonmode.contrast_forest helper this body calls.
+    raise SystemExit('main Figure 7 is built by scripts/credit_first_figures/'
+                     'build_anatomy.py; this entry point is superseded')
     tables={q:read('anatomy_commonmode/'+q+'/cell_method_summary.csv')for q in ('original8','v661','pinky')}
     table=tables['v661'];report=json.loads((S/'anatomy_commonmode/v661/summary.json').read_text())
     rows=[];c=NativeCanvas(493/72,3,row_weights=[137,133,127],hgutter_pt=36,vgutter_pt=45,
@@ -2499,6 +2511,11 @@ def figure7():
 
 
 def figure9():
+    # Superseded 2026-09-08: main Figure 9 is drawn by
+    # scripts/credit_first_figures/build_measured.py, which replaced the
+    # measured.forest helper this body calls.
+    raise SystemExit('main Figure 9 is built by scripts/credit_first_figures/'
+                     'build_measured.py; this entry point is superseded')
     rows=[];c=NativeCanvas(365/72,2,row_weights=[135,153],hgutter_pt=36,vgutter_pt=52,
                           margins=Margins(left=58,right=17,top=26,bottom=39))
     a=c.panel('A',0,0,12,title='Observed ancestry–response similarity in seven targets')
@@ -2542,7 +2559,7 @@ def figure9():
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--figures',nargs='+',type=int,default=[1,4,6,7,9],choices=[1,4,6,7,9])
+    parser.add_argument('--figures',nargs='+',type=int,default=[4,6],choices=[1,4,6,7,9])
     parser.add_argument('--emit-main',action='store_true')
     args=parser.parse_args()
     for number in args.figures:
