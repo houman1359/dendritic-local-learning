@@ -445,7 +445,7 @@
   },
   "S7": {
     "path": "figures/supplementary/figure_S07_panels_A-D.pdf",
-    "sha256": "4cdc8227927a26f1378ad79451a2b0f5676762ad8e0cb177153c4659355392c8",
+    "sha256": "be44a0a0d06cfe0d7c871610a9f7bdab611015839e72d88a70546cc451c5f565",
     "old_label": "fig:supp_spatial_audit",
     "width": 518.4000244140625,
     "height": 327.6000061035156,
@@ -680,7 +680,7 @@
   },
   "S10": {
     "path": "figures/supplementary/figure_S10_panels_A-H.pdf",
-    "sha256": "03b4bee94e11ffb8bb2eb51b3a61862dd3eb5b2ebb28a1b4b8e303aa673a0ba7",
+    "sha256": "628ef501daec521a038a05f850dee5b2c7c65d8d700163b1c75b2e8cdf6bbdac",
     "old_label": "fig:supp_v661",
     "width": 518.4000244140625,
     "height": 439.20001220703125,
@@ -841,7 +841,7 @@
   },
   "S12": {
     "path": "figures/supplementary/figure_S12_panels_A-J.pdf",
-    "sha256": "09ef876b6c6711749d0473df733e27c04c4cfb32f421f0beff31dfb87338e4a7",
+    "sha256": "9c08d59eb111637c4be12ef21c41709b37a4359eb9d443a1e40f8070f3476644",
     "old_label": "fig:supp_inhibitory",
     "width": 518.4000244140625,
     "height": 489.6000061035156,
@@ -954,7 +954,7 @@
   },
   "S13": {
     "path": "figures/supplementary/figure_S13_panels_A-F.pdf",
-    "sha256": "02a0aaaea12d55ac3d9d249085f1d46957e2ef3ba753be98be52d324a60dbcd5",
+    "sha256": "646d676317a79e32fb1f2cbba963876b6cc39c62645bf137caa8d5221d745437",
     "old_label": "fig:supp_positive_reliability",
     "width": 518.4000244140625,
     "height": 356.3999938964844,
@@ -1128,7 +1128,7 @@
   },
   "S15": {
     "path": "figures/supplementary/figure_S15_panels_A-D.pdf",
-    "sha256": "5ceff795b553e8e15151a0a17b40a7549f972c55063fe8ccea4b024ef5434533",
+    "sha256": "4a9f9918a14625f3e7c91d10a64c43501851cbefa79dbbccd3144d8c04769126",
     "old_label": "fig:supp_nonlinear_depth_calibration",
     "width": 518.4000244140625,
     "height": 360.0,
@@ -1629,7 +1629,7 @@
   },
   "S23": {
     "path": "figures/supplementary/figure_S23_panels_A-C.pdf",
-    "sha256": "3c656698754161bd820758ca19fa68ac8c35035a61a2c08c735ecd1dd44e1363",
+    "sha256": "8184f977242f1ea4d404276900277e248c9ada740b8b44280e5bc0c5fc9bc1c5",
     "old_label": "fig:supp_partition_residual",
     "width": 518.4000244140625,
     "height": 381.6000061035156,
@@ -1677,7 +1677,7 @@
   },
   "S24": {
     "path": "figures/supplementary/figure_S24_panels_A-D.pdf",
-    "sha256": "5e4cf734962d04021dd5cf5d8ffaa2307f16ea3f1abedbf71936a46ff0b7708a",
+    "sha256": "97e2e77f0890e12794d0bc3d622f5cb2c8247d6e3aa0105249367a05889a746a",
     "old_label": "fig:supp_adaptive_reliability",
     "width": 518.4000244140625,
     "height": 334.79998779296875,
@@ -1738,7 +1738,7 @@
   },
   "S25": {
     "path": "figures/supplementary/figure_S25_panels_A-D.pdf",
-    "sha256": "bc57ef4455069d95026a4dae44079af4f0d4b99fedb2d4ae6113f6d21ebaffa4",
+    "sha256": "a09839405ae44d155c5393bb46ba58c94c917e35e02db0c1fbd636c5247f3146",
     "old_label": "fig:supp_irregular_wavelets",
     "width": 518.4000244140625,
     "height": 320.3999938964844,
@@ -2217,7 +2217,7 @@
   },
   "S32": {
     "path": "figures/supplementary/figure_S32_panels_A-F.pdf",
-    "sha256": "50b5acb4a4794d4569297de4ba6739cac41205fd96875b3095a59bc65a134754",
+    "sha256": "8492fcce878910fa2b1bfea8cfda6b615fd1f0ba59f4d213c55c2b8170acfaf3",
     "old_label": "fig:supp_local_context_encoder",
     "width": 518.4000244140625,
     "height": 504.0,
@@ -2304,7 +2304,7 @@
   },
   "S33": {
     "path": "figures/supplementary/figure_S33_panels_A-F.pdf",
-    "sha256": "568937771cb95e9769bcf03e321dd8566d17abe0f56630becbe93b0e3b6cfb4a",
+    "sha256": "28d4ba09ff83c61615a16d2b9999b911f69bb4f88df8e70d8b113f33d767a6e3",
     "old_label": "fig:supp_morphology_uncertainty",
     "width": 518.4000244140625,
     "height": 504.0,
@@ -2391,7 +2391,7 @@
   },
   "S34": {
     "path": "figures/supplementary/figure_S34_panels_A-D.pdf",
-    "sha256": "6a923b15a55c333d4e6ca539a67cc8a69ca046d3e7a4135453d59435f7a3636e",
+    "sha256": "b99db41cf98d07d0bce994f5fbd846eb8fd1adceab77415b20e6d3038b9d40d7",
     "old_label": "fig:supp_response_baselines",
     "width": 518.4000244140625,
     "height": 475.20001220703125,

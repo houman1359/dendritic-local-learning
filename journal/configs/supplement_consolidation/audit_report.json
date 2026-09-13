@@ -70,17 +70,12 @@
     },
     "reliability_gain": {
       "figure": "S4",
-      "violations": 8,
+      "violations": 2,
       "by_kind": {
-        "font-family": 2,
-        "text-floor": 1,
-        "stroke-width": 3,
         "fill-width": 1,
         "manifest-missing": 1
       },
-      "text_floor_examples": [
-        "4.90 pt is below the 7.0 pt floor (4 spans, e.g. 'b')"
-      ]
+      "text_floor_examples": []
     },
     "same_span_conditioning": {
       "figure": "S5",
@@ -136,11 +131,8 @@
     },
     "ancestry_coefficients": {
       "figure": "S11",
-      "violations": 10,
+      "violations": 1,
       "by_kind": {
-        "stroke-width": 5,
-        "area-stroke": 1,
-        "role-colour": 3,
         "manifest-missing": 1
       },
       "text_floor_examples": []
@@ -235,9 +227,8 @@
     },
     "physical_calibration": {
       "figure": "S23",
-      "violations": 3,
+      "violations": 1,
       "by_kind": {
-        "stroke-width": 2,
         "manifest-missing": 1
       },
       "text_floor_examples": []
@@ -252,18 +243,16 @@
     },
     "anatomy_capacity_controls": {
       "figure": "S25",
-      "violations": 8,
+      "violations": 1,
       "by_kind": {
-        "stroke-width": 7,
         "manifest-missing": 1
       },
       "text_floor_examples": []
     },
     "inhibitory_spatial_controls": {
       "figure": "S26",
-      "violations": 6,
+      "violations": 2,
       "by_kind": {
-        "stroke-width": 4,
         "fill-width": 1,
         "manifest-missing": 1
       },
@@ -271,21 +260,18 @@
     },
     "coarse_energy": {
       "figure": "S27",
-      "violations": 4,
+      "violations": 2,
       "by_kind": {
         "canvas-aspect": 1,
-        "stroke-width": 2,
         "manifest-missing": 1
       },
       "text_floor_examples": []
     },
     "anatomy_preprocessing": {
       "figure": "S28",
-      "violations": 6,
+      "violations": 2,
       "by_kind": {
         "canvas-aspect": 1,
-        "stroke-width": 2,
-        "role-colour": 2,
         "manifest-missing": 1
       },
       "text_floor_examples": []
@@ -316,9 +302,8 @@
     },
     "measured_predictor_controls": {
       "figure": "S32",
-      "violations": 3,
+      "violations": 1,
       "by_kind": {
-        "stroke-width": 2,
         "manifest-missing": 1
       },
       "text_floor_examples": []

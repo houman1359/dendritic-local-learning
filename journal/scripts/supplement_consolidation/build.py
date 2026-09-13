@@ -244,7 +244,9 @@ def main():
     y+=rowh+GUTTER
    for key,r in legend_specs:
     source=fitz.open(J/REG[key]['path']);sp=source[0]
-    for letter in REG[key]['letters']:sp.add_redact_annot(letter['bbox'],fill=(1,1,1))
+    # fill=None for the same reason as the panel crops above: a filled redaction
+    # box is painted as a stroked rectangle at the 1.0 pt PDF default.
+    for letter in REG[key]['letters']:sp.add_redact_annot(letter['bbox'],fill=None)
     if REG[key]['letters']:sp.apply_redactions(images=0,graphics=0,text=0)
     clip=fitz.Rect(r);cw=clip.width*scale;ch=clip.height*scale
     target=fitz.Rect((W-cw)/2,y-7,(W+cw)/2,y-7+ch);p.show_pdf_page(target,source,0,clip=clip)

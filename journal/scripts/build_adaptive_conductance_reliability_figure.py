@@ -15,6 +15,9 @@ from journal_style import (
     COLORS,
     FIG_W,
     LW_DATA,
+    LW_EDGE,
+    LW_ERR,
+    LW_HAIR,
     LW_REF,
     PT_ANNOT,
     PT_LEGEND,
@@ -28,6 +31,7 @@ from journal_style import (
     panel_title,
     style_axis,
 )
+from figure_canvas import enforce_tokens
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -35,25 +39,99 @@ SOURCE = ROOT / "source_data" / "adaptive_conductance_reliability"
 FIGURE = ROOT / "figures" / "generated" / "fig_adaptive_conductance_reliability.pdf"
 
 
+def token_run(ax, x, y, parts, *, size=PT_ANNOT, color=None, drop_pt=1.6,
+              ha="center", zorder=5):
+    """One line of base + subscript spans, drawn at token type sizes only.
+
+    Mathtext shrinks a subscript to 0.7x its base, so a 7.0 pt annotation
+    carried its branch index at 4.90 pt -- below the 7.0 pt floor and the
+    smallest type in the volume.  Here every span is a real ``size`` pt text
+    placed on the line's own baseline, a subscript span dropped by
+    ``drop_pt``, the same chained-span idiom as
+    :func:`figure_canvas.token_subscript`.  ``parts`` is a sequence of
+    ``(text, is_subscript)`` pairs; the run is centred on ``x`` (display
+    metrics, so the centring survives a re-measure).
+    """
+    from matplotlib.font_manager import FontProperties
+
+    color = COLORS["ink"] if color is None else color
+    fig = ax.figure
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
+    prop = FontProperties(size=size)
+    widths = [renderer.get_text_width_height_descent(text, prop, False)[0]
+              for text, _ in parts]
+    baseline_text = "".join(text for text, is_sub in parts if not is_sub)
+    _, height_px, descent_px = renderer.get_text_width_height_descent(
+        baseline_text or "Xy", prop, False)
+    box = ax.get_window_extent(renderer=renderer)
+    drop = drop_pt * fig.dpi / 72.0
+    anchor = {"center": 0.5, "right": 1.0}.get(ha, 0.0)
+    cursor = x - anchor * sum(widths) / box.width
+    # ``y`` keeps its meaning from the mathtext span it replaces: the vertical
+    # centre of the line, so the run sits where the old string sat.
+    baseline = y - (height_px / 2.0 - descent_px) / box.height
+    for (text, is_sub), width in zip(parts, widths):
+        ax.text(cursor, baseline - (drop / box.height if is_sub else 0.0),
+                text, fontsize=size, color=color, ha="left", va="baseline",
+                zorder=zorder, clip_on=False)
+        cursor += width / box.width
+
+
+def tokenise_axis(ax, grid="none"):
+    """``style_axis``, then the canvas weights for spines, ticks and grid.
+
+    :func:`journal_style.style_axis` still writes the pre-token weights (a
+    0.8 pt spine and tick, a 0.6 pt grid line); the canvas token set puts a
+    spine and a tick at ``LW_EDGE`` and a grid line at ``LW_HAIR``, which is
+    what the natively drawn sheets of this supplement print.
+    """
+    style_axis(ax, grid=grid)
+    if grid in {"x", "y", "both"}:
+        ax.grid(True, axis=grid, zorder=0, linewidth=LW_HAIR, alpha=0.55,
+                color=COLORS["grid"])
+    for spine in ax.spines.values():
+        spine.set_linewidth(LW_EDGE)
+    ax.tick_params(axis="both", which="major", width=LW_EDGE)
+    ax.tick_params(axis="both", which="minor", width=LW_HAIR)
+
+
 def estimator_schematic(ax: plt.Axes) -> None:
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.axis("off")
     panel_title(ax, "A", "Local reliability estimate")
+    # Each box carries a word line and a symbol line.  Both were mathtext set
+    # at 6.50 pt, which put every subscript at 4.55 pt; the words are now at
+    # the type token and the symbols are token-size spans with a real dropped
+    # subscript.  The hat on the moments is carried by the word "estimates"
+    # instead: matplotlib draws \widehat from Cmex10, a maths fallback face
+    # that must not reach a print PDF.
     boxes = [
-        (0.03, 0.55, 0.25, 0.20, "paired noisy\ncredit $g_1,g_2$", COLORS["local"]),
-        (0.38, 0.55, 0.25, 0.20, "$\\widehat S_b,\\widehat N_b$\nlocal moments", COLORS["oracle"]),
-        (0.73, 0.55, 0.24, 0.20, "adaptive shunt\n$\\kappa_b\\geq0$", COLORS["shunting"]),
+        (0.03, 0.55, 0.25, 0.20, "paired noisy",
+         [("credit g", False), ("1", True), (", g", False), ("2", True)],
+         COLORS["local"]),
+        (0.38, 0.55, 0.25, 0.20, "local estimates",
+         [("S", False), ("b", True), (", N", False), ("b", True)],
+         COLORS["oracle"]),
+        (0.73, 0.55, 0.24, 0.20, "adaptive shunt",
+         [("\u03ba", False), ("b", True), (" \u2265 0", False)],
+         COLORS["shunting"]),
     ]
-    for x, y, width, height, label, color in boxes:
+    line = 8.75 / 2.0            # half a 7.0 pt line at linespacing 1.25, in pt
+    for x, y, width, height, label, symbols, color in boxes:
         ax.add_patch(
             FancyBboxPatch(
                 (x, y), width, height, boxstyle="round,pad=0.018",
                 facecolor="white", edgecolor=color, lw=LW_DATA,
             )
         )
-        ax.text(x + width / 2, y + height / 2, label, ha="center", va="center",
-                fontsize=PT_ANNOT - 0.5, color=color, linespacing=1.25)
+        centre = (x + width / 2, y + height / 2)
+        offset = line / (ax.get_window_extent().height * 72.0 / ax.figure.dpi)
+        ax.text(centre[0], centre[1] + offset, label, ha="center",
+                va="center", fontsize=PT_ANNOT, color=color)
+        token_run(ax, centre[0], centre[1] - offset, symbols,
+                  size=PT_ANNOT, color=color)
     for left, right in ((0.28, 0.38), (0.63, 0.73)):
         ax.add_patch(
             FancyArrowPatch(
@@ -61,25 +139,23 @@ def estimator_schematic(ax: plt.Axes) -> None:
                 lw=LW_REF, color=COLORS["mute"],
             )
         )
-    ax.text(
-        0.5,
-        0.35,
-        r"$\widehat S_b=\langle g_1,g_2\rangle$"
-        "   "
-        r"$\widehat N_b=\|g_1-g_2\|^2/2$",
-        ha="center",
-        va="center",
-        fontsize=PT_ANNOT,
-        color=COLORS["ink"],
+    # The same two definitions, set with token-size spans.  The inner product
+    # is written with a centre dot and the norm with the double bar that the
+    # journal face carries, so no glyph is fetched from STIXGeneral or Cmex10.
+    token_run(
+        ax, 0.5, 0.35,
+        [("S", False), ("b", True), (" = g", False), ("1", True),
+         (" \u00b7 g", False), ("2", True), ("     N", False), ("b", True),
+         (" = \u2225g", False), ("1", True), (" \u2212 g", False), ("2", True),
+         ("\u2225\u00b2 / 2", False)],
+        size=PT_ANNOT, color=COLORS["ink"],
     )
-    ax.text(
-        0.5,
-        0.18,
-        r"$a_b=\min\{1,\widehat S_b/[c(\widehat S_b+\widehat N_b)]\}$",
-        ha="center",
-        va="center",
-        fontsize=PT_ANNOT,
-        color=COLORS["shunting"],
+    token_run(
+        ax, 0.5, 0.18,
+        [("a", False), ("b", True), (" = min{1,  S", False), ("b", True),
+         (" / [c(S", False), ("b", True), (" + N", False), ("b", True),
+         (")]}", False)],
+        size=PT_ANNOT, color=COLORS["shunting"],
     )
 
 
@@ -117,15 +193,15 @@ def main() -> None:
               lw=LW_DATA, label="fixed oracle")
     ax_b.errorbar(x, gain_summary.adaptive, yerr=gain_summary.adaptive_sd,
                   color=COLORS["shunting"], marker="o", ms=3.5, lw=LW_DATA,
-                  elinewidth=0.7, capsize=1.8, label="adaptive local")
+                  elinewidth=LW_ERR, capsize=1.8, label="adaptive local")
     ax_b.set_xticks(x)
     ax_b.set_xlabel("branch index")
     ax_b.set_ylabel("attenuation gain")
     panel_title(ax_b, "B", "Estimated branch ordering")
     ax_b.text(.03,.96,"mean ± SD",transform=ax_b.transAxes,va="top",
-              fontsize=PT_LEGEND-0.4,color=COLORS["mute"])
-    style_axis(ax_b, grid="y")
-    clean_legend(ax_b, fontsize=PT_LEGEND - 0.4, loc="lower right")
+              fontsize=PT_LEGEND,color=COLORS["mute"])
+    tokenise_axis(ax_b, grid="y")
+    clean_legend(ax_b, fontsize=PT_LEGEND, loc="lower right")
 
     # One colour per condition, shared with the fixed-profile study (the
     # consolidated supplement pastes both contrast panels on one sheet): the
@@ -152,7 +228,7 @@ def main() -> None:
     panel_title(ax_c, "C", "No endpoint gain over no shunt")
     ax_c.text(.03,.95,"mean / 95% CI",transform=ax_c.transAxes,va="top",
               fontsize=PT_LEGEND,color=COLORS["mute"])
-    style_axis(ax_c, grid="both")
+    tokenise_axis(ax_c, grid="both")
     # The key belongs to C alone (B has its own), so it sits under C's axis
     # label, spanning C's width, rather than between the rows.
     handles, labels = ax_c.get_legend_handles_labels()
@@ -198,7 +274,8 @@ def main() -> None:
         high_ci = -float(row.ci95_low)
         ax_d.errorbar(index, mean, yerr=[[mean - low], [high_ci - mean]], fmt="D",
                       ms=4.0, color=color, markeredgecolor="white",
-                      markeredgewidth=0.45, elinewidth=0.8, capsize=2.0, zorder=3)
+                      markeredgewidth=LW_HAIR, elinewidth=LW_ERR, capsize=2.0,
+                      zorder=3)
     ax_d.axhline(0, color=COLORS["mute"], lw=LW_REF, ls="--")
     # Name the zero reference in a short right-hand margin, clear of the last
     # column's seed dots.
@@ -210,9 +287,12 @@ def main() -> None:
     ax_d.tick_params(axis="x", labelsize=PT_SMALL, pad=2.0)
     ax_d.set_ylabel("control loss $-$ adaptive-local loss")
     panel_title(ax_d, "D", "Final-loss boundary at high heterogeneity")
-    style_axis(ax_d, grid="y")
+    tokenise_axis(ax_d, grid="y")
 
     style_direct_color_labels(fig)
+    # Snap whatever a shared helper still sets off the token set (legend and
+    # marker furniture) before the audits read the figure.
+    enforce_tokens(fig)
     fig.canvas.draw()
     audit_layout(fig, "fig_adaptive_conductance_reliability")
     audit_text_over_data(fig, "fig_adaptive_conductance_reliability")

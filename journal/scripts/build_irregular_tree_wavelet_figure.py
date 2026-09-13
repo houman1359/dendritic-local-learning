@@ -148,6 +148,29 @@ def draw_tree_basis(ax: plt.Axes) -> None:
               alignment="left")
 
 
+def token_axis(ax: plt.Axes, grid: str = "none") -> None:
+    """``style_axis`` finished on the journal line-weight tokens.
+
+    ``journal_style.style_axis`` still writes the pre-token furniture widths
+    (0.8 pt spines and major ticks, 0.6 pt grid rules, and the rc default on
+    minor ticks), none of which is a line-weight token, so the strict audit
+    reports them.  Re-set exactly those three widths to the tokens the native
+    canvas uses for the same roles (``figure_canvas.style_panel``): spines and
+    major ticks at ``LW_EDGE``, grid rules and minor ticks at ``LW_HAIR``.
+    Nothing here touches data, limits, ticks or their positions.
+    """
+
+    style_axis(ax, grid=grid)
+    if grid in {"x", "y", "both"}:
+        ax.grid(True, axis=grid, zorder=0, linewidth=LW_HAIR, alpha=0.9,
+                color=COLORS["grid"])
+    ax.tick_params(axis="both", which="major", width=LW_EDGE)
+    ax.tick_params(axis="both", which="minor", width=LW_HAIR)
+    for spine in ax.spines.values():
+        if spine.get_visible():
+            spine.set_linewidth(LW_EDGE)
+
+
 def main() -> None:
     apply_neurips_style()
     cell = pd.read_csv(SOURCE / "cell_scale_summary.csv")
@@ -198,7 +221,7 @@ def main() -> None:
     ax_b.set_yticks([0, 0.2, 0.4, 0.6, 0.8])
     ax_b.set_ylabel("non-scalar route-energy fraction")
     compact_panel_title(ax_b, "B", "Disjoint same-animal cohort (47 cells)")
-    style_axis(ax_b, grid="y")
+    token_axis(ax_b, grid="y")
     key = [
         Line2D([], [], marker="o", ms=4.0, color=ROUTE_COLOR, mec="white", mew=LW_HAIR,
                ls="none", label="actual routes"),
@@ -235,7 +258,7 @@ def main() -> None:
     ax_c.set_xlim(-0.55, len(SCALES) - 0.45)
     ax_c.set_ylabel("signal / isotropic-noise power")
     compact_panel_title(ax_c, "C", "Coarse modes carry excess power")
-    style_axis(ax_c, grid="y")
+    token_axis(ax_c, grid="y")
 
     # ---- D: coarse actual - permuted contrast, both cohorts ----
     cohorts = [("original_8", "original cohort\n(n=8)", ORIGINAL_COLOR, 0.16),
@@ -255,7 +278,7 @@ def main() -> None:
     ax_d.set_xlim(-0.6, 1.6)
     ax_d.set_ylabel("actual $-$ permuted coarse energy")
     compact_panel_title(ax_d, "D", "Coarse excess: original vs disjoint cohort")
-    style_axis(ax_d, grid="y")
+    token_axis(ax_d, grid="y")
 
     fig.canvas.draw()
     audit_layout(fig, "fig_irregular_tree_wavelets")

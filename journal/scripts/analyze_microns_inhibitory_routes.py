@@ -67,6 +67,7 @@ from journal_style import (  # noqa: E402
     panel_title,
     style_axis,
 )
+from figure_canvas import enforce_tokens  # noqa: E402
 
 
 DEFAULT_COHORT = ROOT / "source_data" / "microns_v661_replication" / "cohort_manifest.csv"
@@ -631,10 +632,10 @@ def plot_examples(ax: plt.Axes, example_payloads: list[dict]) -> None:
         # Physical reference inside the cell, bottom-left, under the arbor.
         by = y1 + pad + 0.6 * strip
         bx = max(x0, xc - span_x / 2 + 0.02 * span_x)
-        cell.plot([bx, bx + bar_um], [by, by], color=COLORS["ink"], lw=1.0, solid_capstyle="butt")
+        cell.plot([bx, bx + bar_um], [by, by], color=COLORS["ink"], lw=LW_ERR, solid_capstyle="butt")
         cell.text(bx, by - 0.08 * strip, f"{bar_um:g} µm", ha="left", va="bottom", fontsize=PT_SMALL)
     handles = [
-        Line2D([0], [0], color=arbor, lw=1.0, label="arbor skeleton"),
+        Line2D([0], [0], color=arbor, lw=LW_ERR, label="arbor skeleton"),
         Line2D([0], [0], marker="o", ms=3.5, color=INH, lw=0, label="inhibitory contact"),
     ]
     ax.legend(
@@ -664,6 +665,21 @@ def make_figure(
     tests: dict | None = None,
 ) -> None:
     apply_neurips_style()
+    # journal_style still ships the pre-token panel furniture (0.6 pt grid,
+    # 0.8 pt spines and ticks, the 1.0 pt patch default a scatter inherits for
+    # its marker edge).  The strict canvas audit accepts only the weight
+    # tokens, so ask for them here and snap whatever a helper still sets
+    # behind our back in enforce_tokens() just before the save.  Nothing
+    # plotted moves: these are stroke weights, not positions or values.
+    matplotlib.rcParams.update({
+        "axes.linewidth": LW_EDGE,
+        "patch.linewidth": LW_ERR,
+        "grid.linewidth": LW_HAIR,
+        "xtick.major.width": LW_EDGE,
+        "ytick.major.width": LW_EDGE,
+        "xtick.minor.width": LW_HAIR,
+        "ytick.minor.width": LW_HAIR,
+    })
     # Keep all ten endpoints in one readable, page-safe figure.  The broad
     # reconstruction panel spans three columns; the quantitative panels then
     # form two compact rows.  This avoids shrinking a five-row portrait figure
@@ -784,7 +800,7 @@ def make_figure(
                 ms=3.0,
                 color=color,
                 mec="white",
-                mew=0.4,
+                mew=LW_HAIR,
                 capsize=ERR_CAPSIZE,
                 lw=LW_ERR,
                 zorder=5,
@@ -943,15 +959,15 @@ def make_figure(
     mean = float(delta.mean())
     ax_h2.errorbar(
         2 + 0.2, mean, yerr=[[mean - lo], [hi - mean]], fmt="D", ms=3.0,
-        color=obs_color, mec="white", mew=0.4, capsize=ERR_CAPSIZE, lw=LW_ERR, zorder=5,
+        color=obs_color, mec="white", mew=LW_HAIR, capsize=ERR_CAPSIZE, lw=LW_ERR, zorder=5,
     )
     ax_h2.plot([1.55, 2.55], [0, 0], color=COLORS["mute"], ls="--", lw=LW_REF, zorder=1)
     ax_h2.set_ylim(-0.03, 0.03)
     ax_h2.set_yticks([-0.02, 0, 0.02])
-    ax_h2.tick_params(direction="out", length=3.0, width=0.8)
+    ax_h2.tick_params(direction="out", length=3.0, width=LW_EDGE)
     for spine in ("top", "left", "bottom"):
         ax_h2.spines[spine].set_visible(False)
-    ax_h2.spines["right"].set_linewidth(0.8)
+    ax_h2.spines["right"].set_linewidth(LW_EDGE)
     ax_h2.spines["right"].set_color(COLORS["edge"])
     ax_h2.spines["right"].set_bounds(-0.03, 0.03)
     ax_h2.grid(False)
@@ -1037,7 +1053,7 @@ def make_figure(
     for x, method, color in [(0, "morphology-selected actual routes", MORPH), (1, "random actual routes", RANDOM), (2, "depth-preserving ancestry shuffle", SHUFFLE)]:
         vals = fixed[method].to_numpy(dtype=float)
         ax_j.scatter(np.full(len(vals), x), vals, color=color, s=11, alpha=0.75, zorder=3)
-        ax_j.errorbar(x, vals.mean(), yerr=stats.sem(vals), fmt="D", ms=4.3, color=color, mec="white", mew=0.4, capsize=ERR_CAPSIZE, lw=LW_ERR, zorder=5)
+        ax_j.errorbar(x, vals.mean(), yerr=stats.sem(vals), fmt="D", ms=4.3, color=color, mec="white", mew=LW_HAIR, capsize=ERR_CAPSIZE, lw=LW_ERR, zorder=5)
     ax_j.set_xticks([0, 1, 2], ["selected", "random", "shuff."])
     for label in ax_j.get_xticklabels():
         label.set_rotation(24)
@@ -1050,7 +1066,23 @@ def make_figure(
     overlap = audit_text_over_data(fig, stem.name)
     if layout or overlap:
         print(f"layout audit: {len(layout)} layout and {len(overlap)} text/data warnings")
+    # style_axis() still draws the pre-token furniture (0.8 pt spines and
+    # ticks, a 0.6 pt grid).  Restate it in the house tokens the native canvas
+    # uses -- LW_EDGE for the frame and the major ticks, LW_HAIR for the grid
+    # and the minor ticks -- so the hierarchy is unchanged and legal.
+    for axes in fig.axes:
+        axes.tick_params(which="major", width=LW_EDGE)
+        axes.tick_params(which="minor", width=LW_HAIR)
+        for spine in axes.spines.values():
+            spine.set_linewidth(LW_EDGE)
+        for gridline in (*axes.get_xgridlines(), *axes.get_ygridlines()):
+            gridline.set_linewidth(LW_HAIR)
+
     stem.parent.mkdir(parents=True, exist_ok=True)
+    # Presentation only: snap every remaining stroke weight and type size onto
+    # the journal tokens (0.6 grid -> LW_HAIR, 0.8 spine/tick -> LW_EDGE,
+    # 1.0 marker edge -> LW_ERR).  Never touches geometry or data.
+    enforce_tokens(fig)
     fig.savefig(stem.with_suffix(".pdf"), metadata={"CreationDate": None, "ModDate": None})
     fig.savefig(stem.with_suffix(".png"), dpi=600)
     plt.close(fig)

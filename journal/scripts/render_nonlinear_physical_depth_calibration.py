@@ -136,6 +136,28 @@ def _seed_handle() -> Line2D:
     )
 
 
+def _token_weights(fig: plt.Figure) -> None:
+    """Pin spine, tick and grid weights onto the journal line-weight tokens.
+
+    ``journal_style.style_axis`` predates the 2026-09-08 token set: it still
+    hard-sets 0.8 pt spines/ticks and 0.6 pt grid lines, neither of which is a
+    line-weight token, so the strict canvas audit reports every panel.  This
+    pass runs after the panels are final and re-states the same hierarchy in
+    tokens -- spine and major tick to ``LW_EDGE`` (the edge weight the native
+    canvas uses for exactly these marks), minor tick and grid line to
+    ``LW_HAIR``.  Geometry, data and colour are untouched.
+    """
+    for ax in fig.get_axes():
+        for spine in ax.spines.values():
+            spine.set_linewidth(LW_EDGE)
+        ax.tick_params(axis="both", which="major", width=LW_EDGE,
+                       grid_linewidth=LW_HAIR)
+        ax.tick_params(axis="both", which="minor", width=LW_HAIR,
+                       grid_linewidth=LW_HAIR)
+        for line in (*ax.get_xgridlines(), *ax.get_ygridlines()):
+            line.set_linewidth(LW_HAIR)
+
+
 def main() -> None:
     apply_neurips_style()
     fig, axes = plt.subplots(
@@ -261,6 +283,7 @@ def main() -> None:
     panel_title(ax_d, "D", "Accessible non-ceiling boundary")
 
     FIGURES.mkdir(parents=True, exist_ok=True)
+    _token_weights(fig)
     fig.canvas.draw()
     audit_layout(fig, "fig_supp_nonlinear_depth_calibration")
     audit_text_over_data(fig, "fig_supp_nonlinear_depth_calibration")

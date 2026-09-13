@@ -15,6 +15,9 @@ from journal_style import (
     COLORS,
     FIG_W,
     LW_DATA,
+    LW_EDGE,
+    LW_ERR,
+    LW_HAIR,
     LW_REF,
     PT_ANNOT,
     PT_LEGEND,
@@ -28,6 +31,7 @@ from journal_style import (
     panel_title,
     style_axis,
 )
+from figure_canvas import enforce_tokens
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -81,10 +85,75 @@ def schematic(ax: plt.Axes) -> None:
                                      arrowstyle="-|>", mutation_scale=8,
                                      lw=LW_REF, color=COLORS["mute"], clip_on=False))
     centre = (3 * width + 2 * gap) / 2
-    ax.text(centre, 0.34, r"shunt $\kappa_b\geq0$  +  clamp current $\kappa_bV$",
-            ha="center", va="center", fontsize=PT_ANNOT, color=COLORS["ink"])
-    ax.text(centre, 0.16, r"$V'=V$   but   eligibility $\times\;G/(G+\kappa_b)$",
-            ha="center", va="center", fontsize=PT_ANNOT, color=COLORS["shunting"])
+    # Both lines were mathtext, whose subscripts printed at 4.90 pt; they are
+    # the same words and symbols set as token-size spans with a real dropped
+    # subscript instead.
+    token_run(ax, centre, 0.34,
+              [("shunt \u03ba", False), ("b", True),
+               (" \u2265 0  +  clamp current \u03ba", False), ("b", True),
+               ("V", False)],
+              size=PT_ANNOT, color=COLORS["ink"])
+    token_run(ax, centre, 0.16,
+              [("V\u2032 = V   but   eligibility \u00d7 G/(G + \u03ba", False),
+               ("b", True), (")", False)],
+              size=PT_ANNOT, color=COLORS["shunting"])
+
+
+def token_run(ax, x, y, parts, *, size=PT_ANNOT, color=None, drop_pt=1.6,
+              ha="center", zorder=5):
+    """One line of base + subscript spans, drawn at token type sizes only.
+
+    Mathtext shrinks a subscript to 0.7x its base, so a 7.0 pt annotation
+    carried its branch index at 4.90 pt -- below the 7.0 pt floor and the
+    smallest type in the volume.  Here every span is a real ``size`` pt text
+    placed on the line's own baseline, a subscript span dropped by
+    ``drop_pt``, the same chained-span idiom as
+    :func:`figure_canvas.token_subscript`.  ``parts`` is a sequence of
+    ``(text, is_subscript)`` pairs; the run is centred on ``x`` (display
+    metrics, so the centring survives a re-measure).
+    """
+    from matplotlib.font_manager import FontProperties
+
+    color = COLORS["ink"] if color is None else color
+    fig = ax.figure
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
+    prop = FontProperties(size=size)
+    widths = [renderer.get_text_width_height_descent(text, prop, False)[0]
+              for text, _ in parts]
+    baseline_text = "".join(text for text, is_sub in parts if not is_sub)
+    _, height_px, descent_px = renderer.get_text_width_height_descent(
+        baseline_text or "Xy", prop, False)
+    box = ax.get_window_extent(renderer=renderer)
+    drop = drop_pt * fig.dpi / 72.0
+    anchor = {"center": 0.5, "right": 1.0}.get(ha, 0.0)
+    cursor = x - anchor * sum(widths) / box.width
+    # ``y`` keeps its meaning from the mathtext span it replaces: the vertical
+    # centre of the line, so the run sits where the old string sat.
+    baseline = y - (height_px / 2.0 - descent_px) / box.height
+    for (text, is_sub), width in zip(parts, widths):
+        ax.text(cursor, baseline - (drop / box.height if is_sub else 0.0),
+                text, fontsize=size, color=color, ha="left", va="baseline",
+                zorder=zorder, clip_on=False)
+        cursor += width / box.width
+
+
+def tokenise_axis(ax, grid="none"):
+    """``style_axis``, then the canvas weights for spines, ticks and grid.
+
+    :func:`journal_style.style_axis` still writes the pre-token weights (a
+    0.8 pt spine and tick, a 0.6 pt grid line); the canvas token set puts a
+    spine and a tick at ``LW_EDGE`` and a grid line at ``LW_HAIR``, which is
+    what the natively drawn sheets of this supplement print.
+    """
+    style_axis(ax, grid=grid)
+    if grid in {"x", "y", "both"}:
+        ax.grid(True, axis=grid, zorder=0, linewidth=LW_HAIR, alpha=0.55,
+                color=COLORS["grid"])
+    for spine in ax.spines.values():
+        spine.set_linewidth(LW_EDGE)
+    ax.tick_params(axis="both", which="major", width=LW_EDGE)
+    ax.tick_params(axis="both", which="minor", width=LW_HAIR)
 
 
 def line_with_interval(
@@ -144,9 +213,11 @@ def main() -> None:
     )
     ax_b.set_xticks(np.arange(1, 9))
     ax_b.set_xlabel("branch index")
-    ax_b.set_ylabel(r"fixed-step gain $a_b^*$")
+    # $a_b^*$ set its subscript and star at 5.60 pt on top of each other;
+    # the axis says the same thing in words.
+    ax_b.set_ylabel("optimal fixed-step gain")
     panel_title(ax_b, "B", "Step-consistent profile")
-    style_axis(ax_b)
+    tokenise_axis(ax_b)
 
     for method, label, color, marker in METHODS:
         line_with_interval(
@@ -157,7 +228,7 @@ def main() -> None:
     ax_c.set_xlabel("SNR heterogeneity")
     ax_c.set_ylabel("one-step test-loss decrease")
     panel_title(ax_c, "C", "Immediate step")
-    style_axis(ax_c)
+    tokenise_axis(ax_c)
 
     comparison_styles = [
         ("reliability_aligned_shunt - best_global_shunt", "aligned $-$ global",
@@ -178,8 +249,13 @@ def main() -> None:
     ax_d.set_xlabel("SNR heterogeneity")
     ax_d.set_ylabel("paired loss-decrease difference")
     panel_title(ax_d, "D", "Alignment contrast")
-    style_axis(ax_d)
-    clean_legend(ax_d, fontsize=PT_LEGEND - 0.4, loc="upper left")
+    tokenise_axis(ax_d)
+    # the 7.0 pt key needs a band of its own: both contrast curves cross every
+    # corner of the data box, so the panel is given headroom instead of letting
+    # the key sit on a line (no datum moves; only the window grows upward)
+    lo, hi = ax_d.get_ylim()
+    ax_d.set_ylim(lo, hi + 0.42 * (hi - lo))
+    clean_legend(ax_d, fontsize=PT_LEGEND, loc="upper left")
 
     for method, label, color, marker in METHODS:
         line_with_interval(
@@ -192,7 +268,7 @@ def main() -> None:
     ax_e.set_xlabel("SNR heterogeneity")
     ax_e.set_ylabel("test loss after 40 updates")
     panel_title(ax_e, "E", "Training horizon")
-    style_axis(ax_e)
+    tokenise_axis(ax_e)
     handles, labels = ax_e.get_legend_handles_labels()
     # The shared key sits between the rows under C and F, to the right of the
     # schematic column, so that the schematic's own crop is not widened by it.
@@ -203,7 +279,7 @@ def main() -> None:
         bbox_to_anchor=(0.745, 0.505),
         ncol=3,
         frameon=False,
-        fontsize=PT_LEGEND - 1.0,
+        fontsize=PT_LEGEND,
         handlelength=1.3,
         handletextpad=0.35,
         columnspacing=0.9,
@@ -250,7 +326,8 @@ def main() -> None:
                      edgecolors="none", zorder=1)
         ax_f.errorbar(i, values[i], yerr=[[values[i] - lows[i]], [highs[i] - values[i]]],
                       color=color, fmt="D", ms=4.0, markeredgecolor="white",
-                      markeredgewidth=0.45, elinewidth=0.8, capsize=2.0, zorder=3)
+                      markeredgewidth=LW_HAIR, elinewidth=LW_ERR, capsize=2.0,
+                      zorder=3)
     ax_f.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
     # Name the zero reference in a short right-hand margin, clear of the last
     # column's seed dots.
@@ -261,10 +338,13 @@ def main() -> None:
     ax_f.tick_params(axis="x", labelsize=PT_SMALL, pad=2.0)
     ax_f.set_ylabel("control loss $-$ aligned loss")
     panel_title(ax_f, "F", "Paired endpoint effects")
-    style_axis(ax_f, grid="y")
+    tokenise_axis(ax_f, grid="y")
 
     FIGURES.mkdir(parents=True, exist_ok=True)
     style_direct_color_labels(fig)
+    # Snap whatever a shared helper still sets off the token set (legend and
+    # marker furniture) before the audits read the figure.
+    enforce_tokens(fig)
     fig.canvas.draw()
     audit_layout(fig, "fig_positive_conductance_reliability")
     audit_text_over_data(fig, "fig_positive_conductance_reliability")

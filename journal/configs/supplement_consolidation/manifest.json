@@ -6,7 +6,7 @@
   "specification": "scripts/supplement_consolidation/specification.py",
   "source_registry": "scripts/supplement_consolidation/original_assets.json",
   "frozen_input_hashes": {
-    "scripts/supplement_consolidation/original_assets.json": "37c2a42fdae9b6b9e9bfe7811c1f613e1438417540e5a37e5d7a9c1903fcc884",
+    "scripts/supplement_consolidation/original_assets.json": "b94ff89bd0b540c2be5e9efe2ebf1fa5e5b5a6e1883934373c17fba3f9a7de6d",
     "scripts/supplement_consolidation/original_captions.json": "838b3f4ead564b68639cf68506efe686e12b47e3d846ab230af35c7a6c8f6816",
     "scripts/supplement_consolidation/original_provenance.json": "2eca6cebde706e5af0b222c5675d413d80b4d4acfcfb234abe89d37afb72c90d"
   },
@@ -526,20 +526,20 @@
             15.692800521850586,
             11.350255012512207,
             235.1433563232422,
-            121.37423706054688
+            122.72146606445312
           ],
           "width": 219.4505558013916,
-          "height": 110.02398204803467,
+          "height": 111.37121105194092,
           "panel": "A",
           "target_rect": [
             32.18279094696044,
             19.0,
             251.63334674835204,
-            129.02398204803467
+            130.37121105194092
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S13_panels_A-F.pdf",
-          "source_sha256": "02a0aaaea12d55ac3d9d249085f1d46957e2ef3ba753be98be52d324a60dbcd5",
+          "source_sha256": "646d676317a79e32fb1f2cbba963876b6cc39c62645bf137caa8d5221d745437",
           "old_provenance_figure": "figS13",
           "old_provenance_entry_ids": [
             "positive.a",
@@ -579,7 +579,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S13_panels_A-F.pdf",
-          "source_sha256": "02a0aaaea12d55ac3d9d249085f1d46957e2ef3ba753be98be52d324a60dbcd5",
+          "source_sha256": "646d676317a79e32fb1f2cbba963876b6cc39c62645bf137caa8d5221d745437",
           "old_provenance_figure": "figS13",
           "old_provenance_entry_ids": [
             "positive.a",
@@ -619,7 +619,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S24_panels_A-D.pdf",
-          "source_sha256": "5e4cf734962d04021dd5cf5d8ffaa2307f16ea3f1abedbf71936a46ff0b7708a",
+          "source_sha256": "97e2e77f0890e12794d0bc3d622f5cb2c8247d6e3aa0105249367a05889a746a",
           "old_provenance_figure": "figS24",
           "old_provenance_entry_ids": [
             "adaptive.reliability.asset"
@@ -647,7 +647,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S24_panels_A-D.pdf",
-          "source_sha256": "5e4cf734962d04021dd5cf5d8ffaa2307f16ea3f1abedbf71936a46ff0b7708a",
+          "source_sha256": "97e2e77f0890e12794d0bc3d622f5cb2c8247d6e3aa0105249367a05889a746a",
           "old_provenance_figure": "figS24",
           "old_provenance_entry_ids": [
             "adaptive.reliability.asset"
@@ -661,7 +661,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 344.90631103515625,
-      "sha256": "04a10439718e6cfc9c923218c92059eb32cf533b9d94918ccc666b0ed14751b3",
+      "sha256": "d03a2099b25e488aa2fbd3e565355b7261de3ea294d365bc63e49df3e2eacb81",
       "source_data_directories": [
         "source_data/positive_conductance_reliability_step_consistent"
       ]
@@ -1387,7 +1387,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S07_panels_A-D.pdf",
-          "source_sha256": "4cdc8227927a26f1378ad79451a2b0f5676762ad8e0cb177153c4659355392c8",
+          "source_sha256": "be44a0a0d06cfe0d7c871610a9f7bdab611015839e72d88a70546cc451c5f565",
           "old_provenance_figure": "figS7",
           "old_provenance_entry_ids": [
             "spatial.audit.asset",
@@ -1420,7 +1420,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S07_panels_A-D.pdf",
-          "source_sha256": "4cdc8227927a26f1378ad79451a2b0f5676762ad8e0cb177153c4659355392c8",
+          "source_sha256": "be44a0a0d06cfe0d7c871610a9f7bdab611015839e72d88a70546cc451c5f565",
           "old_provenance_figure": "figS7",
           "old_provenance_entry_ids": [
             "spatial.audit.asset",
@@ -1453,7 +1453,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S07_panels_A-D.pdf",
-          "source_sha256": "4cdc8227927a26f1378ad79451a2b0f5676762ad8e0cb177153c4659355392c8",
+          "source_sha256": "be44a0a0d06cfe0d7c871610a9f7bdab611015839e72d88a70546cc451c5f565",
           "old_provenance_figure": "figS7",
           "old_provenance_entry_ids": [
             "spatial.audit.asset",
@@ -1486,7 +1486,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S07_panels_A-D.pdf",
-          "source_sha256": "4cdc8227927a26f1378ad79451a2b0f5676762ad8e0cb177153c4659355392c8",
+          "source_sha256": "be44a0a0d06cfe0d7c871610a9f7bdab611015839e72d88a70546cc451c5f565",
           "old_provenance_figure": "figS7",
           "old_provenance_entry_ids": [
             "spatial.audit.asset",
@@ -1577,7 +1577,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 319.0,
-      "sha256": "d6aa197873d2fccbf38a718ec2ed223a76a458be4970cc9e6f9b4240e616720c",
+      "sha256": "d762bc9e8deb35f23d133a0cef33fb48c5966c0eff543d7cc8dd43bc7b44ed0d",
       "source_data_directories": [
         "source_data/spatial_topology_audit",
         "source_data/prospective_input_validity"
@@ -2238,7 +2238,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S23_panels_A-C.pdf",
-          "source_sha256": "3c656698754161bd820758ca19fa68ac8c35035a61a2c08c735ecd1dd44e1363",
+          "source_sha256": "8184f977242f1ea4d404276900277e248c9ada740b8b44280e5bc0c5fc9bc1c5",
           "old_provenance_figure": "figS23",
           "old_provenance_entry_ids": [
             "partition.residual.asset"
@@ -2266,7 +2266,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S32_panels_A-F.pdf",
-          "source_sha256": "50b5acb4a4794d4569297de4ba6739cac41205fd96875b3095a59bc65a134754",
+          "source_sha256": "8492fcce878910fa2b1bfea8cfda6b615fd1f0ba59f4d213c55c2b8170acfaf3",
           "old_provenance_figure": "figS32",
           "old_provenance_entry_ids": [
             "coefficient.encoder.asset",
@@ -2483,7 +2483,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S32_panels_A-F.pdf",
-          "source_sha256": "50b5acb4a4794d4569297de4ba6739cac41205fd96875b3095a59bc65a134754",
+          "source_sha256": "8492fcce878910fa2b1bfea8cfda6b615fd1f0ba59f4d213c55c2b8170acfaf3",
           "old_provenance_figure": "figS32",
           "old_provenance_entry_ids": [
             "coefficient.encoder.asset",
@@ -2686,7 +2686,7 @@
           "role": "shared legend",
           "source": "S32",
           "source_asset": "figures/supplementary/figure_S32_panels_A-F.pdf",
-          "source_sha256": "50b5acb4a4794d4569297de4ba6739cac41205fd96875b3095a59bc65a134754",
+          "source_sha256": "8492fcce878910fa2b1bfea8cfda6b615fd1f0ba59f4d213c55c2b8170acfaf3",
           "bbox": [
             120.0,
             0.0,
@@ -2706,7 +2706,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 382.6850891113281,
-      "sha256": "82dabf27648b277eaaac94e63255093ee4e3d86385c5403f03694d006bb2318d",
+      "sha256": "0806deb5160dff32aa37994c9f8599c90713f3a3ddf8278019cf07594f972a5c",
       "source_data_directories": [
         "source_data/review_coefficient_encoder",
         "source_data/review_coefficient_hard_readout",
@@ -4582,7 +4582,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S15_panels_A-D.pdf",
-          "source_sha256": "5ceff795b553e8e15151a0a17b40a7549f972c55063fe8ccea4b024ef5434533",
+          "source_sha256": "4a9f9918a14625f3e7c91d10a64c43501851cbefa79dbbccd3144d8c04769126",
           "old_provenance_figure": "figS15",
           "old_provenance_entry_ids": [
             "physical_calibration.accessibility",
@@ -4621,7 +4621,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S15_panels_A-D.pdf",
-          "source_sha256": "5ceff795b553e8e15151a0a17b40a7549f972c55063fe8ccea4b024ef5434533",
+          "source_sha256": "4a9f9918a14625f3e7c91d10a64c43501851cbefa79dbbccd3144d8c04769126",
           "old_provenance_figure": "figS15",
           "old_provenance_entry_ids": [
             "physical_calibration.accessibility",
@@ -4660,7 +4660,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S15_panels_A-D.pdf",
-          "source_sha256": "5ceff795b553e8e15151a0a17b40a7549f972c55063fe8ccea4b024ef5434533",
+          "source_sha256": "4a9f9918a14625f3e7c91d10a64c43501851cbefa79dbbccd3144d8c04769126",
           "old_provenance_figure": "figS15",
           "old_provenance_entry_ids": [
             "physical_calibration.accessibility",
@@ -4699,7 +4699,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S15_panels_A-D.pdf",
-          "source_sha256": "5ceff795b553e8e15151a0a17b40a7549f972c55063fe8ccea4b024ef5434533",
+          "source_sha256": "4a9f9918a14625f3e7c91d10a64c43501851cbefa79dbbccd3144d8c04769126",
           "old_provenance_figure": "figS15",
           "old_provenance_entry_ids": [
             "physical_calibration.accessibility",
@@ -4724,7 +4724,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 360.0,
-      "sha256": "faea7e29b468681f1a4c0fc48a2e41468fdfdee9b6de7288327a84fc02176905",
+      "sha256": "c651fb7b51acac7923c5a7cbd404772ac1363989cd71f8c40b5c6d5ffc0ac065",
       "source_data_directories": [
         "source_data/nonlinear_physical_depth_accessibility",
         "source_data/nonlinear_physical_depth_boundary",
@@ -4899,7 +4899,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S10_panels_A-H.pdf",
-          "source_sha256": "03b4bee94e11ffb8bb2eb51b3a61862dd3eb5b2ebb28a1b4b8e303aa673a0ba7",
+          "source_sha256": "628ef501daec521a038a05f850dee5b2c7c65d8d700163b1c75b2e8cdf6bbdac",
           "old_provenance_figure": "figS10",
           "old_provenance_entry_ids": [
             "fig5.a-b",
@@ -5047,7 +5047,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 439.6000061035156,
-      "sha256": "53ff6eb41b3665add28a33957d7ad0eca00bf4b1d4dcc90a5cf241f7b032f124",
+      "sha256": "a4f26f416459e9be2fc1aee40ceab760e598461ba0e9ae83d076b3a6fbd8bad5",
       "source_data_directories": [
         "source_data/figure3",
         "source_data/microns_v661_replication",
@@ -5081,7 +5081,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S12_panels_A-J.pdf",
-          "source_sha256": "09ef876b6c6711749d0473df733e27c04c4cfb32f421f0beff31dfb87338e4a7",
+          "source_sha256": "9c08d59eb111637c4be12ef21c41709b37a4359eb9d443a1e40f8070f3476644",
           "old_provenance_figure": "figS12",
           "old_provenance_entry_ids": [
             "inhcensus.asset",
@@ -5123,7 +5123,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S12_panels_A-J.pdf",
-          "source_sha256": "09ef876b6c6711749d0473df733e27c04c4cfb32f421f0beff31dfb87338e4a7",
+          "source_sha256": "9c08d59eb111637c4be12ef21c41709b37a4359eb9d443a1e40f8070f3476644",
           "old_provenance_figure": "figS12",
           "old_provenance_entry_ids": [
             "inhcensus.asset",
@@ -5164,7 +5164,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S12_panels_A-J.pdf",
-          "source_sha256": "09ef876b6c6711749d0473df733e27c04c4cfb32f421f0beff31dfb87338e4a7",
+          "source_sha256": "9c08d59eb111637c4be12ef21c41709b37a4359eb9d443a1e40f8070f3476644",
           "old_provenance_figure": "figS12",
           "old_provenance_entry_ids": [
             "inhcensus.asset",
@@ -5205,7 +5205,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S12_panels_A-J.pdf",
-          "source_sha256": "09ef876b6c6711749d0473df733e27c04c4cfb32f421f0beff31dfb87338e4a7",
+          "source_sha256": "9c08d59eb111637c4be12ef21c41709b37a4359eb9d443a1e40f8070f3476644",
           "old_provenance_figure": "figS12",
           "old_provenance_entry_ids": [
             "inhcensus.asset",
@@ -5246,7 +5246,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S12_panels_A-J.pdf",
-          "source_sha256": "09ef876b6c6711749d0473df733e27c04c4cfb32f421f0beff31dfb87338e4a7",
+          "source_sha256": "9c08d59eb111637c4be12ef21c41709b37a4359eb9d443a1e40f8070f3476644",
           "old_provenance_figure": "figS12",
           "old_provenance_entry_ids": [
             "inhcensus.asset",
@@ -5287,7 +5287,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S12_panels_A-J.pdf",
-          "source_sha256": "09ef876b6c6711749d0473df733e27c04c4cfb32f421f0beff31dfb87338e4a7",
+          "source_sha256": "9c08d59eb111637c4be12ef21c41709b37a4359eb9d443a1e40f8070f3476644",
           "old_provenance_figure": "figS12",
           "old_provenance_entry_ids": [
             "inhcensus.asset",
@@ -5314,7 +5314,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 469.29998779296875,
-      "sha256": "692df3a93cee1194fdbb3be1456faeb097b0efb2d4afb54482379c1cdada885c",
+      "sha256": "8189aaf21a40bfc358f8593fd41408159a94a36bdccc4d3cda8197aaff58cfe4",
       "source_data_directories": [
         "source_data/microns_inhibitory_routes"
       ]
@@ -5346,7 +5346,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S25_panels_A-D.pdf",
-          "source_sha256": "bc57ef4455069d95026a4dae44079af4f0d4b99fedb2d4ae6113f6d21ebaffa4",
+          "source_sha256": "a09839405ae44d155c5393bb46ba58c94c917e35e02db0c1fbd636c5247f3146",
           "old_provenance_figure": "figS25",
           "old_provenance_entry_ids": [
             "irregular.wavelet.asset"
@@ -5374,7 +5374,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S25_panels_A-D.pdf",
-          "source_sha256": "bc57ef4455069d95026a4dae44079af4f0d4b99fedb2d4ae6113f6d21ebaffa4",
+          "source_sha256": "a09839405ae44d155c5393bb46ba58c94c917e35e02db0c1fbd636c5247f3146",
           "old_provenance_figure": "figS25",
           "old_provenance_entry_ids": [
             "irregular.wavelet.asset"
@@ -5406,7 +5406,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S25_panels_A-D.pdf",
-          "source_sha256": "bc57ef4455069d95026a4dae44079af4f0d4b99fedb2d4ae6113f6d21ebaffa4",
+          "source_sha256": "a09839405ae44d155c5393bb46ba58c94c917e35e02db0c1fbd636c5247f3146",
           "old_provenance_figure": "figS25",
           "old_provenance_entry_ids": [
             "irregular.wavelet.asset"
@@ -5440,7 +5440,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S25_panels_A-D.pdf",
-          "source_sha256": "bc57ef4455069d95026a4dae44079af4f0d4b99fedb2d4ae6113f6d21ebaffa4",
+          "source_sha256": "a09839405ae44d155c5393bb46ba58c94c917e35e02db0c1fbd636c5247f3146",
           "old_provenance_figure": "figS25",
           "old_provenance_entry_ids": [
             "irregular.wavelet.asset"
@@ -5458,7 +5458,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 320.3999938964844,
-      "sha256": "96556f1ee93ef4de8eb9cfdcbf8afbb73f5cef00bedfc1ed00cfdea0a6fef1fe",
+      "sha256": "ee3f3454b1886c796329e6c44fef22761af036ae62813c283f150a53b4f7a9f2",
       "source_data_directories": [
         "source_data/irregular_tree_wavelets"
       ]
@@ -5490,7 +5490,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S33_panels_A-F.pdf",
-          "source_sha256": "568937771cb95e9769bcf03e321dd8566d17abe0f56630becbe93b0e3b6cfb4a",
+          "source_sha256": "28d4ba09ff83c61615a16d2b9999b911f69bb4f88df8e70d8b113f33d767a6e3",
           "old_provenance_figure": "figS33",
           "old_provenance_entry_ids": [
             "completion.source_data.review_morphology_uncertainty.README.md",
@@ -5535,7 +5535,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S33_panels_A-F.pdf",
-          "source_sha256": "568937771cb95e9769bcf03e321dd8566d17abe0f56630becbe93b0e3b6cfb4a",
+          "source_sha256": "28d4ba09ff83c61615a16d2b9999b911f69bb4f88df8e70d8b113f33d767a6e3",
           "old_provenance_figure": "figS33",
           "old_provenance_entry_ids": [
             "completion.source_data.review_morphology_uncertainty.README.md",
@@ -5580,7 +5580,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S33_panels_A-F.pdf",
-          "source_sha256": "568937771cb95e9769bcf03e321dd8566d17abe0f56630becbe93b0e3b6cfb4a",
+          "source_sha256": "28d4ba09ff83c61615a16d2b9999b911f69bb4f88df8e70d8b113f33d767a6e3",
           "old_provenance_figure": "figS33",
           "old_provenance_entry_ids": [
             "completion.source_data.review_morphology_uncertainty.README.md",
@@ -5625,7 +5625,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S33_panels_A-F.pdf",
-          "source_sha256": "568937771cb95e9769bcf03e321dd8566d17abe0f56630becbe93b0e3b6cfb4a",
+          "source_sha256": "28d4ba09ff83c61615a16d2b9999b911f69bb4f88df8e70d8b113f33d767a6e3",
           "old_provenance_figure": "figS33",
           "old_provenance_entry_ids": [
             "completion.source_data.review_morphology_uncertainty.README.md",
@@ -5670,7 +5670,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S33_panels_A-F.pdf",
-          "source_sha256": "568937771cb95e9769bcf03e321dd8566d17abe0f56630becbe93b0e3b6cfb4a",
+          "source_sha256": "28d4ba09ff83c61615a16d2b9999b911f69bb4f88df8e70d8b113f33d767a6e3",
           "old_provenance_figure": "figS33",
           "old_provenance_entry_ids": [
             "completion.source_data.review_morphology_uncertainty.README.md",
@@ -5715,7 +5715,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S33_panels_A-F.pdf",
-          "source_sha256": "568937771cb95e9769bcf03e321dd8566d17abe0f56630becbe93b0e3b6cfb4a",
+          "source_sha256": "28d4ba09ff83c61615a16d2b9999b911f69bb4f88df8e70d8b113f33d767a6e3",
           "old_provenance_figure": "figS33",
           "old_provenance_entry_ids": [
             "completion.source_data.review_morphology_uncertainty.README.md",
@@ -5746,7 +5746,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 504.0,
-      "sha256": "bfd305fd7758ac434504829387c7521d6d4660a39ff621d56e01becbd36b0e04",
+      "sha256": "51bd028ace0f3a2a7e289fe86bb7c0f3732205b95c16399d761d7b3b0c5ff32e",
       "source_data_directories": [
         "source_data/review_morphology_uncertainty"
       ]
@@ -6257,7 +6257,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S34_panels_A-D.pdf",
-          "source_sha256": "6a923b15a55c333d4e6ca539a67cc8a69ca046d3e7a4135453d59435f7a3636e",
+          "source_sha256": "b99db41cf98d07d0bce994f5fbd846eb8fd1adceab77415b20e6d3038b9d40d7",
           "old_provenance_figure": "figS34",
           "old_provenance_entry_ids": [
             "completion.source_data.review_response_baselines.README.md",
@@ -6314,7 +6314,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S34_panels_A-D.pdf",
-          "source_sha256": "6a923b15a55c333d4e6ca539a67cc8a69ca046d3e7a4135453d59435f7a3636e",
+          "source_sha256": "b99db41cf98d07d0bce994f5fbd846eb8fd1adceab77415b20e6d3038b9d40d7",
           "old_provenance_figure": "figS34",
           "old_provenance_entry_ids": [
             "completion.source_data.review_response_baselines.README.md",
@@ -6371,7 +6371,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S34_panels_A-D.pdf",
-          "source_sha256": "6a923b15a55c333d4e6ca539a67cc8a69ca046d3e7a4135453d59435f7a3636e",
+          "source_sha256": "b99db41cf98d07d0bce994f5fbd846eb8fd1adceab77415b20e6d3038b9d40d7",
           "old_provenance_figure": "figS34",
           "old_provenance_entry_ids": [
             "completion.source_data.review_response_baselines.README.md",
@@ -6428,7 +6428,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S34_panels_A-D.pdf",
-          "source_sha256": "6a923b15a55c333d4e6ca539a67cc8a69ca046d3e7a4135453d59435f7a3636e",
+          "source_sha256": "b99db41cf98d07d0bce994f5fbd846eb8fd1adceab77415b20e6d3038b9d40d7",
           "old_provenance_figure": "figS34",
           "old_provenance_entry_ids": [
             "completion.source_data.review_response_baselines.README.md",
@@ -6471,7 +6471,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 475.20001220703125,
-      "sha256": "55385b3fdcabe8dc361f90369ef41daf35e1a7f1c59fbbaa30d4d4306080a889",
+      "sha256": "e99167988ef788b5732e17b5e4f7034437a31e70714727a3c81e29b6618f35e6",
       "source_data_directories": [
         "source_data/review_response_baselines"
       ]
