@@ -2303,7 +2303,7 @@ def figure6():
     # 0.3 pt clear of the x spine; the drawn axis stays -5 to 10 (`f6_trim`).
     f6_paired(g, paired, 'test_accuracy', rows, ylim=(-6.95, 13.5),
               yticks=[-5, 0, 5, 10],
-              ylabel='Exact path − shared soma (pp)', band=(300, 330),
+              ylabel='Exact path − shared soma (pp)', band=(300, 325),
               sign=('exact path ahead', 'shared soma ahead'),
               # QA 2026-09-10: 0.982, not the default 1.0 -- at the axes top
               # the key's box grazed the panel title by 0.4 pt.
@@ -2339,7 +2339,7 @@ def figure6():
               # the largest of the eight annotation elements that filled a
               # third of this data-free plot box.
               notes=((250.0, 9.5, 'left',
-                      ('crossing not resolved (300–330)',)),))
+                      ('crossing not resolved (300–325)',)),))
     h = c.panel('H', 2, 6, 6, title='Cross-entropy ordering does not flip',
                 sharex=g)
     f6_style(h, 'Cross-entropy ordering does not flip')

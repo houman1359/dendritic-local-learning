@@ -1,7 +1,7 @@
 {
   "figure": "Figure 6",
   "output": "figures/components/restored_main_06.pdf",
-  "output_sha256": "e2db45af7f57e36136d966ebd1be72c11f178fc0a5d85765d9db6502a92e2d7f",
+  "output_sha256": "d23a1fdf794ced5cef689dd7d842237da98bd902a86c5b5c26cce65a25702cf6",
   "panel_sources": {
     "A": "Native architecture schematic (no data): D1 [8] and D3 [2,1,2] over the same eight nonsomatic compartments, the grouped-point control swatch, and the shared inventory printed from physical_depth_h4_factorial/seed_outcomes.csv (66,178 trainable parameters, 14,336 active synapses).",
     "B": "Native generative-model schematic (no data): tier supports and family strips from configs/nonlinear_physical_depth/confirmatory/aligned_shunting_bp.yaml (n_levels 3, hierarchy_branching 2, n_flat_groups 8, e_signal_delta 0.8) and supplementary/curated/si_06_physical_depth.tex Eq. S1-S2.",
@@ -27,7 +27,7 @@
     "source_data/physical_depth_budget/canonical/extension_paired_contrasts.csv": "52edceb0a920f6bd3548550deb81bc1b11a065da8d56d0ae7027157ca05e02d1"
   },
   "builder_sha256": {
-    "scripts/credit_first_figures/build_restored_main.py": "f4700df00562b6e73d5c54dfe026a1589ea62a132cfc3bc13a3ce96197e6ea59",
+    "scripts/credit_first_figures/build_restored_main.py": "60fd06978e287f1538f63e3dd37c48dd8f189ef3398367b2d5d6dd10da598d8b",
     "scripts/credit_first_figures/focused_main_evidence.py": "e045f0fc26ce8554af19f7d2b1ee9683ec852899f19e02e76e78163b0d74e773",
     "scripts/figure_canvas.py": "0a0d01607cc3589a44075b6ccd7c2867dcf7d8a31f88ca1565dade247f4bcb48",
     "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a"
@@ -40,7 +40,7 @@
     "TEXT-ON-DATA 'at 486: \u22122.94 pp'",
     "TEXT-ON-DATA 'at 600: \u22121.52 pp [\u22121.83, \u22121.23],'",
     "TEXT-ON-DATA '10 of 10 seeds negative'",
-    "TEXT-ON-DATA 'crossing not resolved (300\u2013330)'"
+    "TEXT-ON-DATA 'crossing not resolved (300\u2013325)'"
   ],
   "rendering_scope": "Existing outcomes only; no scientific endpoint or rate selection. Any redraw bootstrap uses whole existing seeds/cells, not independent pairs.",
   "helper_sha256": {
