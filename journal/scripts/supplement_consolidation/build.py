@@ -302,7 +302,9 @@ def main():
              'S47':('fig:si_shunt_replication','Replaced by the native render N30, drawn from the same source tables and pasted whole as Supplementary Fig. S30D,E.'),
              'S22':('fig:si_measured_transfer_geometry','Replaced by the native render N31, drawn from the same source tables and pasted whole as Supplementary Fig. S31A.'),
              'M9':('fig:si_measured_transfer_geometry','Replaced by the native render N31, drawn from the same source tables and pasted whole as Supplementary Fig. S31B--D.'),
-             'S56':('fig:si_measured_transfer_geometry','Replaced by the native render N31, drawn from the same calibration table and pasted whole as Supplementary Fig. S31E.')}.get(key)
+             'S56':('fig:si_measured_transfer_geometry','Replaced by the native render N31, drawn from the same calibration table and pasted whole as Supplementary Fig. S31E.'),
+             'S11':('fig:si_shunt_sensitivity','Replaced by the native render N29, which ports the legacy panels to the canvas from the same source tables and is pasted whole as Supplementary Fig. S29.'),
+             'S21':('fig:si_shunt_sensitivity','Replaced by the native render N29, drawn from the same source tables and pasted whole as Supplementary Fig. S29.')}.get(key)
    if not fallback:raise ValueError('No destination: '+key)
    mapping[key]=[{'kind':'table' if key in ['S26'] else 'section','label':fallback[0],'note':fallback[1]}]
  manifest={'schema':'supplement-consolidation/1','selection_is_editorial':True,'numerical_results_changed':False,'builder':'scripts/supplement_consolidation/build.py','specification':'scripts/supplement_consolidation/specification.py','source_registry':'scripts/supplement_consolidation/original_assets.json','frozen_input_hashes':{str(p.relative_to(J)):sha(p) for p in [HERE/'original_assets.json',HERE/'original_captions.json',HERE/'original_provenance.json']},'paste_scale_target':PASTE_SCALE,'height_cap_pt':HEIGHT_CAP,'assets':assets,'old_to_new':mapping}

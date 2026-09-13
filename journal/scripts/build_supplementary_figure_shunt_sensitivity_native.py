@@ -201,7 +201,7 @@ def panel_dose(ax, contrasts, percell):
                        zorder=0.5)
     ax.set_yscale("symlog", linthresh=LINTHRESH, linscale=0.8)
     # tight to the per-cell fan (-0.042 .. 0.179), not to a round number
-    ax.set_ylim(-0.052, 0.26)
+    ax.set_ylim(-0.065, 0.26)   # ~2 pt of white under the lowest per-cell point
     ticks = [-0.01, -0.001, 0.0, 0.001, 0.01, 0.1]
     ax.yaxis.set_major_locator(FixedLocator(ticks))
     ax.yaxis.set_minor_locator(NullLocator())
@@ -314,9 +314,11 @@ def panel_selectivity(ax, rows):
         Line2D([], [], ls="none", marker="+", color=MUTE,
                markeredgewidth=LW_ERR, ms=BG_KEY_MS + 0.8, label="×4"),
     ]
-    ax.legend(handles=handles, loc="lower right", frameon=False,
-              bbox_to_anchor=(1.0, 0.04), fontsize=PT_BASE, handlelength=1.0,
-              handletextpad=0.5, labelspacing=0.22, borderaxespad=0.3)
+    leg = ax.legend(handles=handles, loc="lower right", frameon=False,
+                    bbox_to_anchor=(1.0, 0.04), fontsize=PT_BASE, handlelength=1.0,
+                    handletextpad=0.5, labelspacing=0.22, borderaxespad=0.3)
+    leg.set_title("colour: Rm as in A", prop={"size": PT_BASE})
+    leg.get_title().set_color(MUTE)
     stratum = sites.groupby(["membrane_resistance_ohm_cm2",
                              "background_leak_multiplier"])
     print(f"[C] {len(sites)} site-regime points, 101 per stratum; "
@@ -362,7 +364,7 @@ def panel_census(ax, summary, rows):
                         xy=(i + offset, value), xycoords="data",
                         xytext=(0.0, 2.0), textcoords="offset points",
                         ha="center", va="bottom", fontsize=PT_BASE,
-                        color=colour if value else MUTE)
+                        color=colour, alpha=1.0 if value else 0.75)
     ax.set_xticks(range(3), ["attenuated", "enhanced", "sign flip"])
     ax.set_xlim(-0.62, 2.62)
     ax.set_ylabel("descendant-gradient fraction")

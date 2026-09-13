@@ -475,25 +475,25 @@
     "old_label": "fig:supp_focal_matrix",
     "original_asset": "figures/supplementary/figure_S11_panels_A-C.pdf",
     "original_sha256": "be93b440e7b5dde31e2bbb5fee0c3b924e9f08d40f51eecaef52d23431e0e2fb",
-    "primary_destination": "S29",
-    "panels": {
+    "primary_destination": "fig:si_shunt_sensitivity",
+    "panels": {},
+    "omitted_panel_status": {
       "A": {
-        "figure": "S29",
-        "panel": "A",
-        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
+        "content": "Shunt-minus-current-injection localization across fixed absolute doses at three membrane resistances and three background multipliers.",
+        "reason": "Replaced by the native render N29 (scripts/build_supplementary_figure_shunt_sensitivity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S29; no crop of this render is used.",
+        "numbers_at": "source_data/focal_selectivity_phase1/paired_contrasts.csv"
       },
       "B": {
-        "figure": "S29",
-        "panel": "C",
-        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
+        "content": "Transport selectivity S_k, the descendant-to-control ratio of median absolute Green-function entries, against full synaptic-gradient localization at unit input-conductance-normalized dose.",
+        "reason": "Replaced by the native render N29 (scripts/build_supplementary_figure_shunt_sensitivity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S29; no crop of this render is used.",
+        "numbers_at": "source_data/focal_selectivity_phase1/cell_condition_metrics.csv"
       },
       "C": {
-        "figure": "S29",
-        "panel": "D",
-        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
+        "content": "Fraction of descendant gradients attenuated, enhanced or sign reversed at R_m = 1,000 ohm cm^2, background multiplier one and unit dose.",
+        "reason": "Replaced by the native render N29 (scripts/build_supplementary_figure_shunt_sensitivity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S29; no crop of this render is used.",
+        "numbers_at": "source_data/focal_selectivity_phase1/"
       }
-    },
-    "omitted_panel_status": {}
+    }
   },
   "S12": {
     "old_label": "fig:supp_inhibitory",
@@ -843,25 +843,14 @@
     "old_label": "fig:supp_focal_detail",
     "original_asset": "figures/supplementary/figure_S21_panels_A-D.pdf",
     "original_sha256": "86727844700a11b853f8f4c902e2ed782b791fd017f373387bc4c855316c92e7",
-    "primary_destination": "S29",
-    "panels": {
-      "A": {
-        "figure": "S29",
-        "panel": "B",
-        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
-      },
-      "D": {
-        "figure": "S29",
-        "panel": "E",
-        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
-      },
-      "C": {
-        "figure": "S29",
-        "panel": "F",
-        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
-      }
-    },
+    "primary_destination": "fig:si_shunt_sensitivity",
+    "panels": {},
     "omitted_panel_status": {
+      "A": {
+        "content": "Within-cell controls: shunt and baseline-current-matched injection localization, and the true relation against a reassigned foreign template.",
+        "reason": "Replaced by the native render N29 (scripts/build_supplementary_figure_shunt_sensitivity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S29; no crop of this render is used.",
+        "numbers_at": "source_data/figure4/cell_primary_contrasts.csv"
+      },
       "B": {
         "content": "Cell means and 95\\% cell-bootstrap intervals within focal-site depths 2/3/4/5/6/7/8/9/13, with 8/8/8/7/5/4/5/3/1 eligible cells. No curve connects means from changing cell sets.",
         "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
@@ -871,6 +860,16 @@
           "drafts/dendritic-local-learning/journal/source_data/figure4/direct_typed_focal_localization.csv",
           "drafts/dendritic-local-learning/journal/source_data/figure4/direct_typed_summary.json"
         ]
+      },
+      "C": {
+        "content": "Dimensionless excitatory/inhibitory conductance-scale and normalized inhibitory-reversal sensitivity.",
+        "reason": "Replaced by the native render N29 (scripts/build_supplementary_figure_shunt_sensitivity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S29; no crop of this render is used.",
+        "numbers_at": "source_data/figure4/"
+      },
+      "D": {
+        "content": "All mapped contacts versus directly typed presynaptic contacts, summarized by shunt-minus-current localization in eight reconstructed cells.",
+        "reason": "Replaced by the native render N29 (scripts/build_supplementary_figure_shunt_sensitivity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S29; no crop of this render is used.",
+        "numbers_at": "source_data/figure4/direct_typed_cell_primary_contrasts.csv"
       }
     }
   },
@@ -3199,6 +3198,45 @@
         "figure": "S31",
         "panel": "E",
         "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
+      }
+    },
+    "omitted_panel_status": {}
+  },
+  "N29": {
+    "old_label": "fig:si_shunt_sensitivity",
+    "original_asset": "figures/supplementary/figure_shunt_sensitivity_native.pdf",
+    "original_sha256": "ebdfa6f5343f006daae9784779e2081d8fbe1b96b4b9324af76f62d690ae1750",
+    "primary_destination": "S29",
+    "panels": {
+      "A": {
+        "figure": "S29",
+        "panel": "A",
+        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
+      },
+      "B": {
+        "figure": "S29",
+        "panel": "B",
+        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
+      },
+      "C": {
+        "figure": "S29",
+        "panel": "C",
+        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
+      },
+      "D": {
+        "figure": "S29",
+        "panel": "D",
+        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
+      },
+      "E": {
+        "figure": "S29",
+        "panel": "E",
+        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
+      },
+      "F": {
+        "figure": "S29",
+        "panel": "F",
+        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
       }
     },
     "omitted_panel_status": {}

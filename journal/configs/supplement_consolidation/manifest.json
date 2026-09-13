@@ -6,7 +6,7 @@
   "specification": "scripts/supplement_consolidation/specification.py",
   "source_registry": "scripts/supplement_consolidation/original_assets.json",
   "frozen_input_hashes": {
-    "scripts/supplement_consolidation/original_assets.json": "eb7cdb785bd05d70ccef0d619d72270761783e378a05262389fb8c1362bb08dd",
+    "scripts/supplement_consolidation/original_assets.json": "37c2a42fdae9b6b9e9bfe7811c1f613e1438417540e5a37e5d7a9c1903fcc884",
     "scripts/supplement_consolidation/original_captions.json": "838b3f4ead564b68639cf68506efe686e12b47e3d846ab230af35c7a6c8f6816",
     "scripts/supplement_consolidation/original_provenance.json": "2eca6cebde706e5af0b222c5675d413d80b4d4acfcfb234abe89d37afb72c90d"
   },
@@ -5759,276 +5759,168 @@
       "label": "fig:si_shunt_sensitivity",
       "panels": [
         {
-          "source": "S11",
+          "source": "N29",
           "source_panel": "A",
           "bbox": [
-            6.176875114440918,
-            5.759007453918457,
-            221.6678466796875,
-            179.78363037109375
+            13.264874458312988,
+            4.759007453918457,
+            294.0369873046875,
+            167.616943359375
           ],
-          "width": 215.49097156524658,
-          "height": 174.0246229171753,
+          "width": 280.7721128463745,
+          "height": 162.85793590545654,
           "panel": "A",
           "target_rect": [
-            57.0932104394372,
-            19.0,
-            253.60005338849408,
-            177.69355916147975
+            13.264874458312988,
+            4.759007453918457,
+            294.0369873046875,
+            167.616943359375
           ],
-          "scale": 0.9119029048952908,
-          "source_asset": "figures/supplementary/figure_S11_panels_A-C.pdf",
-          "source_sha256": "be93b440e7b5dde31e2bbb5fee0c3b924e9f08d40f51eecaef52d23431e0e2fb",
-          "old_provenance_figure": "figS11",
-          "old_provenance_entry_ids": [
-            "focalmatrix.asset",
-            "focalmatrix.cells",
-            "focalmatrix.contrasts",
-            "focalmatrix.reproducibility",
-            "focalmatrix.sites",
-            "focalmatrix.summary"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/focal_selectivity_phase1/cell_condition_metrics.csv",
-            "drafts/dendritic-local-learning/journal/source_data/focal_selectivity_phase1/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/focal_selectivity_phase1/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/focal_selectivity_phase1/site_outcomes.csv.gz",
-            "drafts/dendritic-local-learning/journal/source_data/focal_selectivity_phase1/summary.json"
-          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_shunt_sensitivity_native.pdf",
+          "source_sha256": "ebdfa6f5343f006daae9784779e2081d8fbe1b96b4b9324af76f62d690ae1750",
+          "old_provenance_figure": "figN29",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
           "explicit_numerical_source_hashes": {}
         },
         {
-          "source": "S21",
-          "source_panel": "A",
-          "bbox": [
-            32.0,
-            4.8,
-            251.0,
-            171.8
-          ],
-          "width": 219.0,
-          "height": 167.0,
-          "panel": "B",
-          "target_rect": [
-            261.6000533884941,
-            19.0,
-            461.3067895605627,
-            171.28778511751355
-          ],
-          "scale": 0.9119029048952908,
-          "source_asset": "figures/supplementary/figure_S21_panels_A-D.pdf",
-          "source_sha256": "86727844700a11b853f8f4c902e2ed782b791fd017f373387bc4c855316c92e7",
-          "old_provenance_figure": "figS21",
-          "old_provenance_entry_ids": [
-            "completion.source_data.review_focal_depth.figure_S21_depth_intervals.csv",
-            "fig4.d.irev0",
-            "fig4.d.irevm05",
-            "fig4.d.primary",
-            "fig4.d.scale01",
-            "fig4.d.scale10",
-            "fig4.typed.cells",
-            "fig4.typed.effects",
-            "fig4.typed.sites",
-            "fig4.typed.summary",
-            "focal.detail.asset"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/figure4/direct_typed_category_effects.csv",
-            "drafts/dendritic-local-learning/journal/source_data/figure4/direct_typed_cell_primary_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/figure4/direct_typed_focal_localization.csv",
-            "drafts/dendritic-local-learning/journal/source_data/figure4/direct_typed_summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/figure4/irev0_summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/figure4/irevm0p5_summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/figure4/scale0p1_summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/figure4/scale1p0_summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/figure4/summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/review_focal_depth/figure_S21_depth_intervals.csv"
-          ],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "S11",
+          "source": "N29",
           "source_panel": "B",
           "bbox": [
-            225.4,
-            5.8,
-            386.8,
-            178.1
+            314.89300537109375,
+            4.759007453918457,
+            475.0422058105469,
+            155.60220336914062
           ],
-          "width": 161.4,
-          "height": 172.29999999999998,
+          "width": 160.14920043945312,
+          "height": 150.84319591522217,
+          "panel": "B",
+          "target_rect": [
+            314.89300537109375,
+            4.759007453918457,
+            475.0422058105469,
+            155.60220336914062
+          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_shunt_sensitivity_native.pdf",
+          "source_sha256": "ebdfa6f5343f006daae9784779e2081d8fbe1b96b4b9324af76f62d690ae1750",
+          "old_provenance_figure": "figN29",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
+          "explicit_numerical_source_hashes": {}
+        },
+        {
+          "source": "N29",
+          "source_panel": "C",
+          "bbox": [
+            30.0,
+            175.09231567382812,
+            293.64862060546875,
+            324.2761535644531
+          ],
+          "width": 263.64862060546875,
+          "height": 149.183837890625,
           "panel": "C",
           "target_rect": [
-            126.80407099074304,
-            200.69355916147975,
-            273.985199840843,
-            357.8144296749383
+            30.0,
+            175.09231567382812,
+            293.64862060546875,
+            324.2761535644531
           ],
-          "scale": 0.9119029048952908,
-          "source_asset": "figures/supplementary/figure_S11_panels_A-C.pdf",
-          "source_sha256": "be93b440e7b5dde31e2bbb5fee0c3b924e9f08d40f51eecaef52d23431e0e2fb",
-          "old_provenance_figure": "figS11",
-          "old_provenance_entry_ids": [
-            "focalmatrix.asset",
-            "focalmatrix.cells",
-            "focalmatrix.contrasts",
-            "focalmatrix.reproducibility",
-            "focalmatrix.sites",
-            "focalmatrix.summary"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/focal_selectivity_phase1/cell_condition_metrics.csv",
-            "drafts/dendritic-local-learning/journal/source_data/focal_selectivity_phase1/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/focal_selectivity_phase1/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/focal_selectivity_phase1/site_outcomes.csv.gz",
-            "drafts/dendritic-local-learning/journal/source_data/focal_selectivity_phase1/summary.json"
-          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_shunt_sensitivity_native.pdf",
+          "source_sha256": "ebdfa6f5343f006daae9784779e2081d8fbe1b96b4b9324af76f62d690ae1750",
+          "old_provenance_figure": "figN29",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
           "explicit_numerical_source_hashes": {}
         },
         {
-          "source": "S11",
-          "source_panel": "C",
-          "bbox": [
-            390.5,
-            5.8,
-            510.7,
-            176.0
-          ],
-          "width": 120.19999999999999,
-          "height": 170.2,
-          "panel": "D",
-          "target_rect": [
-            281.985199840843,
-            200.69355916147975,
-            391.5959290092569,
-            355.89943357465825
-          ],
-          "scale": 0.9119029048952908,
-          "source_asset": "figures/supplementary/figure_S11_panels_A-C.pdf",
-          "source_sha256": "be93b440e7b5dde31e2bbb5fee0c3b924e9f08d40f51eecaef52d23431e0e2fb",
-          "old_provenance_figure": "figS11",
-          "old_provenance_entry_ids": [
-            "focalmatrix.asset",
-            "focalmatrix.cells",
-            "focalmatrix.contrasts",
-            "focalmatrix.reproducibility",
-            "focalmatrix.sites",
-            "focalmatrix.summary"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/focal_selectivity_phase1/cell_condition_metrics.csv",
-            "drafts/dendritic-local-learning/journal/source_data/focal_selectivity_phase1/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/focal_selectivity_phase1/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/focal_selectivity_phase1/site_outcomes.csv.gz",
-            "drafts/dendritic-local-learning/journal/source_data/focal_selectivity_phase1/summary.json"
-          ],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "S21",
+          "source": "N29",
           "source_panel": "D",
           "bbox": [
-            321.0,
-            201.3,
-            498.7,
-            361.6
+            314.8999938964844,
+            175.09231567382812,
+            464.27496337890625,
+            311.2886657714844
           ],
-          "width": 177.7,
-          "height": 160.3,
-          "panel": "E",
+          "width": 149.37496948242188,
+          "height": 136.19635009765625,
+          "panel": "D",
           "target_rect": [
-            44.99215141909417,
-            380.8144296749383,
-            207.03729761898734,
-            526.9924653296534
+            314.8999938964844,
+            175.09231567382812,
+            464.27496337890625,
+            311.2886657714844
           ],
-          "scale": 0.9119029048952908,
-          "source_asset": "figures/supplementary/figure_S21_panels_A-D.pdf",
-          "source_sha256": "86727844700a11b853f8f4c902e2ed782b791fd017f373387bc4c855316c92e7",
-          "old_provenance_figure": "figS21",
-          "old_provenance_entry_ids": [
-            "completion.source_data.review_focal_depth.figure_S21_depth_intervals.csv",
-            "fig4.d.irev0",
-            "fig4.d.irevm05",
-            "fig4.d.primary",
-            "fig4.d.scale01",
-            "fig4.d.scale10",
-            "fig4.typed.cells",
-            "fig4.typed.effects",
-            "fig4.typed.sites",
-            "fig4.typed.summary",
-            "focal.detail.asset"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/figure4/direct_typed_category_effects.csv",
-            "drafts/dendritic-local-learning/journal/source_data/figure4/direct_typed_cell_primary_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/figure4/direct_typed_focal_localization.csv",
-            "drafts/dendritic-local-learning/journal/source_data/figure4/direct_typed_summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/figure4/irev0_summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/figure4/irevm0p5_summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/figure4/scale0p1_summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/figure4/scale1p0_summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/figure4/summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/review_focal_depth/figure_S21_depth_intervals.csv"
-          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_shunt_sensitivity_native.pdf",
+          "source_sha256": "ebdfa6f5343f006daae9784779e2081d8fbe1b96b4b9324af76f62d690ae1750",
+          "old_provenance_figure": "figN29",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
           "explicit_numerical_source_hashes": {}
         },
         {
-          "source": "S21",
-          "source_panel": "C",
+          "source": "N29",
+          "source_panel": "E",
           "bbox": [
-            15.328125,
-            201.25900268554688,
-            298.6593322753906,
-            371.4367370605469
+            21.249248504638672,
+            323.6256408691406,
+            197.9893341064453,
+            469.60638427734375
           ],
-          "width": 283.3312072753906,
-          "height": 170.177734375,
+          "width": 176.74008560180664,
+          "height": 145.98074340820312,
+          "panel": "E",
+          "target_rect": [
+            21.249248504638672,
+            323.6256408691406,
+            197.9893341064453,
+            469.60638427734375
+          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_shunt_sensitivity_native.pdf",
+          "source_sha256": "ebdfa6f5343f006daae9784779e2081d8fbe1b96b4b9324af76f62d690ae1750",
+          "old_provenance_figure": "figN29",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
+          "explicit_numerical_source_hashes": {}
+        },
+        {
+          "source": "N29",
+          "source_panel": "F",
+          "bbox": [
+            233.5,
+            323.6256408691406,
+            506.07598876953125,
+            479.4367370605469
+          ],
+          "width": 272.57598876953125,
+          "height": 155.81109619140625,
           "panel": "F",
           "target_rect": [
-            215.03729761898734,
-            380.8144296749383,
-            473.4078485809058,
-            536.0
+            233.5,
+            323.6256408691406,
+            506.07598876953125,
+            479.4367370605469
           ],
-          "scale": 0.9119029048952908,
-          "source_asset": "figures/supplementary/figure_S21_panels_A-D.pdf",
-          "source_sha256": "86727844700a11b853f8f4c902e2ed782b791fd017f373387bc4c855316c92e7",
-          "old_provenance_figure": "figS21",
-          "old_provenance_entry_ids": [
-            "completion.source_data.review_focal_depth.figure_S21_depth_intervals.csv",
-            "fig4.d.irev0",
-            "fig4.d.irevm05",
-            "fig4.d.primary",
-            "fig4.d.scale01",
-            "fig4.d.scale10",
-            "fig4.typed.cells",
-            "fig4.typed.effects",
-            "fig4.typed.sites",
-            "fig4.typed.summary",
-            "focal.detail.asset"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/figure4/direct_typed_category_effects.csv",
-            "drafts/dendritic-local-learning/journal/source_data/figure4/direct_typed_cell_primary_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/figure4/direct_typed_focal_localization.csv",
-            "drafts/dendritic-local-learning/journal/source_data/figure4/direct_typed_summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/figure4/irev0_summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/figure4/irevm0p5_summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/figure4/scale0p1_summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/figure4/scale1p0_summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/figure4/summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/review_focal_depth/figure_S21_depth_intervals.csv"
-          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_shunt_sensitivity_native.pdf",
+          "source_sha256": "ebdfa6f5343f006daae9784779e2081d8fbe1b96b4b9324af76f62d690ae1750",
+          "old_provenance_figure": "figN29",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
           "explicit_numerical_source_hashes": {}
         }
       ],
       "ancillary_elements": [],
-      "whole_source_sheet": false,
-      "paste_scale": 0.9119,
+      "whole_source_sheet": true,
+      "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
-      "height_pt": 540.0,
-      "sha256": "e64e0ab1974dad00df62e3d9501572f48cccecd1652193ef3ebc3d9c1a62e69d",
+      "height_pt": 489.0,
+      "sha256": "e9aba2873070381f16f070b1efd189ebbe123ddef867ebb9c1219e6217d66f1d",
       "source_data_directories": [
         "source_data/figure4",
         "source_data/focal_selectivity_phase1",
@@ -8952,25 +8844,9 @@
     ],
     "S11": [
       {
-        "figure": "S29",
+        "kind": "section",
         "label": "fig:si_shunt_sensitivity",
-        "panel": "A",
-        "source_panel": "A",
-        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
-      },
-      {
-        "figure": "S29",
-        "label": "fig:si_shunt_sensitivity",
-        "panel": "C",
-        "source_panel": "B",
-        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
-      },
-      {
-        "figure": "S29",
-        "label": "fig:si_shunt_sensitivity",
-        "panel": "D",
-        "source_panel": "C",
-        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
+        "note": "Replaced by the native render N29, which ports the legacy panels to the canvas from the same source tables and is pasted whole as Supplementary Fig. S29."
       }
     ],
     "S12": [
@@ -9159,25 +9035,9 @@
     ],
     "S21": [
       {
-        "figure": "S29",
+        "kind": "section",
         "label": "fig:si_shunt_sensitivity",
-        "panel": "B",
-        "source_panel": "A",
-        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
-      },
-      {
-        "figure": "S29",
-        "label": "fig:si_shunt_sensitivity",
-        "panel": "E",
-        "source_panel": "D",
-        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
-      },
-      {
-        "figure": "S29",
-        "label": "fig:si_shunt_sensitivity",
-        "panel": "F",
-        "source_panel": "C",
-        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
+        "note": "Replaced by the native render N29, drawn from the same source tables and pasted whole as Supplementary Fig. S29."
       }
     ],
     "S22": [
@@ -10342,6 +10202,50 @@
         "panel": "E",
         "source_panel": "E",
         "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
+      }
+    ],
+    "N29": [
+      {
+        "figure": "S29",
+        "label": "fig:si_shunt_sensitivity",
+        "panel": "A",
+        "source_panel": "A",
+        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
+      },
+      {
+        "figure": "S29",
+        "label": "fig:si_shunt_sensitivity",
+        "panel": "B",
+        "source_panel": "B",
+        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
+      },
+      {
+        "figure": "S29",
+        "label": "fig:si_shunt_sensitivity",
+        "panel": "C",
+        "source_panel": "C",
+        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
+      },
+      {
+        "figure": "S29",
+        "label": "fig:si_shunt_sensitivity",
+        "panel": "D",
+        "source_panel": "D",
+        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
+      },
+      {
+        "figure": "S29",
+        "label": "fig:si_shunt_sensitivity",
+        "panel": "E",
+        "source_panel": "E",
+        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
+      },
+      {
+        "figure": "S29",
+        "label": "fig:si_shunt_sensitivity",
+        "panel": "F",
+        "source_panel": "F",
+        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
       }
     ],
     "X1": [

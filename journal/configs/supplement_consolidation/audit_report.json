@@ -30,7 +30,7 @@
     "inhibitory_spatial_controls": 1.0,
     "coarse_energy": 1.0,
     "anatomy_preprocessing": 1.0,
-    "shunt_sensitivity": 0.9119,
+    "shunt_sensitivity": 1.0,
     "shunt_replication": 1.0,
     "measured_transfer_geometry": 1.0,
     "measured_predictor_controls": 1.0,
@@ -39,18 +39,8 @@
     "finite_horizon": 1.0,
     "morphology_estimation": 1.0
   },
-  "below_target_scale": {
-    "shunt_sensitivity": 0.9119
-  },
-  "scale_exemptions": {
-    "shunt_sensitivity": {
-      "figure": "S29",
-      "native_order": "N7",
-      "builder": "scripts/build_supplementary_figure_s21_native.py + scripts/build_focal_selectivity_figure.py (legacy port for old S11)",
-      "reason": "The frozen six-panel order of AMENDMENTS B8 with Q3 needs 558.9 pt of panel band at 1.0. Old S21 is native; old S11A--C is legacy and must be ported.",
-      "paste_scale": 0.9119
-    }
-  },
+  "below_target_scale": {},
+  "scale_exemptions": {},
   "cleared_scale_exemptions": [],
   "over_height_cap": {},
   "strict_audit": {
@@ -307,18 +297,11 @@
     },
     "shunt_sensitivity": {
       "figure": "S29",
-      "violations": 10,
+      "violations": 1,
       "by_kind": {
-        "canvas-aspect": 1,
-        "text-floor": 1,
-        "text-size": 1,
-        "stroke-width": 5,
-        "fill-width": 1,
         "manifest-missing": 1
       },
-      "text_floor_examples": [
-        "6.38 pt is below the 7.0 pt floor (80 spans, e.g. 'reference interval')"
-      ]
+      "text_floor_examples": []
     },
     "shunt_replication": {
       "figure": "S30",

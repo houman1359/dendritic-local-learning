@@ -46854,11 +46854,11 @@
     {
       "figure": "figS29",
       "panel": "a",
-      "path": "figures/supplementary/figure_S11_panels_A-C.pdf",
+      "path": "figures/supplementary/figure_shunt_sensitivity_native.pdf",
       "role": "Authenticated vector rendering input",
-      "generator": "scripts/supplement_consolidation/build.py",
+      "generator": "scripts/build_supplementary_figure_shunt_sensitivity_native.py",
       "replication_unit": "reconstructed cell (n=8); confirmatory passive matrix; reconstructed cell; focal sites and regimes nested within cell (n=8 cells)",
-      "notes": "Selected S11 panel A. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
+      "notes": "Drawn natively by build_supplementary_figure_shunt_sensitivity_native.py from this study's frozen tables and pasted whole; it replaced the retired render figure_S11_panels_A-C.pdf in the 2026-09-13 rebuild. Paste and source hashes in the curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
     },
     {
       "figure": "figS29",
@@ -47133,20 +47133,20 @@
     {
       "figure": "figS29",
       "panel": "e",
-      "path": "figures/supplementary/figure_S21_panels_A-D.pdf",
+      "path": "figures/supplementary/figure_shunt_sensitivity_native.pdf",
       "role": "Authenticated vector rendering input",
-      "generator": "scripts/supplement_consolidation/build.py",
+      "generator": "scripts/build_supplementary_figure_shunt_sensitivity_native.py",
       "replication_unit": "cells within one mouse; varying count by depth; biological cell (n=8); reconstructed cell (n=8; one animal); reconstructed cell; 55 focal sites nested within 8 cells from one animal",
-      "notes": "Selected S21 panel D. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
+      "notes": "Drawn natively by build_supplementary_figure_shunt_sensitivity_native.py from this study's frozen tables and pasted whole; it replaced the retired render figure_S21_panels_A-D.pdf in the 2026-09-13 rebuild. Paste and source hashes in the curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
     },
     {
       "figure": "figS29",
       "panel": "f",
-      "path": "figures/supplementary/figure_S21_panels_A-D.pdf",
+      "path": "figures/supplementary/figure_shunt_sensitivity_native.pdf",
       "role": "Authenticated vector rendering input",
-      "generator": "scripts/supplement_consolidation/build.py",
+      "generator": "scripts/build_supplementary_figure_shunt_sensitivity_native.py",
       "replication_unit": "cells within one mouse; varying count by depth; biological cell (n=8); reconstructed cell (n=8; one animal); reconstructed cell; 55 focal sites nested within 8 cells from one animal",
-      "notes": "Selected S21 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
+      "notes": "Drawn natively by build_supplementary_figure_shunt_sensitivity_native.py from this study's frozen tables and pasted whole; it replaced the retired render figure_S21_panels_A-D.pdf in the 2026-09-13 rebuild. Paste and source hashes in the curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
     },
     {
       "figure": "figS30",
@@ -86044,6 +86044,60 @@
       "role": "Complete numerical source of selected input panel",
       "generator": "scripts/build_supplementary_figure_measured_transfer_geometry_native.py",
       "replication_unit": "4000 simulated global datasets preserving 13 scans within 7 targets; calibration uses 1000 datasets; 4000 global simulated datasets; observed 13 scans within 7 targets",
+      "notes": "Read by the native builder of this sheet (2026-09-13 provenance pass, traced file reads). Complete tables can contain other panels/conditions; no additional replication is implied."
+    },
+    {
+      "figure": "figS29",
+      "panel": "a",
+      "path": "source_data/figure4/cell_primary_contrasts.csv",
+      "role": "Complete numerical source of selected input panel",
+      "generator": "scripts/build_supplementary_figure_shunt_sensitivity_native.py",
+      "replication_unit": "cells within one mouse; varying count by depth; biological cell (n=8); reconstructed cell (n=8; one animal); reconstructed cell; 55 focal sites nested within 8 cells from one animal",
+      "notes": "Read by the native builder of this sheet (2026-09-13 provenance pass, traced file reads). Complete tables can contain other panels/conditions; no additional replication is implied."
+    },
+    {
+      "figure": "figS29",
+      "panel": "b",
+      "path": "source_data/figure4/cell_primary_contrasts.csv",
+      "role": "Complete numerical source of selected input panel",
+      "generator": "scripts/build_supplementary_figure_shunt_sensitivity_native.py",
+      "replication_unit": "cells within one mouse; varying count by depth; biological cell (n=8); reconstructed cell (n=8; one animal); reconstructed cell; 55 focal sites nested within 8 cells from one animal",
+      "notes": "Read by the native builder of this sheet (2026-09-13 provenance pass, traced file reads). Complete tables can contain other panels/conditions; no additional replication is implied."
+    },
+    {
+      "figure": "figS29",
+      "panel": "c",
+      "path": "source_data/figure4/cell_primary_contrasts.csv",
+      "role": "Complete numerical source of selected input panel",
+      "generator": "scripts/build_supplementary_figure_shunt_sensitivity_native.py",
+      "replication_unit": "cells within one mouse; varying count by depth; biological cell (n=8); reconstructed cell (n=8; one animal); reconstructed cell; 55 focal sites nested within 8 cells from one animal",
+      "notes": "Read by the native builder of this sheet (2026-09-13 provenance pass, traced file reads). Complete tables can contain other panels/conditions; no additional replication is implied."
+    },
+    {
+      "figure": "figS29",
+      "panel": "d",
+      "path": "source_data/figure4/cell_primary_contrasts.csv",
+      "role": "Complete numerical source of selected input panel",
+      "generator": "scripts/build_supplementary_figure_shunt_sensitivity_native.py",
+      "replication_unit": "cells within one mouse; varying count by depth; biological cell (n=8); reconstructed cell (n=8; one animal); reconstructed cell; 55 focal sites nested within 8 cells from one animal",
+      "notes": "Read by the native builder of this sheet (2026-09-13 provenance pass, traced file reads). Complete tables can contain other panels/conditions; no additional replication is implied."
+    },
+    {
+      "figure": "figS29",
+      "panel": "e",
+      "path": "source_data/figure4/cell_primary_contrasts.csv",
+      "role": "Complete numerical source of selected input panel",
+      "generator": "scripts/build_supplementary_figure_shunt_sensitivity_native.py",
+      "replication_unit": "cells within one mouse; varying count by depth; biological cell (n=8); reconstructed cell (n=8; one animal); reconstructed cell; 55 focal sites nested within 8 cells from one animal",
+      "notes": "Read by the native builder of this sheet (2026-09-13 provenance pass, traced file reads). Complete tables can contain other panels/conditions; no additional replication is implied."
+    },
+    {
+      "figure": "figS29",
+      "panel": "f",
+      "path": "source_data/figure4/cell_primary_contrasts.csv",
+      "role": "Complete numerical source of selected input panel",
+      "generator": "scripts/build_supplementary_figure_shunt_sensitivity_native.py",
+      "replication_unit": "cells within one mouse; varying count by depth; biological cell (n=8); reconstructed cell (n=8; one animal); reconstructed cell; 55 focal sites nested within 8 cells from one animal",
       "notes": "Read by the native builder of this sheet (2026-09-13 provenance pass, traced file reads). Complete tables can contain other panels/conditions; no additional replication is implied."
     }
   ],
