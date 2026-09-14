@@ -1,7 +1,7 @@
 {
   "figure": "Figure 4",
   "output": "figures/components/restored_main_04.pdf",
-  "output_sha256": "751bf1b2aa7e2f6afe6018b05456a1cdefd6ccd5c5371fd70c2c44e0da42e2f0",
+  "output_sha256": "246b2ea56410f9bf6a0845f3c194ad95706f52aaeab40872d85ae2a005ada4aa",
   "panel_sources": {
     "A": "Schematic. credit_rule_bridge/protocol_freeze.json (protocol.algebraic, protocol.fresh_seeds): the two targets, the shared balanced tree and the twenty fresh paired seeds. No measured series.",
     "B": "Schematic. credit_rule_bridge/figures/initial_profile_source.csv (site, junction, mean_profile, mean_abs_profile, n_seeds) sets the six drop-dot radii; figures/figure_provenance.json and protocol_freeze.json fix the calibration protocol (256 unlabeled examples at step 0).",
@@ -31,9 +31,9 @@
     "source_data/credit_rule_bridge/summaries/all_diagnostics.csv": "a11538ed5d5e95c11863bdd0b8b1b89dbc4ed5819d307f17d8e39e2a766af562"
   },
   "builder_sha256": {
-    "scripts/credit_first_figures/build_restored_main.py": "26cdd0d6c5b918c40e248b75e70d1aac2b6680eef563327ad2d93ae0421cdeed",
+    "scripts/credit_first_figures/build_restored_main.py": "59603d9651650c582c9e72ec3233bc120eb3d45388aa830e0884013e27f6f4bc",
     "scripts/credit_first_figures/focused_main_evidence.py": "e045f0fc26ce8554af19f7d2b1ee9683ec852899f19e02e76e78163b0d74e773",
-    "scripts/figure_canvas.py": "0a0d01607cc3589a44075b6ccd7c2867dcf7d8a31f88ca1565dade247f4bcb48",
+    "scripts/figure_canvas.py": "ebfaf161136972a7461aafe57140731f01e988d34d57ed514db9536da75ce863",
     "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a"
   },
   "source_data_immutable": true,
@@ -53,8 +53,9 @@
   "original_capture_replay_max_abs_difference": 1.1102230246251565e-16,
   "csv_parse_mode": "round_trip; replay equality checked to floating-point precision",
   "canvas_contract": {
-    "CF-1 canvas": "518.4 x 490.0 pt, aspect 1.058, ladder 340/415/490",
-    "CF-10 schematic_fraction": "25.3 % on the AMENDMENTS B12 formula (A 171.5 + B 254.9 pt over 118 pt, live area 463.4 x 430 pt); waiver: none",
+    "CF-1 canvas": "518.4 x 456.0 pt, aspect 1.137 (design pass 2026-09-14; the 340/415/490 ladder is superseded by content-proportional heights)",
+    "CF-10 schematic_fraction": "28.9 % on the AMENDMENTS B12 formula (A and B slots over the 118 pt row, live area 473.4 x 396.0 pt); waiver: none",
+    "design pass 2026-09-14": "rows 122/100/114 at 30 pt gutters (row 2 carved 18 pt at the top by a declared reserve); no titles, sub-titles or n / interval lines on C-H (all in the caption); F drops its in-plot endpoint key (caption names both diamond states); B drops its radius sub-line (caption carries 0.133-0.386); the six 4-module panels share one 25 pt reserve split per column (25+0, 20+5, 15+10) so each row has two equal 50 pt gaps and ends flush with B",
     "margin deviation": "left margin 40 pt, not the plan's 58 pt: at 58 pt the strict audit fails fill-width (90.7 % of the canvas width, gate 92 %)",
     "waiver D3": "row 2 (F seed strip / G energy curve / H shuffle forest) is three 4-module panels that share no axis; each is a different estimand and the row is column-locked",
     "CF-5 legends": "zero legend artists; B rule-key strip is a schematic footer, not an in-axes key; G carries a two-token direct-label block (word + series marker) whose markers are required because quartic and nested differ by at most 0.030 at every k (2.2 pt on this axes) -- PENDING RATIFICATION, not approved",

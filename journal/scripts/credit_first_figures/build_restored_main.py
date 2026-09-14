@@ -65,18 +65,24 @@ def boot(values, seed=210999):
     return values.mean(axis=0),lo,hi
 
 
-def save(canvas, number, sources, panels, caption, rows=(), extra=None):
+def save(canvas, number, sources, panels, caption, rows=(), extra=None,
+         equalize=True):
     OUT.mkdir(exist_ok=True);REC.mkdir(parents=True,exist_ok=True)
     path=OUT/f'restored_main_{number:02d}.pdf'
     style_direct_color_labels(canvas.fig)
     # Equal module spans keep equal plotting widths despite long forest labels.
+    # ``equalize=False`` (design pass 2026-09-14) leaves the builder's own
+    # per-column reserves alone: a builder that has already given every
+    # same-span panel the same TOTAL reserve, split per column so that the
+    # gaps of a shared-axis strip come out equal, must not have the maximum
+    # left and the maximum right re-applied to every panel.
     locks=canvas.lock_reserves()
     groups={}
     for rec in canvas._records:
         if not rec.get('schematic'):
             groups.setdefault(rec['colspan'],[]).append(rec['name'])
     for group in groups.values():
-        if len(group)<2:continue
+        if len(group)<2 or not equalize:continue
         left=max(locks[name][0]for name in group)
         right=max(locks[name][1]for name in group)
         for name in group:canvas.declare_reserve(name,left=left,right=right)
@@ -641,11 +647,10 @@ def f4_deficit(ax, contrast, seeds, rows):
                     lw=LW_ERR, zorder=3.0, solid_capstyle='butt')
         ax.plot([m], [yy], marker='D', ms=MARKER_MS - .8, mfc='white',
                 mec=COLORS['ink'], mew=LW_HAIR, ls='none', zorder=4.0)
-    # QA 2026-09-10 (minor): the four per-row 'n = 20' tags are dropped; the
-    # count is printed once, in the panel's own right sub-title.
-    f4_forest_strip(ax, extra_rows=1.15, n_rows=len(entries),
-                    key=((COLORS['ink'], 'endpoint'),
-                         ('white', 'validation-selected')))
+    # Design pass 2026-09-14: no in-plot key strip -- the caption names the
+    # filled (endpoint) and open (validation-selected) diamonds -- so the four
+    # rows take the whole box; the per-row 'n = 20' tags went on 2026-09-10.
+    f4_forest_strip(ax, extra_rows=.22, n_rows=len(entries))
     return out
 
 
@@ -1026,18 +1031,25 @@ def figure4():
                  drop_radius_pt=float(radii[row.junction]))
             for row in profile.itertuples()]
 
-    c = NativeCanvas(490 / 72, 3, row_weights=[118, 116, 116], hgutter_pt=37,
-                     vgutter_pt=40,
-                     margins=Margins(left=40, right=15, top=24, bottom=36))
+    # Design pass 2026-09-14: 24 + 122 + 30 + 100 + 30 + 114 + 36 = 456 pt.
+    # The schematic row keeps 122 pt (B's 7-module card row sits at aspect
+    # 2.34 under the 2.40 cap); the two data rows are sized to
+    # their marks (the lock pass carves ~14 pt off the top of row 2 for
+    # row 1's x labels and row 2's letters, so its axes are ~96 pt like
+    # row 1's).  No data panel carries a title or a sub-title line: the
+    # caption already states the frozen rates, the three stalled quartic
+    # seeds, the depth-four control, the 20/20 positive deficits and the
+    # 1,024-update oracle checkpoint, and every series is direct-labelled.
+    c = NativeCanvas(456 / 72, 3, row_weights=[122, 100, 114], hgutter_pt=30,
+                     vgutter_pt=30,
+                     margins=Margins(left=40, right=5, top=24, bottom=36))
     a = c.panel('A', 0, 0, 5, title=None, schematic=True, lock=False,
                 inset_pt=(10, 10, 8, 10))
     f4_title(a, 'Two targets, one shared tree')
     f4_targets_panel(a)
     b = c.panel('B', 0, 5, 7, title=None, schematic=True, lock=False,
                 inset_pt=(10, 10, 8, 10))
-    f4_title(b, 'Where each rule delivers credit',
-             right_sub=('six nonsomatic sites; radius = mean |weight| over '
-                        '20 seeds, 0.133–0.386', COLORS['mute']))
+    f4_title(b, 'Where each rule delivers credit')
     f4_delivery_panel(b, radii)
 
     spec = {'matching': ('Pairwise: broadcast fits', ('frozen Adam rates',),
@@ -1066,8 +1078,6 @@ def figure4():
                        edge=True, lw=LW_HAIR, radius_pt=2.0, zorder=0.0,
                        clip_on=True, transform=ax.transData)
         f4_curve(ax, data, task, letter, rows, seed_layer=(task == 'quartet'))
-        f4_title(ax, spec[task][0], accent=ramp[task], sub=spec[task][1],
-                 right_sub=spec[task][2], pad=34.0)
         # QA 2026-09-10 (major): C, D and E share one log NMSE axis, so D and
         # E now carry the same three tick labels; without them no value could
         # be read off either panel.  The rotated 'Test NMSE' title stays on C
@@ -1116,31 +1126,36 @@ def figure4():
         getattr(e, '_journal_schematic_notes', []) or []) + list(fi._notes)
 
     f_ax = c.panel('F', 2, 0, 4, title=None, grid='none')
-    f4_title(f_ax, 'Larger quartic deficit', pad=22.5,
-             sub=('20/20 positive at every budget',),
-             right_sub=('n = 20; mean [95 % CI]', COLORS['mute']))
     f4_deficit(f_ax, contrast, seedfan, rows)
     g_ax = c.panel('G', 2, 4, 4, title=None, grid='none')
-    f4_title(g_ax, 'One direction, or five', pad=22.5,
-             sub=('oracle fit at 1,024 updates',),
-             right_sub=('n = 20 seeds', COLORS['mute']))
     f4_energy(g_ax, eigen, diag, rows, ramp)
     f4_badge(g_ax, .965, .975, 'oracle')
     h_ax = c.panel('H', 2, 8, 4, title=None, grid='none')
-    f4_title(h_ax, 'Leaf assignment matters', pad=22.5,
-             sub=('tree shape, parameters fixed',),
-             right_sub=('n = 20; mean [95 % CI]', COLORS['mute']))
     f4_shuffle(h_ax, morph, ends, rows, ramp)
-    # The panel titles are set with loc='left', which NativeCanvas cannot
-    # measure (it reads ax.get_title(), i.e. the centred title), so the title
-    # block, its sub-lines and the panel letter are declared here: 8.5 pt of
-    # clear gutter between every pair of rows (audit_row_separation) and a
-    # 25 pt label column so no panel's ink enters the letter column
-    # (audit_letter_alignment).
-    for name in ('C', 'D', 'E'):
-        c.declare_reserve(name, left=25.0, top=16.0)
-    for name in ('F', 'G', 'H'):
-        c.declare_reserve(name, left=25.0, top=26.0)
+    # One 25 pt reserve per 4-module panel so the six data panels share one
+    # axes width, split per module column so the two gaps of each row come
+    # out equal and the row ends flush with B's ink: column 0 takes it all
+    # on the left (C's and F's y title and tick labels must clear the
+    # panel-letter column, audit_letter_alignment.py), column 4 splits
+    # 20 + 5, column 8 splits 15 + 10 -- C->D and D->E are then both 50 pt
+    # axes to axes, with D's and E's tick labels in that gap, and E's and
+    # H's right edge sits 10 pt inside the slot, exactly where B's 10 pt
+    # inset puts its ink (the 5 pt right margin makes that 503.4 pt).
+    # save(equalize=False) keeps the split.  Row 2 declares an 18 pt top
+    # reserve: F's and H's 'no deficit' / 'no cost' labels stand 8.5 pt
+    # above their axes, and audit_row_separation wants 8.5 pt of clear
+    # gutter under row 1's x labels.
+    for name in ('C', 'F'):
+        c.declare_reserve(name, left=25.0)
+    c.declare_reserve('F', top=18.0)
+    # the lock pass pads column 0's right edge by whatever F's x tick labels
+    # hang past its axes (2.2 pt here); the other two columns take the same
+    # amount on their right so the six axes widths stay equal
+    pad_right = c.lock_reserves()['C'][1]
+    for name in ('D', 'G'):
+        c.declare_reserve(name, left=20.0, right=5.0 + pad_right)
+    for name in ('E', 'H'):
+        c.declare_reserve(name, left=15.0, right=10.0 + pad_right)
 
     sources = ['credit_rule_bridge/protocol_freeze.json',
                'credit_rule_bridge/figures/initial_profile_source.csv',
@@ -1189,11 +1204,26 @@ def figure4():
              'per-seed differences recomputed from selected_endpoints.csv; '
              'morphology_credit/protocol_freeze.json fixes the twenty fresh '
              'seeds.'}
+    live_w = 518.4 - 40 - 5
+    live_h = 456.0 - 24 - 36
+    frac = sum(w * h for _, _, w, h in (c.slot_pt(0, 0, 5), c.slot_pt(0, 5, 7))) \
+        / (live_w * live_h)
     contract = {
-        'CF-1 canvas': '518.4 x 490.0 pt, aspect 1.058, ladder 340/415/490',
+        'CF-1 canvas': '518.4 x 456.0 pt, aspect 1.137 (design pass '
+                       '2026-09-14; the 340/415/490 ladder is superseded by '
+                       'content-proportional heights)',
         'CF-10 schematic_fraction':
-            '25.3 % on the AMENDMENTS B12 formula (A 171.5 + B 254.9 pt over '
-            '118 pt, live area 463.4 x 430 pt); waiver: none',
+            f'{100 * frac:.1f} % on the AMENDMENTS B12 formula (A and B slots '
+            f'over the 118 pt row, live area {live_w:.1f} x {live_h:.1f} pt); '
+            'waiver: none',
+        'design pass 2026-09-14':
+            'rows 122/100/114 at 30 pt gutters (row 2 carved 18 pt at the '
+            'top by a declared reserve); no titles, sub-titles or n / interval '
+            'lines on C-H (all in the caption); F drops its in-plot endpoint '
+            'key (caption names both diamond states); B drops its radius '
+            'sub-line (caption carries 0.133-0.386); the six 4-module panels '
+            'share one 25 pt reserve split per column (25+0, 20+5, 15+10) so '
+            'each row has two equal 50 pt gaps and ends flush with B',
         'margin deviation': 'left margin 40 pt, not the plan\'s 58 pt: at '
                             '58 pt the strict audit fails fill-width '
                             '(90.7 % of the canvas width, gate 92 %)',
@@ -1265,7 +1295,7 @@ def figure4():
           'original_capture_replay_max_abs_difference': replay,
           'csv_parse_mode': 'round_trip; replay equality checked to '
                             'floating-point precision',
-          'canvas_contract': contract})
+          'canvas_contract': contract}, equalize=False)
 
 
 def f6_formula(f, xy, parts, *, size=None, color=None):
