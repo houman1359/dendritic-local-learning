@@ -791,10 +791,10 @@ def panel_relations(canvas, ax, category):
                 color=INJECT, ha="right", va="center", zorder=6,
                 arrowprops=dict(arrowstyle="-", lw=LW_HAIR, color=MUTE,
                                 shrinkA=1.5, shrinkB=1.5))
-    # the descendant contrast, moved off the zero rule (the dashed rule ran
-    # through the "s" of "shunt") and set between the two descendant arms
-    ax.text(0.156, 1.02, f"shunt {shunt_d / inject_d:.1f}\u00d7 injection",
-            fontsize=PT_BASE, color=INK, ha="right", va="center", zorder=6)
+    # Design pass 2026-09-14: the `shunt 3.1x injection` tag is gone (the
+    # running text says the injection changed descendant gradients roughly
+    # threefold less); the ratio is held to the source here instead.
+    assert 2.9 < shunt_d / inject_d < 3.3, shunt_d / inject_d
     # 2026-09-11 fix round: EIGHT further lines of prose stood here -- the
     # three-line stat block (`n = 8 cells` / `101 focal sites` /
     # `mean [95 % CI]`), the two-line `injection off-route: zero by
@@ -914,18 +914,14 @@ def panel_adjoint(ax, shapley):
     # 2.00, not 2.15: at 2.15 the second line ended 1.7 pt and the first
     # 1.1 pt PAST the 506.4 pt live right edge, the same overhang already
     # corrected in H's x label.  2.00 is also the bracket's midpoint.
-    for offset, line in enumerate(
-            (f"q′d′ − d′ = +{mean:.3f}",
-             f"[{lo:.3f}, {hi:.3f}], "
-             f"{shapley['replacement_positive']}/8 cells")):
-        ax.text(2.00, 0.265 - 0.029 * offset, line, fontsize=PT_BASE,
-                color=INK, ha="center", va="center", zorder=6)
-    # (iii) the key, in the clear band over the inject and d′ columns, 4 pt
-    # clear of the left spine
-    for offset, line in enumerate(("q adjoint,", "d driving force;",
-                                   "′ = post-shunt")):
-        ax.text(-0.47, 0.182 - 0.029 * offset, line, fontsize=PT_BASE,
-                color=MUTE, ha="left", va="center", zorder=6)
+    # Design pass 2026-09-14: the bracket carries its value alone.  The
+    # interval, the 8/8 count and the factor key (q adjoint, d driving
+    # force, prime = post-shunt) are caption E's and the running text's own
+    # words; the values are held to the source here instead.
+    ax.text(2.00, 0.235, f"+{mean:.3f}", fontsize=PT_BASE, color=INK,
+            ha="center", va="center", zorder=6)
+    assert abs(mean - 0.079) < 5e-4 and abs(lo - 0.060) < 5e-4 \
+        and abs(hi - 0.095) < 5e-4 and shapley["replacement_positive"] == 8
     # `shared y with D` stood at the lower right, inside the paired-line
     # bundle that is the densest ink in the panel.  E prints its own tick
     # labels now, so the note has nothing left to excuse.
@@ -1003,14 +999,10 @@ def panel_signed(canvas, ax, summary, cells):
     # "open = depth-matched off-route" is 98.3 pt and the clear strip left of
     # the zero rule is 73 pt, so the verbatim string wraps at its own hyphen
     # over three lines; the tie to panel C's `depth-matched` row is kept.
-    for y_line, text, colour in ((0.40, "shunt attenuates;", SHUNT),
-                                 (0.68, "injection enhances", INJECT),
-                                 (2.34, "filled = descendants,", INK),
-                                 (2.62, "open = depth-", INK),
-                                 (2.90, "matched off-route", INK)):
-        # 3.5 pt clear of the row tick hairline that rides on the left spine
-        ax.text(-0.249, y_line, text, fontsize=PT_BASE, color=colour,
-                ha="left", va="center", zorder=6)
+    # Design pass 2026-09-14: the two key blocks (`shunt attenuates; /
+    # injection enhances` and `filled = descendants, / open = depth-matched
+    # off-route`) are gone; caption F names the hue, the sign and the fill
+    # of every mark in this panel.
     # the third label line is a properly chained R_m (the gutter cannot host
     # a mathtext span, and "Rm" beside panel H's R_m read as a typo)
     for index, (_cohort, _regime, _label, rm_value) in enumerate(SIGNED_ROWS):
@@ -1092,11 +1084,10 @@ def panel_state(ax, physical, ranges):
                 transform=ax.transAxes, fontsize=PT_BASE, color=MUTE,
                 ha="right", va="center", zorder=6)
         keyed.append((name, marker, filled, y_name))
+    # Design pass 2026-09-14: the `>= 33x from 300 to 15,000` tag is gone
+    # (the running text: `more than an order of magnitude`); held here.
     smallest = min(drops.values())
-    # 0.022, not 0.005: the leading `>=` glyph straddled the left spine
-    ax.text(0.022, 0.045, f"\u2265 {np.floor(smallest):.0f}\u00d7 from 300 "
-                          "to 15,000", transform=ax.transAxes,
-            fontsize=PT_BASE, color=INK, ha="left", va="center", zorder=6)
+    assert smallest >= 10.0, smallest
 
     # 0.31 (not 0.28) lifts the inset clear of the source-region box it
     # magnifies: at 0.28 the frame overlapped the box by 0.0024 log units
@@ -1309,8 +1300,15 @@ def _balance_slot_fill(canvas, target=1.35):
 
     reserve = max(GUTTER_PT,
                   max(lock[0] for lock in canvas._locks.values()))
+    # the RIGHT side too (design pass 2026-09-14): at 30 pt gutters the y
+    # decorations of D and E overrun the gutter, so the lock pass pads C's
+    # and D's right edges by different amounts (4.7 and 2.6 pt) and the
+    # three axes of a row come out three different widths.  Every data panel
+    # takes the largest measured right pad, so C = D = E and F = G = H.
+    right = max(lock[1] for name, lock in canvas._locks.items()
+                if not canvas._record_for(name).get("schematic"))
     for rec in canvas._records:
-        canvas.declare_reserve(rec["name"], left=reserve)
+        canvas.declare_reserve(rec["name"], left=reserve, right=right)
     canvas.lock_reserves()
     fills = measure()
     spread = max(fills.values()) / min(fills.values())
@@ -1433,8 +1431,13 @@ def build(emit_main=True):
     assert abs(d_inject[1.0]
                - shapley["matched_additive_localization"].mean()) < 1e-12
 
-    canvas = NativeCanvas(490 / 72, 3, row_weights=[128, 116, 116],
-                          hgutter_pt=37, vgutter_pt=41,
+    # Design pass 2026-09-14: 23 + 124 + 30 + 104 + 30 + 108 + 25 = 444 pt at
+    # 30 pt gutters (the lock pass carves ~9 pt off the top of row 2 for
+    # row 1's x labels and the letters).  Data panels carry no titles, and
+    # the key sentences of C, E, F and G are gone: caption C-H names every
+    # series, marker and sign, and the running text quotes the values.
+    canvas = NativeCanvas(444 / 72, 3, row_weights=[124, 104, 108],
+                          hgutter_pt=30, vgutter_pt=30,
                           margins=Margins(left=49, right=12, top=23,
                                           bottom=25))
     canvas.letter_dx = LETTER_DX_PT
@@ -1442,16 +1445,13 @@ def build(emit_main=True):
                      title="Focal shunt versus matched injection")
     b = canvas.panel("B", 0, 6, 6, schematic=True,
                      title="One exact gain per ancestry block")
-    c = canvas.panel("C", 1, 0, 4, title="Descendants change most")
-    d = canvas.panel("D", 1, 4, 4, grid="y", title="Contrast grows with dose")
-    e = canvas.panel("E", 1, 8, 4, grid="y", title="Adjoint replacement",
-                     sharey=d)
-    g_f = canvas.panel("F", 2, 0, 4, title="Opposite signed changes")
-    g = canvas.panel("G", 2, 4, 4, grid="y", title="State sets selectivity")
-    h = canvas.panel("H", 2, 8, 4, grid="y", title="Background restores it")
-    for ax in canvas.axes.values():
-        # 3 pt of title pad plus the 5.4 pt letter clearance push the row-2
-        # letters 14 pt above their axes and close the r1|r2 band to 6.7 pt
+    c = canvas.panel("C", 1, 0, 4)
+    d = canvas.panel("D", 1, 4, 4, grid="y")
+    e = canvas.panel("E", 1, 8, 4, grid="y", sharey=d)
+    g_f = canvas.panel("F", 2, 0, 4)
+    g = canvas.panel("G", 2, 4, 4, grid="y")
+    h = canvas.panel("H", 2, 8, 4, grid="y")
+    for ax in (a, b):
         ax.set_title(ax.get_title(), fontsize=PT_EMPH, color=INK, pad=1.0,
                      fontweight="normal")
     canvas.fig.canvas.draw()

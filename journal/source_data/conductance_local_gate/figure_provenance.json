@@ -1,11 +1,11 @@
 {
   "code_sha256": {
-    "scripts/conductance_local_gate/figure.py": "7a3829252f28f4bba8d49270117a86dfbb2e8368901bd08bc2867f2ded018181",
+    "scripts/conductance_local_gate/figure.py": "8b4e07ce87a4ed94258f61ecb91cab41c7fc90ee51409e09fed92b7064bfe217",
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
     "scripts/conductance_local_gate/portable_contract.py": "fea35a393f5881dfc60b3dfe810dac64f8c2e6b0d8ba01937f4a42c5ffab3c05",
     "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",
     "scripts/credit_tree_schematics.py": "ebd31b5ccc86b00bb27a236af210eb2a1d1820e9fcec27b57283a12224158cbe",
-    "scripts/figure_canvas.py": "0a0d01607cc3589a44075b6ccd7c2867dcf7d8a31f88ca1565dade247f4bcb48",
+    "scripts/figure_canvas.py": "ebfaf161136972a7461aafe57140731f01e988d34d57ed514db9536da75ce863",
     "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a",
     "scripts/native_schematics.py": "68530ec60f85e496b9b0ba7a7ad53510dce2fae91cc38231046c1175e1cb7aeb"
   },
@@ -14,8 +14,8 @@
     "source_data/conductance_local_gate/figures/historical_cancellation_source.csv": "15938898c44c07bbbc5721ee727e9d54199c90e90ab8a298bb7109682dc69814",
     "source_data/conductance_local_gate/figures/local_gate_all_rates.pdf": "9ed32d20fb9af6c078e6cc391a98d9e7a36f27d9b74d9ddee45098ab9ac5ae33",
     "source_data/conductance_local_gate/figures/local_gate_all_rates.png": "26674c42572b6acdea030aa8c925920e239cf58d3f191ef1d995fa20204550ce",
-    "source_data/conductance_local_gate/figures/local_gate_primary.pdf": "a58270e1480eefdd517895dfb32e5111ca80d0cf276ce072e180260885cdf5b2",
-    "source_data/conductance_local_gate/figures/local_gate_primary.png": "f160aeca075d849e4132e567e8a470d723f8bff21a53624401272b035fd4d71a",
+    "source_data/conductance_local_gate/figures/local_gate_primary.pdf": "b3166b060efc786535a261c06ffe77c45d6f5c8b18ddeaf7ce22f626fb70ab62",
+    "source_data/conductance_local_gate/figures/local_gate_primary.png": "558e9644517e7cce9d3dcf46904793ebce6cda80e589632ae50765f84c6270d2",
     "source_data/conductance_local_gate/figures/teacher_tuning_source.csv": "26b9ebc985bc662465c9a03af5a9197f54d8443383f44090121ddcf24c4c3086"
   },
   "fresh_seeds": [
@@ -74,16 +74,16 @@
     "source_data/conductance_local_gate/summaries/paired_seed_contrasts.csv": "07fa32c5b4cc10ea5f47f683662753d22c08f3b17e767d044af4a9e0e2554d22"
   },
   "native_canvas": {
-    "g4_waiver": "DECISIONS G4 schematic-area waiver for Fig 5, restated at the AMENDMENTS B12 / CF-10 value 22.7 % (sum of schematic slot areas over the live canvas 450.4 x 436 pt). Recorded, not exercised: the figure is inside the 30 % cap and no relaxation of PANEL_ASPECT_MAX or of the cap is requested.",
-    "height_pt": 490,
+    "g4_waiver": "DECISIONS G4 schematic-area waiver for Fig 5, restated at the AMENDMENTS B12 / CF-10 value 26.9 % (sum of schematic slot areas over the live canvas 452.4 x 402 pt). Recorded, not exercised: the figure is inside the 30 % cap and no relaxation of PANEL_ASPECT_MAX or of the cap is requested.",
+    "height_pt": 456,
     "in_axes_key_exception": "CF-5: the frameless four-entry rule key inside panel C is the single sanctioned in-axes key in the nine-figure set; C and D share four series across two panels.",
     "layout_findings": [],
     "rows_pt": [
-      108,
-      122,
-      122
+      116,
+      112,
+      114
     ],
-    "schematic_fraction_b12": 0.2268,
+    "schematic_fraction_b12": 0.2694,
     "strict_audit_violations": []
   },
   "panel_sources": {
@@ -149,7 +149,7 @@
   },
   "printed_numbers": {
     "A": {
-      "gate_tag_to_inset_pt": 11.7,
+      "gate_tag_to_inset_pt": 6.73,
       "perturbation_line": false
     },
     "C": {
@@ -167,9 +167,7 @@
       "window_rule_segments": 2
     },
     "D": {
-      "annotation_lines": [
-        "validation-selected broadcast 0.49 (E, F)"
-      ],
+      "annotation_lines": [],
       "bound_by_16384": 20,
       "bound_by_4096": 18,
       "bound_median_step": 717,
@@ -203,7 +201,7 @@
       "n_seeds": 20
     },
     "F": {
-      "_min_mark_separation_pt": 11.22,
+      "_min_mark_separation_pt": 11.25,
       "_rate_categories": [
         "exact",
         "hard_distal_unit_proximal",
@@ -301,26 +299,26 @@
       "n_seeds": 20
     },
     "_geometry": {
-      "g4_waiver": "DECISIONS G4 schematic-area waiver for Fig 5, restated at the AMENDMENTS B12 / CF-10 value 22.7 % (sum of schematic slot areas over the live canvas 450.4 x 436 pt). Recorded, not exercised: the figure is inside the 30 % cap and no relaxation of PANEL_ASPECT_MAX or of the cap is requested.",
-      "height_pt": 490,
+      "g4_waiver": "DECISIONS G4 schematic-area waiver for Fig 5, restated at the AMENDMENTS B12 / CF-10 value 26.9 % (sum of schematic slot areas over the live canvas 452.4 x 402 pt). Recorded, not exercised: the figure is inside the 30 % cap and no relaxation of PANEL_ASPECT_MAX or of the cap is requested.",
+      "height_pt": 456,
       "in_axes_key_exception": "CF-5: the frameless four-entry rule key inside panel C is the single sanctioned in-axes key in the nine-figure set; C and D share four series across two panels.",
       "rows_pt": [
-        108,
-        122,
-        122
+        116,
+        112,
+        114
       ],
-      "schematic_fraction_b12": 0.2268
+      "schematic_fraction_b12": 0.2694
     }
   },
   "protocol_sha256": "c441998f6f91e1f8782b2918689806e119af567e479bcd5c94069dca837a2413",
   "scope": "Current figure-only rendering; frozen protocol and numerical summary bytes unchanged. Initial numerical audit retains its historical render hashes.",
   "source_sha256": {
-    "scripts/conductance_local_gate/figure.py": "7a3829252f28f4bba8d49270117a86dfbb2e8368901bd08bc2867f2ded018181",
+    "scripts/conductance_local_gate/figure.py": "8b4e07ce87a4ed94258f61ecb91cab41c7fc90ee51409e09fed92b7064bfe217",
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
     "scripts/conductance_local_gate/portable_contract.py": "fea35a393f5881dfc60b3dfe810dac64f8c2e6b0d8ba01937f4a42c5ffab3c05",
     "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",
     "scripts/credit_tree_schematics.py": "ebd31b5ccc86b00bb27a236af210eb2a1d1820e9fcec27b57283a12224158cbe",
-    "scripts/figure_canvas.py": "0a0d01607cc3589a44075b6ccd7c2867dcf7d8a31f88ca1565dade247f4bcb48",
+    "scripts/figure_canvas.py": "ebfaf161136972a7461aafe57140731f01e988d34d57ed514db9536da75ce863",
     "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a",
     "scripts/native_schematics.py": "68530ec60f85e496b9b0ba7a7ad53510dce2fae91cc38231046c1175e1cb7aeb",
     "source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv": "a3bea23ba12a888eb7fb356b4ac3142bbf240518fa8b3d2a28278d91e1b40486",

@@ -326,20 +326,26 @@ ROUTE_SITE = 4396           # route 3: the inhibitory origin C shunts
 BROADCAST = "local"         # amber, reserved in this figure for the broadcast
 
 # Canvas geometry (CF-1 / CF-10).
-CANVAS_H_PT = 490.0
-ROW_H = [122.0, 119.0, 109.0]
+# Design pass 2026-09-14: 24 + 122 + 30 + 102 + 30 + 112 + 36 = 456 pt.  The
+# schematic row keeps its 122 pt; rows 1 and 2 are sized to their marks (the
+# lock pass carves ~14 pt off the top of row 2 for row 1's x labels and the
+# letters, so its axes are ~98 pt).  Gutters 30 pt.  No data panel carries a
+# title, and the footers of G and H and H's head note are gone: every clause
+# they carried is a sentence of the running text or of the caption.
+CANVAS_H_PT = 456.0
+ROW_H = [122.0, 102.0, 112.0]
 MARGINS = dict(left=52.0, right=14.0, top=24.0, bottom=36.0)
-HGUT, VGUT = 38.0, 40.0
+HGUT, VGUT = 30.0, 30.0
 LIVE_W = 518.4 - MARGINS["left"] - MARGINS["right"]          # 452.4
 LIVE_H = CANVAS_H_PT - MARGINS["top"] - MARGINS["bottom"]    # 430.0
 MODULE_PITCH = (LIVE_W + HGUT) / 12.0                        # 40.867
 SLOT4_W = 4 * MODULE_PITCH - HGUT                            # 125.47
 SCHEMATIC_FRACTION = 3 * (SLOT4_W * ROW_H[0]) / (LIVE_W * LIVE_H)
-SCHEMATIC_INSET = (7.0, 7.0, 7.0, 13.0)  # left, right, top, bottom (points)
+SCHEMATIC_INSET = (7.0, 7.0, 7.0, 9.0)   # left, right, top, bottom (points); bottom 13 -> 9 on 2026-09-14 so the schematic row's blank band stays inside the 30 pt gutter allowance
 GUTTER_PT = 37.0          # one label gutter for every 4+ module panel
-BOTTOM_R1 = 5.0           # room under row 1 for D's footnote line
+BOTTOM_R1 = 0.0           # D's footnote line went in QA round 4
 RIGHT_R1 = 8.0            # one declared right reserve for D, E and F
-BOTTOM_R2 = 20.0          # room under row 2 for G's and H's footnotes
+BOTTOM_R2 = 0.0           # G's and H's footers went in the 2026-09-14 pass
 
 
 CAPTION = r"""\caption{\textbf{Ancestry routes on reconstructed arbors compress a cell's own focal-shunt response fields better than four budget-matched controls, at a fifth of dense wiring, and the advantage is modest and heterogeneous.}
@@ -1453,18 +1459,13 @@ def panel_g(canvas, ax, report, tables, summaries):
     # for the two printed columns (moved off the head, where it shared its
     # baseline with nothing and pushed the column heads down) and the one fact
     # the caption does not carry.
-    below = [
-        f"ancestry: {100 * float(ancestry['wiring_density_mean']):.1f} % "
-        f"of dense wiring, rank "
-        f"{float(ancestry['dictionary_rank_mean']):.2f}",
-        f"ancestry and shuffled routes: identical {nonzero:.1f} nonzero "
-        "entries",
-    ]
-    for row, line in enumerate(below):
-        ax.annotate(line, xy=(0.0, 0.0), xycoords="axes fraction",
-                    xytext=(0.0, -24.0 - 8.2 * row), textcoords="offset points",
-                    fontsize=PT_BASE, color=COLORS["mute"], ha="left",
-                    va="top")
+    # Design pass 2026-09-14: the two-line footer (ancestry's 18.75 % of
+    # dense wiring and rank 7.70; the identical 46.9 nonzero entries of
+    # ancestry and shuffled routes) is gone -- both are sentences of the
+    # running text -- and the values are held to the source here instead.
+    assert abs(100 * float(ancestry['wiring_density_mean']) - 18.75) < 0.05
+    assert abs(float(ancestry['dictionary_rank_mean']) - 7.70) < 0.05
+    assert abs(nonzero - 46.9) < 0.1
     frame = []
     for i, method in enumerate(CONTROLS):
         frame.append(dict(panel="G", control=method,
@@ -1558,8 +1559,8 @@ def panel_h(ax, tables, inclusion):
             zorder=1.0, solid_capstyle="butt")
     ax.text(3.53, 1.012, "ceiling", fontsize=PT_BASE, color=COLORS["mute"],
             ha="right", va="bottom")
-    ax.text(-0.50, 1.155, "mean [95 % cell bootstrap]; K = 8", fontsize=PT_BASE,
-            color=COLORS["mute"], ha="left", va="top")
+    # (design pass 2026-09-14: the `mean [95 % cell bootstrap]; K = 8` head
+    # note is the caption's own sentence and is gone)
     # the four family names, once, beside the Pinky group (CF-5)
     order = sorted(pinky, key=lambda m: -pinky[m][1])
     # five names, not four (QA round 5): the step is the tightest the 7 pt
@@ -1582,20 +1583,13 @@ def panel_h(ax, tables, inclusion):
                     textcoords="offset points", fontsize=PT_BASE,
                     color=COLORS[FAMILIES[method]["color"]], ha="right",
                     va="center", annotation_clip=False)
+    # Design pass 2026-09-14: the two-line footer (Pinky's 9-13 sites per
+    # cell and 8 of 10 cells; the two mice and the three cohort sizes) is
+    # gone -- the running text and the caption carry both sentences -- and
+    # the counts it printed are held to the source here instead.
     eligible = inclusion[inclusion.focus_budget_eligible]
-    lines = [
-        f"Pinky: {int(eligible.n_e_sites.min())}–"
-        f"{int(eligible.n_e_sites.max())} sites per cell, "
-        f"{len(eligible)} of {int(inclusion.inherited_qc_included.sum())} "
-        "cells",
-        "two mice: initial and disjoint share one; n = 8, 47, 8 cells",
-    ]
-    width = ax.get_position().width * 518.4
-    block = "\n".join(wrap_pt(ax, line, PT_BASE, width) for line in lines)
-    ax.annotate(block, xy=(0.0, 0.0), xycoords="axes fraction",
-                xytext=(0.0, -21.0), textcoords="offset points",
-                fontsize=PT_BASE, color=COLORS["mute"], ha="left", va="top",
-                linespacing=1.2)
+    assert (int(eligible.n_e_sites.min()), int(eligible.n_e_sites.max())) == (9, 13)
+    assert (len(eligible), int(inclusion.inherited_qc_included.sum())) == (8, 10)
     # the badge goes in the free strip between the ceiling line and the
     # initial cohort's tallest interval CAP, at the left edge of the axes:
     # placed over the oracle marker it covered that interval's upper cap and
@@ -1648,12 +1642,12 @@ def figure7(*, out=COMPONENT, png=True, dpi=200, quiet=False):
                      inset_pt=SCHEMATIC_INSET, title="One arbor, seven routes")
     c = canvas.panel("C", 0, 8, 4, schematic=True, lock=False,
                      inset_pt=SCHEMATIC_INSET, title="A shunt makes the field")
-    d = canvas.panel("D", 1, 0, 4, title="Capture rises with budget")
-    e = canvas.panel("E", 1, 4, 4, title="The spatial share at K = 8")
-    fx = canvas.panel("F", 1, 8, 4, title="Cell by cell")
-    g = canvas.panel("G", 2, 0, 7,
-                     title="Paired advantage and its wiring cost")
-    h = canvas.panel("H", 2, 7, 5, title="Three cohorts, one ordering")
+    # data panels carry no titles (design pass 2026-09-14)
+    d = canvas.panel("D", 1, 0, 4)
+    e = canvas.panel("E", 1, 4, 4)
+    fx = canvas.panel("F", 1, 8, 4)
+    g = canvas.panel("G", 2, 0, 7)
+    h = canvas.panel("H", 2, 7, 5)
     # One axes width for the whole of row 1, declared rather than measured.
     # D's direct end labels and E's last x tick claim different shares of
     # their gutters, so the measured locks came out 83.0 / 81.4 / 88.5 pt and

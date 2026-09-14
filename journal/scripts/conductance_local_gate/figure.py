@@ -177,10 +177,19 @@ TEXT_RIGHT = 0.98
 # which is G's two-line 'calibrated broadcast' label, not empty axis.
 UNIT_YLIM = (-0.22, 1.15)
 HIST_SEED = 982211                      # descriptive bootstrap RNG, as report.py
-ROWS_PT = [108, 122, 122]
-VGUTTER_PT = 42
-HGUTTER_PT = 38
-MARGINS = dict(left=54, right=14, top=22, bottom=32)
+# Design pass 2026-09-14: 22 + 116 + 30 + 112 + 30 + 114 + 32 = 456 pt.  Row 0
+# grows 8 pt so B's four cards draw their trees larger; rows 1 and 2 are sized
+# to their marks (the lock pass carves ~14 pt off the top of row 2 for row 1's
+# x labels and row 2's letters, so its axes are ~100 pt).  Gutters 30 pt.  No
+# data panel carries a title: C and D are tagged 'aligned' / 'opposed' in the
+# band above their traces, and the statistics prose of D and F is reduced to
+# the marks and the two values the running text quotes.  Row 2 stays 4/4/4:
+# at three modules E and G are 64 pt wide, under the 0.70 aspect floor, and
+# G's two direct labels no longer clear its seed columns.
+ROWS_PT = [116, 112, 114]
+VGUTTER_PT = 30
+HGUTTER_PT = 30
+MARGINS = dict(left=54, right=12, top=22, bottom=32)
 LETTER_DX_PT = 26.0
 # reserves are declared BEFORE anything is drawn: every width test in the
 # panels (label wrapping, category pitch, direct-label anchors) is measured
@@ -192,12 +201,18 @@ LETTER_DX_PT = 26.0
 # stack needs 1.1 pt more than the old single line.  Declared for every
 # data panel alike, so C = D and E = F = G stay exact.
 LEFT_RESERVE_PT = 18.5
-RIGHT_RESERVE_PT = 4.0
-ROW2_TOP_PT = 5.7
+# 8, not 4: D's and F's log tick stacks (the '10' label, its raised exponent
+# and the axis title) reach 33.6 pt into a 30 pt gutter, so the lock pass
+# pads their left neighbours' right edge by RESERVE_PAD_PT; declaring the
+# same 8 pt on every data panel keeps C = D and E = F = G exact.
+RIGHT_RESERVE_PT = 8.0
 HEIGHT_PT = MARGINS['top'] + sum(ROWS_PT) + 2 * VGUTTER_PT + MARGINS['bottom']
 LIVE_W_PT = 518.4 - MARGINS['left'] - MARGINS['right']
 LIVE_H_PT = HEIGHT_PT - MARGINS['top'] - MARGINS['bottom']
-SCHEMATIC_FRACTION = (165.5 + 246.9) * ROWS_PT[0] / (LIVE_W_PT * LIVE_H_PT)
+_MODULE_W_PT = (LIVE_W_PT - 11 * HGUTTER_PT) / 12.0
+_SLOT_W_PT = lambda n: n * _MODULE_W_PT + (n - 1) * HGUTTER_PT  # noqa: E731
+SCHEMATIC_FRACTION = ((_SLOT_W_PT(5) + _SLOT_W_PT(7)) * ROWS_PT[0]
+                      / (LIVE_W_PT * LIVE_H_PT))
 KEY_EXCEPTION = ('CF-5: the frameless four-entry rule key inside panel C is '
                  'the single sanctioned in-axes key in the nine-figure set; '
                  'C and D share four series across two panels.')
@@ -1023,6 +1038,12 @@ def curve_annotations(ax, t, task):
                 ha='left', va='center',
                 zorder=6, annotation_clip=False)
     w = axes_w_pt(ax) - 4.0
+    # Design pass 2026-09-14: the panel titles are gone, so each panel names
+    # its target in the band above the traces (INK, top right; C's top left
+    # holds the sanctioned rule key).
+    ax.text(TEXT_RIGHT, 0.965, 'aligned targets' if aligned
+            else 'opposed targets', transform=ax.transAxes, fontsize=PT_BASE,
+            color=INK, ha='right', va='top', zorder=6)
     if aligned:
         # QA 2026-09-10 (visual review): 'Adam 0.03 . n = 20 seeds' and
         # 'mean +- 95 % pointwise seed bootstrap' are the caption's own words
@@ -1035,14 +1056,10 @@ def curve_annotations(ax, t, task):
         printed['annotation_lines'] = list(note)
         stack(ax, 0.02, 0.155, note, ha='left', lead_pt=8.0)
     else:
-        # the optimiser and n line goes with C's: it is the same caption
-        # sentence, and so is 'fixed checkpoint at each saved step', which C
-        # already carries as '12 saved checkpoints'.  What is left is the one
-        # line that separates this panel's endpoint from E's and F's readout,
-        # and the band it leaves under it is the broadcast label's.
-        lines = ['validation-selected broadcast 0.49 (E, F)']
-        printed['annotation_lines'] = lines
-        stack(ax, TEXT_RIGHT, 0.950, lines, ha='right', lead_pt=8.5)
+        # Design pass 2026-09-14: the 'validation-selected broadcast 0.49
+        # (E, F)' readout line is gone; the running text carries both the
+        # 0.487 validation-selected value and the 0.522 fixed-checkpoint one.
+        printed['annotation_lines'] = []
         printed.update(bound_contact(ax, t))
     printed['window_rule_segments'] = len(window_rule(ax))
     return printed
@@ -1081,9 +1098,11 @@ def bound_contact(ax, t):
     # caption.  The tag now sits in the band the broadcast trace and the trio
     # leave open, with its top line 3 pt under the tick itself, so the old
     # hairline leader up to the tick is gone with it.
-    lines = ['broadcast reaches a conductance',
-             f'bound in {by_4096}/20 fits by 4,096;',
-             f'tick: median {step}']
+    # Design pass 2026-09-14: one line.  The 18/20 count is the running
+    # text's ('eighteen of twenty opposed broadcast fits had done so by 4,096
+    # updates') and the caption names the tick as the median first bound
+    # contact, so the tag carries the value alone.
+    lines = [f'first bound contact, median {step}']
     # QA 2026-09-11 (regression check): the 3-pt premise did not hold -- on
     # the page the tag's top line sat 8 pt under the tick and 21 pt to its
     # right, with the labelled 4,096 rule between them as a competing
@@ -1167,6 +1186,7 @@ def interaction(ax, t):
 # ── F: gate shape versus gate placement ───────────────────────────────────
 F_ORDER = ('exact', 'hard_distal_unit_proximal',
            'swapped_distal_unit_proximal', 'hard_distal_and_proximal')
+F_ONE = ('Exact path', 'Distal gate', 'Swapped gate', 'Also proximal')
 F_LONG = ('Exact\npath', 'Distal\ngate', 'Swapped\ngate', 'Gate also\nproximal')
 F_SHORT = ('Exact\npath', 'Distal\ngate', 'Swapped\ngate', 'Also\nproximal')
 # QA 2026-09-10 (visual review).  The two gate SHAPES are dodged inside the
@@ -1185,6 +1205,10 @@ F_XLIM = (-0.55, 3.55)  # 0.15 wider than the outermost circle, which used to
 
 def f_labels(ax):
     pitch = axes_w_pt(ax) / (ax.get_xlim()[1] - ax.get_xlim()[0])
+    # one-line labels at the six-module width of the 2026-09-14 layout; the
+    # two-line forms remain for a narrower panel
+    if all(_text_w_pt(ax, name, PT_BASE) <= pitch - 3.0 for name in F_ONE):
+        return F_ONE
     fits = all(_text_w_pt(ax, line, PT_BASE) <= pitch - 2.0
                for line in F_LONG[3].split('\n'))
     return F_LONG if fits else F_SHORT
@@ -1305,38 +1329,26 @@ def placement(ax, t):
     # qualification.  It sits 0.29 decade over the unit-broadcast rule -- four
     # points at this scale, less than the diamond's own half-height -- so a
     # near-twofold difference in failure reads off the panel as coincidence.
+    # Design pass 2026-09-14: the two prose blocks (the swapped gate's
+    # '4/20 unchanged from initialization' and the also-proximal column's
+    # 'g_I frozen 20/20; best step <= 256, endpoint 0.55') and the 'hard =
+    # continuous' line are gone -- every one of those facts is a sentence of
+    # the running text or of caption F.  The swapped mean keeps its value on
+    # the panel, over its own column: it sits four points above the unit-
+    # broadcast rule, less than a diamond's half-height, and would otherwise
+    # read as a coincidence with it.  The equality of the two gate shapes is
+    # still asserted here, against the source.
     swapped = printed['swapped_distal_unit_proximal']
-    stack(ax, 0.99, 0.44,
-          [f"{swapped['mean']:.2f}; {swapped['best_step_zero']}/20 unchanged",
-           'from initialization'], ha='right', lead_pt=8.6)
-    tie_leader(ax, 2.0, 0.44, seeds['swapped_distal_unit_proximal'].min())
-    also = printed['hard_distal_and_proximal']
-    # two right-aligned lines over the column they name, in the band the
-    # failure cluster leaves under the panel title
-    frozen = [['g', ('sub', 'I'), f" frozen {also['both_gains_frozen']}/20"],
-              f"best step ≤ {also['max_best_step']}, "
-              f"endpoint {also['mean_fixed_endpoint']:.2f}"]
-    _, below = stack(ax, 0.99, 0.955, frozen, ha='right', lead_pt=8.6)
-    # QA 2026-09-11 (regression check): both column tags are right-edge
-    # blocks now, and only the swapped one kept a leader when the frozen
-    # block moved up from 0.300 (its old upward tie at x = 3.0 went with the
-    # move), so its attribution rested on also-proximal being the rightmost
-    # category.  The tie is back, running DOWN from the block's bottom line
-    # to 2.2 pt over the highest mark in the column it names.
-    also_sel = f_seeds(t, 'hard_distal_and_proximal')
-    also_m = cond(t, 'opposed_strong', 'hard_distal_and_proximal')
-    tie_leader(ax, 3.0, below + 8.6 / axes_h_pt(ax),
-               max(float(also_sel.test_nmse.max()), float(also_m.ci_high)),
-               above=True)
-    # PLAN section 2 (F, 'Printed on panel'): the equality the panel title
-    # asserts is said in words, not left to the two coincident diamonds.  The
-    # between-cluster band is spent on the swapped-gate tie, so the line takes
-    # the free band directly under the Distal gate pair (lowest mark there is
-    # 4.8e-6, y frac 0.176; this line is centred at 0.085).
+    swapped_sel = f_seeds(t, 'swapped_distal_unit_proximal')
+    swapped_top = max(float(swapped_sel.test_nmse.max()),
+                      float(cond(t, 'opposed_strong',
+                                 'swapped_distal_unit_proximal').ci_high))
+    tag_y = y_frac(swapped_top) + 12.0 / axes_h_pt(ax)
+    stack(ax, x_frac(ax, 2.0), tag_y, [f"{swapped['mean']:.2f}"], ha='center',
+          color=INK)
+    tie_leader(ax, 2.0, tag_y, swapped_top, above=True)
     assert abs(printed['hard_distal_unit_proximal']['mean']
                - cont['mean']) / cont['mean'] < 0.02
-    stack(ax, x_frac(ax, 1.0), 0.075, ['hard = continuous'], ha='center',
-          color=COLORS['shunting'])
     printed['unit_broadcast_reference'] = float(broadcast)
     printed['_min_mark_separation_pt'] = round(separation, 2)
     printed['_rate_categories'] = [F_ORDER[i] for i in rate_categories]
@@ -1501,16 +1513,16 @@ def build(cfg, tables, tuning):
                      title='Context shunts one branch')
     b = canvas.panel('B', 0, 5, 7, schematic=True, lock=False,
                      title='Four deliveries of the somatic error')
-    c = canvas.panel('C', 1, 0, 6, title='Aligned: every rule learns')
-    d = canvas.panel('D', 1, 6, 6, title='Opposed: broadcast fails')
-    e = canvas.panel('E', 2, 0, 4, title='Task-specific gate benefit')
-    f_ = canvas.panel('F', 2, 4, 4, title='Placement, not gate shape')
-    g = canvas.panel('G', 2, 8, 4, title='Context gradients cancel')
+    # data panels carry no titles (design pass 2026-09-14): C and D tag
+    # their target inside the axes, E-G are named by their axis titles
+    c = canvas.panel('C', 1, 0, 6)
+    d = canvas.panel('D', 1, 6, 6)
+    e = canvas.panel('E', 2, 0, 4)
+    f_ = canvas.panel('F', 2, 4, 4)
+    g = canvas.panel('G', 2, 8, 4)
     data_panels = ('C', 'D', 'E', 'F', 'G')
     for n in data_panels:
-        canvas.declare_reserve(n, left=LEFT_RESERVE_PT, right=RIGHT_RESERVE_PT,
-                               top=ROW2_TOP_PT if n in ('E', 'F', 'G') else 0.0,
-                               bottom=0.0)
+        canvas.declare_reserve(n, left=LEFT_RESERVE_PT, right=RIGHT_RESERVE_PT)
     canvas.lock_reserves()
     task = panel_task(a, tuning)
     panel_deliveries(b)

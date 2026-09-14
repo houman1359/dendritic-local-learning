@@ -12,8 +12,8 @@
   },
   "canvas": {
     "width_pt": 518.4,
-    "height_pt": 490.0,
-    "schematic_fraction": 0.2035,
+    "height_pt": 448.0,
+    "schematic_fraction": 0.2166,
     "schematic_formula": "sum(schematic slot w_pt * h_pt) / (live_w_pt * live_h_pt)"
   },
   "delta0_exemption": {
@@ -199,7 +199,7 @@
     "ci95_high": 0.105545551658
   },
   "source_sha256": {
-    "scripts/credit_first_figures/build_measured.py": "f805bab4551e55f1dff079e09169cbace1895bc92659a70a671d88bf27824ee8",
+    "scripts/credit_first_figures/build_measured.py": "47f76c2048ed139acb6221c4a58d3939aff4c9d0bb597298339d62d69baa3f51",
     "source_data/figure3/segment_metrics.csv": "7829c298c4e5b3209b758fb88b92b55f070420c00b383436e5d4e1601e7ff1cf",
     "source_data/fulltree_boundary/output/dictionary_and_validation_metadata.jsonl": "12bd1392df9c3db14b9746f042786dcabbc9fd7f8acc99926277217b55554c7f",
     "source_data/curated_publication/figure_09_plotted.csv": "013b041fd49389ccb592b2fb4c44e061d19a31cb96ea38f6142450b6dbfb1e7f",
@@ -217,7 +217,6 @@
   },
   "layout_findings": [
     "TEXT-ON-DATA '3/7 +'",
-    "TEXT-ON-DATA '+ = closer'",
     "TEXT-ON-DATA 'perfect reliability'"
   ]
 }

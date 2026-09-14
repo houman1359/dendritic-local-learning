@@ -736,21 +736,27 @@ def main():
     above = support[support.coverage > support.n_routes / support.n_sites + 1e-9]
 
     # -- canvas -----------------------------------------------------------
-    canvas = NativeCanvas(490 / 72, 3, row_weights=[124, 114, 108],
-                          hgutter_pt=40, vgutter_pt=44,
+    # Design pass 2026-09-14: 22 + 112 + 30 + 108 + 30 + 112 + 34 = 448 pt at
+    # 30 pt gutters (the lock pass carves ~10 pt off the top of each data row
+    # for the x labels above it and the letters).  The data panels carry no
+    # titles, and every line of caption prose they held -- B's rug and sign
+    # notes, C's cohort line and sign key, D's lambda note, F's three key
+    # lines -- is gone; the caption states each of them.
+    canvas = NativeCanvas(448 / 72, 3, row_weights=[112, 108, 112],
+                          hgutter_pt=30, vgutter_pt=30,
                           margins=Margins(left=40, right=14, top=22, bottom=34))
     ax_a = canvas.panel('A', 0, 0, 5, schematic=True,
                         title='Shared path vs similarity')
-    ax_b = canvas.panel('B', 0, 5, 7,
-                        title='No detected alignment in the selected scans')
-    ax_c = canvas.panel('C', 1, 0, 5,
-                        title='All four measures consistent with zero')
-    ax_d = canvas.panel('D', 1, 5, 7,
-                        title='Observed effect below the detection point')
+    ax_b = canvas.panel('B', 0, 5, 7)
+    ax_c = canvas.panel('C', 1, 0, 5)
+    ax_d = canvas.panel('D', 1, 5, 7)
     ax_e = canvas.panel('E', 2, 0, 5, schematic=True,
                         title='One input per route')
-    ax_f = canvas.panel('F', 2, 5, 7,
-                        title='Routes reach half the mapped inputs')
+    ax_f = canvas.panel('F', 2, 5, 7)
+    # row 2 carries E's title above its axes as well as the letters, and
+    # row 1's x labels hang 20 pt into the gutter: a 14 pt declared top
+    # reserve keeps the two rows 3 mm apart (audit_row_separation)
+    canvas.declare_reserve('F', top=14.0)
 
     # -- B ----------------------------------------------------------------
     # Only the SELECTED-SCAN cohort is drawn here.  The all-thirteen-scan
@@ -780,7 +786,7 @@ def main():
               marker='o', markersize=SEED_MS, markerfacecolor='white',
               markeredgecolor=GRAY, markeredgewidth=LW_HAIR, zorder=3.5)
     rug_bot = float(rug_y.max())
-    ax_b.set_ylim(rug_bot + 0.80, -0.70)
+    ax_b.set_ylim(rug_bot + 0.35, -0.70)
     # CF-7 zero rule, CLIPPED to the row band plus the scan rug.  forest()'s
     # own reference is a full-height axvline; with the y limits padded to
     # carry the annotation block it ran down through the annotation text and
@@ -791,17 +797,16 @@ def main():
               dashes=(2.6, 2.0), zorder=1.0, solid_capstyle='butt')
     ax_b.text(-0.012, -0.52, 'no alignment', fontsize=PT_BASE,
               color=GRAY, ha='right', va='center', zorder=6)
-    ax_b.text(-0.49, rug_bot + 0.31, f'{n_scans} scan values (descriptive)',
-              fontsize=PT_BASE, color=GRAY, ha='left', va='center', zorder=6)
-    ax_b.text(0.49, rug_bot + 0.59, 'positive = ancestry alignment →',
-              fontsize=PT_BASE, color=GRAY, ha='right', va='center', zorder=6)
+    # (design pass 2026-09-14: the `13 scan values (descriptive)` and the
+    # `positive = ancestry alignment` lines are gone; caption B names the
+    # thirteen all-eligible-scan circles and the axis title carries the sign)
 
     # -- C ----------------------------------------------------------------
     canvas.forest(ax_c, c_rows, value_label='Target-level association',
                   xlim=(-0.5, 0.5), reference=None, reference_label='', tag='')
     ax_c.set_xticks([-0.5, -0.25, 0.0, 0.25, 0.5])
     ax_c.set_xticklabels(['−0.5', '−0.25', '0', '0.25', '0.5'])
-    ax_c.set_ylim(4.30, -0.66)
+    ax_c.set_ylim(3.58, -0.66)
     ax_c.plot([0.0, 0.0], [-0.45, len(c_rows) - 0.55], color=GRAY, lw=LW_REF,
               dashes=(2.6, 2.0), zorder=1.0, solid_capstyle='butt')
     ax_c.text(-0.012, -0.56, 'no alignment', fontsize=PT_BASE, color=GRAY,
@@ -819,10 +824,9 @@ def main():
     # panel (visual review 2026-09-10).  The row label cannot carry it --
     # '(+ = closer)' is ~40 pt at PT_BASE against a 46 pt label column and a
     # third label line overruns the 22 pt row pitch.
-    ax_c.text(-0.49, 2.0, '+ = closer', fontsize=PT_BASE, color=GRAY,
-              ha='left', va='center', zorder=6)
-    ax_c.text(-0.49, 3.85, f'all {n_scans} scans; n = {n_targets} target cells',
-              fontsize=PT_BASE, color=GRAY, ha='left', va='center', zorder=6)
+    # (design pass 2026-09-14: the `+ = closer` key and the `all 13 scans;
+    # n = 7 target cells` line are gone; caption C states that tree distance
+    # is sign-flipped and gives the cohort)
 
     # -- D ----------------------------------------------------------------
     for rel, colour, name in (('perfect', CEIL, 'perfect reliability'),
@@ -846,7 +850,7 @@ def main():
     # the inset -- as far as the corridor at this x is free (deviation 24)
     ax_d.plot([cut_m, cut_m], [0.56, 0.80], color=GRAY, lw=LW_HAIR,
               dashes=(2.6, 2.0), zorder=1.5)
-    ax_d.set(xlim=(-0.30, 0.55), ylim=(-0.32, 1.16))
+    ax_d.set(xlim=(-0.30, 0.55), ylim=(-0.32, 1.12))
     ax_d.set_xticks([-0.25, 0.0, 0.25, 0.50])
     ax_d.set_xticklabels(['−0.25', '0', '0.25', '0.50'])
     ax_d.set_yticks([0, 0.25, 0.50, 0.75, 1.00])
@@ -862,9 +866,9 @@ def main():
     # spine by ~14 pt and the spine printed straight through the word
     # (visual review 2026-09-10); a single line long enough to carry the
     # phrase would instead cross the x = 0 rule, so it breaks after the noun.
-    ax_d.text(-0.295, 0.240, 'false-detection', fontsize=PT_BASE,
-              color=GRAY, ha='left', va='center', zorder=6)
-    ax_d.text(-0.295, 0.145, f'rate {floor:.3f}', fontsize=PT_BASE,
+    # one line: the caption gives the two false-detection rates, so the rule
+    # is named and not numbered on the panel (design pass 2026-09-14)
+    ax_d.text(-0.295, 0.145, 'false detection', fontsize=PT_BASE,
               color=GRAY, ha='left', va='center', zorder=6)
     ax_d.text(-0.008, 0.645, 'no alignment', fontsize=PT_BASE, color=GRAY,
               ha='right', va='center', zorder=6)
@@ -874,13 +878,13 @@ def main():
               color=GRAY, ha='right', va='center', zorder=6)
     ax_d.plot([0.200, 0.2445], [0.895, 0.815], color=GRAY, lw=LW_HAIR,
               zorder=2)
-    ax_d.text(-0.295, 1.125, f'ancestry variance λ = {lam:.2f}',
-              fontsize=PT_BASE, color=INK, ha='left', va='center', zorder=6)
-    ax_d.text(-0.295, 1.045, 'respecting the MC band', fontsize=PT_BASE,
-              color=INK, ha='left', va='center', zorder=6)
-    ax_d.text(0.545, 1.09, 'perfect reliability', fontsize=PT_BASE,
+    # (design pass 2026-09-14: the two-line `ancestry variance lambda = 0.65
+    # / respecting the MC band` note is gone -- the running text carries the
+    # sentence -- and the value is held to the source here instead)
+    assert abs(lam - 0.65) < 5e-3, lam
+    ax_d.text(0.545, 1.07, 'perfect reliability', fontsize=PT_BASE,
               color=label_color(CEIL), ha='right', va='center', zorder=6)
-    ax_d.plot([0.42, 0.42], [1.055, 1.00], color=GRAY, lw=LW_HAIR, zorder=2)
+    ax_d.plot([0.42, 0.42], [1.035, 1.00], color=GRAY, lw=LW_HAIR, zorder=2)
     ax_d.text(0.545, 0.72, 'measured reliability', fontsize=PT_BASE,
               color=label_color(ROUTE), ha='right', va='center', zorder=6)
     ax_d.plot([0.288, 0.223], [0.712, 0.742], color=GRAY, lw=LW_HAIR, zorder=2)
@@ -897,9 +901,11 @@ def main():
               va='center', zorder=6)
     # inset: measured split-half reliability, the calibration of the curves
     # the inset title starts 8 pt right of the 0.249 drop (deviation 24)
-    ax_d.text(0.285, 0.600, 'Repeat reliability', fontsize=PT_BASE,
+    ax_d.text(0.300, 0.570, 'Repeat reliability', fontsize=PT_BASE,
               color=GRAY, ha='left', va='center', zorder=6)
-    inset = _data_inset(ax_d, (0.255, 0.12, 0.290, 0.42))
+    # 0.29, not 0.255: on the shorter 2026-09-14 row the inset's rotated
+    # `records` label reached the measured-reliability curve
+    inset = _data_inset(ax_d, (0.290, 0.10, 0.255, 0.40))
     for lo, hi, count in zip(hist_edges[:-1], hist_edges[1:], hist_counts):
         if hi <= 0.0:          # drawn nowhere: see n_negative above
             continue
@@ -938,17 +944,18 @@ def main():
     ax_f.plot(n_in[~single], cov[~single], linestyle='none', marker='o',
               markersize=MARKER_MS, markerfacecolor=ROUTE,
               markeredgecolor=ROUTE, markeredgewidth=0, zorder=5)
-    ax_f.set(xlim=(4.0, 18.6), ylim=(-6.0, 134.0))
+    ax_f.set(xlim=(4.0, 18.6), ylim=(-6.0, 112.0))
     ax_f.set_xticks([5, 8, 11, 14, 17])
     ax_f.set_yticks([0, 25, 50, 75, 100])
     ax_f.set_xlabel('Mapped inputs in the scan', fontsize=PT_EMPH)
     ax_f.set_ylabel('Mapped inputs reached (%)', fontsize=PT_EMPH)
     style_panel(ax_f, grid='y')
     ax_f.spines['left'].set_bounds(0.0, 100.0)
-    ax_f.text(18.5, 129.0,
-              f'open: one input per route ({int(single.sum())} of '
-              f'{n_scans} scans)', fontsize=PT_BASE, color=GRAY, ha='right',
-              va='center', zorder=6)
+    # (design pass 2026-09-14: the `open: one input per route (6 of 13
+    # scans)`, `dashed: 4/n, four distinct inputs` and `coincident scans
+    # offset +-0.2 on x` lines are gone -- caption F carries all three -- and
+    # the counts are held to the source here instead)
+    assert int(single.sum()) == 6 and n_scans == 13 and k_routes == 4
     # 4/n is NOT a ceiling: three of the thirteen scans plot above it because
     # a route can reach more than one input (``sites_per_route`` runs to 2.0),
     # and the old note explained only the downward direction (visual review
@@ -958,17 +965,11 @@ def main():
     # a mark below it as routes that repeated one.  The six open scans, whose
     # routes each reach a single input, are exactly the ones 4/n bounds; the
     # caption names both directions.
-    ax_f.text(18.5, 118.0,
-              f'dashed: {k_routes}/n, {_WORDS[k_routes]} distinct inputs',
-              fontsize=PT_BASE, color=GRAY, ha='right', va='center', zorder=6)
     # Two pairs of scans are exactly coincident in (inputs, coverage) and are
     # separated on x by ``_split_duplicates``; neither the panel nor the
     # caption said so, and an undisclosed offset on an integer count reads as
     # a fractional input (visual review 2026-09-10).  The claim (y) is never
     # moved, so the disclosure names the x offset only.
-    ax_f.text(4.25, 13.0,
-              f'coincident scans offset ±{DUP_OFFSET / 2:.1f} on x',
-              fontsize=PT_BASE, color=GRAY, ha='left', va='center', zorder=6)
 
     # Tighten the tick / label pads on every data axes: the 40 pt vertical
     # gutter has to hold one row's x labels and the next row's letter band,
@@ -1036,9 +1037,11 @@ def main():
             'D-inset': 'all repeat reliabilities, with histogram inclusion flagged',
             'E': 'representative mapped-input by route support matrix',
             'F': 'mapped-input coverage in every eligible scan'},
-        canvas=dict(width_pt=518.4, height_pt=490.0,
+        canvas=dict(width_pt=518.4, height_pt=448.0,
                     schematic_fraction=round(
-                        (176.8 * 124 + 176.8 * 108) / (464.4 * 434), 4),
+                        sum(w * h for _, _, w, h in (canvas.slot_pt(0, 0, 5),
+                                                     canvas.slot_pt(2, 0, 5)))
+                        / (464.4 * (448.0 - 22 - 34)), 4),
                     schematic_formula=('sum(schematic slot w_pt * h_pt) / '
                                        '(live_w_pt * live_h_pt)')),
         delta0_exemption=dict(panel='A', reason=DELTA0_REASON),

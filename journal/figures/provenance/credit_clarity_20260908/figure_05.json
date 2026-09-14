@@ -1,7 +1,7 @@
 {
   "figure": "Figure 5",
   "output": "source_data/conductance_local_gate/figures/local_gate_primary.pdf",
-  "output_sha256": "a58270e1480eefdd517895dfb32e5111ca80d0cf276ce072e180260885cdf5b2",
+  "output_sha256": "b3166b060efc786535a261c06ffe77c45d6f5c8b18ddeaf7ce22f626fb70ab62",
   "plotted_table": "source_data/curated_publication/figure_05_plotted.csv",
   "plotted_table_sha256": "a708e5edb519fe4da1e887043b3a10c1ea0676cc731ab7fb745eef90564fef70",
   "panel_sources": {
@@ -73,10 +73,10 @@
     "source_data/conductance_local_gate/summaries/paired_seed_contrasts.csv": "07fa32c5b4cc10ea5f47f683662753d22c08f3b17e767d044af4a9e0e2554d22"
   },
   "builders_sha256": {
-    "scripts/conductance_local_gate/figure.py": "7a3829252f28f4bba8d49270117a86dfbb2e8368901bd08bc2867f2ded018181",
+    "scripts/conductance_local_gate/figure.py": "8b4e07ce87a4ed94258f61ecb91cab41c7fc90ee51409e09fed92b7064bfe217",
     "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
-    "scripts/figure_canvas.py": "0a0d01607cc3589a44075b6ccd7c2867dcf7d8a31f88ca1565dade247f4bcb48",
+    "scripts/figure_canvas.py": "ebfaf161136972a7461aafe57140731f01e988d34d57ed514db9536da75ce863",
     "scripts/native_schematics.py": "68530ec60f85e496b9b0ba7a7ad53510dce2fae91cc38231046c1175e1cb7aeb",
     "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a",
     "scripts/credit_first_figures/focused_provenance.py": "b7ade95b88e7d10a43bab01716dee6211bc2f09735b605d489c0012a147ecea7"
@@ -84,5 +84,5 @@
   "source_data_immutable": true,
   "new_experiments": 0,
   "layout_findings": [],
-  "scope": "Main Figure 5 (fig:conductancecredit), overhaul v2. DECISIONS G4 schematic-area waiver for Fig 5, restated at the AMENDMENTS B12 / CF-10 value 22.7 % (sum of schematic slot areas over the live canvas 450.4 x 436 pt). Recorded, not exercised: the figure is inside the 30 % cap and no relaxation of PANEL_ASPECT_MAX or of the cap is requested. CF-5: the frameless four-entry rule key inside panel C is the single sanctioned in-axes key in the nine-figure set; C and D share four series across two panels."
+  "scope": "Main Figure 5 (fig:conductancecredit), overhaul v2. DECISIONS G4 schematic-area waiver for Fig 5, restated at the AMENDMENTS B12 / CF-10 value 26.9 % (sum of schematic slot areas over the live canvas 452.4 x 402 pt). Recorded, not exercised: the figure is inside the 30 % cap and no relaxation of PANEL_ASPECT_MAX or of the cap is requested. CF-5: the frameless four-entry rule key inside panel C is the single sanctioned in-axes key in the nine-figure set; C and D share four series across two panels."
 }

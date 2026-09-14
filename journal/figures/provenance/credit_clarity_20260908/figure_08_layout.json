@@ -1,17 +1,17 @@
 {
-  "main_figure_sha256": "0989468b0c904d60f0b1a88b6a06976e927498a5794da78446e2c0ee541fc746",
+  "main_figure_sha256": "4c10234f3f756892fc8e902e9f168fef0c9ed53b6b21db74bf92d4ffc686fa32",
   "slot_fill_balance": {
     "left_reserve_pt": 28.0,
-    "slot_fill_spread": 1.117,
+    "slot_fill_spread": 1.232,
     "slot_fill": {
-      "A": 0.867,
-      "B": 0.867,
-      "C": 0.781,
-      "D": 0.781,
-      "E": 0.781,
-      "F": 0.776,
-      "G": 0.776,
-      "H": 0.776
+      "A": 0.847,
+      "B": 0.847,
+      "C": 0.753,
+      "D": 0.753,
+      "E": 0.753,
+      "F": 0.688,
+      "G": 0.688,
+      "H": 0.688
     }
   },
   "schematic_fraction": 0.2662,
