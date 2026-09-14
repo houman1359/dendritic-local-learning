@@ -237,8 +237,8 @@ def load_categories():
             ["root_id", "category"],
             as_index=False).median_abs_log_gradient_change.mean()
         for index, relation in enumerate(CATEGORIES):
-            values = cells[cells.category.eq(relation)] \
-                .median_abs_log_gradient_change.to_numpy(float)
+            values = cells[cells.category.eq(relation)].set_index("root_id") \
+                .median_abs_log_gradient_change.astype(float)
             assert values.size == 8, (perturbation, relation, values.size)
             out[(perturbation, relation)] = (
                 values, mean_ci(values, seed=1610 + index))
@@ -258,7 +258,7 @@ def load_dose():
         subset = per_cell[per_cell.perturbation.eq(perturbation)]
         rows = []
         for dose, group in subset.groupby("dose"):
-            values = group.localization_index.to_numpy(float)
+            values = group.set_index("root_id").localization_index.astype(float)
             assert values.size == 8, (perturbation, dose, values.size)
             rows.append((float(dose),
                          *mean_ci(values, seed=1660 + 10 * pindex
@@ -324,7 +324,7 @@ def load_physical():
             group = subset[subset.regime.eq(regime)]
             if group.empty:
                 continue
-            values = group.difference.to_numpy(float)
+            values = group.set_index("root_id").difference.astype(float)
             points.append((_rm(regime), *mean_ci(values, seed=1740 + index),
                            int(values.size), values))
         out[cohort] = points
@@ -358,7 +358,7 @@ def load_background():
                              columns="perturbation",
                              values="localization_index").reset_index()
     wide["difference"] = wide["focal shunt"] - wide["matched additive"]
-    per_cell = {int(m): g.difference.to_numpy(float)
+    per_cell = {int(m): g.set_index("root_id").difference.astype(float)
                 for m, g in wide.groupby("background_leak_multiplier")}
     for m in (0, 1, 4):
         assert per_cell[m].size == 8, (m, per_cell[m].size)
@@ -1166,7 +1166,7 @@ def panel_state(ax, physical, ranges):
     inset.set_yticks((0.0,), ("0",))
     inset.tick_params(axis="y", labelsize=PT_BASE, pad=1.0, length=1.6,
                       width=LW_HAIR, colors=MUTE)
-    ax.text(0.600, 0.625, "inset ± 0.005", transform=ax.transAxes,
+    ax.text(0.600, 0.625, "near-zero zoom", transform=ax.transAxes,
             fontsize=PT_BASE, color=MUTE, ha="left", va="center", zorder=6)
     # The magnified window used to be a closed rectangle: every edge of a box
     # that CONTAINS the points it magnifies must cross them, and it cut both
@@ -1337,7 +1337,8 @@ def display_rows(category, dose, shapley, signed_summary, signed_cells,
                          regime="normalized passive"))
         rows.extend(dict(panel="C", record="cell_value",
                          perturbation=perturbation, category=relation,
-                         value=float(v)) for v in values)
+                         root_id=int(root), value=float(v))
+                    for root, v in values.items())
     for perturbation, points in dose.items():
         for value, mean, lo, hi, cells in points:
             rows.append(dict(panel="D", record="cohort_mean",
@@ -1349,7 +1350,8 @@ def display_rows(category, dose, shapley, signed_summary, signed_cells,
             # figure's Source Data.  Every drawn point is now a row.
             rows.extend(dict(panel="D", record="cell_value",
                              perturbation=perturbation, dose=value,
-                             value=float(v)) for v in cells)
+                             root_id=int(root), value=float(v))
+                        for root, v in cells.items())
     for column, (mean, lo, hi) in shapley["stats"].items():
         rows.append(dict(panel="E", record="cohort_mean", condition=column,
                          mean=mean, ci95_low=lo, ci95_high=hi, n_cells=8))
@@ -1387,8 +1389,9 @@ def display_rows(category, dose, shapley, signed_summary, signed_cells,
                              membrane_resistance_ohm_cm2=rm, mean=mean,
                              ci95_low=lo, ci95_high=hi, n_cells=n))
             rows.extend(dict(panel="G", record="cell_value", cohort=cohort,
-                             membrane_resistance_ohm_cm2=rm, value=float(v))
-                        for v in values)
+                             membrane_resistance_ohm_cm2=rm,
+                             root_id=int(root), value=float(v))
+                        for root, v in values.items())
     for record in sel.to_dict("records"):
         rows.append(dict(panel="H", record="cohort_mean",
                          background_leak_multiplier=record[
@@ -1401,8 +1404,12 @@ def display_rows(category, dose, shapley, signed_summary, signed_cells,
     for multiplier, values in sorted(per_cell.items()):
         rows.extend(dict(panel="H", record="cell_value",
                          background_leak_multiplier=int(multiplier),
-                         value=float(v)) for v in values)
-    return rows
+                         root_id=int(root), value=float(v))
+                    for root, v in values.items())
+    # Convert identifiers before publish() constructs a heterogeneous frame;
+    # empty IDs in cohort rows must not round the exact 64-bit cell IDs.
+    from source_data_export import exact_id_table
+    return exact_id_table(rows).to_dict("records")
 
 
 def build(emit_main=True):
@@ -1494,6 +1501,7 @@ def build(emit_main=True):
         ("focal_selectivity_phase1", "cell_condition_metrics.csv"),
         ("focal_selectivity_phase1", "summary.json")]]
     builders = [Path(__file__), Path(previous.__file__),
+                J / "scripts/credit_first_figures/source_data_export.py",
                 J / "scripts/build_main_figure_07.py",
                 J / "scripts/build_main_figure_08.py",
                 J / "scripts/build_journal_figures.py",

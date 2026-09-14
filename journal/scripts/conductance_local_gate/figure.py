@@ -68,8 +68,9 @@ Private helpers (SPEC_ERRATA item 7 / DECISIONS G5; the library is not edited)
     geometry with the capsule hue named by the caller.  ``credit_delivery``
     takes its capsule hues from ``K_CYCLE``, whose two-target entry is
     (shunting, additive); ``additive`` is Fig 4's calibrated-broadcast hue and
-    AMENDMENTS §5 bans it from Fig 5, so the two-profile oracle card composes
-    ``Frame._capsule`` + the same entry arrow in ``oracle`` instead.
+    AMENDMENTS §5 bans it from Fig 5.  The local-gate card uses this helper;
+    the oracle instead uses ``distal_oracle_delivery`` to mark only its two
+    distal supports, with no oracle multiplier at either proximal site.
 ``open_head``        the white-faced arrowhead of a credit path gated to zero.
 ``min_separation_pt`` point clearance between two artist groups (text on a
     frame is invisible to every audit).
@@ -100,7 +101,7 @@ from figure_canvas import (COLORS, LETTER_CAP_FRAC, LETTER_GAP_PT, LW_DATA,  # n
                            PT_BASE, PT_EMPH, SEED_ALPHA, SEED_MS, Margins,
                            NativeCanvas, audit_native_pdf, style_panel)
 from journal_style import label_color  # noqa: E402
-from credit_tree_schematics import AMBER_TEXT  # noqa: E402
+from credit_tree_schematics import AMBER_TEXT, mix  # noqa: E402
 from native_schematics import (BADGE_STYLE, CONTACT_DIA_PT, Frame, _lerp,  # noqa: E402
                                _text_w_pt, _wrap_to_width, reference_line)
 
@@ -429,6 +430,21 @@ def subtree_delivery(f, nodes, targets, cname, rule_color):
             # a head with no shaft; the arrow now runs most of the segment
             f.arrow(_lerp(p0, nodes[t], 0.16), _lerp(p0, nodes[t], 0.84),
                     color=COLORS[rule_color], lw=LW_EDGE, head=3.4, zorder=4.6)
+
+
+def distal_oracle_delivery(f, nodes):
+    """Mark the two weighted distal supports, excluding both proximal sites.
+
+    Equal site dots identify recipients, not profile weights; the adjacent
+    multiplier key explicitly retains the fixed nonuniform profiles p1/p2.
+    The terminal-only collars must not imply oracle credit at the junctions.
+    """
+    groups = [nodes.terminals_under(root) for root in ('JL', 'JR')]
+    for group in groups:
+        f._draw_chains([[nodes[t] for t in group]], mix('oracle', 16), 3.2)
+        for t in group:
+            f.disc(nodes[t], 1.2, fill=COLORS['oracle'], edge='none', zorder=4.6)
+    return groups
 
 
 def axes_w_pt(ax):
@@ -861,11 +877,12 @@ def panel_deliveries(ax):
     f.badge((cell[0] + cell[2] - f.fx(4.0), cell[1] + cell[3] - f.fy(3.5)),
             'oracle')
     nodes = card_tree(f, core)
-    subtree_delivery(f, nodes, ['JL', 'JR'], 'oracle', 'oracle')
+    distal_oracle_delivery(f, nodes)
     key_lines(f, core, key_x, [
-        (['subtree 1 × ', 'ĉ', ('sub', '1')], INK),
-        (['subtree 2 × ', 'ĉ', ('sub', '2')], INK),
-        (['ĉ from the exact field'], MUTE)])
+        (['distal 1 × p', ('sub', '1'), 'ĉ', ('sub', '1')], INK),
+        (['distal 2 × p', ('sub', '2'), 'ĉ', ('sub', '2')], INK),
+        (['proximal, soma × 1'], INK),
+        (['fixed p; oracle ĉ'], MUTE)], lead_pt=9.0)
     f.require_soma_lowest()
     f.require_delta0()
     del gate
@@ -1574,7 +1591,7 @@ PANEL_SOURCES = {
 }
 PANEL_SCOPE = {
     'main_5A': 'Seven-compartment circuit, E/I contacts, the context gate and the local distal gate’s addressed subtree; inset: nominal unperturbed teacher terminal voltage against the latent feature. Schematic, no data.',
-    'main_5B': 'The four deliveries of the somatic error defined by model.delivered (local distal gate, exact path, unit broadcast, two-profile oracle). Schematic, no data.',
+    'main_5B': 'The four deliveries of the somatic error defined by model.delivered (local distal gate, exact path, unit broadcast, two-profile oracle). The oracle has two fixed nonuniform distal profiles p1/p2 with exact-field amplitudes c1/c2, and unit proximal/somatic multipliers. Its equal terminal dots identify support sites, not weight magnitude. Schematic, no data.',
     'main_5C': 'Aligned targets, Adam 0.03, four prespecified rules, 20 paired simulation seeds; means with 95 % pointwise whole-seed bootstrap bands at 12 fixed checkpoints.',
     'main_5D': 'Opposed targets, same cohort and readout as C; bound-contact mark from all_curves.first_bound_step; validation-selected broadcast mean from condition_means.',
     'main_5E': 'Opposed-minus-aligned difference of broadcast-minus-gate NMSE at both windows, validation-selected states, 20 paired seeds joined across windows; prespecified sign-flip test, Holm-adjusted.',

@@ -1928,15 +1928,33 @@ def _audit_layout_contract(manifest, V, N):
             h = rs * _row_h + (rs - 1) * _vg
         return max(w * h, 1e-6)
 
-    density = [(rec, rec["w_pt"] * rec["h_pt"] / _slot_area(rec))
-               for rec in panels]
-    if len(density) > 1:
+    # 2026-09-14: the spread is judged within a kind.  A schematic cell has
+    # no tick column or axis label, so it fills its slot by construction;
+    # measured against it, a data panel's decoration overhead read as
+    # under-emphasis.  Data panels are compared with data panels and
+    # schematics with schematics, at the same 1.35x ratio.
+    # The footprint is the panel's FULL horizontal extent (axes plus its
+    # tick column, labels and gutter, recorded as tx0/tx1), so a forest that
+    # spends 38 pt of a narrow slot on row labels is not read as an
+    # under-emphasised panel; manifests without tx fields fall back to the
+    # axes box.
+    def _footprint_w(rec):
+        if rec.get("tx0_pt") is not None and rec.get("tx1_pt") is not None:
+            return max(float(rec["tx1_pt"]) - float(rec["tx0_pt"]), 1e-6)
+        return float(rec["w_pt"])
+
+    for kind, group in (("data", [r for r in panels if not r.get("schematic")]),
+                        ("schematic", [r for r in panels if r.get("schematic")])):
+        density = [(rec, _footprint_w(rec) * rec["h_pt"] / _slot_area(rec))
+                   for rec in group]
+        if len(density) < 2:
+            continue
         big_rec, big = max(density, key=lambda item: item[1])
         small_rec, small = min(density, key=lambda item: item[1])
         ratio = big / small if small > 0 else float("inf")
         if ratio > EMPHASIS_MAX_RATIO + 1e-9:
             V(Violation("panel-emphasis",
-                        f"slot-fill varies {ratio:.2f}x "
+                        f"slot-fill varies {ratio:.2f}x among {kind} panels "
                         f"({big_rec['name']} fills {big:.2f} vs "
                         f"{small_rec['name']} {small:.2f} of its slot; "
                         f"allowed {EMPHASIS_MAX_RATIO:.2f}x) -- a panel may "

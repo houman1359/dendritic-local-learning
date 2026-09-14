@@ -1,9 +1,9 @@
 {
   "figure": "Figure 8",
   "output": "figures/components/focused_main_08.pdf",
-  "output_sha256": "9d0e46df83ca5095597084333ba9dcf65280840708c7c51de96d74784d41b77a",
+  "output_sha256": "0989468b0c904d60f0b1a88b6a06976e927498a5794da78446e2c0ee541fc746",
   "plotted_table": "source_data/curated_publication/figure_08_plotted.csv",
-  "plotted_table_sha256": "db29847d9560fca85506247c8a414c50425b184e633ae3b4332c36cd17171e45",
+  "plotted_table_sha256": "e505db76ab991ed93728fd103746aa06f966937bcaa25d921add61a84340162b",
   "panel_sources": {
     "A": "Two state-matched interventions with identical tree geometry; shunt as an inhibitory contact, not a bar.",
     "B": "Exact ancestry partition and its derived per-block gain column on the median reconstructed cell.",
@@ -32,8 +32,9 @@
     "source_data/focal_selectivity_phase1/summary.json": "de17bb5e8363ef52ff2be8cf74f150ae9bb1f34026a94afdf624162fa9b88d6c"
   },
   "builders_sha256": {
-    "scripts/shunt_ancestry_gain/build_focused_main.py": "11f31c7321a450e627e1acd7c2398e4501282548cdff5941e19045a06cc02c62",
+    "scripts/shunt_ancestry_gain/build_focused_main.py": "9f36270b103eb137400580ea6620494ed5dfd7cf1f511cf7cd7445ad4529d507",
     "scripts/shunt_ancestry_gain/build_figure.py": "ace3791786d34c8b234b46743fd527b0ede99ff262064fd1067dcfd6616a70d0",
+    "scripts/credit_first_figures/source_data_export.py": "140262b3750a3fbe56fe9d92323788b05553dbb7cb24bb56ca75dce8b7501ee6",
     "scripts/build_main_figure_07.py": "8dd526d60d35b572a17a68c77c1813279756251052d4921471d77c3fb16b885e",
     "scripts/build_main_figure_08.py": "f9960d1b058bfef5486e436ef511fbcb98e751a3fe515587be6929b1d7305cc5",
     "scripts/build_journal_figures.py": "d70f2db5c2f585752a23fa9bbf428715abd7635e1ec9743a31f55adf0af8a1a5",

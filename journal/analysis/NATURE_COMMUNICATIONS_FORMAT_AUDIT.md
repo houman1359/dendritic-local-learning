@@ -5,7 +5,7 @@ The narrative count is mechanical and excludes figure/table environments,
 inline/displayed mathematics, citations and cross-references; the portal count may differ.
 The author working narrative target is 8000 words; this does not
 change the journal's approximately 5,000-word guidance.
-Methods prose: 3437 words (reported separately from the narrative).
+Methods prose: 3449 words (reported separately from the narrative).
 The 9 numbered figures occupy 9 figure environments;
 0 environments are continued multi-panel displays.
 There are 0 main tables, including Methods tables; total display items: 9.
@@ -14,19 +14,19 @@ There are 0 main tables, including Methods tables; total display items: 9.
 |---|---:|---:|---|
 | Title | 9 words | 15 | PASS |
 | Abstract | 161 words | 200 | PASS |
-| Introduction + Results + Discussion | 8109 approximate words | 5000 | ADVISORY |
-| Author working narrative target | 8109 approximate words | 8000 | ADVISORY |
+| Introduction + Results + Discussion | 8172 approximate words | 5000 | ADVISORY |
+| Author working narrative target | 8172 approximate words | 8000 | ADVISORY |
 | Main display items | 9 figures and tables | 10 | PASS |
 | References | 64 entries (general guide) | 70 | PASS |
 | Figure 1 legend | 348 words | 350 | PASS |
-| Figure 2 legend | 350 words | 350 | PASS |
+| Figure 2 legend | 336 words | 350 | PASS |
 | Figure 3 legend | 350 words | 350 | PASS |
 | Figure 4 legend | 349 words | 350 | PASS |
-| Figure 5 legend | 349 words | 350 | PASS |
+| Figure 5 legend | 350 words | 350 | PASS |
 | Figure 6 legend | 347 words | 350 | PASS |
-| Figure 7 legend | 340 words | 350 | PASS |
-| Figure 8 legend | 346 words | 350 | PASS |
-| Figure 9 legend | 330 words | 350 | PASS |
+| Figure 7 legend | 346 words | 350 | PASS |
+| Figure 8 legend | 348 words | 350 | PASS |
+| Figure 9 legend | 300 words | 350 | PASS |
 
 Official guidance:
 

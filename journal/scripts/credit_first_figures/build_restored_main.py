@@ -491,17 +491,24 @@ def f4_curve(ax, data, task, panel, rows, *, seed_layer=False):
         assert w.shape == (20, 64) and not w.isna().any().any()
         steps = w.columns.to_numpy(float)
         if seed_layer and rule == 'exact':
-            for _, trace in w.iterrows():
+            for seed, trace in w.iterrows():
                 ax.plot(steps, trace.to_numpy(), color=COLORS['bp'],
                         lw=LW_HAIR, alpha=.28, zorder=2.0,
                         solid_capstyle='round')
+                rows.extend(dict(panel=panel, record='seed trajectory',
+                                 task=FIG4_NAME[task], series=RN[rule],
+                                 seed=int(seed), x_name='training updates',
+                                 x=int(s), value=float(v), unit='test NMSE',
+                                 endpoint='fixed checkpoint')
+                            for s, v in trace.items())
         mean, lo, hi = boot(w.to_numpy())
         f4_band(ax, steps, lo, hi, RC[rule])
         line, = ax.plot(steps, mean, color=RC[rule], lw=LW_DATA, zorder=3.0,
                         solid_capstyle='round')
         if rule == 'unit_broadcast':
             line.set_dashes((2.6, 1.6))
-        rows.extend(dict(panel=panel, task=FIG4_NAME[task], series=RN[rule],
+        rows.extend(dict(panel=panel, record='curve summary',
+                         task=FIG4_NAME[task], series=RN[rule],
                          x_name='training updates', x=int(s), unit='test NMSE',
                          mean=float(m), ci95_low=float(l), ci95_high=float(h),
                          n_seeds=20, interval='95 % percentile bootstrap',
@@ -579,6 +586,14 @@ def f4_deficit(ax, contrast, seeds, rows):
         draw = fan[fan.budget.eq(budget)
                    & fan.endpoint.eq('terminal')].difference.to_numpy()
         assert len(draw) == 20
+        rows.extend(dict(panel='F', record='paired seed difference',
+                         task='Quartic minus pairwise',
+                         series='calibrated broadcast minus exact path',
+                         seed=int(r.seed), x_name='budget (training updates)',
+                         x=int(budget), value=float(r.difference),
+                         unit='test NMSE difference', endpoint='endpoint state')
+                    for r in fan[fan.budget.eq(budget)
+                                 & fan.endpoint.eq('terminal')].itertuples())
         entries.append(dict(label=f'{budget:,}', mean=float(end['mean']),
                             lo=float(end.ci95_low), hi=float(end.ci95_high),
                             n=20, marker='D', fan=list(map(float, draw))))
@@ -798,6 +813,12 @@ def f4_shuffle(ax, contrast, endpoints, rows, ramp):
         rec = rec.iloc[0]
         assert int(rec.positive_seeds) == 20 and int(rec.n_seeds) == 20
         assert abs(float(rec['mean']) - float(fans[family].mean())) < 1e-9
+        rows.extend(dict(panel='H', record='paired seed difference',
+                         task=label, series='shuffled minus compatible, exact path',
+                         seed=int(seed), x_name='task family', value=float(value),
+                         unit='test NMSE difference',
+                         endpoint='endpoint state (1,024 updates)')
+                    for seed, value in fans[family].items())
         # QA 2026-09-09 (major): the fan is NOT handed to forest(), which
         # would draw it in the row's own ORDINAL_RAMP hue at nearly the mean
         # marker's size and hide the estimand (the Quartic interval is only
@@ -1237,6 +1258,8 @@ def figure4():
                                'f4_bus', 'f4_badge', 'f4_title',
                                'f4_reference', 'f4_forest_tag'],
         'rank95_at_1024': {k: round(float(v), 2) for k, v in rank95.items()}}
+    for row in rows:
+        row.setdefault('record', 'summary')
     save(c, 4, sources, panels, FIG4_CAPTION, rows,
          {'original_capture_rows_joined': len(joined),
           'original_capture_replay_max_abs_difference': replay,
@@ -1426,8 +1449,8 @@ def f6_task_model(ax):
            va='top')
     y_eq = rail_y - f.fy(17.0)
     f6_formula(f, (f.fx(1.0), y_eq),
-               [('x', 0.0), ('E', -1.7), (' = (b', 0.0), ('E', -1.7),
-                (' + y Δ + ε', 0.0), ('E', -1.7), (')', 0.0)])
+               [('x', 0.0), ('E', -1.7), (' = max(b', 0.0), ('E', -1.7),
+                (' + yΔ + ε', 0.0), ('E', -1.7), (', 0.0001)', 0.0)])
     # QA 2026-09-10: the equation pitch opens from 8.6 to 10.4 pt and the
     # squaring exponent drops from a 3.0 to a 2.2 pt raise, so the raised
     # token clears the band of the line above by 1.4 pt and reads as an
@@ -1643,9 +1666,11 @@ def f6_family_dose(ax, effects, seeds, rows):
                 ms=SEED_MS, mfc=colour, mec='none', alpha=SEED_ALPHA,
                 zorder=2.6)
         for seed, value in fan.items():
-            rows.append(dict(panel='C', family=key, alignment_alpha=1.0,
+            rows.append(dict(panel='C', record='paired seed difference',
+                             family=key, alignment_alpha=1.0,
                              credit='bp', estimand='serial_minus_grouped',
-                             seed=int(seed), mean_pp=float(value)))
+                             seed=int(seed), value_pp=float(value),
+                             mean_pp=float(value)))
     for name, y, colour in (('nested', 30.32, ORDINAL_RAMP[3]),
                             ('flat', 22.20, ORDINAL_RAMP[2]),
                             ('local ratio', 9.0, ORDINAL_RAMP[1])):
@@ -1868,12 +1893,18 @@ def f6_trajectories(ax, curves, metric, scale, panel, rows, *, split=None):
             ax.plot(x, y, color=colour, lw=lw, ls=F6_DASH[style], zorder=2.4,
                     solid_capstyle='round')
         ends[label] = (float(y[-1]), colour)
-        rows.extend(dict(panel=panel, arm=arm, depth=depth, metric=metric,
+        rows.extend(dict(panel=panel, record='curve summary',
+                         arm=arm, depth=depth, metric=metric,
                          epoch=int(e), mean=float(m), ci95_low=float(a),
-                         ci95_high=float(b), n_seeds=10)
+                         ci95_high=float(b), n_seeds=10,
+                         plotted_mean=scale * float(m),
+                         plotted_ci95_low=scale * float(a),
+                         plotted_ci95_high=scale * float(b),
+                         plotted_unit='accuracy (%)' if metric == 'test_accuracy'
+                                      else 'cross-entropy (nats)',
+                         band_drawn=bool(band))
                     for e, m, a, b in zip(p.epoch, p['mean'], p.ci95_low,
-                                          p.ci95_high)
-                    if int(e) in (1, 60, 180, 300, 400, 486, 600))
+                                          p.ci95_high))
     return ends
 
 
@@ -2008,9 +2039,11 @@ def f6_validation_loss(ax, curves, stopping, rows):
             mec=COLORS['point_mlp'], mew=LW_EDGE, zorder=3.4)
     ax.plot([330.0, 330.0], [0.700, 0.664], color=COLORS['point_mlp'],
             lw=LW_HAIR, zorder=1.8)
-    rows.extend(dict(panel='F', arm='exact_autograd_bp_recipe', depth=1,
-                     metric='stopping_epoch', epoch=int(e),
-                     mean=float(track.loc[e]), n_seeds=10) for e in stops)
+    rows.extend(dict(panel='F', record='stopping marker',
+                     arm='exact_autograd_bp_recipe', depth=1, seed=int(r.seed),
+                     metric='stopping_epoch', epoch=int(r.epochs_run),
+                     mean=float(track.loc[r.epochs_run]), n_seeds=10)
+                for r in d1.sort_values(['epochs_run', 'seed']).itertuples())
     f6_direct_ends(ax, ends, {'exact BP (D3)': 0.120, 'exact path': 0.214,
                               'shared soma': 0.320}, F6_XLAB_F, lead_from=600.0)
     f6_note_data(ax, 40.0, 0.856,
@@ -2078,14 +2111,14 @@ def f6_paired(ax, paired, metric, rows, *, ylim, yticks, ylabel, marks,
     for x, y, ha, lines in notes:
         f6_note_data(ax, x, y, lines, ha=ha)
     rows.extend(dict(panel='G' if metric == 'test_accuracy' else 'H',
+                     record='paired curve summary',
                      metric=metric, epoch=int(e), mean=float(m),
                      ci95_low=float(a), ci95_high=float(b),
                      positive_seeds=int(ps), negative_seeds=int(ns),
                      n_seeds=10)
                 for e, m, a, b, ps, ns in zip(p.epoch, p['mean'], p.ci95_low,
                                               p.ci95_high, p.positive_seeds,
-                                              p.negative_seeds)
-                if int(e) in (1, 60, 180, 300, 314, 315, 325, 400, 486, 600))
+                                              p.negative_seeds))
     return ax
 
 
@@ -2347,9 +2380,9 @@ def figure6():
               # third of this data-free plot box.
               notes=((250.0, 9.5, 'left',
                       ('crossing not resolved (300–325)',)),))
-    h = c.panel('H', 2, 6, 6, title='Cross-entropy ordering does not flip',
+    h = c.panel('H', 2, 6, 6, title='Cross-entropy favors exact, 180–600',
                 sharex=g)
-    f6_style(h, 'Cross-entropy ordering does not flip')
+    f6_style(h, 'Cross-entropy favors exact, 180–600')
     f6_paired(h, paired, 'test_cross_entropy', rows, ylim=(-0.098, 0.026),
               yticks=[-0.08, -0.04, 0.0],
               ylabel='Exact path − shared soma (nats)',
@@ -2421,6 +2454,8 @@ def figure6():
              'with archived pointwise intervals and sign counts.',
         'H': 'Same paired states, test cross-entropy difference, with the two '
              'absolute 600-epoch levels printed.'}
+    for row in rows:
+        row.setdefault('record', 'summary')
     save(c, 6, sources, panels, F6_CAPTION, rows,
          {'helper_sha256': {str(Path(depth.__file__).relative_to(J)):
                             sha(depth.__file__)},

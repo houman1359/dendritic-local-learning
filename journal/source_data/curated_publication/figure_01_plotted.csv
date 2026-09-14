@@ -330,199 +330,199 @@ D,within-tree note,additive,,,subtree_k3_minus_projected_k1,,,,,,,,,0.0360006093
 D,within-tree note,shunting,,,exact_path_minus_subtree_k3,,,,,,,,,-0.09299993515014648,-0.1949995756149292,0.009000897407531738,10.0,3.0,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
 D,within-tree note,additive,,,exact_path_minus_subtree_k3,,,,,,,,,-0.04400014877319336,-0.14300107955932617,0.0580000877380371,10.0,4.0,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
 E,cohort contrast,shunting,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,,,9.22999918460846,8.593000173568726,9.82999862730503,10.0,10.0,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-E,seed,shunting,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,0.0,10.519999265670776,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-E,seed,shunting,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,1.0,9.489995241165161,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-E,seed,shunting,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,2.0,8.42999815940857,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-E,seed,shunting,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,3.0,7.480001449584961,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-E,seed,shunting,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,4.0,8.390003442764282,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-E,seed,shunting,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,5.0,9.850001335144043,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-E,seed,shunting,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,6.0,10.289996862411499,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-E,seed,shunting,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,7.0,9.679996967315674,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-E,seed,shunting,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,8.0,10.159999132156372,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-E,seed,shunting,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,9.0,8.009999990463257,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+E,seed,shunting,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,50300.0,10.519999265670776,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+E,seed,shunting,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,50301.0,9.489995241165161,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+E,seed,shunting,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,50302.0,8.42999815940857,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+E,seed,shunting,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,50303.0,7.480001449584961,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+E,seed,shunting,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,50304.0,8.390003442764282,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+E,seed,shunting,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,50305.0,9.850001335144043,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+E,seed,shunting,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,50306.0,10.289996862411499,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+E,seed,shunting,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,50307.0,9.679996967315674,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+E,seed,shunting,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,50308.0,10.159999132156372,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+E,seed,shunting,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,50309.0,8.009999990463257,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
 F,cohort contrast,shunting,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,,,0.010000467300415039,-0.061997175216674805,0.07499933242797852,10.0,5.0,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-F,seed,shunting,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,0.0,-0.04000067710876465,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-F,seed,shunting,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,1.0,-0.21999478340148926,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-F,seed,shunting,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,2.0,0.09000301361083984,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-F,seed,shunting,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,3.0,0.15000104904174805,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-F,seed,shunting,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,4.0,0.0899970531463623,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-F,seed,shunting,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,5.0,0.0599980354309082,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-F,seed,shunting,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,6.0,-0.07999539375305176,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-F,seed,shunting,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,7.0,-0.0800013542175293,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-F,seed,shunting,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,8.0,0.0,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-F,seed,shunting,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,9.0,0.12999773025512695,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+F,seed,shunting,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,50300.0,-0.04000067710876465,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+F,seed,shunting,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,50301.0,-0.21999478340148926,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+F,seed,shunting,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,50302.0,0.09000301361083984,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+F,seed,shunting,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,50303.0,0.15000104904174805,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+F,seed,shunting,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,50304.0,0.0899970531463623,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+F,seed,shunting,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,50305.0,0.0599980354309082,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+F,seed,shunting,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,50306.0,-0.07999539375305176,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+F,seed,shunting,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,50307.0,-0.0800013542175293,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+F,seed,shunting,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,50308.0,0.0,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+F,seed,shunting,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,50309.0,0.12999773025512695,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
 E,cohort contrast,additive,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,,,7.45599925518036,6.912999153137207,8.086998462677002,10.0,10.0,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-E,seed,additive,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,0.0,8.789998292922974,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-E,seed,additive,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,1.0,6.599998474121094,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-E,seed,additive,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,2.0,6.439995765686035,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-E,seed,additive,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,3.0,7.389998435974121,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-E,seed,additive,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,4.0,7.080000638961792,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-E,seed,additive,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,5.0,7.969999313354492,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-E,seed,additive,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,6.0,9.529995918273926,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-E,seed,additive,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,7.0,6.9499969482421875,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-E,seed,additive,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,8.0,6.740003824234009,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-E,seed,additive,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,9.0,7.070004940032959,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+E,seed,additive,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,50300.0,8.789998292922974,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+E,seed,additive,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,50301.0,6.599998474121094,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+E,seed,additive,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,50302.0,6.439995765686035,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+E,seed,additive,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,50303.0,7.389998435974121,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+E,seed,additive,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,50304.0,7.080000638961792,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+E,seed,additive,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,50305.0,7.969999313354492,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+E,seed,additive,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,50306.0,9.529995918273926,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+E,seed,additive,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,50307.0,6.9499969482421875,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+E,seed,additive,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,50308.0,6.740003824234009,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+E,seed,additive,,mnist_fresh,neuron_shared_minus_strict_scalar,,,,,,,50309.0,7.070004940032959,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
 F,cohort contrast,additive,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,,,0.18200039863586426,0.11400043964385985,0.252000093460083,10.0,10.0,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-F,seed,additive,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,0.0,0.0599980354309082,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-F,seed,additive,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,1.0,0.270003080368042,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-F,seed,additive,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,2.0,0.3800034523010254,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-F,seed,additive,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,3.0,0.06000399589538574,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-F,seed,additive,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,4.0,0.279998779296875,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-F,seed,additive,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,5.0,0.20999908447265625,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-F,seed,additive,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,6.0,0.12000203132629395,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-F,seed,additive,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,7.0,0.010001659393310547,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-F,seed,additive,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,8.0,0.2599954605102539,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
-F,seed,additive,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,9.0,0.1699984073638916,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+F,seed,additive,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,50300.0,0.0599980354309082,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+F,seed,additive,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,50301.0,0.270003080368042,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+F,seed,additive,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,50302.0,0.3800034523010254,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+F,seed,additive,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,50303.0,0.06000399589538574,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+F,seed,additive,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,50304.0,0.279998779296875,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+F,seed,additive,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,50305.0,0.20999908447265625,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+F,seed,additive,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,50306.0,0.12000203132629395,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+F,seed,additive,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,50307.0,0.010001659393310547,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+F,seed,additive,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,50308.0,0.2599954605102539,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
+F,seed,additive,,mnist_fresh,exact_path_minus_neuron_shared,,,,,,,50309.0,0.1699984073638916,,,,,,percentage points,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv
 E,cohort contrast,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,,,11.033332745234171,10.248001009225845,11.840664555629095,15.0,15.0,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,0.0,8.710002899169922,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,1.0,14.089995622634888,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,2.0,11.100000143051147,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,3.0,10.96000075340271,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,4.0,8.77000093460083,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,5.0,12.459999322891235,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,6.0,10.649996995925903,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,7.0,9.270000457763672,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,8.0,9.390002489089966,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,9.0,12.469995021820068,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,10.0,11.559998989105225,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,11.0,9.729999303817749,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,12.0,11.04000210762024,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,13.0,12.540000677108765,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,14.0,12.759995460510254,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,42.0,8.710002899169922,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,43.0,14.089995622634888,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,44.0,11.100000143051147,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,45.0,10.96000075340271,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,46.0,8.77000093460083,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,47.0,12.459999322891235,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,48.0,10.649996995925903,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,49.0,9.270000457763672,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,50.0,9.390002489089966,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,51.0,12.469995021820068,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,52.0,11.559998989105225,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,53.0,9.729999303817749,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,54.0,11.04000210762024,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,55.0,12.540000677108765,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,shunting,,mnist_dfa,dfa within: neuron - scalar,,,,,,,56.0,12.759995460510254,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
 F,cohort contrast,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,,,0.028000275293986004,-0.056666930516560875,0.10533254345258077,15.0,9.0,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,0.0,0.1999974250793457,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,1.0,0.06999969482421875,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,2.0,0.10000467300415039,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,3.0,0.1399993896484375,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,4.0,-0.3500044345855713,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,5.0,0.0,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,6.0,0.2400040626525879,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,7.0,0.15000104904174805,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,8.0,0.1199960708618164,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,9.0,-0.019997358322143555,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,10.0,-0.1699984073638916,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,11.0,-0.12000203132629395,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,12.0,0.1999974250793457,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,13.0,0.010001659393310547,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,14.0,-0.1499950885772705,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,42.0,0.1999974250793457,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,43.0,0.06999969482421875,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,44.0,0.10000467300415039,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,45.0,0.1399993896484375,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,46.0,-0.3500044345855713,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,47.0,0.0,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,48.0,0.2400040626525879,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,49.0,0.15000104904174805,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,50.0,0.1199960708618164,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,51.0,-0.019997358322143555,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,52.0,-0.1699984073638916,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,53.0,-0.12000203132629395,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,54.0,0.1999974250793457,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,55.0,0.010001659393310547,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,shunting,,mnist_dfa,dfa within: exact path - neuron,,,,,,,56.0,-0.1499950885772705,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
 E,cohort contrast,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,,,10.796667337417603,9.718001266320545,11.914666891098022,15.0,15.0,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,0.0,9.920001029968262,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,1.0,14.410001039505005,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,2.0,11.410003900527954,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,3.0,8.43999981880188,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,4.0,9.049999713897705,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,5.0,12.949997186660767,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,6.0,8.140003681182861,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,7.0,9.32999849319458,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,8.0,9.18000340461731,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,9.0,11.750000715255737,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,10.0,11.990004777908325,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,11.0,7.479995489120483,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,12.0,11.030000448226929,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,13.0,14.849996566772461,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,14.0,12.02000379562378,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,42.0,9.920001029968262,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,43.0,14.410001039505005,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,44.0,11.410003900527954,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,45.0,8.43999981880188,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,46.0,9.049999713897705,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,47.0,12.949997186660767,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,48.0,8.140003681182861,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,49.0,9.32999849319458,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,50.0,9.18000340461731,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,51.0,11.750000715255737,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,52.0,11.990004777908325,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,53.0,7.479995489120483,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,54.0,11.030000448226929,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,55.0,14.849996566772461,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+E,seed,additive,,mnist_dfa,dfa within: neuron - scalar,,,,,,,56.0,12.02000379562378,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
 F,cohort contrast,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,,,0.08666555086771648,0.008665323257446289,0.16866564750671387,15.0,9.0,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,0.0,-0.010001659393310547,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,1.0,0.40000081062316895,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,2.0,-0.020003318786621094,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,3.0,0.1399993896484375,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,4.0,0.15000104904174805,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,5.0,-0.04000067710876465,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,6.0,0.009995698928833008,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,7.0,-0.010001659393310547,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,8.0,0.37999749183654785,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,9.0,0.1699984073638916,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,10.0,0.1999974250793457,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,11.0,-0.21999478340148926,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,12.0,-0.050002336502075195,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,13.0,0.12000203132629395,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
-F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,14.0,0.07999539375305176,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,42.0,-0.010001659393310547,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,43.0,0.40000081062316895,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,44.0,-0.020003318786621094,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,45.0,0.1399993896484375,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,46.0,0.15000104904174805,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,47.0,-0.04000067710876465,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,48.0,0.009995698928833008,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,49.0,-0.010001659393310547,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,50.0,0.37999749183654785,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,51.0,0.1699984073638916,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,52.0,0.1999974250793457,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,53.0,-0.21999478340148926,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,54.0,-0.050002336502075195,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,55.0,0.12000203132629395,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
+F,seed,additive,,mnist_dfa,dfa within: exact path - neuron,,,,,,,56.0,0.07999539375305176,,,,,,percentage points,source_data/mnist_between_within_factorial/paired_contrasts.csv
 E,cohort contrast,shunting,,fashion,neuron indexed - scalar fallback,,,,,,,,,4.462999105453491,4.090999364852905,4.880999326705933,10.0,10.0,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-E,seed,shunting,,fashion,neuron indexed - scalar fallback,,,,,,,0.0,5.03000020980835,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-E,seed,shunting,,fashion,neuron indexed - scalar fallback,,,,,,,1.0,4.079997539520264,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-E,seed,shunting,,fashion,neuron indexed - scalar fallback,,,,,,,2.0,3.5199999809265137,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-E,seed,shunting,,fashion,neuron indexed - scalar fallback,,,,,,,3.0,4.030001163482666,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-E,seed,shunting,,fashion,neuron indexed - scalar fallback,,,,,,,4.0,4.369997978210449,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-E,seed,shunting,,fashion,neuron indexed - scalar fallback,,,,,,,5.0,5.059999227523804,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-E,seed,shunting,,fashion,neuron indexed - scalar fallback,,,,,,,6.0,4.240000247955322,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-E,seed,shunting,,fashion,neuron indexed - scalar fallback,,,,,,,7.0,5.889999866485596,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-E,seed,shunting,,fashion,neuron indexed - scalar fallback,,,,,,,8.0,4.229998588562012,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-E,seed,shunting,,fashion,neuron indexed - scalar fallback,,,,,,,9.0,4.1799962520599365,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+E,seed,shunting,,fashion,neuron indexed - scalar fallback,,,,,,,10200.0,5.03000020980835,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+E,seed,shunting,,fashion,neuron indexed - scalar fallback,,,,,,,10201.0,4.079997539520264,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+E,seed,shunting,,fashion,neuron indexed - scalar fallback,,,,,,,10202.0,3.5199999809265137,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+E,seed,shunting,,fashion,neuron indexed - scalar fallback,,,,,,,10203.0,4.030001163482666,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+E,seed,shunting,,fashion,neuron indexed - scalar fallback,,,,,,,10204.0,4.369997978210449,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+E,seed,shunting,,fashion,neuron indexed - scalar fallback,,,,,,,10205.0,5.059999227523804,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+E,seed,shunting,,fashion,neuron indexed - scalar fallback,,,,,,,10206.0,4.240000247955322,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+E,seed,shunting,,fashion,neuron indexed - scalar fallback,,,,,,,10207.0,5.889999866485596,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+E,seed,shunting,,fashion,neuron indexed - scalar fallback,,,,,,,10208.0,4.229998588562012,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+E,seed,shunting,,fashion,neuron indexed - scalar fallback,,,,,,,10209.0,4.1799962520599365,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
 F,cohort contrast,shunting,,fashion,exact path - neuron indexed,,,,,,,,,-0.10699987411499022,-0.2129989862442017,-0.005998015403747559,10.0,2.0,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-F,seed,shunting,,fashion,exact path - neuron indexed,,,,,,,0.0,-0.1699984073638916,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-F,seed,shunting,,fashion,exact path - neuron indexed,,,,,,,1.0,-0.010001659393310547,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-F,seed,shunting,,fashion,exact path - neuron indexed,,,,,,,2.0,-0.0599980354309082,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-F,seed,shunting,,fashion,exact path - neuron indexed,,,,,,,3.0,-0.2100050449371338,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-F,seed,shunting,,fashion,exact path - neuron indexed,,,,,,,4.0,0.1600027084350586,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-F,seed,shunting,,fashion,exact path - neuron indexed,,,,,,,5.0,-0.06999969482421875,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-F,seed,shunting,,fashion,exact path - neuron indexed,,,,,,,6.0,-0.06999969482421875,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-F,seed,shunting,,fashion,exact path - neuron indexed,,,,,,,7.0,-0.42999982833862305,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-F,seed,shunting,,fashion,exact path - neuron indexed,,,,,,,8.0,0.0899970531463623,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-F,seed,shunting,,fashion,exact path - neuron indexed,,,,,,,9.0,-0.29999613761901855,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+F,seed,shunting,,fashion,exact path - neuron indexed,,,,,,,10200.0,-0.1699984073638916,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+F,seed,shunting,,fashion,exact path - neuron indexed,,,,,,,10201.0,-0.010001659393310547,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+F,seed,shunting,,fashion,exact path - neuron indexed,,,,,,,10202.0,-0.0599980354309082,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+F,seed,shunting,,fashion,exact path - neuron indexed,,,,,,,10203.0,-0.2100050449371338,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+F,seed,shunting,,fashion,exact path - neuron indexed,,,,,,,10204.0,0.1600027084350586,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+F,seed,shunting,,fashion,exact path - neuron indexed,,,,,,,10205.0,-0.06999969482421875,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+F,seed,shunting,,fashion,exact path - neuron indexed,,,,,,,10206.0,-0.06999969482421875,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+F,seed,shunting,,fashion,exact path - neuron indexed,,,,,,,10207.0,-0.42999982833862305,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+F,seed,shunting,,fashion,exact path - neuron indexed,,,,,,,10208.0,0.0899970531463623,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+F,seed,shunting,,fashion,exact path - neuron indexed,,,,,,,10209.0,-0.29999613761901855,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
 E,cohort contrast,additive,,fashion,neuron indexed - scalar fallback,,,,,,,,,3.781000971794128,3.4280014038085933,4.140026509761812,10.0,10.0,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-E,seed,additive,,fashion,neuron indexed - scalar fallback,,,,,,,0.0,4.500001668930054,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-E,seed,additive,,fashion,neuron indexed - scalar fallback,,,,,,,1.0,3.9699971675872803,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-E,seed,additive,,fashion,neuron indexed - scalar fallback,,,,,,,2.0,4.06000018119812,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-E,seed,additive,,fashion,neuron indexed - scalar fallback,,,,,,,3.0,3.850001096725464,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-E,seed,additive,,fashion,neuron indexed - scalar fallback,,,,,,,4.0,3.3600032329559326,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-E,seed,additive,,fashion,neuron indexed - scalar fallback,,,,,,,5.0,3.239995241165161,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-E,seed,additive,,fashion,neuron indexed - scalar fallback,,,,,,,6.0,3.220003843307495,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-E,seed,additive,,fashion,neuron indexed - scalar fallback,,,,,,,7.0,4.80000376701355,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-E,seed,additive,,fashion,neuron indexed - scalar fallback,,,,,,,8.0,3.9499998092651367,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-E,seed,additive,,fashion,neuron indexed - scalar fallback,,,,,,,9.0,2.860003709793091,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+E,seed,additive,,fashion,neuron indexed - scalar fallback,,,,,,,10200.0,4.500001668930054,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+E,seed,additive,,fashion,neuron indexed - scalar fallback,,,,,,,10201.0,3.9699971675872803,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+E,seed,additive,,fashion,neuron indexed - scalar fallback,,,,,,,10202.0,4.06000018119812,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+E,seed,additive,,fashion,neuron indexed - scalar fallback,,,,,,,10203.0,3.850001096725464,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+E,seed,additive,,fashion,neuron indexed - scalar fallback,,,,,,,10204.0,3.3600032329559326,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+E,seed,additive,,fashion,neuron indexed - scalar fallback,,,,,,,10205.0,3.239995241165161,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+E,seed,additive,,fashion,neuron indexed - scalar fallback,,,,,,,10206.0,3.220003843307495,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+E,seed,additive,,fashion,neuron indexed - scalar fallback,,,,,,,10207.0,4.80000376701355,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+E,seed,additive,,fashion,neuron indexed - scalar fallback,,,,,,,10208.0,3.9499998092651367,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+E,seed,additive,,fashion,neuron indexed - scalar fallback,,,,,,,10209.0,2.860003709793091,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
 F,cohort contrast,additive,,fashion,exact path - neuron indexed,,,,,,,,,0.13199865818023682,-0.08099973201751709,0.35399913787841797,10.0,8.0,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-F,seed,additive,,fashion,exact path - neuron indexed,,,,,,,0.0,-0.1900017261505127,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-F,seed,additive,,fashion,exact path - neuron indexed,,,,,,,1.0,-0.5299985408782959,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-F,seed,additive,,fashion,exact path - neuron indexed,,,,,,,2.0,0.050002336502075195,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-F,seed,additive,,fashion,exact path - neuron indexed,,,,,,,3.0,0.15999674797058105,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-F,seed,additive,,fashion,exact path - neuron indexed,,,,,,,4.0,0.9000003337860107,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-F,seed,additive,,fashion,exact path - neuron indexed,,,,,,,5.0,0.2200007438659668,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-F,seed,additive,,fashion,exact path - neuron indexed,,,,,,,6.0,0.3699958324432373,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-F,seed,additive,,fashion,exact path - neuron indexed,,,,,,,7.0,0.2599954605102539,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-F,seed,additive,,fashion,exact path - neuron indexed,,,,,,,8.0,0.009995698928833008,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
-F,seed,additive,,fashion,exact path - neuron indexed,,,,,,,9.0,0.06999969482421875,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+F,seed,additive,,fashion,exact path - neuron indexed,,,,,,,10200.0,-0.1900017261505127,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+F,seed,additive,,fashion,exact path - neuron indexed,,,,,,,10201.0,-0.5299985408782959,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+F,seed,additive,,fashion,exact path - neuron indexed,,,,,,,10202.0,0.050002336502075195,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+F,seed,additive,,fashion,exact path - neuron indexed,,,,,,,10203.0,0.15999674797058105,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+F,seed,additive,,fashion,exact path - neuron indexed,,,,,,,10204.0,0.9000003337860107,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+F,seed,additive,,fashion,exact path - neuron indexed,,,,,,,10205.0,0.2200007438659668,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+F,seed,additive,,fashion,exact path - neuron indexed,,,,,,,10206.0,0.3699958324432373,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+F,seed,additive,,fashion,exact path - neuron indexed,,,,,,,10207.0,0.2599954605102539,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+F,seed,additive,,fashion,exact path - neuron indexed,,,,,,,10208.0,0.009995698928833008,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
+F,seed,additive,,fashion,exact path - neuron indexed,,,,,,,10209.0,0.06999969482421875,,,,,,percentage points,source_data/fashion_feedback_ladder/paired_contrasts.csv
 E,cohort contrast,additive,,cifar10,neuron specific minus strict scalar,,,,,,,,,16.392999440431595,15.87759245590533,16.90840642495786,20.0,20.0,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,0.0,17.1799988,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,1.0,14.809998899999998,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,2.0,15.9299999,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,3.0,17.049998,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,4.0,17.019999,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,5.0,15.830001199999998,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,6.0,16.079998,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,7.0,14.6099985,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,8.0,16.1799997,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,9.0,16.2200004,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,10.0,17.6900029,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,11.0,18.200001099999998,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,12.0,16.6200012,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,13.0,15.9700006,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,14.0,19.219997499999998,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,15.0,15.5099988,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,16.0,16.4899975,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,17.0,15.669998500000002,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,18.0,15.7999992,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,19.0,15.7799989,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,10800.0,17.1799988,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,10801.0,14.809998899999998,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,10802.0,15.9299999,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,10803.0,17.049998,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,10804.0,17.019999,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,10805.0,15.830001199999998,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,10806.0,16.079998,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,10807.0,14.6099985,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,10808.0,16.1799997,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,10809.0,16.2200004,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,10810.0,17.6900029,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,10811.0,18.200001099999998,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,10812.0,16.6200012,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,10813.0,15.9700006,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,10814.0,19.219997499999998,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,10815.0,15.5099988,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,10816.0,16.4899975,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,10817.0,15.669998500000002,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,10818.0,15.7999992,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+E,seed,additive,,cifar10,neuron specific minus strict scalar,,,,,,,10819.0,15.7799989,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
 F,cohort contrast,additive,,cifar10,exact path minus neuron specific,,,,,,,,,-0.8589990437030792,-1.1707598411049271,-0.5472382463012312,20.0,2.0,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,0.0,0.020003299999999998,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,1.0,-1.3300002,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,2.0,-1.3400018,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,3.0,0.0400007,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,4.0,-1.8499970000000001,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,5.0,-0.3899992,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,6.0,-2.1099985,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,7.0,-0.6799996,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,8.0,-0.8099973,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,9.0,-1.6000002999999998,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,10.0,-1.0399996999999999,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,11.0,-1.5900016,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,12.0,-0.029998999999999998,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,13.0,-0.45999880000000004,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,14.0,-1.5199959,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,15.0,-0.7699996,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,16.0,-0.4099965,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,17.0,-0.0999987,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,18.0,-0.2300024,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
-F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,19.0,-0.9799987,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,10800.0,0.020003299999999998,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,10801.0,-1.3300002,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,10802.0,-1.3400018,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,10803.0,0.0400007,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,10804.0,-1.8499970000000001,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,10805.0,-0.3899992,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,10806.0,-2.1099985,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,10807.0,-0.6799996,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,10808.0,-0.8099973,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,10809.0,-1.6000002999999998,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,10810.0,-1.0399996999999999,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,10811.0,-1.5900016,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,10812.0,-0.029998999999999998,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,10813.0,-0.45999880000000004,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,10814.0,-1.5199959,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,10815.0,-0.7699996,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,10816.0,-0.4099965,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,10817.0,-0.0999987,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,10818.0,-0.2300024,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
+F,seed,additive,,cifar10,exact path minus neuron specific,,,,,,,10819.0,-0.9799987,,,,,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
 F,equivalence margin and contrast,additive,,cifar10,exact path minus backpropagation,,,,,,,,1.0,-0.11549949645996092,-0.4572685717179687,0.2262695787980469,20.0,,percentage points,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv
 G,capture mean,shunting,,,,broadcast_k1,1.0,initial,,,,,,0.5321942782314515,0.5319510236350341,0.5324625865666578,10.0,,mean activation-error capture (fraction),source_data/image_ladder_controls/summaries/delivery_coordinate_capture_summary.csv
 G,capture mean,shunting,,,,subtrees_k3,3.0,initial,,,,,,0.5322862258020724,0.5320430852714747,0.5325545340014216,10.0,,mean activation-error capture (fraction),source_data/image_ladder_controls/summaries/delivery_coordinate_capture_summary.csv

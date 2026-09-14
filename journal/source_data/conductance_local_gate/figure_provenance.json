@@ -1,6 +1,6 @@
 {
   "code_sha256": {
-    "scripts/conductance_local_gate/figure.py": "e780dda97d9c9dbb9342cd2607b6cd4470160974a2c2948525e7a9cd6dd7b0de",
+    "scripts/conductance_local_gate/figure.py": "7a3829252f28f4bba8d49270117a86dfbb2e8368901bd08bc2867f2ded018181",
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
     "scripts/conductance_local_gate/portable_contract.py": "fea35a393f5881dfc60b3dfe810dac64f8c2e6b0d8ba01937f4a42c5ffab3c05",
     "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",
@@ -14,8 +14,8 @@
     "source_data/conductance_local_gate/figures/historical_cancellation_source.csv": "15938898c44c07bbbc5721ee727e9d54199c90e90ab8a298bb7109682dc69814",
     "source_data/conductance_local_gate/figures/local_gate_all_rates.pdf": "9ed32d20fb9af6c078e6cc391a98d9e7a36f27d9b74d9ddee45098ab9ac5ae33",
     "source_data/conductance_local_gate/figures/local_gate_all_rates.png": "26674c42572b6acdea030aa8c925920e239cf58d3f191ef1d995fa20204550ce",
-    "source_data/conductance_local_gate/figures/local_gate_primary.pdf": "a9d77a30ed31cc721ac7b192ca04afe8a37fd0690c1ef84163c91edfee80f8d6",
-    "source_data/conductance_local_gate/figures/local_gate_primary.png": "56344cfe30c89baa61a18a71e43d5596f899a3295e7411aa52f3c6a87b9321da",
+    "source_data/conductance_local_gate/figures/local_gate_primary.pdf": "a58270e1480eefdd517895dfb32e5111ca80d0cf276ce072e180260885cdf5b2",
+    "source_data/conductance_local_gate/figures/local_gate_primary.png": "f160aeca075d849e4132e567e8a470d723f8bff21a53624401272b035fd4d71a",
     "source_data/conductance_local_gate/figures/teacher_tuning_source.csv": "26b9ebc985bc662465c9a03af5a9197f54d8443383f44090121ddcf24c4c3086"
   },
   "fresh_seeds": [
@@ -97,7 +97,7 @@
       "type": "schematic"
     },
     "main_5B": {
-      "scope": "The four deliveries of the somatic error defined by model.delivered (local distal gate, exact path, unit broadcast, two-profile oracle). Schematic, no data.",
+      "scope": "The four deliveries of the somatic error defined by model.delivered (local distal gate, exact path, unit broadcast, two-profile oracle). The oracle has two fixed nonuniform distal profiles p1/p2 with exact-field amplitudes c1/c2, and unit proximal/somatic multipliers. Its equal terminal dots identify support sites, not weight magnitude. Schematic, no data.",
       "sources": [
         "scripts/conductance_local_gate/model.py",
         "source_data/conductance_local_gate/METHODS.md"
@@ -315,7 +315,7 @@
   "protocol_sha256": "c441998f6f91e1f8782b2918689806e119af567e479bcd5c94069dca837a2413",
   "scope": "Current figure-only rendering; frozen protocol and numerical summary bytes unchanged. Initial numerical audit retains its historical render hashes.",
   "source_sha256": {
-    "scripts/conductance_local_gate/figure.py": "e780dda97d9c9dbb9342cd2607b6cd4470160974a2c2948525e7a9cd6dd7b0de",
+    "scripts/conductance_local_gate/figure.py": "7a3829252f28f4bba8d49270117a86dfbb2e8368901bd08bc2867f2ded018181",
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
     "scripts/conductance_local_gate/portable_contract.py": "fea35a393f5881dfc60b3dfe810dac64f8c2e6b0d8ba01937f4a42c5ffab3c05",
     "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",

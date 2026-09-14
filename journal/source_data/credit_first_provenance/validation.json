@@ -1,9 +1,9 @@
 {
   "status": "complete",
-  "n_rows": 16419,
-  "n_unique_sources": 7438,
+  "n_rows": 16420,
+  "n_unique_sources": 7439,
   "n_retained_rows": 1560,
-  "n_new_supporting_records": 5276,
+  "n_new_supporting_records": 5277,
   "main_figures": [
     "fig1",
     "fig2",

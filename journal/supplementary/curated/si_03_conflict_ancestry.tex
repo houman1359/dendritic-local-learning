@@ -91,7 +91,7 @@ batch order. The random dense control had four routing nonzeros; the sparse
 two-route conditions had two.
 
 Training used mini-batch stochastic gradient descent (SGD), learning rate 0.3,
-batch size 64 and 60 epochs.
+batch size 64 and 60 epochs on the balanced mixture of both contexts.
 The switch endpoint applied another 12 epochs to 1,024 context-1 examples with
 balanced labels and measured the change in context-0 accuracy. For gradient
 geometry, exact and candidate per-example gradients were concatenated over

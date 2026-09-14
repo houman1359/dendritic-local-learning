@@ -342,16 +342,16 @@ RIGHT_R1 = 8.0            # one declared right reserve for D, E and F
 BOTTOM_R2 = 20.0          # room under row 2 for G's and H's footnotes
 
 
-CAPTION = r"""\caption{\textbf{Ancestry routes on reconstructed arbors compress a cell's own focal-shunt response fields better than four matched controls, at a fifth of dense wiring, and the advantage is modest and heterogeneous.}
-\textbf{A}, Median-sized arbor of the initial eight-cell cohort (root 864691135409937097, 78 segments): its 76 inhibitory-bearing segments and route 3 over the five sites it addresses; schematic, no data; scale bar, 50~$\mu$m.
-\textbf{B}, The same arbor's seven $K=8$ routes and the matrix $A_8$, collapsed to eight tree-ordered site blocks; supports nest and 32 of 70 sites lie on a route; schematic, no data (entries measured).
-\textbf{C}, A focal shunt on route 3 attenuates its descendants and makes the field $\bm t$ (block means); capture is the $W$-weighted energy of $P_{A_K,W}\bm t$; schematic, no data (field column measured).
-\textbf{D}, Total captured energy against budget $K$; cell means with unpaired 95\% cell-bootstrap bands (20,000 draws) for ancestry and surrogates; dashed floor, the shared broadcast 0.203; $n=47$ cells, 46 at $K=16$.
-\textbf{E}, That energy at $K=8$ as broadcast, spatial and unexplained shares; cell means, no interval; $n=47$ cells.
-\textbf{F}, Each cell's ancestry capture against its own 200-surrogate mean; 38 of 47 lie above equality, open symbols the 11 cells whose surrogates match it at least half the time; cohort mean with 95\% cell-bootstrap intervals; $n=47$ cells at $K=8$.
-\textbf{G}, Paired ancestry-minus-control advantages at $K=8$ on post-broadcast (filled) and total (open) scales, with all 47 within-cell differences; means and 95\% cell-bootstrap intervals; right: wiring, rank, positive cells.
-\textbf{H}, Residual capture after the broadcast in three cohorts, one mouse each; means with 95\% cell-bootstrap intervals at $K=8$; $n=8$, 47 and 8 cells.
-Randomized controls average 200 draws; the SVD is an oracle ceiling; typed-contact and joint 3D matching controls are in Supplementary Figs.~S25B and~S26B--D. Fields are modeled passive responses: compression capacity, not observed teaching. Source Data: \texttt{source\_data/curated\_publication/figure\_07\_plotted.csv}.}"""
+CAPTION = r"""\caption{\textbf{Ancestry routes on reconstructed arbors compress a cell's own focal-shunt response fields better than four budget-matched controls, at a fifth of dense wiring, and the advantage is modest and heterogeneous.}
+\textbf{A}, Median-sized arbor of the initial eight-cell cohort (root 864691135409937097, 78 segments): its 76 inhibitory-bearing segments and route 3 (green) over the five sites it addresses, its inhibitory origin ringed. Anatomy-derived reconstruction; scale bar, 50~$\mu$m.
+\textbf{B}, The same arbor's seven $K=8$ routes and the matrix $A_8$, collapsed to eight tree-ordered site blocks; supports nest. Dictionary entries are derived from the reconstruction.
+\textbf{C}, Modeled signed log-gradient-change field $\bm t$ per unit relative shunt dose, for route 3; the strip shows block means scaled by $\max_i|t_i|$, before area weighting. Capture is the $W$-weighted energy of $P_{A_K,W}\bm t$ as a fraction of that of $\bm t$. The shunt attenuates its descendants.
+\textbf{D}, Total captured energy against budget $K$; cell means with unpaired 95\% cell-bootstrap bands for ancestry and surrogates; dashed floor, the shared broadcast 0.203; $n=47$ cells, 46 at $K=16$.
+\textbf{E}, Spatial share at $K=8$, capture beyond the shared broadcast, for the six dictionaries; dashed line, that broadcast 0.203, for scale, removed from every bar; cell means, no interval; $n=47$ cells.
+\textbf{F}, Each cell's ancestry capture minus its own 200-surrogate mean, against that mean; dashed line, zero difference; open green circles, the 11 cells whose surrogates match or exceed the actual tree at least half the time; open black diamond, the cohort mean, with 95\% cell-bootstrap intervals on both coordinates; $n=47$ cells at $K=8$.
+\textbf{G}, Paired ancestry-minus-control advantages at $K=8$ on post-broadcast (filled) and total (open) scales, with all 47 within-cell differences; means and 95\% cell-bootstrap intervals, four of the 188 differences clipped to the axis edge; right: wiring, rank, positive cells.
+\textbf{H}, Residual capture after the broadcast in three cohorts from two mice (the initial and disjoint cohorts are one MICrONS mouse, Pinky a second); means with 95\% cell-bootstrap intervals at $K=8$; dots, individual cells; $n=8$, 47 and 8 cells.
+Typed-contact and joint 3D matching controls are in Supplementary Figs.~S25B and~S26B--D. Fields are modeled passive responses: compression capacity, not observed teaching. Source Data: \texttt{source\_data/curated\_publication/figure\_07\_plotted.csv}.}"""
 
 
 # ── small helpers ────────────────────────────────────────────────────────
@@ -482,11 +482,13 @@ def arbor_routes(n_routes=7):
 
 
 def block_field(arb):
-    """C's field: the measured operator column of i-site 4396, reduced to the
+    """C's field: the modeled raw operator column of i-site 4396, reduced to the
     eight tree-ordered site blocks (block means) and scaled by max |t|."""
     npz = arb["npz"]
     column = arb["i_sites"].index(ROUTE_SITE)
-    response = np.asarray(npz["weighted_response"], float)[:, column]
+    # t is in physical site coordinates.  The adjoining capture equation
+    # applies W once; weighted_response already contains sqrt(W / mean(W)).
+    response = np.asarray(npz["response"], float)[:, column]
     scale = float(np.abs(response).max())
     values = [float(response[arb["blocks"][k]].mean()) / scale
               for k in arb["block_keys"]]
@@ -896,7 +898,7 @@ def panel_c(ax, arb, field, scale):
     """C: a focal shunt on route 3 makes the field t; capture is its energy."""
     f = Frame(ax)
     core = (0.0, 0.0, 1.0, 1.0)
-    # QA round 5: the strip is the one measured element of C and it carried
+    # QA round 5: the strip is the one numerical element of C and it carried
     # no key at all -- to read any cell but the annotated one the reader had
     # to combine two prose clauses (`cells span -1.00 to 0` and `strip scaled
     # by max |t| = ...`).  The span clause is now the scale bar's own end
@@ -904,7 +906,7 @@ def panel_c(ax, arb, field, scale):
     # back to absolute units.
     foot_pt = _foot(f, core, [
         "W = excitatory contact area",
-        f"measured column for route 3; strip scaled by "
+        f"modeled column for route 3; strip scaled by "
         f"max |t| = {scale:.3f}"])
     strip_pt, form_pt, bar_pt = 34.0, 12.0, 12.0
     top = (core[0], core[1] + f.fy(foot_pt + strip_pt + form_pt), core[2],
@@ -950,7 +952,7 @@ def panel_c(ax, arb, field, scale):
                 color=COLORS["inh"], ha="left")
     f.soma(soma, output=8.0, label="z", zorder=6)
     f.error_in(soma, label="δ0", side="left")
-    # the measured field, one signed cell per site block, aligned with B
+    # the modeled field, one signed cell per site block, aligned with B
     cell_pt = 8.0
     strip_w = f.fx(8 * cell_pt)
     strip_h = f.fy(cell_pt)
@@ -1481,7 +1483,8 @@ def panel_g(canvas, ax, report, tables, summaries):
                               series=FAMILIES[method]["label"],
                               root_id=int(root_id),
                               cell_difference_pp=float(value)))
-    return pd.DataFrame(frame), out
+    from source_data_export import exact_id_table
+    return exact_id_table(frame), out
 
 
 def panel_h(ax, tables, inclusion):
@@ -1614,7 +1617,8 @@ def panel_h(ax, tables, inclusion):
                      if r["method"] == ORACLE)
     _leader(ax, (-0.50 + H_BADGE_W, y_badge - 0.050),
             (oracle_x - 0.030, oracle_hi + 0.045))
-    return pd.DataFrame(rows)
+    from source_data_export import exact_id_table
+    return exact_id_table(rows)
 
 
 # ── the canvas ───────────────────────────────────────────────────────────
@@ -1690,18 +1694,24 @@ def figure7(*, out=COMPONENT, png=True, dpi=200, quiet=False):
     # ── the plotted table and the provenance record ─────────────────────
     RECORDS.mkdir(parents=True, exist_ok=True)
     rows_b = pd.DataFrame([
-        dict(panel="B", block=i + 1, route_columns="+".join(
+        dict(panel="B", record="dictionary_block", block=i + 1, route_columns="+".join(
             str(k + 1) for k in key) or "broadcast only",
-             site_count=int(size), field_t=float(value))
-        for i, (key, size, value) in enumerate(
-            zip(arb["block_keys"], arb["block_sizes"], field))])
-    rows_c = pd.DataFrame([
-        dict(panel="C", route=k + 1, origin_segment=int(origin),
+             site_count=int(size))
+        for i, (key, size) in enumerate(
+            zip(arb["block_keys"], arb["block_sizes"]))])
+    rows_routes = pd.DataFrame([
+        dict(panel="B", record="selected_route", route=k + 1, origin_segment=int(origin),
              support_sites=int(support.sum()))
         for k, (origin, support) in enumerate(zip(arb["origins"],
                                                   arb["supports"]))])
-    plotted = pd.concat([rows_b, rows_c, rows_d, rows_e, rows_f, rows_g,
-                         rows_h], ignore_index=True)
+    rows_c = pd.DataFrame([
+        dict(panel="C", record="modeled_field_block", block=i + 1,
+             site_count=int(size), field_t=float(value * field_scale),
+             field_normalized=float(value), field_scale=float(field_scale))
+        for i, (size, value) in enumerate(zip(arb["block_sizes"], field))])
+    from source_data_export import concat_exact_id_tables
+    plotted = concat_exact_id_tables([rows_b, rows_routes, rows_c, rows_d,
+                                      rows_e, rows_f, rows_g, rows_h])
     plotted.to_csv(RECORDS / "figure_07_plotted.csv", index=False)
     # The caption's Source Data pointer names the released copy, so write it
     # from the same frame: until 2026-09-13 the released file was a stale
@@ -1722,6 +1732,7 @@ def figure7(*, out=COMPONENT, png=True, dpi=200, quiet=False):
                      if r["series"] != r["anatomy"]),
                     key=lambda r: r["cvd"])
     files = [Path(__file__), Path(anatomy.__file__),
+             Path(__file__).with_name("source_data_export.py"),
              JOURNAL / "scripts/figure_canvas.py",
              JOURNAL / "scripts/journal_style.py",
              JOURNAL / "scripts/native_schematics.py",
@@ -1750,7 +1761,7 @@ def figure7(*, out=COMPONENT, png=True, dpi=200, quiet=False):
               "4784, 4621, 4396, 4458, 4975, 4209, 4516; supports 1, 1, 5, 1, "
               "1, 29, 1; coverage 32 of 70); the matrix is the eight "
               f"tree-ordered site blocks {schem_b['block_sizes']}"),
-        "c": ("weighted_response column of i-site 4396 in the same operator "
+        "c": ("Unweighted response column of i-site 4396 in the same operator "
               "npz, reduced to the eight site blocks of B by a block mean and "
               f"scaled by max |t| = {schem_c['scale']:.5f}: "
               f"{[round(v, 3) for v in schem_c['field']]}"),

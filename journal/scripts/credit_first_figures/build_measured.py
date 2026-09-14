@@ -521,6 +521,71 @@ def _toward(f, a, b, pt):
 
 
 # ── build ────────────────────────────────────────────────────────────────
+TOPOLOGY_MEASURES = (
+    ('shared_path_partial_r', 'Partial\nrank r', 'shunting'),
+    ('shared_path_spearman_r', 'Shared\npath r', 'mute'),
+    ('negative_tree_distance_spearman_r', 'Tree\ndistance r', 'mute'),
+    ('same_major_branch_delta', 'Same major\nbranch Δ', 'mute'),
+)
+
+
+def current_plotted_table(effect_summary, effects, scan_metrics, all_scans,
+                          cell_metrics, power, reliability, support, matrix,
+                          metadata):
+    """Export the current B--F panels, not the superseded A--C layout.
+
+    Summary estimates and the individual targets/scans remain separate record
+    types.  D-inset retains negative reliabilities with drawn=False; their
+    omission from the histogram does not remove them from the source data.
+    """
+    from source_data_export import exact_id_table
+
+    rows = []
+    selected = effect_summary[
+        effect_summary.endpoint.eq('structure_function_partial_r')
+        & effect_summary.comparison.eq('selected_scans')].iloc[0]
+    rows.append(dict(panel='B', record='target_mean', **selected.to_dict()))
+    target_values = effects[effects.endpoint.eq('structure_function_partial_r')
+                            & effects.comparison.eq('selected_scans')]
+    rows.extend(dict(panel='B', record='target_value', **r)
+                for r in target_values.to_dict('records'))
+    for r in scan_metrics.to_dict('records'):
+        rows.append(dict(panel='B', record='scan_value',
+                         target_root_id=r['target_root_id'],
+                         session=r['session'], scan_idx=r['scan_idx'],
+                         endpoint='shared_path_partial_r',
+                         effect=r['shared_path_partial_r']))
+    for column, _label, _colour in TOPOLOGY_MEASURES:
+        summary = all_scans['metrics'][column]
+        rows.append(dict(panel='C', record='target_mean', endpoint=column,
+                         comparison='scan_complete', n_targets=len(cell_metrics),
+                         mean=summary['mean'],
+                         ci95_low=summary['target_bootstrap_ci95'][0],
+                         ci95_high=summary['target_bootstrap_ci95'][1],
+                         positive_targets=summary['positive_targets']))
+        rows.extend(dict(panel='C', record='target_value', endpoint=column,
+                         comparison='scan_complete',
+                         target_root_id=r['target_root_id'], effect=r[column])
+                    for r in cell_metrics.to_dict('records'))
+    rows.extend(dict(panel='D', record='detection_probability', **r)
+                for r in power.to_dict('records'))
+    rows.append(dict(panel='D', record='observed_estimate', **selected.to_dict()))
+    rows.extend(dict(panel='D-inset', record='repeat_reliability',
+                     drawn=bool(r['measured_split_half_spearman'] >= 0), **r)
+                for r in reliability.to_dict('records'))
+    for i, site in enumerate(metadata['site_segment_ids']):
+        for j, route in enumerate(metadata['selected_route_segments']):
+            rows.append(dict(panel='E', record='support_entry',
+                             target_root_id=metadata['target_root_id'],
+                             session=metadata['session'], scan_idx=metadata['scan_idx'],
+                             input_row=i + 1, route_column=j + 1,
+                             site_segment_id=int(site), route_segment_id=int(route),
+                             value=float(matrix[i, j])))
+    rows.extend(dict(panel='F', record='scan_support', **r)
+                for r in support.to_dict('records'))
+    return exact_id_table(rows)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--emit-main', action='store_true',
@@ -577,7 +642,8 @@ def main():
     assert len(shared) == 3 and len(singles) == 6, (shared, singles)
 
     # -- cohort accounting (panel A sub-title) ----------------------------
-    plotted = pd.read_csv(S / 'curated_publication/figure_09_plotted.csv')
+    effect_summary = pd.read_csv(S / 'review_evidence_reanalysis/'
+                                      'functional_native_contrasts.csv')
     effects = pd.read_csv(S / 'review_evidence_reanalysis/'
                               'functional_native_target_effects.csv')
     scan_metrics = pd.read_csv(S / 'functional_topology_all_scans/scan_metrics.csv')
@@ -594,7 +660,8 @@ def main():
                   f'{n_scans} scans ({p_lo}–{p_hi} per scan)']
 
     # -- B: the two cohorts ------------------------------------------------
-    pa = plotted[plotted.panel.eq('A')].set_index('comparison')
+    pa = effect_summary[effect_summary.endpoint.eq(
+        'structure_function_partial_r')].set_index('comparison')
     b_rows = []
     for mode, label in (('selected_scans', 'Selected scans'),
                         ('scan_complete', f'All {n_scans} scans')):
@@ -611,12 +678,8 @@ def main():
     assert len(scan_values) == n_scans
 
     # -- C: four topology measures ----------------------------------------
-    measures = (('shared_path_partial_r', 'Partial\nrank r', 'shunting'),
-                ('shared_path_spearman_r', 'Shared\npath r', 'mute'),
-                ('negative_tree_distance_spearman_r', 'Tree\ndistance r', 'mute'),
-                ('same_major_branch_delta', 'Same major\nbranch Δ', 'mute'))
     c_rows = []
-    for column, label, colour in measures:
+    for column, label, colour in TOPOLOGY_MEASURES:
         m = all_scans['metrics'][column]
         v = cell_metrics[column].to_numpy()
         assert len(v) == 7, column
@@ -643,7 +706,9 @@ def main():
     mc_hw = float(max(((d.power_ci95_high - d.power_ci95_low) / 2.0).max()
                       for d in curves.values()))
     obs = pa.loc['selected_scans']
-    reliab = plotted[plotted.panel.eq('C')].measured_split_half_spearman.to_numpy()
+    reliability = pd.read_csv(S / 'measured_alignment_power/'
+                                 'reliability_calibration_audit.csv')
+    reliab = reliability.measured_split_half_spearman.to_numpy()
     partner_index = pd.read_csv(S / 'measured_alignment_power/inputs/partner_index.csv')
     n_records = int(len(reliab))
     n_partners_unique = int(partner_index.pre_pt_root_id.nunique())
@@ -932,8 +997,7 @@ def main():
     np.savez_compressed(REC / 'figure_08_actual_support.npz', matrix=a,
                         site_ids=np.array(meta['site_segment_ids']),
                         route_ids=np.array(meta['selected_route_segments']))
-    reliability_rows = plotted[plotted.panel.eq('C')][
-        ['scan', 'partner_index', 'measured_split_half_spearman']].copy()
+    reliability_rows = reliability.copy()
     reliability_rows = reliability_rows.merge(
         partner_index[['scan', 'partner_index', 'pre_pt_root_id',
                        'repeat_reliability']],
@@ -942,21 +1006,36 @@ def main():
     assert reliability_rows.pre_pt_root_id.nunique() == n_partners_unique
     reliability_rows.to_csv(REC / 'figure_09_reliability_source.csv',
                             index=False)
+    plotted = current_plotted_table(
+        effect_summary, effects, scan_metrics, all_scans, cell_metrics, power,
+        reliability_rows, support, a, meta)
+    plotted.to_csv(S / 'curated_publication/figure_09_plotted.csv', index=False)
+    plotted.to_csv(REC / 'figure_09_plotted.csv', index=False)
 
     files = [Path(__file__),
              S / 'figure3/segment_metrics.csv',
              S / 'fulltree_boundary/output/dictionary_and_validation_metadata.jsonl',
              S / 'curated_publication/figure_09_plotted.csv',
+             S / 'review_evidence_reanalysis/functional_native_contrasts.csv',
              S / 'review_evidence_reanalysis/functional_native_target_effects.csv',
              S / 'functional_topology_all_scans/scan_metrics.csv',
              S / 'functional_topology_all_scans/cell_metrics.csv',
              S / 'functional_topology_all_scans/summary.json',
              S / 'figure5/functional_target_metrics.csv',
              S / 'measured_alignment_power/power_summary.csv',
+             S / 'measured_alignment_power/reliability_calibration_audit.csv',
              S / 'measured_alignment_power/RESULTS.json',
-             S / 'measured_alignment_power/inputs/partner_index.csv']
+             S / 'measured_alignment_power/inputs/partner_index.csv',
+             Path(__file__).with_name('source_data_export.py')]
     payload = dict(
         figure='fig9', label='fig:boundary', panels='a-f',
+        plotted_panel_mapping={
+            'B': 'selected-target estimate and values; descriptive all-scan values',
+            'C': 'four all-scan target-level topology measures',
+            'D': 'detection probability and the observed-estimate rug',
+            'D-inset': 'all repeat reliabilities, with histogram inclusion flagged',
+            'E': 'representative mapped-input by route support matrix',
+            'F': 'mapped-input coverage in every eligible scan'},
         canvas=dict(width_pt=518.4, height_pt=490.0,
                     schematic_fraction=round(
                         (176.8 * 124 + 176.8 * 108) / (464.4 * 434), 4),

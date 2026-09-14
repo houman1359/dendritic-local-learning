@@ -2,6 +2,14 @@
   "figure": "fig9",
   "label": "fig:boundary",
   "panels": "a-f",
+  "plotted_panel_mapping": {
+    "B": "selected-target estimate and values; descriptive all-scan values",
+    "C": "four all-scan target-level topology measures",
+    "D": "detection probability and the observed-estimate rug",
+    "D-inset": "all repeat reliabilities, with histogram inclusion flagged",
+    "E": "representative mapped-input by route support matrix",
+    "F": "mapped-input coverage in every eligible scan"
+  },
   "canvas": {
     "width_pt": 518.4,
     "height_pt": 490.0,
@@ -191,18 +199,21 @@
     "ci95_high": 0.105545551658
   },
   "source_sha256": {
-    "scripts/credit_first_figures/build_measured.py": "787a3b7678666ee2da621e421a1ec364e24050831671699b98644e55f1da97d9",
+    "scripts/credit_first_figures/build_measured.py": "f805bab4551e55f1dff079e09169cbace1895bc92659a70a671d88bf27824ee8",
     "source_data/figure3/segment_metrics.csv": "7829c298c4e5b3209b758fb88b92b55f070420c00b383436e5d4e1601e7ff1cf",
     "source_data/fulltree_boundary/output/dictionary_and_validation_metadata.jsonl": "12bd1392df9c3db14b9746f042786dcabbc9fd7f8acc99926277217b55554c7f",
-    "source_data/curated_publication/figure_09_plotted.csv": "d7742b1680aacce728ecc63359d905df1444787827a07aafaa9dd0249c160d57",
+    "source_data/curated_publication/figure_09_plotted.csv": "013b041fd49389ccb592b2fb4c44e061d19a31cb96ea38f6142450b6dbfb1e7f",
+    "source_data/review_evidence_reanalysis/functional_native_contrasts.csv": "c7352f39853bb27f8dcb19b9b8baec0e3442634998c6abeae7ad0e6398dbf72d",
     "source_data/review_evidence_reanalysis/functional_native_target_effects.csv": "ef15a48beb64b0f20e79990ee354ea3a2206532bc767e3b0ebf7aa8ef63c4af7",
     "source_data/functional_topology_all_scans/scan_metrics.csv": "b0817d6b33a0af971f8cc6a61533c7830b90d881877293f7d87dfecee6572386",
     "source_data/functional_topology_all_scans/cell_metrics.csv": "d8cab044c6d792c072e39ac1c02344f20d8ca09e9fbf4548a7bfff94e7f2ec7b",
     "source_data/functional_topology_all_scans/summary.json": "8f32fddca4017365228ba77599b1a0f9c0b451967717636d9a06be59a3397550",
     "source_data/figure5/functional_target_metrics.csv": "7ac04ba59e6f948a75eac9c3e82c5e6849fe835352bdca7a3ce0b51a1fdbbb89",
     "source_data/measured_alignment_power/power_summary.csv": "071538da525eeb31a148ef4d3775fb29003646d4541c26ae82c52afea323e187",
+    "source_data/measured_alignment_power/reliability_calibration_audit.csv": "77c52fcbfc6cba0bd97eff5758b4ef9f914ad31495a17bf1b678c4ba220f915f",
     "source_data/measured_alignment_power/RESULTS.json": "c4e5d721eabc86c8697e43663ebac9122a3968fd97e9f37f27a4889c6eb53ea9",
-    "source_data/measured_alignment_power/inputs/partner_index.csv": "27a73c097eb017f4f9e3d9839c0d27b3e487fa235fd4f978c43b4fd1415f8775"
+    "source_data/measured_alignment_power/inputs/partner_index.csv": "27a73c097eb017f4f9e3d9839c0d27b3e487fa235fd4f978c43b4fd1415f8775",
+    "scripts/credit_first_figures/source_data_export.py": "140262b3750a3fbe56fe9d92323788b05553dbb7cb24bb56ca75dce8b7501ee6"
   },
   "layout_findings": [
     "TEXT-ON-DATA '3/7 +'",

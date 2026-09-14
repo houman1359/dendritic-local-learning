@@ -342,6 +342,7 @@ def cohort_contrasts(paired, seed_diffs):
                 architecture=architecture, kind=kind, mean_pp=100 * r["mean"],
                 low_pp=100 * r.ci_low, high_pp=100 * r.ci_high,
                 n_seeds=int(r.n), positive_seeds=int(r.positive),
+                seed_ids=[int(seed) for seed in fan.seed],
                 seed_pp=[100 * v for v in fan.difference.to_numpy()],
                 source_table="source_data/image_ladder_controls/summaries/"
                              "paired_contrasts_six_rules.csv",
@@ -370,6 +371,7 @@ def cohort_contrasts(paired, seed_diffs):
                 mean_pp=100 * r.mean_difference, low_pp=100 * r.ci95_low,
                 high_pp=100 * r.ci95_high, n_seeds=int(r.n_seeds),
                 positive_seeds=int(round(r.positive_seed_fraction * r.n_seeds)),
+                seed_ids=[int(seed) for seed in fan.index],
                 seed_pp=[100 * v for v in fan.to_numpy()],
                 source_table="source_data/mnist_between_within_factorial/"
                              "paired_contrasts.csv", source_contrast=key))
@@ -397,6 +399,7 @@ def cohort_contrasts(paired, seed_diffs):
                 mean_pp=100 * r.mean_difference, low_pp=100 * r.ci95_low,
                 high_pp=100 * r.ci95_high, n_seeds=int(r.n_seeds),
                 positive_seeds=int(r.positive_seeds),
+                seed_ids=[int(seed) for seed in fan.index],
                 seed_pp=[100 * v for v in fan.to_numpy()],
                 source_table="source_data/fashion_feedback_ladder/"
                              "paired_contrasts.csv", source_contrast=key))
@@ -404,11 +407,19 @@ def cohort_contrasts(paired, seed_diffs):
                         "paired_contrasts.csv", float_precision="round_trip")
     cs = pd.read_csv(SOURCE / "cifar10_additive_feedback_ladder_confirmatory/"
                      "seed_outcomes.csv", float_precision="round_trip")
+    cifar_pairs = cs.pivot(index="seed", columns="feedback",
+                          values="test_accuracy").sort_index()
     for kind, key in (("identity", "neuron specific minus strict scalar"),
                       ("exact", "exact path minus neuron specific")):
         r = cifar[cifar.contrast.eq(key)].iloc[0]
         fan = np.array([float(v) for v in str(r.seed_differences).split(";")])
-        n_seed = cs[cs.feedback.eq("neuron specific")].seed.nunique()
+        paired_values = cifar_pairs[r.left] - cifar_pairs[r.right]
+        assert not paired_values.isna().any()
+        # The frozen display values are rounded to nine decimal places.
+        # Verify their ordering against actual seed IDs without changing them.
+        np.testing.assert_allclose(fan, paired_values.to_numpy(),
+                                   rtol=0, atol=5e-10)
+        n_seed = len(paired_values)
         assert len(fan) == int(r.n_seeds) == n_seed == 20
         assert abs(fan.mean() - r.mean_difference) < 1e-8
         rows.append(dict(
@@ -417,6 +428,7 @@ def cohort_contrasts(paired, seed_diffs):
             mean_pp=100 * r.mean_difference, low_pp=100 * r.ci95_low_difference,
             high_pp=100 * r.ci95_high_difference, n_seeds=int(r.n_seeds),
             positive_seeds=int(r.seeds_positive),
+            seed_ids=[int(seed) for seed in paired_values.index],
             seed_pp=[100 * v for v in fan],
             source_table="source_data/cifar10_additive_feedback_ladder_"
                          "confirmatory/paired_contrasts.csv",
@@ -486,6 +498,11 @@ def credit_entry(ax):
     f = Frame(ax)
     X, Y = f.fx, f.fy
     W = f.w_pt
+    # 2026-09-14: the cell is no longer confined to the 92 pt beside the
+    # forest gutter (the panel is unlocked), so the drawing's horizontal
+    # geometry is set from the cell width: the arbor takes the left 45 %,
+    # the two cards the right 46 pt, and the type stays on its tokens.
+    k = max(W / 92.0, 1.0)
     # -- update rule and operands -----------------------------------------
     x0, w_delta = X(1.0), _text_w_pt(ax, "δ", PT_BASE)
     _, _, starts = chain(f, (x0, Y(22.0)),
@@ -500,7 +517,7 @@ def credit_entry(ax):
                          size=PT_BASE, color=MUTE)
     hat(f, starts[0], Y(2.0), w_delta, color=MUTE)
     # -- the neuron and its one ghosted neighbour -------------------------
-    tree_w, tree_h, tree_y = 44.0, 52.0, 44.0
+    tree_w, tree_h, tree_y = min(44.0 * k, 0.46 * W), 52.0 + 4.0 * (k - 1.0), 44.0
     base = (X(0.5), Y(tree_y), X(tree_w), Y(tree_h))
     # QA 2026-09-09: no ghost neighbour in A.  A 92 pt panel that also holds
     # two task cards leaves a 7.5 pt window in which a ghost soma is both
@@ -521,7 +538,7 @@ def credit_entry(ax):
     f.text(f._off(inh, 2.6, 0.8), "I", size=PT_BASE, color=COLORS["inh"],
            ha="left")
     # -- stimulus: drawn, never a sub-300 dpi raster (DECISIONS Fig 1) -----
-    tile = (X(1.0), Y(102.0), X(15.0), Y(15.0))
+    tile = (X(1.0), Y(102.0), X(15.0 * min(k, 1.2)), Y(15.0 * min(k, 1.2)))
     tint_patch(ax, ("rect", *tile), color="grid", pct=70, edge=True,
                lw=LW_HAIR, radius_pt=1.0, zorder=1.0)
     for k in (1, 2, 3):
@@ -533,7 +550,8 @@ def credit_entry(ax):
     f.leader((tile[0] + tile[2] / 2.0, tile[1] - Y(0.5)),
              (exc[0], exc[1] + Y(3.2)), color=MUTE)
     # -- readout, loss, and the error that returns to this soma -----------
-    card_x, card_w = 48.0, 42.0
+    card_w = 42.0 + 4.0 * min(k - 1.0, 1.0)
+    card_x = W - card_w - 2.0                # flush with the cell's right edge
     read_y, read_h = 38.0, 16.0             # centred on the soma (y = 46)
     loss_y, loss_h = 62.0, 18.0
     f.task_card((X(card_x), Y(read_y), X(card_w), Y(read_h)))
@@ -897,8 +915,6 @@ def accuracy(ax, conditions, seeds, paired, within):
         ax.text(2.72, 91.8 - 1.37 * i,
                 f"{signed(values[0])} / {signed(values[1])}", ha="left",
                 va="center", fontsize=PT_BASE, color=MUTE, zorder=6)
-    ax.text(0.70, 88.2, f"four credit rules within {spread:.2f} pp — see E, F",
-            ha="left", va="center", fontsize=PT_BASE, color=MUTE, zorder=6)
     plateau_inset(ax, conditions, seeds)
     ax.set(xlim=(-0.5, 6.3), ylim=(78, 98.5), xticks=xs, xticklabels=ARM_LABELS,
            yticks=[80, 85, 90, 95], ylabel="Test accuracy (%)")
@@ -1028,9 +1044,8 @@ def cohort_forest(canvas, ax, cohorts, kind, *, value_label, xlim, xticks,
                               ("additive", "additive", 0.30)):
             ax.text(edge, out["ypos"][0] + dy, name, ha="right", va="center",
                     fontsize=PT_BASE, color=label_color(COLORS[key]), zorder=6)
-    ax.annotate("mean [95 % CI]", xy=(1.0, 0.0), xycoords="axes fraction",
-                xytext=(0.0, -25.0), textcoords="offset points", ha="right",
-                va="top", fontsize=PT_BASE, color=MUTE, annotation_clip=False)
+    # 2026-09-14: the "mean [95 % CI]" sub-label under the axis is gone; the
+    # legend defines the marks and the line cost the forest a text row.
     return out
 
 
@@ -1065,7 +1080,7 @@ def capture(ax, per_seed, summary):
     # left pad widens to -0.34 (~1.5 pt of white between dot and spine) and
     # the right edge tightens to 2.05, keeping label_x and jitter as measured
     # on 2026-09-10; the fan itself is not narrowed.
-    xlo, xhi = -0.34, 2.05
+    xlo, xhi = -0.34, 2.55            # 2026-09-14: the panel is 3 modules wide
     label_x, jitter = 1.30, 0.17       # the fan is rescaled with the axis
     ax.axhline(1.0, color=MUTE, lw=LW_REF, dashes=(2.6, 2.0), zorder=1.0)
     # on TOP of its own rule, right-aligned: below the rule the label would
@@ -1229,10 +1244,12 @@ def write_curated(conditions, seeds, paired, within, cohorts, equivalence,
             ci_low=r.low_pp, ci_high=r.high_pp, n=int(r.n_seeds),
             positive_seeds=int(r.positive_seeds), unit="percentage points",
             source_table=r.source_table))
-        for i, v in enumerate(r.seed_pp):
+        assert len(r.seed_ids) == len(r.seed_pp) == int(r.n_seeds)
+        assert len(set(r.seed_ids)) == int(r.n_seeds)
+        for seed, v in zip(r.seed_ids, r.seed_pp):
             rows.append(dict(
                 panel=panel, record="seed", architecture=r.architecture,
-                cohort=r.cohort, contrast=r.source_contrast, seed=i,
+                cohort=r.cohort, contrast=r.source_contrast, seed=int(seed),
                 value=float(v), unit="percentage points",
                 source_table=r.source_table))
     rows.append(dict(
@@ -1319,29 +1336,31 @@ def main():
     cap_seed, cap_summary = read_capture()
     RECORDS.mkdir(exist_ok=True)
 
-    canvas = NativeCanvas(490 / 72, 3, row_weights=[126, 126, 98],
-                          hgutter_pt=40, vgutter_pt=40,
+    # Design pass 2026-09-14: panel area follows content.  G draws eight
+    # points and becomes a 3-module panel at the right of the bottom row; E,
+    # whose axis spans 20 pp, takes five modules and F four.  The data panels
+    # carry no sentence titles (the legend states the claims) and the row
+    # gutter is 30 pt.  Letters keep their reading order, so no pointer in the
+    # text moves.
+    canvas = NativeCanvas(472 / 72, 3, row_weights=[126, 126, 100],
+                          hgutter_pt=40, vgutter_pt=30,
                           margins=Margins(left=36, right=12, top=22, bottom=38))
-    a = canvas.panel("A", 0, 0, 4, schematic=True, title="From loss to one arbor")
+    a = canvas.panel("A", 0, 0, 4, schematic=True, title="From loss to one arbor",
+                     lock=False)
     b = canvas.panel("B", 0, 4, 8, schematic=True,
                      title="Three ways to spread one somatic error")
-    c = canvas.panel("C", 1, 0, 4, schematic=True,
-                     title="Profiles at K = 1, 3, 12")
-    d = canvas.panel("D", 1, 4, 8, title="Per-neuron credit carries the MNIST gain")
-    e = canvas.panel("E", 2, 0, 4, title="Identity: +3.8 to +16.4 pp")
-    f_ = canvas.panel("F", 2, 4, 4, title="Resolution: −0.9 to +0.2 pp")
-    g = canvas.panel("G", 2, 8, 4,
-                     title="Training splits the two arms")
-    for ax in (e, f_, g):
-        # left: the forest label gutter (W3).  top: 8 pt (was 4) so G can
-        # carry the plan's mute sub-title BETWEEN its title and its axes, and
-        # so E's and F's 'no effect' labels clear their title boxes.  The
-        # reserve is locked per ROW, so all three titles keep one baseline;
-        # each title's pad is raised to match.  8 pt is the ceiling: at 14 pt
-        # the slot-fill spread reaches 1.44x (panel-emphasis allows 1.35x).
-        canvas.declare_reserve(ax, left=FOREST_GUTTER_PT, top=8.0)
-        ax.set_title(ax.get_title(), fontsize=PT_EMPH, color=COLORS["ink"],
-                     pad=9.0, fontweight="normal")
+    # C and D start in the same grid columns as E and F below them, so the
+    # forest label gutter locked on those columns is shared rather than paid
+    # by the forests alone (the canvas locks reserves per column).
+    c = canvas.panel("C", 1, 0, 5, schematic=True,
+                     title="Profiles at K = 1, 3, 12", lock=False)
+    d = canvas.panel("D", 1, 5, 7)
+    e = canvas.panel("E", 2, 0, 5)
+    f_ = canvas.panel("F", 2, 5, 4)
+    g = canvas.panel("G", 2, 9, 3)
+    for ax in (e, f_):
+        # the forest label gutter (W3), locked per row; G is not a forest
+        canvas.declare_reserve(ax, left=FOREST_GUTTER_PT)
 
     within = {}
     for label, key in (("K = 3 − K = 1", "subtree_k3_minus_projected_k1"),
@@ -1449,8 +1468,9 @@ def main():
     # -- render-time records and provenance -------------------------------
     np.savez_compressed(RECORDS / "figure_01_illustrative_dictionaries.npz",
                         **matrices)
-    flat = cohorts.assign(seed_pp=cohorts.seed_pp.map(
-        lambda v: ";".join(f"{x:.6f}" for x in v)))
+    flat = cohorts.assign(
+        seed_ids=cohorts.seed_ids.map(lambda v: ";".join(str(x) for x in v)),
+        seed_pp=cohorts.seed_pp.map(lambda v: ";".join(f"{x:.6f}" for x in v)))
     flat.to_csv(RECORDS / "figure_01_contrasts.csv", index=False)
     plotted = []
     for table, frame in (("condition_summary_six_rules.csv", conditions),
@@ -1458,7 +1478,8 @@ def main():
         plotted.extend(dict(panel="D", source_table=str((FRESH / table).relative_to(JOURNAL)),
                             **r) for r in frame.to_dict("records"))
     plotted.extend(dict(panel="E" if r["kind"] == "identity" else "F",
-                        **{k: v for k, v in r.items() if k != "seed_pp"})
+                        **{k: v for k, v in r.items()
+                           if k not in {"seed_ids", "seed_pp"}})
                    for r in cohorts.to_dict("records"))
     pd.DataFrame(plotted).to_csv(RECORDS / "figure_01_six_arm_source.csv",
                                  index=False)

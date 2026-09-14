@@ -278,28 +278,26 @@ Y_LIM_C = (-4.0, 100.0)
 #: The shipped caption (analysis/figure_overhaul_20260908/v2/fig3/TEXT.md).
 #: Counted under CF-8 by :func:`caption_words` and recorded in the manifest.
 CAPTION = r"""\caption{\textbf{Ancestry routes help only where the tree's partition matches the task, and only when the coefficients are supplied.}
-\textbf{A}, Eight streams enter the terminals $b_1$--$b_8$ of a balanced tree; context $c$ selects $b_3$, whose block sets the logit $z$, $\delta_0$ enters the soma, and the $K=4$ capsule delivers it to $b_3$ and sibling $b_4$. Junctions define feedback supports only; the tinted band gives each tier's coefficient by tree distance ($+1.00$ cued, $-0.15$ sibling, $-0.45$ same-half nonsibling, $-0.75$ other half).
-\textbf{B}, Ancestry dictionaries $A$ ($8\times K$), the channel carrying $b_3$'s credit shaded, over raw class-signal sums ($-3.05$, $-0.05$, $+0.85$, $+1.00$; unit-row normalization preserves the signs: $-1.08$, $-0.03$, $+0.60$, $+1.00$), beside $b_3$'s delivered support under the four matched controls at $K=4$ (random-sparse and dense rows, one draw).
-\textbf{C}, Held-out accuracy across budgets for the ancestry route, the deranged route and the best matched control (the per-seed maximum over the four controls, a ceiling); 20 paired seeds, per cent, means with 95\% seed-bootstrap intervals at epoch 80.
-\textbf{D}, Task-matched versus degree- and depth-matched rewired tree under ancestry feedback: paired $+23.15$ [$21.03$, $25.32$] and $+5.02$ [$4.19$, $5.94$] percentage points at $K=2,4$, exact ties at $K=1,8$; 20 paired seeds, 95\% paired seed-bootstrap intervals at epoch 80.
-\textbf{E}, Ancestry minus each control at $K=4$, intervals from \texttt{review\_evidence\_reanalysis/ancestry\_k4\_control\_contrasts.csv}, Holm-adjusted $P$ across four budgets (top row) or four controls; 20 paired seeds, percentage points, means with 95\% seed-bootstrap intervals at epoch 80.
-\textbf{F}, Coefficient source across the calibration $\times$ cue-noise grid at zero cue delay: soft solid, exploratory hard dashed, labelled by calibration size, against the oracle ceiling and frozen-profile floor. At 256 cues and noise 0.5 the soft readout is $-54.47$ [$-55.45$, $-53.54$] percentage points below oracle and $+7.16$ [$6.26$, $8.07$] above that floor; 20 fresh seeds (52000--52019), per cent, means with 95\% seed-bootstrap bands at epoch 80.
-Teal ramps in \textbf{A} and \textbf{F} are ordinal within this figure alone.
+\textbf{A}, Eight streams enter terminals $b_1$--$b_8$ of a balanced tree; context $c$ selects $b_3$, whose block sets the logit $z$, and the $K=4$ capsule delivers $\delta_0$ to $b_3$ and sibling $b_4$. Junctions define feedback supports only; the tinted band gives each tier's coefficient by tree distance.
+\textbf{B}, Ancestry dictionaries $A$ ($8\times K$): $K$ columns of $8/K$ terminals, the channel carrying $b_3$'s credit green and the others grey; $K=8$ is the identity, eight unit channels, $A=I$. Raw class-signal sums are $-3.05$, $-0.05$, $+0.85$, $+1.00$ (unit-norm columns preserve the signs); beside them, absolute delivered credit for context $c=b_3$ under the four controls at $K=4$ (one random-sparse/dense draw), each row normalized by its maximum: $|\Phi_{cb}|/\max_b|\Phi_{cb}|$.
+\textbf{C}, Held-out accuracy across budgets for the ancestry route, the deranged route and the best matched control (per-seed maximum over four controls, badged ceiling); 20 paired seeds, means with 95\% seed-bootstrap intervals, smaller than the markers where no bar is visible.
+\textbf{D}, Task-matched versus degree- and depth-matched rewired tree under ancestry feedback: $+23.15$ [$21.03$, $25.32$] and $+5.02$ [$4.19$, $5.94$] points at $K=2,4$, exact ties at $K=1,8$; 20 paired seeds. Bracketed intervals are paired 95\% seed-bootstrap intervals, reported, not drawn; the drawn bars are per-condition and smaller than the markers.
+\textbf{E}, Ancestry minus each control at $K=4$; the top row uses the per-seed best of the four controls (three below it plus the off-scale deranged control), so its seeds repeat theirs; Holm-adjusted $P$ across four budgets (top row) or four controls; 20 paired seeds, means with 95\% seed-bootstrap intervals; the fan is clipped at 12 points, the seed beyond it named on the panel.
+\textbf{F}, Coefficient source across the calibration $\times$ cue-noise grid at zero delay: soft solid with filled marks, exploratory hard dashed with open marks at three noise levels (covered at noise 0, where the hard series meet), labelled by calibration size, against the oracle ceiling and frozen-profile floor. At 256 cues and noise 0.5, soft minus oracle is $-54.47$ [$-55.45$, $-53.54$] and soft minus floor $+7.16$ [$6.26$, $8.07$]; 20 fresh seeds, 95\% seed-bootstrap bands.
+Teal ramps in \textbf{A} and \textbf{F} are ordinal within this figure; \textbf{C}--\textbf{F} report epoch 80 and \textbf{A},\textbf{B} are schematics.
 Source Data: \texttt{source\_data/curated\_publication/figure\_03\_plotted.csv}.}"""
 
 
 
 
 def caption_words(text=None):
-    """CF-8 word count: macros stripped, each inline math group one word."""
-    import re
-    t = (CAPTION if text is None else text).strip()
-    t = t[len("\\caption{"):-1]
-    t = re.sub(r"\$[^$]*\$", " MATH ", t)
-    t = re.sub(r"\\text(bf|tt)\{([^}]*)\}", r" \2 ", t)
-    t = re.sub(r"\\[a-zA-Z]+", " ", t)
-    t = t.replace("\\%", "%").replace("--", " ")
-    return len([w for w in re.split(r"\s+", t) if w.strip(" .,;:()[]{}")])
+    """Use the same prose count as the manuscript's 350-word legend audit."""
+    from audit_nature_communications_format import balanced_arguments, prose_words
+    caption = CAPTION if text is None else text
+    arguments = balanced_arguments(caption, "caption")
+    if len(arguments) != 1:
+        raise ValueError("Expected exactly one publication caption")
+    return len(prose_words(arguments[0]))
 
 
 def _signed(v, digits=2):
@@ -499,6 +497,14 @@ def control_supports(rng_seed=0):
     table.insert(0, "control", order)
     table.insert(1, "cued_stream", "b3")
     return table
+
+
+def normalized_control_supports(supports):
+    """Absolute delivered fields Φ[c, b], scaled by each row's maximum."""
+    magnitudes = np.abs(supports[[f"b{i + 1}" for i in range(8)]].to_numpy(float))
+    maxima = magnitudes.max(axis=1, keepdims=True)
+    assert np.all(maxima > 0), "Every control must deliver nonzero credit"
+    return magnitudes / maxima
 
 
 def rewiring_pairs(outcomes):
@@ -869,8 +875,7 @@ def panel_dictionaries(ax, prediction, supports):
     mw, mh = f.fx(col_pt * 8), f.fy(row_pt * 4)
     mx = f.fx(rx0 + lab_pt)
     my = f.fy(26.0)
-    S = np.abs(supports[[f"b{i + 1}" for i in range(8)]].to_numpy(float))
-    S = S / S.max(axis=1, keepdims=True)
+    S = normalized_control_supports(supports)
     inner = f.dictionary_matrix((mx, my, mw, mh), S, color="point_mlp",
                                 label=None, row_groups=[1] * 4,
                                 col_labels=[str(i + 1) for i in range(8)],
@@ -881,7 +886,7 @@ def panel_dictionaries(ax, prediction, supports):
                 size=PT_SMALL, color=MUTE, ha="right")
     # 3-stop key for the grey levels of the dense rank-4 row
     bar_y, bar_w = f.fy(17.0), f.fx(9.0)
-    f.text((mx - f.fx(1.5), bar_y + f.fy(2.7)), "|A|", size=PT_SMALL,
+    f.text((mx - f.fx(1.5), bar_y + f.fy(2.7)), "|Φ| / max |Φ|", size=PT_SMALL,
            color=MUTE, ha="right")
     for j, level in enumerate((0.0, 0.5, 1.0)):
         bx = mx + f.fx(3.0) + j * (bar_w + f.fx(15.0))
@@ -1416,7 +1421,10 @@ def build():
              "grouped_routes(correct_ancestry_subtrees) with the card footers "
              "the raw group sums of figure_03_coefficient_prediction.csv, and "
              "the delivered support of b3's credit under the four matched "
-             "controls at K = 4 (figure_03_control_supports.csv, rng seed 0).",
+             "controls at K = 4 (figure_03_control_supports.csv, rng seed 0). "
+             "The control heatmap shows absolute delivered fields Φ[c, b] "
+             "divided by the maximum absolute value within each row; the "
+             "source table retains the signed, unit-norm field values.",
         "C": "condition_summary.csv means with 95% seed-bootstrap intervals "
              "(dendritic_tree under correct ancestry and under derangement) "
              "and the per-seed post-training maximum over the four matched "
@@ -1547,7 +1555,7 @@ def build():
                           "and are not a new prospective prediction.",
         caption_word_count=caption_words(),
         deviations_from_plan=deviations)
-    assert 220 <= payload["caption_word_count"] <= 320, \
+    assert 220 <= payload["caption_word_count"] <= 350, \
         payload["caption_word_count"]
     (RECORDS / "figure_03_caption.tex").write_text(CAPTION + "\n")
     (RECORDS / "figure_03_sources.json").write_text(

@@ -2,14 +2,14 @@
   "figure": "Figure 7",
   "label": "fig:topology",
   "output": "figures/components/credit_first_figure_07.pdf",
-  "output_sha256": "45cb638ed1a30c0d479b53f9aca044de80ec30a2dcf0a7cf18831f23ecb2371a",
+  "output_sha256": "8054a8eea5a5bea01c4f6e9a6871bec1f6a6347882c77c4fb81cfbb9df6a2d31",
   "main_copy": "figures/main/figure_07.pdf",
   "panel_letters": "abcdefgh",
   "replication_unit": "reconstructed cell; initial eight-cell, disjoint 47-cell and Pinky second-mouse cohorts kept separate",
   "panel_sources": {
     "a": "source_data/figure3/segment_metrics.csv filtered to root 864691135409937097 (78 of 616 segments): the pia-up principal-plane projection, all 76 inhibitory-bearing segments as inh contacts, route 3's origin 4396 and its five input-bearing descendants under a 16 % shunting tint; schematic, no data",
     "b": "the same skeleton; the seven K = 8 routes reproduced in the builder from scripts/anatomy_commonmode/run.py:105-112 over source_data/anatomy_commonmode/original8/cells/operator_864691135409937097.npz with scripts/anatomy_commonmode/protocol.json (origins 4784, 4621, 4396, 4458, 4975, 4209, 4516; supports 1, 1, 5, 1, 1, 29, 1; coverage 32 of 70); the matrix is the eight tree-ordered site blocks [23, 1, 1, 1, 4, 1, 1, 38]",
-    "c": "weighted_response column of i-site 4396 in the same operator npz, reduced to the eight site blocks of B by a block mean and scaled by max |t| = 0.47842: [-0.028, -0.004, -0.003, -0.003, -0.378, -1.0, -0.119, -0.002]",
+    "c": "Unweighted response column of i-site 4396 in the same operator npz, reduced to the eight site blocks of B by a block mean and scaled by max |t| = 0.26020: [-0.057, -0.004, -0.004, -0.004, -0.755, -1.0, -0.17, -0.004]",
     "d": "v661 cohort_method_summary.csv total_capture_mean at K = 1, 2, 4, 8, 16 for the six families; ancestry and surrogate bands are 20,000-draw cell bootstraps of cell_method_summary.csv (seed 202609061 + 10i + K); broadcast floor 0.20263",
     "e": "v661 cohort_method_summary.csv at K = 8; the DRAWN quantity is spatial = incremental_total_capture_mean, the one share that is not fixed by construction, against the shared broadcast 0.20263 as its reference; broadcast = total_capture_mean - incremental_total_capture_mean and unexplained = 1 - total_capture_mean are carried by the plotted table",
     "f": "per-cell K = 8 total capture of common + ancestry against the mean of the cell's 200 common + surrogate ancestry replicates from v661/cells/rows_<root_id>.csv.gz; open symbols are the cells whose surrogate fraction >= 0.5; cohort mean with 20,000-draw cell-bootstrap intervals on both coordinates",
@@ -17,8 +17,9 @@
     "h": "residual_capture at K = 8 per cohort from each cohort's cell_method_summary.csv (initial 8, disjoint 47, Pinky 8) for ancestry, surrogate tree, depth bins, random routes and the common-constrained SVD; the cells themselves are drawn behind each mean and are rows of figure_07_plotted.csv; 20,000-draw cell bootstrap, seed 202609061 + 100 g + i; Pinky site counts and eligibility from pinky/cohort_inclusion.csv"
   },
   "source_sha256": {
-    "scripts/credit_first_figures/build_anatomy.py": "26a43c80931cf95f00d7eff49fb3584309c5e4eb8962ca95ae7e8d4fb4320974",
+    "scripts/credit_first_figures/build_anatomy.py": "138b0c46fae230e0546d457a5f88c1e192bd2f460389551978b36f19e7d79585",
     "scripts/build_main_figure_07.py": "8dd526d60d35b572a17a68c77c1813279756251052d4921471d77c3fb16b885e",
+    "scripts/credit_first_figures/source_data_export.py": "140262b3750a3fbe56fe9d92323788b05553dbb7cb24bb56ca75dce8b7501ee6",
     "scripts/figure_canvas.py": "0a0d01607cc3589a44075b6ccd7c2867dcf7d8a31f88ca1565dade247f4bcb48",
     "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a",
     "scripts/native_schematics.py": "68530ec60f85e496b9b0ba7a7ad53510dce2fae91cc38231046c1175e1cb7aeb",

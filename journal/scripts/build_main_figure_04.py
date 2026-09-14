@@ -595,7 +595,7 @@ def backward_credit_schematic(ax) -> Frame:
         ("neuron-shared", AMBER_TEXT, "local rule", "neuron", None,
          ("δ", "b", " = δ / B"), None),
         ("deranged route", GRAY_TEXT, "control", "subtree", "J2",
-         ("δ", "b", " = δ 1[b = b* + 1]"), "b → b + 1"),
+         ("δ", "b", " = δ 1[b ≡ b* + 1]"), "modulo B; B → 1"),
     )
     for (y0, h), (name, text_col, badge, mode, target, formula, tail) \
             in zip(B_CARDS, specs):
@@ -1037,10 +1037,10 @@ def forgetting_forest(canvas: NativeCanvas, ax, summary: pd.DataFrame,
                 xycoords=("axes fraction", "data"), xytext=(7.0, 0.0),
                 textcoords="offset points", ha="right", va="center",
                 fontsize=PT_BASE, color=MUTE, zorder=6, annotation_clip=False)
-    # QA 2026-09-10: the deranged route sits on the 'no forgetting' rule
-    # because it never acquired context 0 (19.6 % held-out, i.e. chance), so
-    # its 0.1 pp is undefined rather than protective.  The panel says so on
-    # the row itself; the disclosure used to be in the caption alone.
+    # The deranged route's measured accuracy change is defined, but it never
+    # acquired context 0 (19.6 % held-out, below 50 % chance). Its near-zero
+    # change therefore does not demonstrate retention of learned knowledge.
+    # Keep the numerical subtraction and disclose the failed acquisition.
     ax.annotate(f'never learned ({rows[2]["accuracy"]:.1f} %)',
                 xy=(1.0, out["ypos"][2] + 0.42),
                 xycoords=("axes fraction", "data"), xytext=(7.0, 0.0),
@@ -1052,7 +1052,7 @@ def forgetting_forest(canvas: NativeCanvas, ax, summary: pd.DataFrame,
     # is 8 pp from the left spine here, which is narrower than the label, so
     # it is set immediately to the RIGHT of the rule instead of running out
     # of the axes and over the top row's tick
-    ax.annotate("no forgetting", xy=(0.0, -0.42), xycoords=("data", "data"),
+    ax.annotate("no accuracy loss", xy=(0.0, -0.42), xycoords=("data", "data"),
                 xytext=(2.5, 0.0), textcoords="offset points",
                 fontsize=PT_BASE, color=MUTE, ha="left", va="center",
                 zorder=6, annotation_clip=False)
@@ -1410,7 +1410,7 @@ def build() -> list:
                         inset_pt=(0.0, 0.0, 0.0, 6.0))
     ax_c = canvas.panel("C", 1, 0, 4, title="Predicted and measured")
     ax_d = canvas.panel("D", 1, 4, 4, title="Trained order as predicted")
-    ax_e = canvas.panel("E", 1, 8, 4, title="Only shared credit forgets")
+    ax_e = canvas.panel("E", 1, 8, 4, title="Selection protects memory")
     # QA 2026-09-10: "shared still learns" was contradicted by the panel's
     # own endpoint -- the amber χ = 1 mean is 45.1 %, drawn below the chance
     # rule directly under the title.  The three facet titles now read as one
