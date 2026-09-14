@@ -1,7 +1,7 @@
 {
   "figure": "Figure 6",
   "output": "figures/components/restored_main_06.pdf",
-  "output_sha256": "7c4a873e9b964a7fa5b2fa63864d4d11a3cff6b04efdb7585fed748421e1fe8a",
+  "output_sha256": "f6d47c99c20c078e9ad75a6a0a24fcff8b6709f12512f20b13e3050d82cda877",
   "panel_sources": {
     "A": "Native architecture schematic (no data): D1 [8] and D3 [2,1,2] over the same eight nonsomatic compartments, the grouped-point control swatch, and the shared inventory printed from physical_depth_h4_factorial/seed_outcomes.csv (66,178 trainable parameters, 14,336 active synapses).",
     "B": "Native generative-model schematic (no data): tier supports and family strips from configs/nonlinear_physical_depth/confirmatory/aligned_shunting_bp.yaml (n_levels 3, hierarchy_branching 2, n_flat_groups 8, e_signal_delta 0.8) and supplementary/curated/si_06_physical_depth.tex Eq. S1-S2.",
@@ -27,27 +27,24 @@
     "source_data/physical_depth_budget/canonical/extension_paired_contrasts.csv": "52edceb0a920f6bd3548550deb81bc1b11a065da8d56d0ae7027157ca05e02d1"
   },
   "builder_sha256": {
-    "scripts/credit_first_figures/build_restored_main.py": "26cdd0d6c5b918c40e248b75e70d1aac2b6680eef563327ad2d93ae0421cdeed",
+    "scripts/credit_first_figures/build_restored_main.py": "6a5166fbdf4f5a133f5697c8c05b41590880d89f359c99fb4ffa0744280db109",
     "scripts/credit_first_figures/focused_main_evidence.py": "e045f0fc26ce8554af19f7d2b1ee9683ec852899f19e02e76e78163b0d74e773",
-    "scripts/figure_canvas.py": "0a0d01607cc3589a44075b6ccd7c2867dcf7d8a31f88ca1565dade247f4bcb48",
+    "scripts/figure_canvas.py": "ebfaf161136972a7461aafe57140731f01e988d34d57ed514db9536da75ce863",
     "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a"
   },
   "source_data_immutable": true,
   "new_experiments": 0,
   "layout_findings": [
-    "TEXT-ON-DATA 'at 180: +10.86 pp'",
-    "TEXT-ON-DATA '10 of 10 seeds positive'",
-    "TEXT-ON-DATA 'at 486: \u22122.94 pp'",
-    "TEXT-ON-DATA 'at 600: \u22121.52 pp [\u22121.83, \u22121.23],'",
-    "TEXT-ON-DATA '10 of 10 seeds negative'",
-    "TEXT-ON-DATA 'crossing not resolved (300\u2013325)'"
+    "TEXT-ON-DATA '+10.86 pp'",
+    "TEXT-ON-DATA '\u22122.94 pp'"
   ],
   "rendering_scope": "Existing outcomes only; no scientific endpoint or rate selection. Any redraw bootstrap uses whole existing seeds/cells, not independent pairs.",
   "helper_sha256": {
     "scripts/build_main_figure_06.py": "a9a0182be4f9f4223151d186ba6d4c8b7b6800ea9874eb4e1d49d076b17d6453"
   },
-  "schematic_fraction_percent": 14.9,
-  "schematic_fraction_formula": "sum(schematic slot w_pt*h_pt) / (live_w_pt*live_h_pt) = 2*134.47*116 / (477.4*438)",
+  "schematic_fraction_percent": 17.1,
+  "design_pass_2026_09_14": "444 pt on rows 116/108/108 at 32/30 pt gutters; no titles on C-H; C drops its tie note, E its restart sub-title, F its stopping-epoch note and two caveats, G and H every clause but the marked values (all quoted in the running text); G and H y titles shortened to fit a 99 pt axes; per-column reserves kept (save equalize=False)",
+  "schematic_fraction_formula": "sum(schematic slot w_pt*h_pt) / (live_w_pt*live_h_pt), A and B slots over the 116 pt row against the live area",
   "no_forest": "CF-6: Fig 6 uses no forest panel (recorded)",
   "in_axes_key_count": 0
 }

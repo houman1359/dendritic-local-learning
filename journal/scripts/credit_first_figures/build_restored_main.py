@@ -1541,11 +1541,15 @@ def f6_task_model(ax):
     return f
 
 
-def f6_style(ax, title):
-    """Tighten the label bands so three rows clear 3 mm (audit_row_separation)."""
+def f6_style(ax, title=None):
+    """Tighten the label bands so three rows clear 3 mm (audit_row_separation).
+
+    ``title`` is None for every data panel since the 2026-09-14 design pass.
+    """
     from journal_style import COLORS, PT_EMPH
-    ax.set_title(title, fontsize=PT_EMPH, color=COLORS['ink'], pad=1.0,
-                 fontweight='normal')
+    if title:
+        ax.set_title(title, fontsize=PT_EMPH, color=COLORS['ink'], pad=1.0,
+                     fontweight='normal')
     ax.tick_params(axis='both', which='major', pad=0.8, length=2.0)
     ax.tick_params(axis='both', which='minor', length=1.4)
     ax.xaxis.labelpad = 0.8
@@ -1708,14 +1712,9 @@ def f6_family_dose(ax, effects, seeds, rows):
                 ha='left', zorder=6, clip_on=False)
     ax.plot([2.055, 2.105], [1.3, 7.6], color=ORDINAL_RAMP[1], lw=LW_HAIR,
             zorder=1.6)
-    ax.plot([2.0, 2.0], [-0.95, -2.45], color=ORDINAL_RAMP[1], lw=LW_HAIR,
-            zorder=1.6)
-    f6_note_data(ax, 2.85, -2.6, ('exact tie at α = 1:',
-                                  'all ten pairs identical'),
-                 color=ORDINAL_RAMP[1], ha='right')
-    # QA 2026-09-10 (minor): four of the five lines (fixed D3, exact BP, the
-    # seed count and the bootstrap) are already in caption C and in the
-    # caption footer, so only the panel-specific caveat stays on the panel.
+    # Design pass 2026-09-14: the two-line tie note is gone (caption C states
+    # that the alpha = 1 local-ratio value is an exact tie in all ten pairs;
+    # the open marker is its mark).  Only the panel-specific caveat stays.
     f6_note_data(ax, -0.15, 36.5, ('intervals < markers',))
     return ax
 
@@ -1726,7 +1725,7 @@ def f6_family_dose(ax, effects, seeds, rows):
 # the data and duplicated the caption.  Both blocks are deleted and the band
 # with them; the drawn axis is still 50-100 (`f6_trim`) and the remaining
 # 7 points hold the `chance` reference label.
-F6_ACC_YLIM = (43.0, 110.0)
+F6_ACC_YLIM = (43.0, 105.0)   # 2026-09-14: 110 -> 105, E's sub-title band went
 
 
 def f6_num(value, places=2, *, signed=False):
@@ -2029,7 +2028,8 @@ def f6_accuracy_budget(ax, curves, stopping, budget, rows):
     # At 141 pt the sub-title pushed panel E's tight bounding box under
     # panel F's letter (the canvas letter check flagged it); the caption
     # carries the full sentence.
-    f6_note_data(ax, 8.0, 109.0, ('600-epoch restarts, same seeds',))
+    # (design pass 2026-09-14: the `600-epoch restarts, same seeds` note is
+    # gone; caption E carries the sentence)
     # QA 2026-09-10 (major): the four-line contrast block is DELETED.  It sat
     # between the curves and the x axis, took 39 % of the panel's height and
     # detached the axis from the data; every number in it is a paired
@@ -2051,7 +2051,7 @@ def f6_accuracy_budget(ax, curves, stopping, budget, rows):
 def f6_validation_loss(ax, curves, stopping, rows):
     """Fig 6F: best validation loss for the same six arms."""
     from journal_style import COLORS, MARKER_MS, LW_EDGE, LW_HAIR
-    ax.set(xlim=F6_XLIM, ylim=(0.010, 0.86), xticks=[0, 180, 400, 600],
+    ax.set(xlim=F6_XLIM, ylim=(0.055, 0.765), xticks=[0, 180, 400, 600],
            yticks=[0.1, 0.3, 0.5, 0.7], xlabel='Epoch',
            ylabel='Best validation loss')
     f6_trim(ax, x=(0, 600), y=(0.1, 0.7))
@@ -2067,8 +2067,6 @@ def f6_validation_loss(ax, curves, stopping, rows):
     ax.plot(stops, [float(track.loc[e]) for e in stops], marker='o',
             ls='none', ms=MARKER_MS * 0.8, mfc='white',
             mec=COLORS['point_mlp'], mew=LW_EDGE, zorder=3.4)
-    ax.plot([330.0, 330.0], [0.700, 0.664], color=COLORS['point_mlp'],
-            lw=LW_HAIR, zorder=1.8)
     rows.extend(dict(panel='F', record='stopping marker',
                      arm='exact_autograd_bp_recipe', depth=1, seed=int(r.seed),
                      metric='stopping_epoch', epoch=int(r.epochs_run),
@@ -2076,23 +2074,13 @@ def f6_validation_loss(ax, curves, stopping, rows):
                 for r in d1.sort_values(['epochs_run', 'seed']).itertuples())
     f6_direct_ends(ax, ends, {'exact BP (D3)': 0.120, 'exact path': 0.214,
                               'shared soma': 0.320}, F6_XLAB_F, lead_from=600.0)
-    f6_note_data(ax, 40.0, 0.856,
-                 ('open circles: the eight D1 stopping',
-                  'epochs, %d–%d; all 50 D3 fits reach' % (stops[0],
-                                                           stops[-1]),
-                  'the cap, loss still falling'))
-    # The y range gains 0.035 of headroom at the foot so this tag clears the
-    # bottom spine by 2.8 pt; the previous build printed it across the spine.
-    # QA 2026-09-10: the caveat applies to all six arms, so it moves out of
-    # the right-hand label column (where it shared a baseline band with
-    # `exact BP (D3)` and read as that curve's second line) into the empty
-    # lower-left gutter under the 0.1 spine bound.
-    f6_note_data(ax, 12.0, 0.062, ('convergence not established',))
-    # QA 2026-09-10 (minor): F draws all six arms but seats only three direct
-    # labels (the other three end inside the bundle, where a fourth seat
-    # cannot be separated from `exact BP (D3)` at 8.3 pt of pitch), so the
-    # panel says once, in the free band between the D1 reference and the
-    # falling bundle, that the arm-to-style mapping is E's.
+    # Design pass 2026-09-14: the three-line stopping note, its leader and
+    # the `convergence not established` caveat are gone -- caption F names
+    # the open markers, and the running text carries the 103-590 range, the
+    # fifty capped D3 fits and the maturity caveat.  F draws all six arms but
+    # seats only three direct labels (the other three end inside the bundle),
+    # so it still says once that the arm-to-style mapping is E's.
+    assert stops[0] == 103 and stops[-1] == 590, (stops[0], stops[-1])
     f6_note_data(ax, 250.0, 0.600, ('arms and styles as in E',))
     return ax
 
@@ -2328,8 +2316,18 @@ def figure6():
     import build_main_figure_06 as depth
     from figure_canvas import enforce_tokens
     rows = []
-    c = NativeCanvas(490 / 72, 3, row_weights=[116, 118, 116], hgutter_pt=37,
-                     vgutter_pt=44,
+    # Design pass 2026-09-14: 22 + 116 + 30 + 108 + 30 + 108 + 30 = 444 pt.
+    # Row 0 keeps its 116 pt for the two schematics; rows 1 and 2 are sized
+    # to their curves (the lock pass carves ~9 pt at the top of each for the
+    # x labels of the row above and the letters, so their axes are ~99 pt;
+    # G's and H's rotated y titles are 90 pt tall and must fit inside that).
+    # Gutters 32 pt horizontally (E's y decorations are 23.4 pt wide and need
+    # the 8 pt pad beside them, or D is carved 1.4 pt narrower than E) and
+    # 30 pt vertically.  No data panel carries a title, and the
+    # statistics prose in C, E, F, G and H is reduced to the marked values,
+    # each of which the running text quotes.
+    c = NativeCanvas(444 / 72, 3, row_weights=[116, 108, 108], hgutter_pt=32,
+                     vgutter_pt=30,
                      margins=Margins(left=26, right=15, top=22, bottom=30))
     a = c.panel('A', 0, 0, 4, title='Same modules, more stages',
                 schematic=True, lock=False)
@@ -2342,38 +2340,38 @@ def figure6():
 
     effects = read('task_family_alignment/architecture_effects.csv')
     seeds = read('task_family_alignment/seed_outcomes.csv')
-    cc = c.panel('C', 0, 8, 4, title='Gains must be distributed')
-    f6_style(cc, 'Gains must be distributed')
+    cc = c.panel('C', 0, 8, 4)
+    f6_style(cc)
     f6_family_dose(cc, effects, seeds, rows)
 
     conf = read('nonlinear_physical_depth_confirmatory/condition_summary.csv')
     remaining = read('remaining_physical_experiments/condition_summary.csv')
     ceiling = read('point_dendrite_credit_controls/condition_summary.csv')
     contrast = read('physical_depth_h4_factorial/paired_contrasts.csv')
-    d = c.panel('D', 1, 0, 4, title='Depth gain needs the tree')
-    f6_style(d, 'Depth gain needs the tree')
+    d = c.panel('D', 1, 0, 4)
+    f6_style(d)
     f6_depth_ladder(d, conf, remaining, ceiling, contrast, rows)
 
     curves = read('physical_depth_followup/condition_trajectory_summary.csv')
     stopping = read('physical_depth_followup/stopping_by_seed.csv')
     budget = read(
         'physical_depth_budget/canonical/extension_paired_contrasts.csv')
-    e = c.panel('E', 1, 4, 4, title='D3 keeps its lead to 600', sharey=d)
-    f6_style(e, 'D3 keeps its lead to 600')
+    e = c.panel('E', 1, 4, 4, sharey=d)
+    f6_style(e)
     f6_accuracy_budget(e, curves, stopping, budget, rows)
-    f = c.panel('F', 1, 8, 4, title='No plateau by 600 epochs', sharex=e)
-    f6_style(f, 'No plateau by 600 epochs')
+    f = c.panel('F', 1, 8, 4, sharex=e)
+    f6_style(f)
     f6_validation_loss(f, curves, stopping, rows)
 
     paired = read('physical_depth_followup/paired_trajectory_summary.csv')
-    g = c.panel('G', 2, 0, 6, title='Accuracy ranking flips with budget')
-    f6_style(g, 'Accuracy ranking flips with budget')
+    g = c.panel('G', 2, 0, 6)
+    f6_style(g)
     # QA 2026-09-10: the floor drops from -6.6 to -6.95 so the two-line
     # 600-epoch note clears the 486 note above it by 0.7 pt and still ends
     # 0.3 pt clear of the x spine; the drawn axis stays -5 to 10 (`f6_trim`).
     f6_paired(g, paired, 'test_accuracy', rows, ylim=(-6.95, 13.5),
               yticks=[-5, 0, 5, 10],
-              ylabel='Exact path − shared soma (pp)', band=(300, 325),
+              ylabel='Exact − shared soma (pp)', band=(300, 325),
               sign=('exact path ahead', 'shared soma ahead'),
               # QA 2026-09-10: 0.982, not the default 1.0 -- at the axes top
               # the key's box grazed the panel title by 0.4 pt.
@@ -2383,39 +2381,22 @@ def figure6():
               # gutter is free for the 600-epoch note (below).
               sign_bottom=(0.0, 'left'),
               rule_span=(-1.2, 13.5), zero_dy=0.45, zero_at=612.0,
-              marks=((180, 205.0, 13.3, 'left',
-                      ('at 180: +10.86 pp', '10 of 10 seeds positive'),
+              # Design pass 2026-09-14: each marked epoch carries its value
+              # and nothing else -- the seed counts, the interval and the
+              # unresolved-crossing sentence are in the running text and the
+              # caption (the shaded band IS the unresolved crossing).
+              marks=((180, 205.0, 13.3, 'left', ('+10.86 pp',),
                       ((186.0, 11.5), (203.0, 12.6))),
-                     (486, 300.0, -3.0, 'left', ('at 486: −2.94 pp',),
+                     (486, 300.0, -3.0, 'left', ('−2.94 pp',),
                       ((464.0, -3.6), (483.0, -3.05))),
-                     # QA 2026-09-10 (second pass): the 600-epoch note drops
-                     # out of the +6.5 pp band -- where it floated seven
-                     # points above and 200 epochs left of the endpoint it
-                     # names -- into the gutter under the trough, and takes
-                     # the same short shallow diagonal leader the 486 mark
-                     # uses.  From this seat the leader runs up-and-right
-                     # BELOW the curve and never crosses the zero rule, so the
-                     # error-bar reading that removed the old leader (a 28 pt
-                     # near-vertical at x = 600) does not return.  The sign
-                     # word is stated, as it is at 180.
-                     (600, 203.0, -4.36, 'left',
-                      ('at 600: −1.52 pp [−1.83, −1.23],',
-                       '10 of 10 seeds negative'),
-                      ((513.0, -4.27), (585.0, -2.01)))),
-              # QA 2026-09-10 (major): the three-line cohort footer is
-              # DELETED.  It repeated the caption footer verbatim ('Points
-              # are means over ten paired seeds; ... pointwise in E-H;
-              # accuracy endpoints are validation-selected states') and was
-              # the largest of the eight annotation elements that filled a
-              # third of this data-free plot box.
-              notes=((250.0, 9.5, 'left',
-                      ('crossing not resolved (300–325)',)),))
-    h = c.panel('H', 2, 6, 6, title='Cross-entropy favors exact, 180–600',
-                sharex=g)
-    f6_style(h, 'Cross-entropy favors exact, 180–600')
+                     (600, 600.0, -4.55, 'right', ('−1.52 pp at 600',),
+                      None)),
+              notes=())
+    h = c.panel('H', 2, 6, 6, sharex=g)
+    f6_style(h)
     f6_paired(h, paired, 'test_cross_entropy', rows, ylim=(-0.098, 0.026),
               yticks=[-0.08, -0.04, 0.0],
-              ylabel='Exact path − shared soma (nats)',
+              ylabel='Exact − shared soma (nats)',
               # QA 2026-09-10 (blocker): H's ordinate is a LOSS difference, so
               # the arm that is ahead is the one BELOW zero.  Plan §4 H copies
               # G's gain-ordinate key and is wrong here; the two readings are
@@ -2432,19 +2413,27 @@ def figure6():
               # they read as a run-on string.
               sign_top=(0.21, 0.8684, 'left'),
               zero_dy=-0.0035, zero_at=380.0, zero_va='top',
-              marks=((180, 15.0, -0.0785, 'left',
-                      ('−0.073 nats at 180, 10 of 10 seeds',),
-                      ((180.0, -0.0757), (180.0, -0.0782))),
-                     (600, 612.0, 0.01759, 'right',
-                      ('−0.021 nats at 600 (0.254 vs 0.276), 9 of 10; '
-                       'decays 3.4×',),
+              # Design pass 2026-09-14: values only; the seed counts, the
+              # 0.254 vs 0.276 endpoint pair and the decay factor are in the
+              # running text, and the sign key names what `below zero` means.
+              marks=((180, 188.0, -0.0785, 'left', ('−0.073 nats at 180',),
+                      None),
+                     (600, 612.0, 0.01759, 'right', ('−0.021 nats at 600',),
                       None)),
-              notes=((15.0, 0.0255, 'left',
-                      ('below zero: lower loss with exact-path credit',)),
-                     ))
+              notes=())
 
+    # 22 pt, not 20: the letters sit 16 pt left of the slots (10 pt from the
+    # page edge) and column 0's rotated y titles reach 26 pt out, so 22 pt
+    # keeps them clear of the letter column.  H's y decorations (29.4 pt:
+    # the '−0.08' tick labels plus the title) overrun the gutter, so the lock
+    # pass carves G's right edge by the shortfall; H takes the same amount on
+    # its left, which makes the two 6-module boxes equal without declaring a
+    # right reserve on H's column boundary -- a declared right at c1 = 12
+    # would leak onto C and F, which end on the same boundary.  save() is
+    # told not to re-equalise, so this per-column split survives.
     for name in ('C', 'D', 'E', 'F', 'G', 'H'):
-        c.declare_reserve(name, left=20.0)
+        c.declare_reserve(name, left=22.0)
+    c.declare_reserve('H', left=22.0 + c.lock_reserves()['G'][1])
     enforce_tokens(c.fig)
     sources = ['task_family_alignment/architecture_effects.csv',
                'task_family_alignment/seed_outcomes.csv',
@@ -2486,15 +2475,27 @@ def figure6():
              'absolute 600-epoch levels printed.'}
     for row in rows:
         row.setdefault('record', 'summary')
+    live_w = 518.4 - 26 - 15
+    live_h = 444.0 - 22 - 30
+    frac = 100 * sum(w * h for _, _, w, h in (c.slot_pt(0, 0, 4),
+                                              c.slot_pt(0, 4, 4))) \
+        / (live_w * live_h)
     save(c, 6, sources, panels, F6_CAPTION, rows,
          {'helper_sha256': {str(Path(depth.__file__).relative_to(J)):
                             sha(depth.__file__)},
-          'schematic_fraction_percent': 14.9,
+          'schematic_fraction_percent': round(frac, 1),
+          'design_pass_2026_09_14':
+              '444 pt on rows 116/108/108 at 32/30 pt gutters; no titles on '
+              'C-H; C drops its tie note, E its restart sub-title, F its '
+              'stopping-epoch note and two caveats, G and H every clause but '
+              'the marked values (all quoted in the running text); G and H '
+              'y titles shortened to fit a 99 pt axes; per-column reserves '
+              'kept (save equalize=False)',
           'schematic_fraction_formula':
-              'sum(schematic slot w_pt*h_pt) / (live_w_pt*live_h_pt) = '
-              '2*134.47*116 / (477.4*438)',
+              'sum(schematic slot w_pt*h_pt) / (live_w_pt*live_h_pt), A and '
+              'B slots over the 116 pt row against the live area',
           'no_forest': 'CF-6: Fig 6 uses no forest panel (recorded)',
-          'in_axes_key_count': 0})
+          'in_axes_key_count': 0}, equalize=False)
 
 
 def dictionary_cartoon(ax):
