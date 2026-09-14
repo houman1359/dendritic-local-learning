@@ -1,7 +1,7 @@
 {
   "figure": "Figure 3",
   "output": "figures/components/credit_first_figure_03.pdf",
-  "output_sha256": "128df534ab54baab811f541a8128e10b839743627c36e24cd53afc784ba23d65",
+  "output_sha256": "d834d84238a56de8d7b2213e531f60e3588b1fcdfde860baa885607426c51415",
   "plotted_table": "source_data/curated_publication/figure_03_plotted.csv",
   "plotted_table_sha256": "f6d11bb66255bcf46a0f4774ceacd578a10982f54acf8ae452f2071ad3cfcf8c",
   "panel_sources": {
@@ -9,8 +9,8 @@
     "B": "Schematic, no data: ancestry dictionaries A (8 x K) from grouped_routes(correct_ancestry_subtrees) with the card footers the raw group sums of figure_03_coefficient_prediction.csv, and the delivered support of b3's credit under the four matched controls at K = 4 (figure_03_control_supports.csv, rng seed 0). The control heatmap shows absolute delivered fields \u03a6[c, b] divided by the maximum absolute value within each row; the source table retains the signed, unit-norm field values.",
     "C": "condition_summary.csv means with 95% seed-bootstrap intervals (dendritic_tree under correct ancestry and under derangement) and the per-seed post-training maximum over the four matched controls from seed_outcomes.csv.",
     "D": "condition_summary.csv means with 95% intervals for dendritic_tree versus degree_depth_matched_rewired_tree under ancestry feedback; paired differences and 20,000-draw seed bootstrap (seed 70000) from seed_outcomes.csv.",
-    "E": "review_evidence_reanalysis/ancestry_k4_control_contrasts.csv means, 95% intervals, positive-seed counts and Holm-adjusted P; the seed fan is ancestry_control_paired_differences.csv at K = 4.",
-    "F": "review_coefficient_encoder and review_coefficient_hard_readout condition_summary.csv over the calibration x cue-noise grid at cue delay 0, with render-time 95% seed-bootstrap bands from trajectories.csv at epoch 80; contrasts from both paired_contrasts.csv (the hard readout is exploratory)."
+    "E": "review_evidence_reanalysis/ancestry_k4_control_contrasts.csv means, 95% intervals, positive-seed counts and Holm-adjusted P for five controls (the deranged row off scale, printed as its value); the seed fan is ancestry_control_paired_differences.csv at K = 4.",
+    "F": "review_coefficient_encoder and review_coefficient_hard_readout condition_summary.csv over the calibration x cue-noise grid at cue delay 0, with render-time 95% seed-bootstrap bands from trajectories.csv at epoch 80 (soft and hard facets); the right facet draws the paired_contrasts.csv learned-minus-oracle means and 95% intervals over the per-seed differences recomputed from trajectories.csv (the hard readout is exploratory)."
   },
   "source_sha256": {
     "configs/trained_subtree_address/full_factorial_confirmatory.json": "8684f7c30886e7aede7eaa71550033ad84605fcfb45220d32a2d91d2627f23b2",
@@ -28,16 +28,20 @@
     "source_data/review_coefficient_hard_readout/paired_contrasts.csv": "46b214de8efef2e8640cce199a1cbb032477ec0e9ec62fdbc727e471705751e1"
   },
   "builders_sha256": {
-    "scripts/credit_first_figures/build_ancestry.py": "d582ec0ac012c47e18e06e4c0c31082596366640555f948f3af0bef76516c3be",
+    "scripts/credit_first_figures/build_ancestry.py": "ddad1fcbd31ad5c224c938407cb00b73e8e65508b9009f61c932960148240013",
     "scripts/routing_figure_panels.py": "b6a38d2f1329add30c30e3e98317f3d5a3946a2133a75303d458723b32faf521",
     "scripts/run_trained_subtree_address_full_factorial.py": "c5d75b8ea9bc29d7fd24ca53c360c4bbdf825d7fa31f84727af4b7dd47e875dd",
-    "scripts/figure_canvas.py": "0a0d01607cc3589a44075b6ccd7c2867dcf7d8a31f88ca1565dade247f4bcb48",
+    "scripts/figure_canvas.py": "ebfaf161136972a7461aafe57140731f01e988d34d57ed514db9536da75ce863",
     "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a",
     "scripts/native_schematics.py": "68530ec60f85e496b9b0ba7a7ad53510dce2fae91cc38231046c1175e1cb7aeb",
     "scripts/credit_first_figures/focused_provenance.py": "b7ade95b88e7d10a43bab01716dee6211bc2f09735b605d489c0012a147ecea7"
   },
   "source_data_immutable": true,
   "new_experiments": 0,
-  "layout_findings": [],
+  "layout_findings": [
+    "TEXT-ON-DATA '+1.27 pp'",
+    "TEXT-ON-DATA '256'",
+    "TEXT-ON-DATA '16'"
+  ],
   "scope": "Overhaul rebuild of main Fig 3 (v2 plan, 2026-09-09). No new training, fit, endpoint selection or reseeding; every value is re-read from the frozen Source Data."
 }

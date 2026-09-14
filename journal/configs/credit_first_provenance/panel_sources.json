@@ -611,7 +611,7 @@
     },
     {
       "figure": "fig3",
-      "panel": "e-f",
+      "panel": "e",
       "path": "source_data/review_evidence_reanalysis/ancestry_k4_control_contrasts.csv",
       "role": "numerical source",
       "generator": "",
@@ -620,7 +620,7 @@
     },
     {
       "figure": "fig3",
-      "panel": "e-f",
+      "panel": "e",
       "path": "source_data/review_evidence_reanalysis/ancestry_control_paired_differences.csv",
       "role": "numerical source",
       "generator": "",
@@ -629,7 +629,7 @@
     },
     {
       "figure": "fig3",
-      "panel": "e-f",
+      "panel": "e",
       "path": "source_data/credit_first_figures/figure_03_k4_contrasts.csv",
       "role": "numerical source",
       "generator": "",
@@ -82916,7 +82916,7 @@
     },
     {
       "figure": "fig3",
-      "panel": "d",
+      "panel": "f",
       "path": "source_data/review_coefficient_encoder/trajectories.csv",
       "role": "Complete numerical input or panel-indexed display summary",
       "generator": "scripts/credit_first_figures/build_ancestry_focused.py",
@@ -82925,7 +82925,7 @@
     },
     {
       "figure": "fig3",
-      "panel": "d",
+      "panel": "f",
       "path": "source_data/review_coefficient_hard_readout/trajectories.csv",
       "role": "Complete numerical input or panel-indexed display summary",
       "generator": "scripts/credit_first_figures/build_ancestry_focused.py",

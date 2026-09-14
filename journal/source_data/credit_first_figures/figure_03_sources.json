@@ -4,8 +4,8 @@
     "B": "Schematic, no data: ancestry dictionaries A (8 x K) from grouped_routes(correct_ancestry_subtrees) with the card footers the raw group sums of figure_03_coefficient_prediction.csv, and the delivered support of b3's credit under the four matched controls at K = 4 (figure_03_control_supports.csv, rng seed 0). The control heatmap shows absolute delivered fields \u03a6[c, b] divided by the maximum absolute value within each row; the source table retains the signed, unit-norm field values.",
     "C": "condition_summary.csv means with 95% seed-bootstrap intervals (dendritic_tree under correct ancestry and under derangement) and the per-seed post-training maximum over the four matched controls from seed_outcomes.csv.",
     "D": "condition_summary.csv means with 95% intervals for dendritic_tree versus degree_depth_matched_rewired_tree under ancestry feedback; paired differences and 20,000-draw seed bootstrap (seed 70000) from seed_outcomes.csv.",
-    "E": "review_evidence_reanalysis/ancestry_k4_control_contrasts.csv means, 95% intervals, positive-seed counts and Holm-adjusted P; the seed fan is ancestry_control_paired_differences.csv at K = 4.",
-    "F": "review_coefficient_encoder and review_coefficient_hard_readout condition_summary.csv over the calibration x cue-noise grid at cue delay 0, with render-time 95% seed-bootstrap bands from trajectories.csv at epoch 80; contrasts from both paired_contrasts.csv (the hard readout is exploratory)."
+    "E": "review_evidence_reanalysis/ancestry_k4_control_contrasts.csv means, 95% intervals, positive-seed counts and Holm-adjusted P for five controls (the deranged row off scale, printed as its value); the seed fan is ancestry_control_paired_differences.csv at K = 4.",
+    "F": "review_coefficient_encoder and review_coefficient_hard_readout condition_summary.csv over the calibration x cue-noise grid at cue delay 0, with render-time 95% seed-bootstrap bands from trajectories.csv at epoch 80 (soft and hard facets); the right facet draws the paired_contrasts.csv learned-minus-oracle means and 95% intervals over the per-seed differences recomputed from trajectories.csv (the hard readout is exploratory)."
   },
   "source_sha256": {
     "configs/trained_subtree_address/full_factorial_confirmatory.json": "8684f7c30886e7aede7eaa71550033ad84605fcfb45220d32a2d91d2627f23b2",
@@ -22,10 +22,15 @@
     "source_data/review_coefficient_hard_readout/trajectories.csv": "74e4818f4d8bab92ab7c1e9d6e4fb2817cb432f164c5d0d7f6163ea643219781",
     "source_data/review_coefficient_hard_readout/paired_contrasts.csv": "46b214de8efef2e8640cce199a1cbb032477ec0e9ec62fdbc727e471705751e1"
   },
-  "layout_findings": [],
-  "forest_gutter_pt": 54.04,
-  "schematic_area_fraction": 0.2598,
-  "g4_waiver": "G4 waiver recorded for Fig 3 at the superseded 31.6 % measure; on the B12 formula the figure is 26.0 % and the waiver is dormant",
+  "layout_findings": [
+    "TEXT-ON-DATA '+1.27 pp'",
+    "TEXT-ON-DATA '256'",
+    "TEXT-ON-DATA '16'"
+  ],
+  "forest_gutter_pt": 76.8,
+  "gap_gutter_pt": 84.48,
+  "schematic_area_fraction": 0.302,
+  "g4_waiver": "G4 waiver recorded for Fig 3 at the superseded 31.6 % measure; on the B12 formula the figure is 30.2 % and the waiver is dormant",
   "derived_numbers": {
     "group_sums": {
       "1": -3.05,
@@ -113,6 +118,14 @@
         20,
         20,
         7.62939453125e-06
+      ],
+      "within_neuron_route_derangement": [
+        61.0571289062,
+        60.1293945312,
+        62.0166015625,
+        20,
+        20,
+        7.62939453125e-06
       ]
     },
     "cue_grid": {
@@ -181,10 +194,47 @@
         -17.8295898438,
         -14.8291015625
       ]
+    },
+    "cue_gaps": {
+      "soft_256_noise0_vs_oracle": [
+        -0.3125,
+        -0.42236328125,
+        -0.1953125,
+        3,
+        20
+      ],
+      "soft_16_noise0_vs_oracle": [
+        -60.8984375,
+        -61.6088867188,
+        -60.1953125,
+        0,
+        20
+      ],
+      "hard_256_noise0_vs_oracle": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        20
+      ],
+      "soft_256_noise0.5_vs_oracle": [
+        -54.4653320312,
+        -55.4467773438,
+        -53.5400390625,
+        0,
+        20
+      ],
+      "hard_256_noise0.5_vs_oracle": [
+        -16.259765625,
+        -17.8295898438,
+        -14.8291015625,
+        0,
+        20
+      ]
     }
   },
   "coefficient_scope": "Raw group sums; implemented route rows divide by sqrt(group size). Signs follow from the generator and are not a new prospective prediction.",
-  "caption_word_count": 350,
+  "caption_word_count": 346,
   "deviations_from_plan": [
     "row weights 124/113/113 at a 44 pt vertical gutter and margins 44/12/20/32, not the plan's 112/121/121 at 42 pt with margins 52/14.  FILL_W_MIN 0.92 makes left + right <= 57.5 pt a hard constraint (52 + 14 fills only 90.3 % of the page width and fails the strict audit's fill-width check); at a 112 pt row 0 the eight-module panel B has axes aspect 2.64, above PANEL_ASPECT_MAX 2.40, which DECISIONS G4 forbids relaxing, and 124 pt is the shortest row 0 that clears it; a 42 pt gutter leaves 7.2 pt between rows 1 and 2 against audit_row_separation.py's 8.5 pt floor, 44 pt measures 9.4 pt.  The two data rows gain 6 pt against the previous build and the schematic fraction falls to 26.0 %",
     "E uses lock=False plus a measured private left inset instead of declare_reserve(left=66): a declared reserve locks the whole grid column and C starts in column 0, so C and D would differ in width",
@@ -207,6 +257,7 @@
     "B's control-table column headers are the digits 1..8 under one b_i tag, not eight subscripted b_j strings: a literal Unicode subscript is not in Nimbus Sans and mathtext is banned by CF-2",
     "B's |A| scale-bar tag is plain text, not Frame.subscript",
     "F's oracle rule is labelled 'oracle 80.3 %' with no 'oracle' badge (the panel already carries the 'exploratory' badge; a second chip on the same rule would sit on the dashed hard-readout curves)",
-    "private helpers _badge (ceiling, exploratory), _delivery_arrow, _gap_span"
+    "private helpers _badge (ceiling, exploratory), _delivery_arrow, _gap_span",
+    "DESIGN PASS 2026-09-14: 450 pt tall on rows 126/96/110 at a 28 pt horizontal and 30 pt vertical gutter; C and D are three-module panels sharing one y axis (D keeps its tick labels, drops the title); E is a five-row forest at six modules with the row name over its wins / Holm P in the label column and the deranged control as an off-scale arrow with its value; F is three facets (soft, hard, paired accuracy minus oracle) under one letter; no data panel carries a title or an n / interval / epoch line; C's tie tags, D's 'exact tie' line, E's off-scale prose and F's contrast prose are gone (caption, concentric marks and the new facet carry them); the mismatched-encoder range is asserted but not printed"
   ]
 }
