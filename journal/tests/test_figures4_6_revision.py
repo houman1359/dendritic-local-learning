@@ -36,7 +36,8 @@ def restored():
 def displays(restored):
     result = {}
 
-    def capture(canvas, number, sources, panels, caption, rows, extra=None):
+    def capture(canvas, number, sources, panels, caption, rows, extra=None,
+                equalize=True):
         result[number] = (pd.DataFrame(rows), canvas)
 
     with pytest.MonkeyPatch.context() as patch:
@@ -102,9 +103,17 @@ def test_figure6_labels_preserve_the_floor_and_limit_the_loss_claim(displays):
     texts = [text.get_text() for ax in canvas.fig.axes for text in ax.texts]
     assert any('max(b' in text for text in texts)
     assert any('0.0001' in text for text in texts)
+    # design pass 2026-09-14: data panels carry no titles; the loss claim is
+    # limited by the sign key drawn on H (`shared soma ahead` at the top of a
+    # loss ordinate, `exact path ahead` at the bottom) and by the two marked
+    # values, not by a title
     titles = [ax.get_title() for ax in canvas.fig.axes]
-    assert 'Cross-entropy favors exact, 180–600' in titles
     assert 'Cross-entropy ordering does not flip' not in titles
+    assert not any('Cross-entropy' in title for title in titles)
+    assert any(text == 'exact path ahead' for text in texts)
+    assert any(text == 'shared soma ahead' for text in texts)
+    assert any(text.startswith('−0.073 nats at 180') for text in texts)
+    assert any(text.startswith('−0.021 nats at 600') for text in texts)
     loss = rows[rows.panel.eq('H') & rows.record.eq('paired curve summary')]
     assert (loss[loss.epoch.between(180, 600)]['mean'] < 0).all()
     assert float(loss[loss.epoch.eq(34)]['mean'].iloc[0]) > 0

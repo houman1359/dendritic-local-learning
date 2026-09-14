@@ -188,6 +188,33 @@ own builders during the overhaul and crashed with an `AttributeError` on a
 helper that had moved. They now exit with the name of the builder that draws
 each figure.
 
+## The design pass (2026-09-14)
+
+The author's verdict after the four readings was that the figures were true
+but did not look like a journal's: every figure was the same 518 x 490 pt,
+panel area followed the grid rather than the content (Fig. 1G gave eight
+points the area Fig. 1D gave sixty; Fig. 3E and 3F filled a row for a
+four-row forest and six points), data panels carried claim titles and
+sentences of statistics, and 40-pt gutters left white bands. All nine were
+re-laid out on 2026-09-14 (`analysis/figure_visual_review_20260910/
+DESIGN_AUDIT_20260914.md` has the per-figure table and the outcome):
+
+- panel widths and row heights follow the marks (heights now 444-472 pt);
+- no data panel carries a title; schematics keep short noun titles;
+- every sentence inside a plot box is gone, after checking that the caption
+  or the Results sentence carries the fact -- two captions were edited to
+  carry what nothing else did (Fig. 2E's paired contrast; Fig. 3E and 3F for
+  the redrawn panels), and every printed value that left a panel is now
+  asserted against its source table inside the builder instead;
+- Fig. 3F is three facets (soft, hard, paired accuracy minus oracle), Fig. 3E
+  a five-row forest with its wins and Holm P in the label column, Fig. 2B's
+  and Fig. 5B's delivery cards are drawn a quarter larger;
+- shared-axis pairs and strips (Fig. 2 C-E and F-H, Fig. 3 C/D and the F
+  facets, Fig. 4 C-E) have equal widths and equal gaps by declared reserves.
+
+Every figure passes the strict canvas audit, the three layout audits, the
+caption-sync and cross-reference tests and the provenance refresh.
+
 ## Deferred with a reason
 
 144 findings across the main figures and rebuildable sheets were deferred by
