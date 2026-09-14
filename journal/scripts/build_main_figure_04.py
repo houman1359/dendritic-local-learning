@@ -12,7 +12,12 @@ Eight panels on one :class:`figure_canvas.NativeCanvas`, in reading order:
   row 2  F/G/H held-out accuracy vs dose, one facet per branch count
 
 Built to ``analysis/figure_overhaul_20260908/v2/fig2/PLAN.md`` as amended by
-``v2/AMENDMENTS.md`` and ruled by ``v2/DECISIONS.md``.
+``v2/AMENDMENTS.md`` and ruled by ``v2/DECISIONS.md``; re-laid out in the
+2026-09-14 design pass (see the canvas constants): 464 pt tall, no titles
+on data panels, B's cards 1.25x, E without its value column and footer,
+F-H tagged ``B = b`` / ``χc = v`` in place of titles.  Where the paragraphs
+below quote the 2026-09-09 geometry (490 pt, 116/116/124, 34/46 pt
+gutters, the 33 pt shared forest gutter), the constants are the record.
 
 Cross-figure rules carried by this builder (AMENDMENTS §3)
 ----------------------------------------------------------
@@ -127,6 +132,7 @@ from figure_canvas import (
     PT_EMPH,
     SEED_MS,
     Margins,
+    forest,
     NativeCanvas,
     style_panel,
     tint_patch,
@@ -151,22 +157,34 @@ SUBTREE = ROOT / "source_data" / "trained_subtree_address"
 CURATED = ROOT / "source_data" / "curated_publication" / "figure_02_plotted.csv"
 
 # ── canvas (CF-1) ─────────────────────────────────────────────────────────
-# 16 + 116 + 46 + 116 + 46 + 124 + 26 = 490.  The plan's 22/40/32 split gives
-# a measured row-1|row-2 ink separation of 6.7 pt, under the 8.5 pt (3 mm)
-# floor of ``audit_row_separation.py``; 12 pt of outer margin moved into the
-# two vertical gutters buys the clearance without touching the row heights,
-# the canvas height or the module grid.
-CANVAS_H_PT = 490.0
+# Design pass 2026-09-14: 20 + 130 + 34 + 108 + 34 + 106 + 30 = 462.  Row 0
+# grows to 130 pt so panel B's three delivery cards are drawn 1.24x larger
+# (they are the mechanism the figure is about); the two data rows are sized
+# to their marks, 108 pt for C-E and 106 pt for the F-H strip, of which the
+# lock pass carves ~10 pt at the top for row 1's x labels and row 2's
+# letters (that carve, not a fat gutter, is what keeps the rows 3 mm apart:
+# the 46 pt gutter the 2026-09-09 build needed was a white band).  Gutters
+# are 24 pt horizontally and 34 pt vertically.  Data panels carry no titles.
+CANVAS_H_PT = 462.0
 HEIGHT_IN = CANVAS_H_PT / 72.0
-ROW_PT = [116.0, 116.0, 124.0]
-HGUTTER_PT = 34.0
-VGUTTER_PT = 46.0
-MARGINS = Margins(left=51.0, right=13.0, top=16.0, bottom=26.0)
-# One in-slot left reserve for every data column: the forest's row-label
-# gutter in E sets it, and the row-alignment contract makes every 4-module
-# panel of a row share it.  It is also what keeps column 0's y label out of
-# the 9 pt panel-letter column (audit_letter_alignment.py).
-DATA_LEFT_PT = 33.0
+ROW_PT = [130.0, 108.0, 106.0]
+HGUTTER_PT = 24.0
+VGUTTER_PT = 34.0
+MARGINS = Margins(left=41.0, right=12.0, top=20.0, bottom=30.0)
+# Declared in-slot reserves, one per module-column boundary, so that every
+# locked data panel has the same 103 pt axes width and the F-H strip has two
+# equal 46 pt gaps.  Column 0 takes 28 pt on its left (the y title and tick
+# labels of C and F reach 28.3 pt out and must clear the panel-letter
+# column, audit_letter_alignment.py) and, from the lock pass, an 8 pt pad on
+# its right: D's y title fills the whole 24 pt gutter, so the canvas pads
+# C's and F's right edge by RESERVE_PAD_PT.  Column 4 therefore takes
+# 14 + 22 and column 8 takes 36 on its right, which makes the three widths
+# equal (139.1 - 36) and the two strip gaps equal (8 + 24 + 14 = 22 + 24).
+# E (the forest, column 8 of row 1) is unlocked and carries its own measured
+# row-label gutter as a private inset, so H below it is not carved by it.
+COL0_LEFT_PT = 28.0
+COL4_LEFT_PT, COL4_RIGHT_PT = 14.0, 22.0
+COL8_RIGHT_PT = 36.0
 
 INK = COLORS["ink"]
 MUTE = COLORS["mute"]
@@ -458,17 +476,22 @@ def branch_conflict_task(ax) -> Frame:
             core[3] - frame.fy(A_FOOT_PT))
     ox, oy = core[0], core[1]
     core_w = core[2] * frame.w_pt
+    # Design pass 2026-09-14: the drawing was laid out for an 80 pt core and
+    # is stretched vertically to the core it is given (the x geometry is the
+    # cell's full width already), so a taller row 0 grows the tree instead of
+    # leaving a white band under the title.
+    ka = min(max((core[3] * frame.h_pt) / 80.0, 1.0), 1.35)
 
     def P(x_pt, y_pt):
-        return (ox + frame.fx(x_pt), oy + frame.fy(y_pt))
+        return (ox + frame.fx(x_pt), oy + frame.fy(y_pt * ka))
 
     # -- the tree -----------------------------------------------------------
     xs = [46.0, 68.0, 90.0, 112.0]
     tips = [41.0, 66.0, 92.0, 117.0]
     nodes = fan_tree(frame, origin=(ox, oy), xs_pt=xs, tip_xs_pt=tips,
-                     y_soma_pt=13.0, y_junc_pt=36.0, y_tip_pt=66.0,
-                     contact_pt=56.0, gate_lift_pt=7.0,
-                     gate_badge_offset=(5.2, 0.6),
+                     y_soma_pt=13.0 * ka, y_junc_pt=36.0 * ka,
+                     y_tip_pt=66.0 * ka, contact_pt=56.0 * ka,
+                     gate_lift_pt=7.0 * ka, gate_badge_offset=(5.2, 0.6),
                      selected=0, output=11.0,
                      delta_side="left", delta_compact=(12.0, 7.0),
                      labels=[("x", "1"), ("x", "2"), ("x", "3"), ("x", "4")])
@@ -491,20 +514,21 @@ def branch_conflict_task(ax) -> Frame:
             selected = (i == 0)
             if conflict and not selected:
                 tint_patch(ax, ("rect", ox + frame.fx(x),
-                                oy + frame.fy(y_tile),
+                                oy + frame.fy(y_tile * ka),
                                 frame.fx(tw), frame.fy(13.0)),
                            color="mute", pct=16, edge=True, lw=LW_HAIR,
                            radius_pt=1.5, zorder=1.0)
             else:
                 tint_patch(ax, ("rect", ox + frame.fx(x),
-                                oy + frame.fy(y_tile),
+                                oy + frame.fy(y_tile * ka),
                                 frame.fx(tw), frame.fy(13.0)),
                            color="mute", pct=0, face="white",
                            edge_color=INK if selected else COLORS["grid"],
                            edge=True, lw=LW_EDGE if selected else LW_HAIR,
                            radius_pt=1.5, zorder=1.0)
             sub = "1−y" if (conflict and not selected) else "y"
-            frame.subscript(P(x + tw * 0.5, y_tile + 6.5), "x", sub,
+            frame.subscript((ox + frame.fx(x + tw * 0.5),
+                             oy + frame.fy(y_tile * ka + 6.5)), "x", sub,
                             size=PT_BASE, color=INK, ha="center", va="center")
 
     # -- footer: the intermediate-dose rule, then the glyph key -------------
@@ -588,6 +612,11 @@ def backward_credit_schematic(ax) -> Frame:
     core = (core[0], core[1] + frame.fy(B_FOOT_PT), core[2],
             core[3] - frame.fy(B_FOOT_PT))
     ox0, oy0 = core[0], core[1]
+    # Design pass 2026-09-14: the three cards were laid out in an 85 pt core
+    # with 10 pt-tall fans; every point coordinate of the fan, the card stack
+    # and the text column is scaled to the core the cell provides (1.25x at
+    # the 132 pt row), the type and its 9.6 pt line pitch excepted.
+    kb = min(max((core[3] * frame.h_pt) / 85.0, 1.0), 1.4)
 
     specs = (
         ("branch-specific", GREEN_TEXT, "exact", "subtree", "J1",
@@ -599,11 +628,14 @@ def backward_credit_schematic(ax) -> Frame:
     )
     for (y0, h), (name, text_col, badge, mode, target, formula, tail) \
             in zip(B_CARDS, specs):
-        oy = oy0 + frame.fy(y0)
-        nodes = fan_tree(frame, origin=(ox0, oy), xs_pt=B_JUNC_X,
-                         tip_xs_pt=B_TIP_X, y_soma_pt=9.5, y_junc_pt=15.5,
-                         y_tip_pt=20.0, contact_pt=B_CONTACT_PT, ghost=True,
-                         selected=0, soma_r_pt=2.4, delta_compact=(10.5, 6.0),
+        oy = oy0 + frame.fy(y0 * kb)
+        nodes = fan_tree(frame, origin=(ox0, oy),
+                         xs_pt=[v * kb for v in B_JUNC_X],
+                         tip_xs_pt=[v * kb for v in B_TIP_X],
+                         y_soma_pt=9.5 * kb, y_junc_pt=15.5 * kb,
+                         y_tip_pt=20.0 * kb, contact_pt=B_CONTACT_PT * kb,
+                         ghost=True, selected=0, soma_r_pt=2.4 * kb ** 0.5,
+                         delta_compact=(10.5 * kb, 6.0 * kb),
                          # QA 2026-09-10: one badge offset for all three
                          # cards.  The neuron-shared card used to swing its
                          # 'c' to the RIGHT of the gate, where it landed on
@@ -633,7 +665,8 @@ def backward_credit_schematic(ax) -> Frame:
             # 5 pt right of the row's 'c' badge.
             frame.credit_delivery(nodes, mode="neuron", rule_color=AMBER,
                                   targets=[f"J{i + 1}" for i in range(4)])
-            _seat_neuron_bus(frame, nodes, n_lines=n_lines, n_patches=before)
+            _seat_neuron_bus(frame, nodes, n_lines=n_lines, n_patches=before,
+                             riser_x_pt=B_RISER_X * kb)
         else:
             frame.credit_delivery(nodes, mode="subtree", targets=[target],
                                   rule_color=GREEN if target == "J1" else GRAY)
@@ -648,8 +681,8 @@ def backward_credit_schematic(ax) -> Frame:
                             (j2[0], j2[1] + frame.fy(3.0)),
                             color=GRAY, lw=LW_HAIR, head=3.2, rad=0.28,
                             zorder=4.6)
-        tx = ox0 + frame.fx(B_TEXT_X)
-        ytop = oy + frame.fy(24.0)
+        tx = ox0 + frame.fx(B_TEXT_X * kb)
+        ytop = oy + frame.fy(24.0 * kb)
         frame.text((tx, ytop), name, size=PT_BASE, color=text_col,
                    ha="left", va="top")
         frame.subscript((tx, ytop - frame.fy(9.6)), formula[0], formula[1],
@@ -661,7 +694,7 @@ def backward_credit_schematic(ax) -> Frame:
         # every badge uses the neutral 'control' face: BADGE_STYLE's 'exact'
         # is drawn in ``bp`` and its 'local rule' in ``shunting``, and both
         # hues are barred / reserved in this figure (AMENDMENTS §5)
-        frame.badge((core[0] + core[2], oy + frame.fy(25.0)), "control",
+        frame.badge((core[0] + core[2], oy + frame.fy(25.0 * kb)), "control",
                     text=badge, ha="right", va="top")
     # Γ footer token (AMENDMENTS B10): a printed symbol, not a new glyph.
     # QA 2026-09-10: the header used to read "Γ ∈ {0,1}", which the second
@@ -699,7 +732,10 @@ def backward_credit_schematic(ax) -> Frame:
 #     labels sit just OUTSIDE the right spine at their own line ends.
 #   * the four-line methods note that used to fill the empty lower-left wedge
 #     is gone (caption contract CF-8 carries n, the interval and epoch 0).
-C_XLIM = (-0.02, 1.03)
+# Design pass 2026-09-14: the axis runs to 1.30 so the three end labels sit
+# INSIDE C's own box (the bottom spine still stops at χ = 1); outside it they
+# claimed 24 pt of the gutter that D's y title now fills.
+C_XLIM = (-0.02, 1.30)
 C_YLIM = (-1.35, 1.05)
 C_LABEL_X = 1.05
 C_STRIP_TOP = -0.88             # data y of the residual strip's top edge
@@ -739,7 +775,7 @@ def _residual_strip(ax):
     strip.set_ylim(*C_STRIP_YLIM)
     strip.set_xticks([])
     strip.set_yticks([-0.02, 0.0, 0.02], ["−0.02", "0", "0.02"])
-    strip.plot(list(C_XLIM), [0.0, 0.0], color=MUTE, lw=LW_REF,
+    strip.plot([C_XLIM[0], 1.0], [0.0, 0.0], color=MUTE, lw=LW_REF,
                dashes=(2.6, 2.0), zorder=1.0, solid_capstyle="butt")
     return strip
 
@@ -810,8 +846,11 @@ def initial_utility(ax, summary: pd.DataFrame) -> dict:
     # the B = 8 line passes 3 pt above the cue's last ascender at 40.5 pt
     # (at 43 pt it touches, at 46 pt it cuts through), and the two baselines
     # are now 10 pt apart, i.e. two lines, not one paragraph.
-    _corner_lines(ax, ("markers: neuron-shared",), corner=(0.0, 0.0),
-                  x_pt=1.0, y_pt=40.5, color=AMBER_TEXT)
+    # Design pass 2026-09-14: two lines, not one.  At 103 pt of axes width a
+    # one-line "markers: neuron-shared" spans the whole χ range and meets the
+    # B = 8 line; each 50 pt line stays inside the wedge.
+    _corner_lines(ax, ("markers:", "neuron-shared"), corner=(0.0, 0.0),
+                  x_pt=1.0, y_pt=44.0, step_pt=9.0, color=AMBER_TEXT)
     # QA 2026-09-10: the χ_c definition is not set here any more.  With the
     # three diamonds gone C marks no χ_c, so the token named a symbol the
     # panel no longer draws; it is defined in the caption, printed per facet
@@ -827,6 +866,7 @@ def initial_utility(ax, summary: pd.DataFrame) -> dict:
     ax.set_yticks([-0.5, 0.0, 0.5, 1.0], ["−0.5", "0", "0.5", "1"])
     ax.set_yticks([-0.75, -0.25, 0.25, 0.75], minor=True)
     ax.spines["left"].set_bounds(-0.80, C_YLIM[1])
+    ax.spines["bottom"].set_bounds(0.0, 1.0)
     ax.set_xlabel("conflict dose χ")
     ax.set_ylabel("initial signed utility s(χ)", y=0.62)
     return {"max_dev": max_dev, "excluded": excluded}
@@ -983,8 +1023,17 @@ E_XLIM = (-8.0, 86.0)
 
 
 def forgetting_forest(canvas: NativeCanvas, ax, summary: pd.DataFrame,
-                      seeds: pd.DataFrame, contrasts: pd.DataFrame) -> None:
-    """Context-0 accuracy lost after a context switch, four credit routes."""
+                      seeds: pd.DataFrame, contrasts: pd.DataFrame) -> dict:
+    """Context-0 accuracy lost after a context switch, four credit routes.
+
+    Design pass 2026-09-14: the forest and nothing else.  The right-aligned
+    value column, the ``never learned`` note and the four-line footer that
+    filled the strip under the rows are gone -- the headline interval, the
+    paired contrast, the failed acquisition and n are in the caption -- and
+    the four rows take the whole box.  E is an unlocked panel: its measured
+    row-label gutter is a private inset, so H (the same module column, one
+    row down) keeps the strip's shared axes width.
+    """
     rows = []
     for label, condition, colour, marker, hollow in E_ROWS:
         s = summary[summary.condition.eq(condition)].iloc[0]
@@ -999,81 +1048,43 @@ def forgetting_forest(canvas: NativeCanvas, ax, summary: pd.DataFrame,
             "n": int(s.n_seeds),
             "accuracy": 100.0 * float(s.mean_test_accuracy),
         })
-    out = canvas.forest(
-        ax, rows, value_label="context-0 accuracy lost (pp)",
-        reference=0.0, reference_label=None, xlim=E_XLIM, tag="",
-        label_size=PT_BASE, band=False)
-    # The four rows keep the top 4.04 row-units; the strip below them carries
-    # the reference label and the n / interval / endpoint tag, because the
-    # forest's own right-aligned tag above the top spine lands on this
-    # panel's title at 93 pt of width.
-    ax.set_ylim(5.30, -0.62)
+    out = forest(ax, rows, value_label="context-0 accuracy lost (pp)",
+                 reference=0.0, reference_label=None, xlim=E_XLIM, tag="",
+                 label_size=PT_BASE, band=False)
+    record = canvas._record_for("E")
+    record["inset_pt"] = (float(out["gutter_pt"]) + 2.0, 0.0, 0.0, 0.0)
+    # CF-7: the zero rule only over the rows, labelled immediately to its
+    # RIGHT (the rule is 8 pp from the left spine, narrower than its label)
     for line in list(ax.lines):
         xd = list(line.get_xdata())
         if len(xd) == 2 and xd[0] == xd[1] == 0.0 and line.get_linestyle() != "-":
             line.remove()
-    ax.plot([0.0, 0.0], [-0.55, 3.30], color=MUTE, lw=LW_REF, zorder=1.0,
+    ax.plot([0.0, 0.0], [-0.50, 3.45], color=MUTE, lw=LW_REF, zorder=1.0,
             dashes=(2.6, 2.0), solid_capstyle="butt")
-    # a right-aligned value column: a per-row note set inside the axes lands
-    # on its own interval, and outside the right spine it would leave the
-    # page (E is the last module column)
-    # QA 2026-09-09: every row now carries its interval.  The headline row's
-    # `55.7 [53.8, 57.6]` is 61.9 pt at 7 pt and its own seed fan already
-    # reaches 68.9 pt of the 93.2 pt axis, so the interval is set on a second
-    # right-aligned line half a row below the value, clear of the fan and of
-    # the branch-specific row's own tag.
-    values = [f'{_minus(r["mean"])} [{_minus(r["lo"])}, {_minus(r["hi"])}]'
-              for r in rows]
-    ties = int((np.asarray(rows[1]["seeds"]) == 0.0).sum())
-    values[1] = f'{_minus(rows[1]["mean"])} ({ties}/{len(rows[1]["seeds"])})'
-    head = values[0].split(" [")
-    values[0] = head[0]
-    for y, text in zip(out["ypos"], values):
-        ax.annotate(text, xy=(1.0, y), xycoords=("axes fraction", "data"),
-                    xytext=(7.0, 0.0), textcoords="offset points",
-                    ha="right", va="center", fontsize=PT_BASE, color=MUTE,
-                    zorder=6, annotation_clip=False)
-    ax.annotate("[" + head[1], xy=(1.0, out["ypos"][0] + 0.42),
-                xycoords=("axes fraction", "data"), xytext=(7.0, 0.0),
-                textcoords="offset points", ha="right", va="center",
-                fontsize=PT_BASE, color=MUTE, zorder=6, annotation_clip=False)
-    # The deranged route's measured accuracy change is defined, but it never
-    # acquired context 0 (19.6 % held-out, below 50 % chance). Its near-zero
-    # change therefore does not demonstrate retention of learned knowledge.
-    # Keep the numerical subtraction and disclose the failed acquisition.
-    ax.annotate(f'never learned ({rows[2]["accuracy"]:.1f} %)',
-                xy=(1.0, out["ypos"][2] + 0.42),
-                xycoords=("axes fraction", "data"), xytext=(7.0, 0.0),
-                textcoords="offset points", ha="right", va="center",
-                fontsize=PT_BASE, color=MUTE, zorder=6, annotation_clip=False)
-    # CF-7: right-aligned at the TOP of the rule (the forest's own placement
-    # is above the top spine, which is this panel's title band)
-    # CF-7 asks for the label right-aligned at the top of the rule; the rule
-    # is 8 pp from the left spine here, which is narrower than the label, so
-    # it is set immediately to the RIGHT of the rule instead of running out
-    # of the axes and over the top row's tick
-    ax.annotate("no accuracy loss", xy=(0.0, -0.42), xycoords=("data", "data"),
+    ax.annotate("no accuracy loss", xy=(0.0, -0.45), xycoords=("data", "data"),
                 xytext=(2.5, 0.0), textcoords="offset points",
                 fontsize=PT_BASE, color=MUTE, ha="left", va="center",
                 zorder=6, annotation_clip=False)
     c = contrasts[contrasts.contrast.eq("correct - neuron shared")
                   & contrasts.endpoint.eq("context_switch_forgetting")].iloc[0]
-    # anchored at the panel's own left edge, not the axes' -- below the rows
-    # the row-label gutter is free, so the footer gets the full 126 pt
-    _corner_lines(ax, (
-        "branch-specific − neuron-shared:",
-        f"{_signed(100.0 * float(c.mean_difference))} pp "
-        f"[{_minus(100.0 * float(c.ci95_low))}, "
-        f"{_minus(100.0 * float(c.ci95_high))}], "
-        f"P = {float(c.wilcoxon_p_two_sided):.3f}",
-        "n = 10 paired seeds; mean and 95 %",
-        "bootstrap, after 12 switch epochs",
-    # QA 2026-09-09: lifted 3 pt so the last baseline clears the x-axis
-    # spine by 3.2 pt (it stood 0.2 pt off it), while the zero rule is
-    # shortened to y = 3.30 so the first footer line still clears its foot.
-    ), corner=(0.0, 0.0), x_pt=-DATA_LEFT_PT, y_pt=36.0, step_pt=8.6)
+    ties = int((np.asarray(rows[1]["seeds"]) == 0.0).sum())
+    facts = {
+        "headline": [rows[0]["mean"], rows[0]["lo"], rows[0]["hi"]],
+        "branch_specific_ties": ties,
+        "deranged_accuracy": rows[2]["accuracy"],
+        "contrast_pp": [100.0 * float(c.mean_difference),
+                        100.0 * float(c.ci95_low),
+                        100.0 * float(c.ci95_high)],
+        "contrast_p": float(c.wilcoxon_p_two_sided),
+    }
+    # the caption prints these; the builder holds them to the source
+    np.testing.assert_allclose(facts["headline"], [55.7, 53.8, 57.6], atol=0.05)
+    np.testing.assert_allclose(facts["contrast_pp"], [-55.7, -57.7, -53.8],
+                               atol=0.05)
+    assert ties == 10 and abs(facts["deranged_accuracy"] - 19.6) < 0.05
+    assert abs(facts["contrast_p"] - 0.002) < 5e-4
     ax.set_xticks([0, 20, 40, 60])
-    return out
+    return facts
 
 
 # ── F/G/H: dose facets ────────────────────────────────────────────────────
@@ -1171,14 +1182,8 @@ def accuracy_facet(ax, summary: pd.DataFrame, seeds: pd.DataFrame,
                     values, linestyle="none", marker="o", ms=SEED_MS - 0.7,
                     markerfacecolor=colour, markeredgecolor="none",
                     alpha=0.45, zorder=2.5)
-    # token_subscript grows to the RIGHT of its base, so the chain is placed
-    # by its measured width immediately left of the rule; anchored on the
-    # rule it would run past the right spine at B = 2 and be clipped
-    chain = _text_w_pt(ax, f"χc = {boundary:.2f}", PT_BASE) + 1.2
-    per_unit = 93.16 / (F_XLIM[1] - F_XLIM[0])
-    token_subscript(ax, boundary - 0.035 - chain / per_unit, F_YLIM[1] - 0.5,
-                    "χ", "c", f" = {boundary:.2f}", size=PT_BASE,
-                    sub_size=PT_BASE, color=MUTE, ha="left", va="top")
+    # the facet tag (B and its chi_c) is drawn by facet_tags() after the lock
+    # pass, when the axes width is final and the chain can be measured
     zero = contrasts[contrasts.contrast.eq("correct - deranged")
                      & contrasts.branches.eq(branches)
                      & contrasts.endpoint.eq("test_accuracy")
@@ -1214,10 +1219,30 @@ def accuracy_facet(ax, summary: pd.DataFrame, seeds: pd.DataFrame,
                     ha="right", va="bottom", zorder=6)
         ax.set_ylabel("held-out accuracy (%)")
     ax.set_xticks([0.0, 0.5, 1.0], ["0", "0.5", "1"])
+    # every facet keeps its three tick labels and only the first carries the
+    # y title -- the set's shared-y convention (Fig. 3 D, F) -- so each facet
+    # can be read as numbers on its own
     ax.set_yticks([20, 50, 80])
-    if not first:
-        ax.tick_params(axis="y", labelleft=False)
     ax.set_xlabel("conflict dose χ")
+
+
+def facet_tags(ax, branches: int) -> None:
+    """The facet's ``B = b`` tag, right-aligned just left of its χ_c rule in
+    the one mark-free band above the branch-specific arm.  Called after the
+    lock pass so the tag is measured against the final axes width.  Design
+    pass 2026-09-14: this replaces the three facet titles; the χ_c value is
+    not printed (the rule is drawn, D plots the three values against B and
+    the caption defines χ_c), because a second line does not fit above the
+    branch-specific band and a one-line ``B = 2, χc = 1.00`` would run into
+    F's series labels.
+    """
+    fig = ax.get_figure()
+    w_pt = ax.get_position().width * fig.get_size_inches()[0] * 72.0
+    per_unit = w_pt / (F_XLIM[1] - F_XLIM[0])
+    boundary = CHI_C[branches]
+    ax.text(boundary - 0.035 - 1.2 / per_unit, F_YLIM[1] - 0.5,
+            f"B = {branches}", fontsize=PT_BASE, color=INK, ha="right",
+            va="top", zorder=6)
 
 
 # ── checks, curated table, layout ─────────────────────────────────────────
@@ -1401,25 +1426,19 @@ def build() -> list:
         HEIGHT_IN, 3, row_weights=ROW_PT,
         hgutter_pt=HGUTTER_PT, vgutter_pt=VGUTTER_PT, margins=MARGINS,
     )
-    # the 5 pt bottom inset keeps the module-normalised slot fill of the two
-    # schematics within EMPHASIS_MAX_RATIO of the data panels, whose own slot
-    # fill is capped by the shared 33 pt forest gutter.
-    ax_a = canvas.panel("A", 0, 0, 7, schematic=True, lock=False,
-                        inset_pt=(0.0, 0.0, 0.0, 6.0))
-    ax_b = canvas.panel("B", 0, 7, 5, schematic=True, lock=False,
-                        inset_pt=(0.0, 0.0, 0.0, 6.0))
-    ax_c = canvas.panel("C", 1, 0, 4, title="Predicted and measured")
-    ax_d = canvas.panel("D", 1, 4, 4, title="Trained order as predicted")
-    ax_e = canvas.panel("E", 1, 8, 4, title="Selection protects memory")
-    # QA 2026-09-10: "shared still learns" was contradicted by the panel's
-    # own endpoint -- the amber χ = 1 mean is 45.1 %, drawn below the chance
-    # rule directly under the title.  The three facet titles now read as one
-    # ordered statement about where the collapse falls.
-    ax_f = canvas.panel("F", 2, 0, 4, title="B = 2: latest collapse")
-    ax_g = canvas.panel("G", 2, 4, 4, title="B = 4: boundary moves left",
-                        sharey=ax_f)
-    ax_h = canvas.panel("H", 2, 8, 4, title="B = 8: earliest collapse",
-                        sharey=ax_f)
+    ax_a = canvas.panel("A", 0, 0, 7, schematic=True, lock=False)
+    ax_b = canvas.panel("B", 0, 7, 5, schematic=True, lock=False)
+    # data panels carry no titles (design pass 2026-09-14): the axes and the
+    # direct labels say what they show, the caption says what it means
+    ax_c = canvas.panel("C", 1, 0, 4)
+    ax_d = canvas.panel("D", 1, 4, 4)
+    ax_e = canvas.panel("E", 1, 8, 4, lock=False)
+    ax_f = canvas.panel("F", 2, 0, 4)
+    ax_g = canvas.panel("G", 2, 4, 4, sharey=ax_f)
+    ax_h = canvas.panel("H", 2, 8, 4, sharey=ax_f)
+    canvas.declare_reserve("C", left=COL0_LEFT_PT)          # column 0: C, F
+    canvas.declare_reserve("D", left=COL4_LEFT_PT, right=COL4_RIGHT_PT)
+    canvas.declare_reserve("H", right=COL8_RIGHT_PT)        # column 8: H
 
     frame_a = branch_conflict_task(ax_a)
     frame_b = backward_credit_schematic(ax_b)
@@ -1429,19 +1448,20 @@ def build() -> list:
 
     stats_c = initial_utility(ax_c, summary)
     boundary_order(ax_d, crossings, seed_boundaries, order)
-    for name in ("C", "D", "E", "F", "G", "H"):
-        canvas.declare_reserve(name, left=DATA_LEFT_PT)
-    forgetting_forest(canvas, ax_e, sub_summary, sub_seeds, sub_contrasts)
-    canvas.declare_reserve("E", left=DATA_LEFT_PT)
+    facts_e = forgetting_forest(canvas, ax_e, sub_summary, sub_seeds,
+                                sub_contrasts)
 
     accuracy_facet(ax_f, summary, seed_outcomes, contrasts, 2, first=True)
     accuracy_facet(ax_g, summary, seed_outcomes, contrasts, 4, first=False)
     accuracy_facet(ax_h, summary, seed_outcomes, contrasts, 8, first=False)
 
     style_direct_color_labels(canvas.fig)
-    _equalize_row_widths(canvas, (("C", "D", "E"), ("F", "G", "H")))
+    canvas.lock_reserves()
+    for ax, b in ((ax_f, 2), (ax_g, 4), (ax_h, 8)):
+        facet_tags(ax, b)
     findings = canvas.align_letters()
-    LAST_BUILD.update({"canvas": canvas, "stats_c": stats_c, "facts": facts})
+    LAST_BUILD.update({"canvas": canvas, "stats_c": stats_c, "facts": facts,
+                       "facts_e": facts_e})
     COMPONENT.parent.mkdir(parents=True, exist_ok=True)
     problems = canvas.save(COMPONENT, name="main_figure_04_native")
     PUBLISHED.parent.mkdir(parents=True, exist_ok=True)
@@ -1458,7 +1478,10 @@ def main() -> None:
         print(f"  {problem}")
     live_h = CANVAS_H_PT - MARGINS.top - MARGINS.bottom
     live_w = 518.4 - MARGINS.left - MARGINS.right
-    frac = (250.9 * ROW_PT[0] + 169.5 * ROW_PT[0]) / (live_w * live_h)
+    canvas = LAST_BUILD["canvas"]
+    frac = sum(w * h for _, _, w, h in (canvas.slot_pt(0, 0, 7),
+                                        canvas.slot_pt(0, 7, 5))) \
+        / (live_w * live_h)
     print(f"  canvas {FIG_W * 72:.1f} x {CANVAS_H_PT:.1f} pt, "
           f"schematic fraction {frac * 100:.1f} %")
 
