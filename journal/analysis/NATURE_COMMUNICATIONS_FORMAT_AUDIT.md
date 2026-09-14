@@ -19,7 +19,7 @@ There are 0 main tables, including Methods tables; total display items: 9.
 | Main display items | 9 figures and tables | 10 | PASS |
 | References | 64 entries (general guide) | 70 | PASS |
 | Figure 1 legend | 348 words | 350 | PASS |
-| Figure 2 legend | 336 words | 350 | PASS |
+| Figure 2 legend | 342 words | 350 | PASS |
 | Figure 3 legend | 346 words | 350 | PASS |
 | Figure 4 legend | 349 words | 350 | PASS |
 | Figure 5 legend | 350 words | 350 | PASS |
