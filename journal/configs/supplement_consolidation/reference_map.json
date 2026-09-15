@@ -2,7 +2,7 @@
   "S1": {
     "old_label": "fig:inherited_mechanistic",
     "original_asset": "figures/supplementary/figure_S01_panels_A-E.pdf",
-    "original_sha256": "de6ee1c5200193cd17053d04c119a8f8f9e37d4b50c329be4f1462aa0de8f6e2",
+    "original_sha256": "2f7eea87c8dcf46253906c60300ad6e0456c574fc0c8db0dfd83204582da9cc5",
     "primary_destination": "S1",
     "panels": {
       "A": {
@@ -658,7 +658,7 @@
   "S15": {
     "old_label": "fig:supp_nonlinear_depth_calibration",
     "original_asset": "figures/supplementary/figure_S15_panels_A-D.pdf",
-    "original_sha256": "4a9f9918a14625f3e7c91d10a64c43501851cbefa79dbbccd3144d8c04769126",
+    "original_sha256": "1ba6d9859574a52b27a94e8402c3a39f6e6c5155cdddfa9778a162ea15a7f5e4",
     "primary_destination": "S23",
     "panels": {
       "A": {
@@ -736,7 +736,7 @@
   "S17": {
     "old_label": "fig:supp_animal_credit",
     "original_asset": "figures/supplementary/figure_S17_panels_A-B.pdf",
-    "original_sha256": "4e48291e28ec06aaa7ef5e4372228897cd4a10f62b8c0593c92983dde44241dc",
+    "original_sha256": "f4ae3ae180ebebb6e9a5e89d01dfd481b57d2a8545354c7b7312af1d27dea413",
     "primary_destination": "S33",
     "panels": {
       "A": {
@@ -760,7 +760,7 @@
   "S18": {
     "old_label": "fig:supp_physical_depth_controls",
     "original_asset": "figures/supplementary/figure_S18_panels_A-K.pdf",
-    "original_sha256": "1724745817a41637c1ea2694a56172a50755e3b5b864112dc3a4256246353f5a",
+    "original_sha256": "37f6cabc1bd80a5443133398adc629e0abad9e7f8f4da55eef95769b6df32dee",
     "primary_destination": "S24",
     "panels": {
       "E": {
@@ -1005,7 +1005,7 @@
   "S25": {
     "old_label": "fig:supp_irregular_wavelets",
     "original_asset": "figures/supplementary/figure_S25_panels_A-D.pdf",
-    "original_sha256": "a09839405ae44d155c5393bb46ba58c94c917e35e02db0c1fbd636c5247f3146",
+    "original_sha256": "1cecc1a72ca95ea69cd2ce382eff5ac7d72762a0fba9c600dcff21c934cf4063",
     "primary_destination": "S27",
     "panels": {
       "A": {
@@ -1313,7 +1313,7 @@
   "S33": {
     "old_label": "fig:supp_morphology_uncertainty",
     "original_asset": "figures/supplementary/figure_S33_panels_A-F.pdf",
-    "original_sha256": "28d4ba09ff83c61615a16d2b9999b911f69bb4f88df8e70d8b113f33d767a6e3",
+    "original_sha256": "3a6ad356326371787c68b40b6f68a0ce03927e9893c5f061cef505ad099392a1",
     "primary_destination": "S28",
     "panels": {
       "A": {
@@ -1352,7 +1352,7 @@
   "S34": {
     "old_label": "fig:supp_response_baselines",
     "original_asset": "figures/supplementary/figure_S34_panels_A-D.pdf",
-    "original_sha256": "b99db41cf98d07d0bce994f5fbd846eb8fd1adceab77415b20e6d3038b9d40d7",
+    "original_sha256": "6d04a5f2fdc938954d54b7b7cc6884e028abe1c4a06c620f6690606bca797593",
     "primary_destination": "S32",
     "panels": {
       "A": {
@@ -1381,7 +1381,7 @@
   "S35": {
     "old_label": "fig:supp_original_prospective_selection",
     "original_asset": "figures/supplementary/figure_S35_panels_A-F.pdf",
-    "original_sha256": "050b111c5eb781f1195af183ccafa6d2813071247cb6f4711b4c1e0e58bbb53c",
+    "original_sha256": "f97defa94f4dc010c45ae73a211c0195dd2f8996dabbe09b08f1efadf28d720c",
     "primary_destination": "S34",
     "panels": {
       "A": {
@@ -2538,7 +2538,7 @@
   "N14": {
     "old_label": "fig:si_boolean_capacity",
     "original_asset": "figures/supplementary/figure_boolean_capacity_native.pdf",
-    "original_sha256": "693e3361c1c217bdb9dd5c8984afebbf302fea694ee6d5884171e278953784ee",
+    "original_sha256": "613407dd274ba81bc77342e06f419c66bca3311577b2bf372a464d1d5805048e",
     "primary_destination": "S14",
     "panels": {
       "A": {
@@ -2577,7 +2577,7 @@
   "N15": {
     "old_label": "fig:si_boolean_learning",
     "original_asset": "figures/supplementary/figure_boolean_learning_native.pdf",
-    "original_sha256": "8a234b9ccab1a368d66d7df583b517a74a9a1594203730f7b63e17609514dccd",
+    "original_sha256": "c908da0b1b0dbbbced89a564f602f8bfa9430be4fa5618986d8cb95d5a2cca9f",
     "primary_destination": "S15",
     "panels": {
       "A": {
@@ -2626,7 +2626,7 @@
   "N18": {
     "old_label": "fig:si_conductance_grouping",
     "original_asset": "figures/supplementary/figure_conductance_grouping_native.pdf",
-    "original_sha256": "5b12f26e4f81dde27fe8645f7c474de8a6039ae673a9d6d51536edee7b447914",
+    "original_sha256": "67062a920cfd48c0eea9fe59691741a8ba9dc2e9b51b700adbb85fc33a60b651",
     "primary_destination": "S18",
     "panels": {
       "A": {
@@ -2665,7 +2665,7 @@
   "N7": {
     "old_label": "fig:si_mnist_dictionary_geometry",
     "original_asset": "figures/supplementary/figure_mnist_dictionary_geometry_native.pdf",
-    "original_sha256": "b8b0be1d0f6ba67b5aeeefbf9475ac1e233eafc2227194f46f6362f4b465f902",
+    "original_sha256": "726cd37b4c5212b773f950b83f964bc57f6cabec3ecab54e80f77cb1553343a9",
     "primary_destination": "S7",
     "panels": {
       "A": {
@@ -2694,7 +2694,7 @@
   "N8": {
     "old_label": "fig:si_error_field_geometry",
     "original_asset": "figures/supplementary/figure_error_field_geometry_native.pdf",
-    "original_sha256": "9676614b37d886202f92c21c4684671d86ede5ab2decb83b8141efbee24e9286",
+    "original_sha256": "19ecb97cbe77e26d05d1a8f8935b1aa3befdf85f33942d25cd56719158ffa6e6",
     "primary_destination": "S8",
     "panels": {
       "A": {
@@ -2718,7 +2718,7 @@
   "N12": {
     "old_label": "fig:si_scalar_tree_capacity",
     "original_asset": "figures/supplementary/figure_scalar_tree_capacity_native.pdf",
-    "original_sha256": "6713199647eabc34f4a116f873ee5d5835eb43ad80e08706bcf716e956d99696",
+    "original_sha256": "a6f10ed7c3e250a2bfc6c89f7f03b54f81ecfd3cc9a7aed370c235853df80c41",
     "primary_destination": "S12",
     "panels": {
       "A": {
@@ -2757,7 +2757,7 @@
   "N13": {
     "old_label": "fig:si_oracle_profile_credit",
     "original_asset": "figures/supplementary/figure_oracle_profile_credit_native.pdf",
-    "original_sha256": "53bb2ed90f68b12a7dacc22455d86d4399b3644db83afbc7dcf852fbe532d257",
+    "original_sha256": "992dd2dec2079a955dbceb3a2fec752c759f9f36c6e768862172f91182adaeff",
     "primary_destination": "S13",
     "panels": {
       "A": {
@@ -2796,7 +2796,7 @@
   "N16": {
     "old_label": "fig:si_fixed_profile_budget",
     "original_asset": "figures/supplementary/figure_fixed_profile_budget_native.pdf",
-    "original_sha256": "ee76d1bfb98ce914290ec3ba98abe11cfc302c3d37e80c80143d045ed7882fc1",
+    "original_sha256": "703c18620bb20b716fa400e53fe89232799dc781ca20c00c39d118e250c9713f",
     "primary_destination": "S16",
     "panels": {
       "A": {
@@ -2835,7 +2835,7 @@
   "N17": {
     "old_label": "fig:si_credit_optimizer_controls",
     "original_asset": "figures/supplementary/figure_credit_optimizer_controls_native.pdf",
-    "original_sha256": "3be11afdaee13b954b914a0195a6c9bdfb855fb62aeae1141bbfc1c67feca2b8",
+    "original_sha256": "193cf1d65c9fc6bb42cd40c51b658b32277cf94c02d8c149985c1d17c2a5e8f7",
     "primary_destination": "S17",
     "panels": {
       "A": {
@@ -2864,7 +2864,7 @@
   "N19": {
     "old_label": "fig:si_conductance_precision",
     "original_asset": "figures/supplementary/figure_conductance_precision_native.pdf",
-    "original_sha256": "c07882dbec68696a256b8a72a24ea78d6f1e5c23106ab93f6a689aba4a3cfd26",
+    "original_sha256": "5b54316d76e494380b1c7797c696f56084d444250f6457201708041d6a4535d2",
     "primary_destination": "S19",
     "panels": {
       "A": {
@@ -2893,7 +2893,7 @@
   "N20": {
     "old_label": "fig:si_conductance_optimization",
     "original_asset": "figures/supplementary/figure_conductance_optimization_native.pdf",
-    "original_sha256": "719d6db080295869e015394a6cfe1ac16f106f59f4a7943c28b013a445930781",
+    "original_sha256": "7472557cd667e2991d970a2824b96ebe42a24773525330bf2679c0e4353d6173",
     "primary_destination": "S20",
     "panels": {
       "A": {
@@ -2927,7 +2927,7 @@
   "N21": {
     "old_label": "fig:si_local_gate_controls",
     "original_asset": "figures/supplementary/figure_local_gate_controls_native.pdf",
-    "original_sha256": "03eae0c3159c06269f22dca51c2e7b170ad13e6c7db487b22c376e430e725382",
+    "original_sha256": "72d2e71acd6490f09eeb24d9cc9570c5a730c05167051b8e8740b33559fa6b5a",
     "primary_destination": "S21",
     "panels": {
       "A": {
@@ -2956,7 +2956,7 @@
   "N35": {
     "old_label": "fig:si_finite_horizon",
     "original_asset": "figures/supplementary/figure_finite_horizon_native.pdf",
-    "original_sha256": "0bd186ba0544d0c454bde5fb7ad88b461f45a6cafc82594149b3d3247e6bef9f",
+    "original_sha256": "a43d67fd9bd3ea2bfe6c4fba1555c35c3d24efe114669ae545f3f1b0f0651f98",
     "primary_destination": "S35",
     "panels": {
       "A": {
@@ -2995,7 +2995,7 @@
   "N36": {
     "old_label": "fig:si_morphology_estimation",
     "original_asset": "figures/supplementary/figure_morphology_estimation_native.pdf",
-    "original_sha256": "947b7a8ec5cb95e2c985d4b739ff789342156095db938be881faae9c9c3e700f",
+    "original_sha256": "06f874cbb45f43a3c6b7902038c3b3c25f88e2bf2b0a4a6319270bbf7cc780f3",
     "primary_destination": "S36",
     "panels": {
       "A": {
@@ -3044,7 +3044,7 @@
   "N3": {
     "old_label": "fig:si_utility_signal_noise",
     "original_asset": "figures/supplementary/figure_utility_signal_noise_native.pdf",
-    "original_sha256": "b14839997895ed78e12ed8c900d653fdba138b4bca5b961d336c63694d22c7c0",
+    "original_sha256": "d18b9c71d7dff0aef2bac50609a1b7d45733851e1eca64a66e09732f2c5f1508",
     "primary_destination": "S3",
     "panels": {
       "A": {
@@ -3088,7 +3088,7 @@
   "N22": {
     "old_label": "fig:si_physical_architecture",
     "original_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-    "original_sha256": "ba9393961e1dc134e3d8f5ffb54eaaba0af53fa84a2437dbb1bf9bb969a20f95",
+    "original_sha256": "e7b8f866b11964781b1babb0d6b624cfebe2eec31469e6bf937d21e35487ffdc",
     "primary_destination": "S22",
     "panels": {
       "A": {
@@ -3137,7 +3137,7 @@
   "N30": {
     "old_label": "fig:si_shunt_replication",
     "original_asset": "figures/supplementary/figure_shunt_replication_native.pdf",
-    "original_sha256": "2560f5fc0100efbf7f02a4675476f750f49ae79e7f803dfac97a4635d986c167",
+    "original_sha256": "99a77f980e0ad8aff168fe199023c5864e16dd684ace7ce81e02f0e7bd6d72c3",
     "primary_destination": "S30",
     "panels": {
       "A": {
@@ -3171,7 +3171,7 @@
   "N31": {
     "old_label": "fig:si_measured_transfer_geometry",
     "original_asset": "figures/supplementary/figure_measured_transfer_geometry_native.pdf",
-    "original_sha256": "32d8fe80ccec984eaedef82a640699a141ffd13b876a039ec17a2069ab266f19",
+    "original_sha256": "4094348b14a7096257e7937d0081318fdc2f86a1e287d2c49b29b3762b072fe3",
     "primary_destination": "S31",
     "panels": {
       "A": {
@@ -3205,7 +3205,7 @@
   "N29": {
     "old_label": "fig:si_shunt_sensitivity",
     "original_asset": "figures/supplementary/figure_shunt_sensitivity_native.pdf",
-    "original_sha256": "ebdfa6f5343f006daae9784779e2081d8fbe1b96b4b9324af76f62d690ae1750",
+    "original_sha256": "84a4e4a8ed1e2f0e3c2503d4453ec4a75a839e931d0cdc4ff06b115b763c5afc",
     "primary_destination": "S29",
     "panels": {
       "A": {

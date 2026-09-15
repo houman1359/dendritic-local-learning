@@ -5,7 +5,7 @@
       "source": "scripts/credit_first_figures/build_framework.py",
       "path": "source_data/curated_publication/figure_01_plotted.csv",
       "sha256": "93acb747a0afd5b020a264df162196493e74904da38f201e136a252325a7ae09",
-      "scope": "Display summaries from existing inputs; panel column identifies the selected data. One record per drawn mark. Panels A and B are schematics and contribute no rows. Not an additional experiment."
+      "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
     },
     {
       "figure": 2,
@@ -15,10 +15,24 @@
       "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
     },
     {
+      "figure": 3,
+      "source": "scripts/credit_first_figures/build_ancestry.py",
+      "path": "source_data/curated_publication/figure_03_plotted.csv",
+      "sha256": "5da940fa16b99f32db31209b65ee58bccac52e7146be95c2dea9fe7cf258a5ee",
+      "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
+    },
+    {
       "figure": 4,
       "source": "figures/provenance/structure_restoration_20260908/figure_04_plotted.csv",
       "path": "source_data/curated_publication/figure_04_plotted.csv",
       "sha256": "e58c8b0a31de9147545719171b782b3ebc50bfddb3a4dc541d296e5f2b6c3a74",
+      "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
+    },
+    {
+      "figure": 5,
+      "source": "scripts/conductance_local_gate/figure.py",
+      "path": "source_data/curated_publication/figure_05_plotted.csv",
+      "sha256": "a708e5edb519fe4da1e887043b3a10c1ea0676cc731ab7fb745eef90564fef70",
       "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
     },
     {
@@ -40,6 +54,13 @@
       "source": "figures/provenance/credit_clarity_20260908/figure_08_plotted.csv",
       "path": "source_data/curated_publication/figure_08_plotted.csv",
       "sha256": "e505db76ab991ed93728fd103746aa06f966937bcaa25d921add61a84340162b",
+      "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
+    },
+    {
+      "figure": 9,
+      "source": "scripts/credit_first_figures/build_measured.py",
+      "path": "source_data/curated_publication/figure_09_plotted.csv",
+      "sha256": "013b041fd49389ccb592b2fb4c44e061d19a31cb96ea38f6142450b6dbfb1e7f",
       "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
     }
   ]

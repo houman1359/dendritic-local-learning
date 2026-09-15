@@ -152,7 +152,11 @@ def build(*, prepare=False):
                            generator=item.get("generator", ""), unit=item["replication_unit"],
                            notes=item.get("notes", "")))
     provenance_paths = {"scripts/update_provenance_hashes.py", str(MAP_PATH.relative_to(JOURNAL_ROOT)),
-                        layout["retained_template"]}
+                        layout["retained_template"], "scripts/figure_canvas.py",
+                        "scripts/panel_letter_layout.py",
+                        "scripts/audit_letter_alignment.py",
+                        "scripts/audit_row_separation.py",
+                        "scripts/audit_panel_letter_geometry.py"}
     provenance_paths.update(a["generator"] for a in layout["assets"])
     for path in sorted(provenance_paths):
         rows.append(record(source_id("implementation", path), path, "methods", "implementation",

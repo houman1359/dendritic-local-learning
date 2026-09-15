@@ -500,7 +500,7 @@ def build(path: Path = OUT):
 
     canvas = NativeCanvas(CANVAS_H_PT / 72.0, 2, row_weights=ROW_PT,
                           hgutter_pt=HGUTTER_PT, vgutter_pt=VGUTTER_PT,
-                          margins=MARGINS)
+                          margins=MARGINS, letter_clearance=True)
     ax_a = canvas.panel("path_gains", 0, 0, 4, schematic=True,
                         title="Path-gain field")
     ax_b = canvas.panel("field_cosine", 0, 4, 4, grid="y",

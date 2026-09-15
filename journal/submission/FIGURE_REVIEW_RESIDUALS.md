@@ -1,10 +1,23 @@
 # Figure review of 2026-09-10 to 13: what was fixed and what remains
 
+**Later panel-placement pass (15 September 2026).** The remaining letter-clearance
+and row-spacing defects were repaired across the main paper and supplement.
+The current verification record and PDF fingerprints are in
+`analysis/reviews/panel_letter_followup_20260914/COMPLETED.md`. The counts and
+remaining-item descriptions below belong to their dated review snapshots.
+
 Every panel of all 45 figures was reviewed from its rendered image against ten
 criteria, each finding was put to an independent skeptic who re-read the same
 image, and only findings that survived were acted on. This file is the record
 of the outcome for the author. The full per-figure lists, agent reports and
 deferral reasons are under `analysis/figure_visual_review_20260910/`.
+
+**Current inventory correction (2026-09-14).** The supplement manifest contains
+26 whole-source sheets and 10 panel compositions: eight combine multiple source
+assets, and S5 and S26 reflow panels from one source each. All sheet and panel
+paste scales are 1.0. The review counts and verification statements below
+describe their dated snapshots; they do not establish the outcome of a later
+build or replace the final-version audit logs.
 
 ## Totals
 
@@ -79,7 +92,7 @@ genuine limits of the data: S15G and S35A,B carry intervals narrower than
 their markers at any scale that keeps the fans visible, and their captions
 say so.
 
-## Every sheet is now drawn natively (2026-09-13)
+## Native-builder expansion (review of 2026-09-13)
 
 Four sheets still pasted crops of renders that no builder could produce -- S3
 took two panels from a script that trains models, S22 and S31 from frozen
@@ -109,10 +122,14 @@ interval called hidden that is merely narrow, a surrogate comparison stated as
 fact where the intervals overlap). All thirteen are fixed, and two summary
 markers their own seed clouds had filled are drawn open again.
 
-**Consequences for the reader.** All 36 sheets are now pasted whole at scale
-1.0, so no panel is scaled down and no crop geometry remains; the paste-scale
-exemption table is empty. Every native render rebuilds byte-identically from
-its builder, and each sheet is identical to the render it pastes.
+**Current production inventory (checked 2026-09-14).** Of the 36 sheets,
+26 are pasted whole and 10 compose selected panels (eight from multiple source
+assets and two single-source reflows). All sheet and panel paste scales are
+1.0, so none is reduced by the paste layer, but the ten compositions retain
+explicit crop and placement geometry. The historical review reported
+byte-identical native rebuilds; that does not mean a composed sheet is
+identical to any one source render. Reproducibility of a later revision must
+be checked against that revision's build and audit records.
 
 **Source Data.** The released inventory named the retired render for every
 sheet that had been rebuilt. Ninety-five rows now name the native render and
@@ -130,9 +147,9 @@ nine builders, no plotted value moved, each checked against the previous render
 path by path). The strict audit of the 36 sheets went from 54 notes to 7, and
 not one of them is about type, stroke weight or colour any more: three sheets
 whose centred rows fill 87--91 % of the page width instead of 92 %, and four
-short sheets whose page is wider than the 1.55 aspect the canvas prefers. Both
-are consequences of pasting panel crops rather than drawing the sheet, so they
-would close only by rebuilding those seventeen sheets natively as well.
+short sheets whose page is wider than the 1.55 aspect the canvas prefers.
+These were the residuals recorded at that stage; their counts are not the
+current composition inventory or a current audit outcome.
 
 ## The nine main legends, read four times (2026-09-13)
 
@@ -227,11 +244,13 @@ reason; and schematic redraws, which the agents were told to avoid. The
 requests and the deferrals with their reasons are in the `fix_reports.json`
 and `supplement_wave*_reports.json` files.
 
-## Verification state
+## Verification state recorded after the design pass (historical)
 
-`make audit` passes end to end on the committed tree: the tests, the LaTeX
-layout, figure-lineage, citation, format and submission audits, and provenance.
-Every main figure and all nineteen native supplementary renders pass the strict
-canvas audit with zero violations, and the main figures pass the three layout
-audits. All nine main-figure legends are at or under the 350-word guidance, and
-no supplementary page overflows. The combined PDF is rebuilt from this state.
+The design-pass record reported that `make audit` passed end to end on its
+committed tree: the tests, LaTeX layout, figure-lineage, citation, format and
+submission audits, and provenance. It also reported zero strict-canvas
+violations for every main figure and all nineteen native supplementary
+renders, passing main-figure layout audits, nine main legends at or under
+350 words, no supplementary page overflows, and a rebuilt combined PDF.
+These statements apply to that snapshot. Later edits require fresh checks
+and a combined PDF built from the same source version.

@@ -6,7 +6,7 @@
   "specification": "scripts/supplement_consolidation/specification.py",
   "source_registry": "scripts/supplement_consolidation/original_assets.json",
   "frozen_input_hashes": {
-    "scripts/supplement_consolidation/original_assets.json": "7cb91de6db6afef13ca7a0c9da2b9d2f392c6147528d5a3b43e6e61886bf4fc9",
+    "scripts/supplement_consolidation/original_assets.json": "853ba3a03f790dd9729f7520c51f9a6f273651d87b68bb789fff910857edc2e4",
     "scripts/supplement_consolidation/original_captions.json": "838b3f4ead564b68639cf68506efe686e12b47e3d846ab230af35c7a6c8f6816",
     "scripts/supplement_consolidation/original_provenance.json": "2eca6cebde706e5af0b222c5675d413d80b4d4acfcfb234abe89d37afb72c90d"
   },
@@ -40,7 +40,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S01_panels_A-E.pdf",
-          "source_sha256": "de6ee1c5200193cd17053d04c119a8f8f9e37d4b50c329be4f1462aa0de8f6e2",
+          "source_sha256": "2f7eea87c8dcf46253906c60300ad6e0456c574fc0c8db0dfd83204582da9cc5",
           "old_provenance_figure": "figS1",
           "old_provenance_entry_ids": [
             "fig2.path_gain",
@@ -72,7 +72,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S01_panels_A-E.pdf",
-          "source_sha256": "de6ee1c5200193cd17053d04c119a8f8f9e37d4b50c329be4f1462aa0de8f6e2",
+          "source_sha256": "2f7eea87c8dcf46253906c60300ad6e0456c574fc0c8db0dfd83204582da9cc5",
           "old_provenance_figure": "figS1",
           "old_provenance_entry_ids": [
             "fig2.path_gain",
@@ -104,7 +104,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S01_panels_A-E.pdf",
-          "source_sha256": "de6ee1c5200193cd17053d04c119a8f8f9e37d4b50c329be4f1462aa0de8f6e2",
+          "source_sha256": "2f7eea87c8dcf46253906c60300ad6e0456c574fc0c8db0dfd83204582da9cc5",
           "old_provenance_figure": "figS1",
           "old_provenance_entry_ids": [
             "fig2.path_gain",
@@ -120,23 +120,23 @@
           "source": "S1",
           "source_panel": "D",
           "bbox": [
-            17.883625030517578,
+            6.859999656677246,
             214.75900268554688,
             251.1158447265625,
             411.4367370605469
           ],
-          "width": 233.23221969604492,
+          "width": 244.25584506988525,
           "height": 196.677734375,
           "panel": "D",
           "target_rect": [
-            17.883625030517578,
+            6.859999656677246,
             214.75900268554688,
             251.1158447265625,
             411.4367370605469
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S01_panels_A-E.pdf",
-          "source_sha256": "de6ee1c5200193cd17053d04c119a8f8f9e37d4b50c329be4f1462aa0de8f6e2",
+          "source_sha256": "2f7eea87c8dcf46253906c60300ad6e0456c574fc0c8db0dfd83204582da9cc5",
           "old_provenance_figure": "figS1",
           "old_provenance_entry_ids": [
             "fig2.path_gain",
@@ -152,23 +152,23 @@
           "source": "S1",
           "source_panel": "E",
           "bbox": [
-            269.0367431640625,
+            258.5574951171875,
             214.75900268554688,
             500.31585693359375,
             411.4367370605469
           ],
-          "width": 231.27911376953125,
+          "width": 241.75836181640625,
           "height": 196.677734375,
           "panel": "E",
           "target_rect": [
-            269.0367431640625,
+            258.5574951171875,
             214.75900268554688,
             500.31585693359375,
             411.4367370605469
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S01_panels_A-E.pdf",
-          "source_sha256": "de6ee1c5200193cd17053d04c119a8f8f9e37d4b50c329be4f1462aa0de8f6e2",
+          "source_sha256": "2f7eea87c8dcf46253906c60300ad6e0456c574fc0c8db0dfd83204582da9cc5",
           "old_provenance_figure": "figS1",
           "old_provenance_entry_ids": [
             "fig2.path_gain",
@@ -186,7 +186,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 420.0,
-      "sha256": "3d2e6147ea1a276376ec0e014298628a4d1c4498ace153e712a8716c202486be",
+      "sha256": "4c66fe0d5e41ca5de1e1eca3f75d0c59bb65c6673e2ad05b40122e2c789164a5",
       "source_data_directories": [
         "source_data/inherited_neurips",
         "source_data/theory"
@@ -203,19 +203,19 @@
           "source": "S2",
           "source_panel": "A",
           "bbox": [
-            1.6,
-            18.0,
-            196.0,
-            189.5
+            35.150001525878906,
+            19.149999618530273,
+            189.85000610351562,
+            176.60000610351562
           ],
-          "width": 194.4,
-          "height": 171.5,
+          "width": 154.70000457763672,
+          "height": 157.45000648498535,
           "panel": "A",
           "target_rect": [
-            21.30000000000001,
+            16.450003099441517,
             19.0,
-            215.70000000000002,
-            190.5
+            171.15000767707824,
+            176.45000648498535
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S02_panels_A-E.pdf",
@@ -235,19 +235,19 @@
           "source": "S2",
           "source_panel": "D",
           "bbox": [
-            1.6,
-            202.8,
-            275.0,
-            374.3
+            9.399999618530273,
+            207.14999389648438,
+            269.3500061035156,
+            372.6000061035156
           ],
-          "width": 273.4,
-          "height": 171.5,
+          "width": 259.95000648498535,
+          "height": 165.45001220703125,
           "panel": "B",
           "target_rect": [
-            223.70000000000002,
+            190.15000767707824,
             19.0,
-            497.1,
-            190.5
+            450.1000141620636,
+            184.45001220703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S02_panels_A-E.pdf",
@@ -267,19 +267,19 @@
           "source": "S3",
           "source_panel": "C",
           "bbox": [
-            6.0,
-            187.5,
-            503.9,
-            344.2
+            7.400000095367432,
+            188.64999389648438,
+            503.8999938964844,
+            342.3500061035156
           ],
-          "width": 497.9,
-          "height": 156.7,
+          "width": 496.49999380111694,
+          "height": 153.70001220703125,
           "panel": "C",
           "target_rect": [
-            10.25,
-            213.5,
-            508.15,
-            370.2
+            16.450003099441517,
+            207.45001220703125,
+            512.9499969005585,
+            361.1500244140625
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S03_panels_A-D.pdf",
@@ -303,8 +303,8 @@
       "whole_source_sheet": false,
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
-      "height_pt": 374.20001220703125,
-      "sha256": "9a41b959c1c9ce021008b5488749f15fd4914f5a052782ecfce20cbe03611b51",
+      "height_pt": 365.1500244140625,
+      "sha256": "82c58d5619982b020451ae097c6f832e30b358469531a1995b0679ad59967467",
       "source_data_directories": [
         "source_data/figure2"
       ]
@@ -320,23 +320,23 @@
           "source": "N3",
           "source_panel": "A",
           "bbox": [
-            22.0,
+            2.0,
             0.759007453918457,
-            256.10186767578125,
+            256.2591247558594,
             133.99234008789062
           ],
-          "width": 234.10186767578125,
+          "width": 254.25912475585938,
           "height": 133.23333263397217,
           "panel": "A",
           "target_rect": [
-            22.0,
+            2.0,
             0.759007453918457,
-            256.10186767578125,
+            256.2591247558594,
             133.99234008789062
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_utility_signal_noise_native.pdf",
-          "source_sha256": "b14839997895ed78e12ed8c900d653fdba138b4bca5b961d336c63694d22c7c0",
+          "source_sha256": "d18b9c71d7dff0aef2bac50609a1b7d45733851e1eca64a66e09732f2c5f1508",
           "old_provenance_figure": "figN3",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -346,23 +346,23 @@
           "source": "N3",
           "source_panel": "B",
           "bbox": [
-            268.6929931640625,
+            257.6600036621094,
             0.759007453918457,
             504.55999755859375,
             150.46798706054688
           ],
-          "width": 235.86700439453125,
+          "width": 246.89999389648438,
           "height": 149.70897960662842,
           "panel": "B",
           "target_rect": [
-            268.6929931640625,
+            257.6600036621094,
             0.759007453918457,
             504.55999755859375,
             150.46798706054688
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_utility_signal_noise_native.pdf",
-          "source_sha256": "b14839997895ed78e12ed8c900d653fdba138b4bca5b961d336c63694d22c7c0",
+          "source_sha256": "d18b9c71d7dff0aef2bac50609a1b7d45733851e1eca64a66e09732f2c5f1508",
           "old_provenance_figure": "figN3",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -372,23 +372,23 @@
           "source": "N3",
           "source_panel": "C",
           "bbox": [
-            12.102375984191895,
+            2.0,
             148.75900268554688,
             255.09523010253906,
             317.4367370605469
           ],
-          "width": 242.99285411834717,
+          "width": 253.09523010253906,
           "height": 168.677734375,
           "panel": "C",
           "target_rect": [
-            12.102375984191895,
+            2.0,
             148.75900268554688,
             255.09523010253906,
             317.4367370605469
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_utility_signal_noise_native.pdf",
-          "source_sha256": "b14839997895ed78e12ed8c900d653fdba138b4bca5b961d336c63694d22c7c0",
+          "source_sha256": "d18b9c71d7dff0aef2bac50609a1b7d45733851e1eca64a66e09732f2c5f1508",
           "old_provenance_figure": "figN3",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -398,23 +398,23 @@
           "source": "N3",
           "source_panel": "D",
           "bbox": [
-            268.6929931640625,
+            257.6600036621094,
             148.75900268554688,
             504.55999755859375,
             314.4679870605469
           ],
-          "width": 235.86700439453125,
+          "width": 246.89999389648438,
           "height": 165.708984375,
           "panel": "D",
           "target_rect": [
-            268.6929931640625,
+            257.6600036621094,
             148.75900268554688,
             504.55999755859375,
             314.4679870605469
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_utility_signal_noise_native.pdf",
-          "source_sha256": "b14839997895ed78e12ed8c900d653fdba138b4bca5b961d336c63694d22c7c0",
+          "source_sha256": "d18b9c71d7dff0aef2bac50609a1b7d45733851e1eca64a66e09732f2c5f1508",
           "old_provenance_figure": "figN3",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -424,23 +424,23 @@
           "source": "N3",
           "source_panel": "E",
           "bbox": [
-            15.789875030517578,
+            2.0,
             315.718994140625,
-            181.11734008789062,
+            175.98873901367188,
             484.0063781738281
           ],
-          "width": 165.32746505737305,
+          "width": 173.98873901367188,
           "height": 168.28738403320312,
           "panel": "E",
           "target_rect": [
-            15.789875030517578,
+            2.0,
             315.718994140625,
-            181.11734008789062,
+            175.98873901367188,
             484.0063781738281
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_utility_signal_noise_native.pdf",
-          "source_sha256": "b14839997895ed78e12ed8c900d653fdba138b4bca5b961d336c63694d22c7c0",
+          "source_sha256": "d18b9c71d7dff0aef2bac50609a1b7d45733851e1eca64a66e09732f2c5f1508",
           "old_provenance_figure": "figN3",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -450,23 +450,23 @@
           "source": "N3",
           "source_panel": "F",
           "bbox": [
-            182.22633361816406,
+            172.2133331298828,
             315.718994140625,
             338.1122741699219,
             477.4367370605469
           ],
-          "width": 155.8859405517578,
+          "width": 165.89894104003906,
           "height": 161.71774291992188,
           "panel": "F",
           "target_rect": [
-            182.22633361816406,
+            172.2133331298828,
             315.718994140625,
             338.1122741699219,
             477.4367370605469
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_utility_signal_noise_native.pdf",
-          "source_sha256": "b14839997895ed78e12ed8c900d653fdba138b4bca5b961d336c63694d22c7c0",
+          "source_sha256": "d18b9c71d7dff0aef2bac50609a1b7d45733851e1eca64a66e09732f2c5f1508",
           "old_provenance_figure": "figN3",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -476,23 +476,23 @@
           "source": "N3",
           "source_panel": "G",
           "bbox": [
-            348.35968017578125,
+            336.90667724609375,
             315.718994140625,
             509.2628173828125,
             477.4367370605469
           ],
-          "width": 160.90313720703125,
+          "width": 172.35614013671875,
           "height": 161.71774291992188,
           "panel": "G",
           "target_rect": [
-            348.35968017578125,
+            336.90667724609375,
             315.718994140625,
             509.2628173828125,
             477.4367370605469
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_utility_signal_noise_native.pdf",
-          "source_sha256": "b14839997895ed78e12ed8c900d653fdba138b4bca5b961d336c63694d22c7c0",
+          "source_sha256": "d18b9c71d7dff0aef2bac50609a1b7d45733851e1eca64a66e09732f2c5f1508",
           "old_provenance_figure": "figN3",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -504,7 +504,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 490.0,
-      "sha256": "1b38d8cfe0d27d6546a628112a8a3a07848f23a2d96b2595c077689a005cf1c7",
+      "sha256": "37f09863b91c34ee33ea252afa80e60f555d75f2da96fcaf0296fc254e098a91",
       "source_data_directories": [
         "source_data/credit_phase_theory",
         "source_data/review_evidence_reanalysis",
@@ -523,19 +523,19 @@
           "source": "S13",
           "source_panel": "A",
           "bbox": [
-            15.692800521850586,
-            11.350255012512207,
-            235.1433563232422,
-            122.72146606445312
+            46.400001525878906,
+            24.149999618530273,
+            234.60000610351562,
+            119.5999984741211
           ],
-          "width": 219.4505558013916,
-          "height": 111.37121105194092,
+          "width": 188.20000457763672,
+          "height": 95.44999885559082,
           "panel": "A",
           "target_rect": [
-            32.18279094696044,
+            34.15937633514403,
             19.0,
-            251.63334674835204,
-            130.37121105194092
+            222.35938091278075,
+            114.44999885559082
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S13_panels_A-F.pdf",
@@ -563,19 +563,19 @@
           "source": "S13",
           "source_panel": "F",
           "bbox": [
-            271.64794921875,
-            196.2855987548828,
+            274.1499938964844,
+            208.89999389648438,
             498.2318115234375,
-            329.4203796386719
+            327.8500061035156
           ],
-          "width": 226.5838623046875,
-          "height": 133.13478088378906,
+          "width": 224.08181762695312,
+          "height": 118.95001220703125,
           "panel": "B",
           "target_rect": [
-            259.63334674835204,
+            269.8953783035278,
             19.0,
-            486.21720905303954,
-            152.13478088378906
+            493.97719593048095,
+            137.95001220703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S13_panels_A-F.pdf",
@@ -603,19 +603,19 @@
           "source": "S24",
           "source_panel": "C",
           "bbox": [
-            19.84000015258789,
-            158.63626098632812,
+            22.649999618530273,
+            171.39999389648438,
             239.38600158691406,
-            324.4078063964844
+            322.8500061035156
           ],
-          "width": 219.54600143432617,
-          "height": 165.77154541015625,
+          "width": 216.7360019683838,
+          "height": 151.45001220703125,
           "panel": "C",
           "target_rect": [
-            32.2000705718994,
-            175.13478088378906,
-            251.74607200622557,
-            340.9063262939453
+            34.15937633514403,
+            160.95001220703125,
+            250.89537830352782,
+            312.4000244140625
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S24_panels_A-D.pdf",
@@ -631,19 +631,19 @@
           "source": "S24",
           "source_panel": "D",
           "bbox": [
-            284.5413818359375,
-            158.63626098632812,
+            285.6499938964844,
+            171.39999389648438,
             510.9952392578125,
-            290.21636962890625
+            288.6000061035156
           ],
-          "width": 226.453857421875,
-          "height": 131.58010864257812,
+          "width": 225.34524536132812,
+          "height": 117.20001220703125,
           "panel": "D",
           "target_rect": [
-            259.7460720062256,
-            175.13478088378906,
-            486.1999294281006,
-            306.7148895263672
+            269.8953783035278,
+            160.95001220703125,
+            495.24062366485595,
+            278.1500244140625
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S24_panels_A-D.pdf",
@@ -660,8 +660,8 @@
       "whole_source_sheet": false,
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
-      "height_pt": 344.90631103515625,
-      "sha256": "d03a2099b25e488aa2fbd3e565355b7261de3ea294d365bc63e49df3e2eacb81",
+      "height_pt": 316.4000244140625,
+      "sha256": "9f5a69824cc7051025a3f97cbf5f2acc1a27c399e178efb7aa96edb6b9e266c5",
       "source_data_directories": [
         "source_data/positive_conductance_reliability_step_consistent"
       ]
@@ -677,19 +677,19 @@
           "source": "S14",
           "source_panel": "A",
           "bbox": [
-            9.99,
-            4.76,
-            253.0,
-            131.28
+            43.150001525878906,
+            11.399999618530273,
+            247.35000610351562,
+            130.35000610351562
           ],
-          "width": 243.01,
-          "height": 126.52,
+          "width": 204.20000457763672,
+          "height": 118.95000648498535,
           "panel": "A",
           "target_rect": [
-            11.264999999999986,
+            15.99500102996825,
             19.0,
-            254.27499999999998,
-            145.51999999999998
+            220.19500560760497,
+            137.95000648498535
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S14_panels_A-F.pdf",
@@ -716,19 +716,19 @@
           "source": "S14",
           "source_panel": "B",
           "bbox": [
-            259.0,
-            4.76,
-            503.86,
-            156.16
+            266.1499938964844,
+            11.399999618530273,
+            503.8599853515625,
+            154.35000610351562
           ],
-          "width": 244.86,
-          "height": 151.4,
+          "width": 237.70999145507812,
+          "height": 142.95000648498535,
           "panel": "B",
           "target_rect": [
-            262.275,
+            275.4450075149536,
             19.0,
-            507.135,
-            170.4
+            513.1549989700318,
+            161.95000648498535
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S14_panels_A-F.pdf",
@@ -755,19 +755,19 @@
           "source": "S14",
           "source_panel": "E",
           "bbox": [
-            9.99,
-            302.97,
-            253.0,
-            487.47
+            11.149999618530273,
+            309.6499938964844,
+            251.60000610351562,
+            485.6000061035156
           ],
-          "width": 243.01,
-          "height": 184.5,
+          "width": 240.45000648498535,
+          "height": 175.95001220703125,
           "panel": "C",
           "target_rect": [
-            11.264999999999986,
-            193.4,
-            254.27499999999998,
-            377.9
+            15.99500102996825,
+            184.95000648498535,
+            256.4450075149536,
+            360.9000186920166
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S14_panels_A-F.pdf",
@@ -794,19 +794,19 @@
           "source": "S14",
           "source_panel": "F",
           "bbox": [
-            259.0,
-            302.97,
-            503.86,
-            487.47
+            265.8999938964844,
+            309.6499938964844,
+            503.8599853515625,
+            485.6000061035156
           ],
-          "width": 244.86,
-          "height": 184.5,
+          "width": 237.95999145507812,
+          "height": 175.95001220703125,
           "panel": "D",
           "target_rect": [
-            262.275,
-            193.4,
-            507.135,
-            377.9
+            275.4450075149536,
+            184.95000648498535,
+            513.4049989700318,
+            360.9000186920166
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S14_panels_A-F.pdf",
@@ -834,8 +834,8 @@
       "whole_source_sheet": false,
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
-      "height_pt": 381.8999938964844,
-      "sha256": "505787219e2521a2e7e52ad89a326325b457d4a38828490fd31ef16f0fec5feb",
+      "height_pt": 364.9000244140625,
+      "sha256": "044ff15e33019eeb49da41a1adba8a0ad7cca4bf219ba92c2f66aab4fa9899ee",
       "source_data_directories": [
         "source_data/same_span_coefficient_learning"
       ]
@@ -851,19 +851,19 @@
           "source": "S4",
           "source_panel": "C",
           "bbox": [
-            14.0,
-            191.73500061035156,
+            16.899999618530273,
+            198.39999389648438,
             167.8771209716797,
-            352.05938720703125
+            349.1000061035156
           ],
-          "width": 153.8771209716797,
-          "height": 160.3243865966797,
+          "width": 150.9771213531494,
+          "height": 150.70001220703125,
           "panel": "A",
           "target_rect": [
-            16.016795349121082,
+            24.25012035369872,
             19.0,
-            169.89391632080077,
-            179.3243865966797
+            175.22724170684813,
+            169.70001220703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S04_panels_A-E.pdf",
@@ -922,19 +922,19 @@
           "source": "S4",
           "source_panel": "D",
           "bbox": [
-            180.13333129882812,
-            191.73500061035156,
-            342.26666259765625,
-            344.4156188964844
+            192.89999389648438,
+            198.39999389648438,
+            341.3500061035156,
+            342.8500061035156
           ],
-          "width": 162.13333129882812,
-          "height": 152.6806182861328,
+          "width": 148.45001220703125,
+          "height": 144.45001220703125,
           "panel": "B",
           "target_rect": [
-            175.89391632080077,
+            188.22724170684813,
             19.0,
-            338.0272476196289,
-            171.6806182861328
+            336.6772539138794,
+            163.45001220703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S04_panels_A-E.pdf",
@@ -993,19 +993,19 @@
           "source": "S4",
           "source_panel": "E",
           "bbox": [
-            346.26666259765625,
-            191.73500061035156,
+            349.1499938964844,
+            198.39999389648438,
             504.62261962890625,
-            352.05938720703125
+            349.1000061035156
           ],
-          "width": 158.35595703125,
-          "height": 160.3243865966797,
+          "width": 155.47262573242188,
+          "height": 150.70001220703125,
           "panel": "C",
           "target_rect": [
-            344.0272476196289,
+            349.6772539138794,
             19.0,
-            502.3832046508789,
-            179.3243865966797
+            505.14987964630126,
+            169.70001220703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S04_panels_A-E.pdf",
@@ -1064,19 +1064,19 @@
           "source": "S30",
           "source_panel": "C",
           "bbox": [
-            19.0,
-            175.34390258789062,
+            24.899999618530273,
+            181.89999389648438,
             250.3631591796875,
-            323.4679870605469
+            321.6000061035156
           ],
-          "width": 231.3631591796875,
-          "height": 148.12408447265625,
+          "width": 225.46315956115723,
+          "height": 139.70001220703125,
           "panel": "D",
           "target_rect": [
-            21.440203857421864,
-            202.3243865966797,
-            252.80336303710936,
-            350.44847106933594
+            24.25012035369872,
+            192.70001220703125,
+            249.71327991485595,
+            332.4000244140625
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S30_panels_A-D.pdf",
@@ -1097,19 +1097,19 @@
           "source": "S30",
           "source_panel": "D",
           "bbox": [
-            268.70001220703125,
-            175.34390258789062,
-            504.8564453125,
-            323.4679870605469
+            271.3999938964844,
+            181.89999389648438,
+            503.1000061035156,
+            321.6000061035156
           ],
-          "width": 236.15643310546875,
-          "height": 148.12408447265625,
+          "width": 231.70001220703125,
+          "height": 139.70001220703125,
           "panel": "E",
           "target_rect": [
-            260.80336303710936,
-            202.3243865966797,
-            496.9597961425781,
-            350.44847106933594
+            268.71327991485595,
+            192.70001220703125,
+            500.4132921218872,
+            332.4000244140625
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S30_panels_A-D.pdf",
@@ -1131,8 +1131,8 @@
       "whole_source_sheet": false,
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
-      "height_pt": 354.448486328125,
-      "sha256": "f135ffd986408542c4251b878aee193c3c1c002714c85a743d736eea6fc820f9",
+      "height_pt": 336.4000244140625,
+      "sha256": "43f4a147fc339b23d8c5eb292701cebafe95264f697a30857b6f8498f621d841",
       "source_data_directories": [
         "source_data/cifar10_additive_feedback_ladder_confirmatory",
         "source_data/fashion_feedback_ladder",
@@ -1151,23 +1151,23 @@
           "source": "N7",
           "source_panel": "A",
           "bbox": [
-            24.0,
+            13.779999732971191,
             4.759007453918457,
             251.05224609375,
             170.2688751220703
           ],
-          "width": 227.05224609375,
+          "width": 237.2722463607788,
           "height": 165.50986766815186,
           "panel": "A",
           "target_rect": [
-            24.0,
+            13.779999732971191,
             4.759007453918457,
             251.05224609375,
             170.2688751220703
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_mnist_dictionary_geometry_native.pdf",
-          "source_sha256": "b8b0be1d0f6ba67b5aeeefbf9475ac1e233eafc2227194f46f6362f4b465f902",
+          "source_sha256": "726cd37b4c5212b773f950b83f964bc57f6cabec3ecab54e80f77cb1553343a9",
           "old_provenance_figure": "figN7",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -1177,23 +1177,23 @@
           "source": "N7",
           "source_panel": "B",
           "bbox": [
-            273.20001220703125,
+            269.13751220703125,
             4.759007453918457,
             500.25225830078125,
             170.2688751220703
           ],
-          "width": 227.05224609375,
+          "width": 231.11474609375,
           "height": 165.50986766815186,
           "panel": "B",
           "target_rect": [
-            273.20001220703125,
+            269.13751220703125,
             4.759007453918457,
             500.25225830078125,
             170.2688751220703
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_mnist_dictionary_geometry_native.pdf",
-          "source_sha256": "b8b0be1d0f6ba67b5aeeefbf9475ac1e233eafc2227194f46f6362f4b465f902",
+          "source_sha256": "726cd37b4c5212b773f950b83f964bc57f6cabec3ecab54e80f77cb1553343a9",
           "old_provenance_figure": "figN7",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -1203,23 +1203,23 @@
           "source": "N7",
           "source_panel": "C",
           "bbox": [
-            24.0,
+            13.779999732971191,
             182.75900268554688,
-            356.3532409667969,
+            345.4682312011719,
             388.7501220703125
           ],
-          "width": 332.3532409667969,
+          "width": 331.6882314682007,
           "height": 205.99111938476562,
           "panel": "C",
           "target_rect": [
-            24.0,
+            13.779999732971191,
             182.75900268554688,
-            356.3532409667969,
+            345.4682312011719,
             388.7501220703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_mnist_dictionary_geometry_native.pdf",
-          "source_sha256": "b8b0be1d0f6ba67b5aeeefbf9475ac1e233eafc2227194f46f6362f4b465f902",
+          "source_sha256": "726cd37b4c5212b773f950b83f964bc57f6cabec3ecab54e80f77cb1553343a9",
           "old_provenance_figure": "figN7",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -1229,23 +1229,23 @@
           "source": "N7",
           "source_panel": "D",
           "bbox": [
-            352.4010314941406,
+            341.32666015625,
             182.75900268554688,
             490.0673828125,
             388.7657470703125
           ],
-          "width": 137.66635131835938,
+          "width": 148.74072265625,
           "height": 206.00674438476562,
           "panel": "D",
           "target_rect": [
-            352.4010314941406,
+            341.32666015625,
             182.75900268554688,
             490.0673828125,
             388.7657470703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_mnist_dictionary_geometry_native.pdf",
-          "source_sha256": "b8b0be1d0f6ba67b5aeeefbf9475ac1e233eafc2227194f46f6362f4b465f902",
+          "source_sha256": "726cd37b4c5212b773f950b83f964bc57f6cabec3ecab54e80f77cb1553343a9",
           "old_provenance_figure": "figN7",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -1257,7 +1257,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 392.0,
-      "sha256": "70948b12685abb2b189405a441ddf0e7005d9295227acbec9d98dcbfad3feda0",
+      "sha256": "cc0030a507324b0d33c3996115060bcc626a94155c605f2e1d77d9f94cd76410",
       "source_data_directories": [
         "source_data/image_ladder_controls",
         "source_data/mnist_feedback_ladder"
@@ -1274,23 +1274,23 @@
           "source": "N8",
           "source_panel": "A",
           "bbox": [
-            24.139873504638672,
+            13.088000297546387,
             4.759007453918457,
             256.16265869140625,
             177.6492462158203
           ],
-          "width": 232.02278518676758,
+          "width": 243.07465839385986,
           "height": 172.89023876190186,
           "panel": "A",
           "target_rect": [
-            24.139873504638672,
+            13.088000297546387,
             4.759007453918457,
             256.16265869140625,
             177.6492462158203
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_error_field_geometry_native.pdf",
-          "source_sha256": "9676614b37d886202f92c21c4684671d86ede5ab2decb83b8141efbee24e9286",
+          "source_sha256": "19ecb97cbe77e26d05d1a8f8935b1aa3befdf85f33942d25cd56719158ffa6e6",
           "old_provenance_figure": "figN8",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -1300,23 +1300,23 @@
           "source": "N8",
           "source_panel": "B",
           "bbox": [
-            274.20001220703125,
+            270.239990234375,
             4.759007453918457,
             487.25457763671875,
             169.93675231933594
           ],
-          "width": 213.0545654296875,
+          "width": 217.01458740234375,
           "height": 165.17774486541748,
           "panel": "B",
           "target_rect": [
-            274.20001220703125,
+            270.239990234375,
             4.759007453918457,
             487.25457763671875,
             169.93675231933594
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_error_field_geometry_native.pdf",
-          "source_sha256": "9676614b37d886202f92c21c4684671d86ede5ab2decb83b8141efbee24e9286",
+          "source_sha256": "19ecb97cbe77e26d05d1a8f8935b1aa3befdf85f33942d25cd56719158ffa6e6",
           "old_provenance_figure": "figN8",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -1326,23 +1326,23 @@
           "source": "N8",
           "source_panel": "C",
           "bbox": [
-            26.0,
+            13.088000297546387,
             184.25900268554688,
             505.2839660644531,
             349.4367370605469
           ],
-          "width": 479.2839660644531,
+          "width": 492.19596576690674,
           "height": 165.177734375,
           "panel": "C",
           "target_rect": [
-            26.0,
+            13.088000297546387,
             184.25900268554688,
             505.2839660644531,
             349.4367370605469
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_error_field_geometry_native.pdf",
-          "source_sha256": "9676614b37d886202f92c21c4684671d86ede5ab2decb83b8141efbee24e9286",
+          "source_sha256": "19ecb97cbe77e26d05d1a8f8935b1aa3befdf85f33942d25cd56719158ffa6e6",
           "old_provenance_figure": "figN8",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -1354,7 +1354,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 364.0,
-      "sha256": "a74e7d92139822bb420d2c19ff9bde0705cbe4daa37ac56bf3b90180858e98d9",
+      "sha256": "76298e9e5610dbe3c9622cbe3c1f47833d7d7147f8c2054fa3bd09eff1df3dff",
       "source_data_directories": [
         "source_data/figure2",
         "source_data/prospective_input_validity"
@@ -1371,19 +1371,19 @@
           "source": "S7",
           "source_panel": "A",
           "bbox": [
-            34.0,
-            25.2,
-            168.1,
-            112.7
+            34.900001525878906,
+            26.399999618530273,
+            167.10000610351562,
+            111.0999984741211
           ],
-          "width": 134.1,
-          "height": 87.5,
+          "width": 132.20000457763672,
+          "height": 84.69999885559082,
           "panel": "A",
           "target_rect": [
-            45.55000000000001,
+            15.274995040893543,
             19.0,
-            179.65,
-            106.5
+            147.47499961853026,
+            103.69999885559082
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S07_panels_A-D.pdf",
@@ -1404,19 +1404,19 @@
           "source": "S7",
           "source_panel": "B",
           "bbox": [
-            183.5,
-            25.2,
-            321.2,
-            157.9
+            184.89999389648438,
+            26.399999618530273,
+            321.20001220703125,
+            156.10000610351562
           ],
-          "width": 137.7,
-          "height": 132.70000000000002,
+          "width": 136.30001831054688,
+          "height": 129.70000648498535,
           "panel": "B",
           "target_rect": [
-            185.65,
+            180.67499847412108,
             19.0,
-            323.35,
-            151.70000000000002
+            316.97501678466796,
+            148.70000648498535
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S07_panels_A-D.pdf",
@@ -1437,19 +1437,19 @@
           "source": "S7",
           "source_panel": "C",
           "bbox": [
-            349.7,
-            25.2,
-            493.2,
-            157.9
+            350.8999938964844,
+            26.399999618530273,
+            493.20001220703125,
+            156.10000610351562
           ],
-          "width": 143.5,
-          "height": 132.70000000000002,
+          "width": 142.30001831054688,
+          "height": 129.70000648498535,
           "panel": "C",
           "target_rect": [
-            329.35,
+            356.4249984741211,
             19.0,
-            472.85,
-            151.70000000000002
+            498.72501678466796,
+            148.70000648498535
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S07_panels_A-D.pdf",
@@ -1470,19 +1470,19 @@
           "source": "S7",
           "source_panel": "D",
           "bbox": [
-            15.2,
-            187.2,
-            168.8,
-            327.5
+            16.399999618530273,
+            188.39999389648438,
+            168.8000030517578,
+            324.1000061035156
           ],
-          "width": 153.60000000000002,
-          "height": 140.3,
+          "width": 152.40000343322754,
+          "height": 135.70001220703125,
           "panel": "D",
           "target_rect": [
-            14.899999999999977,
-            174.70000000000002,
-            168.5,
-            315.0
+            15.274995040893543,
+            171.70000648498535,
+            167.67499847412108,
+            307.4000186920166
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S07_panels_A-D.pdf",
@@ -1503,19 +1503,19 @@
           "source": "S8",
           "source_panel": "E",
           "bbox": [
-            177.5,
-            190.4,
-            341.4,
-            330.7
+            178.64999389648438,
+            191.64999389648438,
+            341.3999938964844,
+            327.3500061035156
           ],
-          "width": 163.89999999999998,
-          "height": 140.29999999999998,
+          "width": 162.75,
+          "height": 135.70001220703125,
           "panel": "E",
           "target_rect": [
-            174.5,
-            174.70000000000002,
-            338.4,
-            315.0
+            180.67499847412108,
+            171.70000648498535,
+            343.4249984741211,
+            307.4000186920166
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S08_panels_A-I.pdf",
@@ -1539,19 +1539,19 @@
           "source": "S8",
           "source_panel": "G",
           "bbox": [
-            13.5,
-            355.6,
-            172.6,
-            488.2
+            14.899999618530273,
+            356.8999938964844,
+            172.60000610351562,
+            486.3500061035156
           ],
-          "width": 159.1,
-          "height": 132.59999999999997,
+          "width": 157.70000648498535,
+          "height": 129.45001220703125,
           "panel": "F",
           "target_rect": [
-            344.4,
-            174.70000000000002,
-            503.5,
-            307.29999999999995
+            356.4249984741211,
+            171.70000648498535,
+            514.1250049591065,
+            301.1500186920166
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S08_panels_A-I.pdf",
@@ -1576,8 +1576,8 @@
       "whole_source_sheet": false,
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
-      "height_pt": 319.0,
-      "sha256": "b23e3f721ffd20488cd3c91b7da89b1e72d2a2ebdb5a2d5e2f60a9042b07a3f4",
+      "height_pt": 311.4000244140625,
+      "sha256": "1ce5278ca396f6d64dc382e68c891145c610462eb2fd680a77ae15a3d5cb6979",
       "source_data_directories": [
         "source_data/spatial_topology_audit",
         "source_data/prospective_input_validity"
@@ -1594,19 +1594,19 @@
           "source": "S19",
           "source_panel": "A",
           "bbox": [
-            13.5,
-            10.8,
-            276.5,
-            236.0
+            15.149999618530273,
+            17.399999618530273,
+            275.3500061035156,
+            234.10000610351562
           ],
-          "width": 263.0,
-          "height": 225.2,
+          "width": 260.20000648498535,
+          "height": 216.70000648498535,
           "panel": "A",
           "target_rect": [
-            44.65116662979125,
+            46.68435020446776,
             19.0,
-            307.65116662979125,
-            244.2
+            306.8843566894531,
+            235.70000648498535
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S19_panels_A-I.pdf",
@@ -1652,19 +1652,19 @@
           "source": "S29",
           "source_panel": "D",
           "bbox": [
-            9.633625984191895,
-            346.1863708496094,
+            10.899999618530273,
+            352.8999938964844,
             167.73129272460938,
-            524.2680053710938
+            522.3499755859375
           ],
-          "width": 158.09766674041748,
-          "height": 178.08163452148438,
+          "width": 156.8312931060791,
+          "height": 169.44998168945312,
           "panel": "B",
           "target_rect": [
-            315.65116662979125,
+            325.8843566894531,
             19.0,
-            473.74883337020873,
-            197.08163452148438
+            482.7156497955322,
+            188.44998168945312
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S29_panels_A-C.pdf",
@@ -1835,19 +1835,19 @@
           "source": "S29",
           "source_panel": "E",
           "bbox": [
-            183.8000030517578,
-            346.1863708496094,
+            188.89999389648438,
+            352.8999938964844,
             335.53131103515625,
-            524.2680053710938
+            522.3499755859375
           ],
-          "width": 151.73130798339844,
-          "height": 178.08163452148438,
+          "width": 146.63131713867188,
+          "height": 169.44998168945312,
           "panel": "C",
           "target_rect": [
-            103.46869964599608,
-            267.2,
-            255.20000762939452,
-            445.28163452148436
+            46.68435020446776,
+            258.70000648498535,
+            193.31566734313964,
+            428.1499881744385
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S29_panels_A-C.pdf",
@@ -2018,19 +2018,19 @@
           "source": "S29",
           "source_panel": "F",
           "bbox": [
-            351.6000061035156,
-            346.1863708496094,
+            356.6499938964844,
+            352.8999938964844,
             503.331298828125,
-            524.2680053710938
+            522.3499755859375
           ],
-          "width": 151.73129272460938,
-          "height": 178.08163452148438,
+          "width": 146.68130493164062,
+          "height": 169.44998168945312,
           "panel": "D",
           "target_rect": [
-            263.2000076293945,
-            267.2,
-            414.9313003540039,
-            445.28163452148436
+            325.8843566894531,
+            258.70000648498535,
+            472.56566162109374,
+            428.1499881744385
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S29_panels_A-C.pdf",
@@ -2202,8 +2202,8 @@
       "whole_source_sheet": false,
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
-      "height_pt": 449.2816467285156,
-      "sha256": "0c94e3b4fc4d436d11e070021f974efa9dd793d9c07ccb74dae838a19b6a31e6",
+      "height_pt": 432.1499938964844,
+      "sha256": "c81f26f3590c0d30e69f12e1294754a69da142ce95dc8bb446d19511919597d1",
       "source_data_directories": [
         "source_data/path_necessity_fashion",
         "source_data/review_branch_trajectories",
@@ -2222,19 +2222,19 @@
           "source": "S23",
           "source_panel": "A",
           "bbox": [
-            15.5,
-            23.2,
-            380.1,
-            179.8
+            16.649999618530273,
+            24.399999618530273,
+            380.1000061035156,
+            178.10000610351562
           ],
-          "width": 364.6,
-          "height": 156.60000000000002,
+          "width": 363.45000648498535,
+          "height": 153.70000648498535,
           "panel": "A",
           "target_rect": [
-            76.89999999999998,
+            20.624990653991688,
             19.0,
-            441.5,
-            175.60000000000002
+            384.07499713897704,
+            172.70000648498535
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S23_panels_A-C.pdf",
@@ -2250,19 +2250,19 @@
           "source": "S32",
           "source_panel": "C",
           "bbox": [
-            4.800000190734863,
-            199.34671020507812,
-            264.0,
-            333.4317932128906
+            18.649999618530273,
+            200.64999389648438,
+            263.1000061035156,
+            331.6000061035156
           ],
-          "width": 259.19999980926514,
-          "height": 134.0850830078125,
+          "width": 244.45000648498535,
+          "height": 130.95001220703125,
           "panel": "B",
           "target_rect": [
-            7.549997043609608,
-            198.60000000000002,
-            266.74999685287474,
-            332.6850830078125
+            20.624990653991688,
+            195.70000648498535,
+            265.07499713897704,
+            326.6500186920166
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S32_panels_A-F.pdf",
@@ -2467,19 +2467,19 @@
           "source": "S32",
           "source_panel": "D",
           "bbox": [
-            267.8999938964844,
-            199.34671020507812,
-            504.0,
-            333.4317932128906
+            278.3999938964844,
+            200.64999389648438,
+            503.1000061035156,
+            331.6000061035156
           ],
-          "width": 236.10000610351562,
-          "height": 134.0850830078125,
+          "width": 224.70001220703125,
+          "height": 130.95001220703125,
           "panel": "C",
           "target_rect": [
-            274.74999685287474,
-            198.60000000000002,
-            510.85000295639037,
-            332.6850830078125
+            284.07499713897704,
+            195.70000648498535,
+            508.7750093460083,
+            326.6500186920166
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S32_panels_A-F.pdf",
@@ -2695,9 +2695,9 @@
           ],
           "target_rect": [
             99.19999999999999,
-            333.6850830078125,
+            327.6500186920166,
             419.2,
-            369.6850830078125
+            363.6500186920166
           ],
           "scale": 1.0
         }
@@ -2705,8 +2705,8 @@
       "whole_source_sheet": false,
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
-      "height_pt": 382.6850891113281,
-      "sha256": "0806deb5160dff32aa37994c9f8599c90713f3a3ddf8278019cf07594f972a5c",
+      "height_pt": 376.6500244140625,
+      "sha256": "c01bf2db236a75bf79ac3fddac7eb1a9f55af89489f5fb8f5b93dab961f142c4",
       "source_data_directories": [
         "source_data/review_coefficient_encoder",
         "source_data/review_coefficient_hard_readout",
@@ -2726,22 +2726,22 @@
           "source_panel": "A",
           "bbox": [
             16.0,
-            0.43900012969970703,
+            0.04459095001220703,
             171.77613830566406,
-            150.56192016601562
+            150.6533203125
           ],
           "width": 155.77613830566406,
-          "height": 150.12292003631592,
+          "height": 150.6087293624878,
           "panel": "A",
           "target_rect": [
             16.0,
-            0.43900012969970703,
+            0.04459095001220703,
             171.77613830566406,
-            150.56192016601562
+            150.6533203125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_scalar_tree_capacity_native.pdf",
-          "source_sha256": "6713199647eabc34f4a116f873ee5d5835eb43ad80e08706bcf716e956d99696",
+          "source_sha256": "a6f10ed7c3e250a2bfc6c89f7f03b54f81ecfd3cc9a7aed370c235853df80c41",
           "old_provenance_figure": "figN12",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -2751,23 +2751,23 @@
           "source": "N12",
           "source_panel": "B",
           "bbox": [
-            183.4596710205078,
-            0.43900012969970703,
+            172.6666717529297,
+            0.04459095001220703,
             505.59503173828125,
             173.1016845703125
           ],
-          "width": 322.13536071777344,
-          "height": 172.6626844406128,
+          "width": 332.92835998535156,
+          "height": 173.0570936203003,
           "panel": "B",
           "target_rect": [
-            183.4596710205078,
-            0.43900012969970703,
+            172.6666717529297,
+            0.04459095001220703,
             505.59503173828125,
             173.1016845703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_scalar_tree_capacity_native.pdf",
-          "source_sha256": "6713199647eabc34f4a116f873ee5d5835eb43ad80e08706bcf716e956d99696",
+          "source_sha256": "a6f10ed7c3e250a2bfc6c89f7f03b54f81ecfd3cc9a7aed370c235853df80c41",
           "old_provenance_figure": "figN12",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -2793,7 +2793,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_scalar_tree_capacity_native.pdf",
-          "source_sha256": "6713199647eabc34f4a116f873ee5d5835eb43ad80e08706bcf716e956d99696",
+          "source_sha256": "a6f10ed7c3e250a2bfc6c89f7f03b54f81ecfd3cc9a7aed370c235853df80c41",
           "old_provenance_figure": "figN12",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -2819,7 +2819,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_scalar_tree_capacity_native.pdf",
-          "source_sha256": "6713199647eabc34f4a116f873ee5d5835eb43ad80e08706bcf716e956d99696",
+          "source_sha256": "a6f10ed7c3e250a2bfc6c89f7f03b54f81ecfd3cc9a7aed370c235853df80c41",
           "old_provenance_figure": "figN12",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -2829,23 +2829,23 @@
           "source": "N12",
           "source_panel": "E",
           "bbox": [
-            183.46665954589844,
+            172.6666717529297,
             335.4657897949219,
             329.8203430175781,
             463.3063659667969
           ],
-          "width": 146.3536834716797,
+          "width": 157.15367126464844,
           "height": 127.840576171875,
           "panel": "E",
           "target_rect": [
-            183.46665954589844,
+            172.6666717529297,
             335.4657897949219,
             329.8203430175781,
             463.3063659667969
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_scalar_tree_capacity_native.pdf",
-          "source_sha256": "6713199647eabc34f4a116f873ee5d5835eb43ad80e08706bcf716e956d99696",
+          "source_sha256": "a6f10ed7c3e250a2bfc6c89f7f03b54f81ecfd3cc9a7aed370c235853df80c41",
           "old_provenance_figure": "figN12",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -2855,23 +2855,23 @@
           "source": "N12",
           "source_panel": "F",
           "bbox": [
-            350.92633056640625,
+            340.913330078125,
             335.4657897949219,
             508.2591552734375,
             486.26800537109375
           ],
-          "width": 157.33282470703125,
+          "width": 167.3458251953125,
           "height": 150.80221557617188,
           "panel": "F",
           "target_rect": [
-            350.92633056640625,
+            340.913330078125,
             335.4657897949219,
             508.2591552734375,
             486.26800537109375
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_scalar_tree_capacity_native.pdf",
-          "source_sha256": "6713199647eabc34f4a116f873ee5d5835eb43ad80e08706bcf716e956d99696",
+          "source_sha256": "a6f10ed7c3e250a2bfc6c89f7f03b54f81ecfd3cc9a7aed370c235853df80c41",
           "old_provenance_figure": "figN12",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -2883,7 +2883,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 492.0,
-      "sha256": "4b4d97458f34957b44ee7ba26ea6bf10089dd3a734922caabb31708165ddbd00",
+      "sha256": "f74c994664fae8fe3a7761d360466381576d866c20c0f50916c46f4984cd9822",
       "source_data_directories": [
         "source_data/morphology_structure"
       ]
@@ -2899,23 +2899,23 @@
           "source": "N13",
           "source_panel": "A",
           "bbox": [
-            22.0,
+            12.248000144958496,
             4.759007453918457,
             246.49156188964844,
             148.80636596679688
           ],
-          "width": 224.49156188964844,
+          "width": 234.24356174468994,
           "height": 144.04735851287842,
           "panel": "A",
           "target_rect": [
-            22.0,
+            12.248000144958496,
             4.759007453918457,
             246.49156188964844,
             148.80636596679688
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_oracle_profile_credit_native.pdf",
-          "source_sha256": "53bb2ed90f68b12a7dacc22455d86d4399b3644db83afbc7dcf852fbe532d257",
+          "source_sha256": "992dd2dec2079a955dbceb3a2fec752c759f9f36c6e768862172f91182adaeff",
           "old_provenance_figure": "figN13",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -2925,23 +2925,23 @@
           "source": "N13",
           "source_panel": "B",
           "bbox": [
-            273.20001220703125,
+            259.3680114746094,
             4.759007453918457,
             497.6915588378906,
             148.80636596679688
           ],
-          "width": 224.49154663085938,
+          "width": 238.32354736328125,
           "height": 144.04735851287842,
           "panel": "B",
           "target_rect": [
-            273.20001220703125,
+            259.3680114746094,
             4.759007453918457,
             497.6915588378906,
             148.80636596679688
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_oracle_profile_credit_native.pdf",
-          "source_sha256": "53bb2ed90f68b12a7dacc22455d86d4399b3644db83afbc7dcf852fbe532d257",
+          "source_sha256": "992dd2dec2079a955dbceb3a2fec752c759f9f36c6e768862172f91182adaeff",
           "old_provenance_figure": "figN13",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -2951,23 +2951,23 @@
           "source": "N13",
           "source_panel": "C",
           "bbox": [
-            22.0,
+            12.248000144958496,
             155.75900268554688,
             253.4075927734375,
             296.5063781738281
           ],
-          "width": 231.4075927734375,
+          "width": 241.159592628479,
           "height": 140.74737548828125,
           "panel": "C",
           "target_rect": [
-            22.0,
+            12.248000144958496,
             155.75900268554688,
             253.4075927734375,
             296.5063781738281
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_oracle_profile_credit_native.pdf",
-          "source_sha256": "53bb2ed90f68b12a7dacc22455d86d4399b3644db83afbc7dcf852fbe532d257",
+          "source_sha256": "992dd2dec2079a955dbceb3a2fec752c759f9f36c6e768862172f91182adaeff",
           "old_provenance_figure": "figN13",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -2977,23 +2977,23 @@
           "source": "N13",
           "source_panel": "D",
           "bbox": [
-            270.3554992675781,
+            259.3680114746094,
             155.75900268554688,
             506.3211364746094,
             297.4367370605469
           ],
-          "width": 235.96563720703125,
+          "width": 246.953125,
           "height": 141.677734375,
           "panel": "D",
           "target_rect": [
-            270.3554992675781,
+            259.3680114746094,
             155.75900268554688,
             506.3211364746094,
             297.4367370605469
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_oracle_profile_credit_native.pdf",
-          "source_sha256": "53bb2ed90f68b12a7dacc22455d86d4399b3644db83afbc7dcf852fbe532d257",
+          "source_sha256": "992dd2dec2079a955dbceb3a2fec752c759f9f36c6e768862172f91182adaeff",
           "old_provenance_figure": "figN13",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3003,23 +3003,23 @@
           "source": "N13",
           "source_panel": "E",
           "bbox": [
-            22.0,
+            12.248000144958496,
             313.9590148925781,
-            260.98974609375,
+            260.3680114746094,
             487.46575927734375
           ],
-          "width": 238.98974609375,
+          "width": 248.12001132965088,
           "height": 173.50674438476562,
           "panel": "E",
           "target_rect": [
-            22.0,
+            12.248000144958496,
             313.9590148925781,
-            260.98974609375,
+            260.3680114746094,
             487.46575927734375
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_oracle_profile_credit_native.pdf",
-          "source_sha256": "53bb2ed90f68b12a7dacc22455d86d4399b3644db83afbc7dcf852fbe532d257",
+          "source_sha256": "992dd2dec2079a955dbceb3a2fec752c759f9f36c6e768862172f91182adaeff",
           "old_provenance_figure": "figN13",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3029,23 +3029,23 @@
           "source": "N13",
           "source_panel": "F",
           "bbox": [
-            268.4957580566406,
+            256.3680114746094,
             313.9590148925781,
             495.84100341796875,
             487.45013427734375
           ],
-          "width": 227.34524536132812,
+          "width": 239.47299194335938,
           "height": 173.49111938476562,
           "panel": "F",
           "target_rect": [
-            268.4957580566406,
+            256.3680114746094,
             313.9590148925781,
             495.84100341796875,
             487.45013427734375
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_oracle_profile_credit_native.pdf",
-          "source_sha256": "53bb2ed90f68b12a7dacc22455d86d4399b3644db83afbc7dcf852fbe532d257",
+          "source_sha256": "992dd2dec2079a955dbceb3a2fec752c759f9f36c6e768862172f91182adaeff",
           "old_provenance_figure": "figN13",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3057,7 +3057,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 490.0,
-      "sha256": "007540ff3605781d963961ea53790af73120764237082030fbf18dd977a992c6",
+      "sha256": "5ba29e69af3947535d541aee821d40aed287cc6ab9567ffd560e8b1b81ee0765",
       "source_data_directories": [
         "source_data/morphology_credit"
       ]
@@ -3073,23 +3073,23 @@
           "source": "N14",
           "source_panel": "A",
           "bbox": [
-            16.359375,
+            2.0,
             2.759007453918457,
             217.30999755859375,
             161.75863647460938
           ],
-          "width": 200.95062255859375,
+          "width": 215.30999755859375,
           "height": 158.99962902069092,
           "panel": "A",
           "target_rect": [
-            16.359375,
+            2.0,
             2.759007453918457,
             217.30999755859375,
             161.75863647460938
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_boolean_capacity_native.pdf",
-          "source_sha256": "693e3361c1c217bdb9dd5c8984afebbf302fea694ee6d5884171e278953784ee",
+          "source_sha256": "613407dd274ba81bc77342e06f419c66bca3311577b2bf372a464d1d5805048e",
           "old_provenance_figure": "figN14",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3099,23 +3099,23 @@
           "source": "N14",
           "source_panel": "B",
           "bbox": [
-            227.54937744140625,
+            216.80999755859375,
             2.759007453918457,
             503.10931396484375,
             152.83676147460938
           ],
-          "width": 275.5599365234375,
+          "width": 286.29931640625,
           "height": 150.07775402069092,
           "panel": "B",
           "target_rect": [
-            227.54937744140625,
+            216.80999755859375,
             2.759007453918457,
             503.10931396484375,
             152.83676147460938
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_boolean_capacity_native.pdf",
-          "source_sha256": "693e3361c1c217bdb9dd5c8984afebbf302fea694ee6d5884171e278953784ee",
+          "source_sha256": "613407dd274ba81bc77342e06f419c66bca3311577b2bf372a464d1d5805048e",
           "old_provenance_figure": "figN14",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3125,23 +3125,23 @@
           "source": "N14",
           "source_panel": "C",
           "bbox": [
-            37.0,
+            2.0,
             167.25900268554688,
-            215.4324951171875,
+            215.4971466064453,
             297.8657531738281
           ],
-          "width": 178.4324951171875,
+          "width": 213.4971466064453,
           "height": 130.60675048828125,
           "panel": "C",
           "target_rect": [
-            37.0,
+            2.0,
             167.25900268554688,
-            215.4324951171875,
+            215.4971466064453,
             297.8657531738281
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_boolean_capacity_native.pdf",
-          "source_sha256": "693e3361c1c217bdb9dd5c8984afebbf302fea694ee6d5884171e278953784ee",
+          "source_sha256": "613407dd274ba81bc77342e06f419c66bca3311577b2bf372a464d1d5805048e",
           "old_provenance_figure": "figN14",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3151,23 +3151,23 @@
           "source": "N14",
           "source_panel": "D",
           "bbox": [
-            227.54937744140625,
+            216.80999755859375,
             167.25900268554688,
             507.6028747558594,
             319.9367370605469
           ],
-          "width": 280.0534973144531,
+          "width": 290.7928771972656,
           "height": 152.677734375,
           "panel": "D",
           "target_rect": [
-            227.54937744140625,
+            216.80999755859375,
             167.25900268554688,
             507.6028747558594,
             319.9367370605469
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_boolean_capacity_native.pdf",
-          "source_sha256": "693e3361c1c217bdb9dd5c8984afebbf302fea694ee6d5884171e278953784ee",
+          "source_sha256": "613407dd274ba81bc77342e06f419c66bca3311577b2bf372a464d1d5805048e",
           "old_provenance_figure": "figN14",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3177,23 +3177,23 @@
           "source": "N14",
           "source_panel": "E",
           "bbox": [
-            6.777375221252441,
+            2.0,
             322.7590026855469,
             217.29388427734375,
             481.8367614746094
           ],
-          "width": 210.5165090560913,
+          "width": 215.29388427734375,
           "height": 159.0777587890625,
           "panel": "E",
           "target_rect": [
-            6.777375221252441,
+            2.0,
             322.7590026855469,
             217.29388427734375,
             481.8367614746094
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_boolean_capacity_native.pdf",
-          "source_sha256": "693e3361c1c217bdb9dd5c8984afebbf302fea694ee6d5884171e278953784ee",
+          "source_sha256": "613407dd274ba81bc77342e06f419c66bca3311577b2bf372a464d1d5805048e",
           "old_provenance_figure": "figN14",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3203,23 +3203,23 @@
           "source": "N14",
           "source_panel": "F",
           "bbox": [
-            241.75,
+            216.80999755859375,
             322.7590026855469,
             470.5689697265625,
             484.4367370605469
           ],
-          "width": 228.8189697265625,
+          "width": 253.75897216796875,
           "height": 161.677734375,
           "panel": "F",
           "target_rect": [
-            241.75,
+            216.80999755859375,
             322.7590026855469,
             470.5689697265625,
             484.4367370605469
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_boolean_capacity_native.pdf",
-          "source_sha256": "693e3361c1c217bdb9dd5c8984afebbf302fea694ee6d5884171e278953784ee",
+          "source_sha256": "613407dd274ba81bc77342e06f419c66bca3311577b2bf372a464d1d5805048e",
           "old_provenance_figure": "figN14",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3231,7 +3231,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 493.0,
-      "sha256": "efeba9dcf76d6b553fc06bf50ad0df473494897beb70614a35a29203f18c94d6",
+      "sha256": "3812e02b9ba9ebd669c1c01993281e799740519aabefa45b0aa7251a6160134c",
       "source_data_directories": [
         "source_data/boolean_theory"
       ]
@@ -3247,23 +3247,23 @@
           "source": "N15",
           "source_panel": "A",
           "bbox": [
-            21.159374237060547,
+            10.420000076293945,
             4.759007453918457,
             245.10000610351562,
             112.20639038085938
           ],
-          "width": 223.94063186645508,
+          "width": 234.68000602722168,
           "height": 107.44738292694092,
           "panel": "A",
           "target_rect": [
-            21.159374237060547,
+            10.420000076293945,
             4.759007453918457,
             245.10000610351562,
             112.20639038085938
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_boolean_learning_native.pdf",
-          "source_sha256": "8a234b9ccab1a368d66d7df583b517a74a9a1594203730f7b63e17609514dccd",
+          "source_sha256": "c908da0b1b0dbbbced89a564f602f8bfa9430be4fa5618986d8cb95d5a2cca9f",
           "old_provenance_figure": "figN15",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3273,23 +3273,23 @@
           "source": "N15",
           "source_panel": "B",
           "bbox": [
-            261.20001220703125,
+            253.17999267578125,
             4.759007453918457,
             499.0299987792969,
             123.7590103149414
           ],
-          "width": 237.82998657226562,
+          "width": 245.85000610351562,
           "height": 119.00000286102295,
           "panel": "B",
           "target_rect": [
-            261.20001220703125,
+            253.17999267578125,
             4.759007453918457,
             499.0299987792969,
             123.7590103149414
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_boolean_learning_native.pdf",
-          "source_sha256": "8a234b9ccab1a368d66d7df583b517a74a9a1594203730f7b63e17609514dccd",
+          "source_sha256": "c908da0b1b0dbbbced89a564f602f8bfa9430be4fa5618986d8cb95d5a2cca9f",
           "old_provenance_figure": "figN15",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3299,23 +3299,23 @@
           "source": "N15",
           "source_panel": "C",
           "bbox": [
-            21.159374237060547,
+            10.420000076293945,
             124.7590103149414,
             245.10000610351562,
             232.20639038085938
           ],
-          "width": 223.94063186645508,
+          "width": 234.68000602722168,
           "height": 107.44738006591797,
           "panel": "C",
           "target_rect": [
-            21.159374237060547,
+            10.420000076293945,
             124.7590103149414,
             245.10000610351562,
             232.20639038085938
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_boolean_learning_native.pdf",
-          "source_sha256": "8a234b9ccab1a368d66d7df583b517a74a9a1594203730f7b63e17609514dccd",
+          "source_sha256": "c908da0b1b0dbbbced89a564f602f8bfa9430be4fa5618986d8cb95d5a2cca9f",
           "old_provenance_figure": "figN15",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3325,23 +3325,23 @@
           "source": "N15",
           "source_panel": "D",
           "bbox": [
-            261.20001220703125,
+            253.17999267578125,
             116.45169067382812,
             510.70599365234375,
             240.15792846679688
           ],
-          "width": 249.5059814453125,
+          "width": 257.5260009765625,
           "height": 123.70623779296875,
           "panel": "D",
           "target_rect": [
-            261.20001220703125,
+            253.17999267578125,
             116.45169067382812,
             510.70599365234375,
             240.15792846679688
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_boolean_learning_native.pdf",
-          "source_sha256": "8a234b9ccab1a368d66d7df583b517a74a9a1594203730f7b63e17609514dccd",
+          "source_sha256": "c908da0b1b0dbbbced89a564f602f8bfa9430be4fa5618986d8cb95d5a2cca9f",
           "old_provenance_figure": "figN15",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3351,23 +3351,23 @@
           "source": "N15",
           "source_panel": "E",
           "bbox": [
-            28.0,
+            10.420000076293945,
             244.75900268554688,
             243.59124755859375,
             351.8063659667969
           ],
-          "width": 215.59124755859375,
+          "width": 233.1712474822998,
           "height": 107.04736328125,
           "panel": "E",
           "target_rect": [
-            28.0,
+            10.420000076293945,
             244.75900268554688,
             243.59124755859375,
             351.8063659667969
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_boolean_learning_native.pdf",
-          "source_sha256": "8a234b9ccab1a368d66d7df583b517a74a9a1594203730f7b63e17609514dccd",
+          "source_sha256": "c908da0b1b0dbbbced89a564f602f8bfa9430be4fa5618986d8cb95d5a2cca9f",
           "old_provenance_figure": "figN15",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3377,23 +3377,23 @@
           "source": "N15",
           "source_panel": "F",
           "bbox": [
-            261.20001220703125,
+            253.17999267578125,
             244.75900268554688,
             475.7796630859375,
             364.5304870605469
           ],
-          "width": 214.57965087890625,
+          "width": 222.59967041015625,
           "height": 119.771484375,
           "panel": "F",
           "target_rect": [
-            261.20001220703125,
+            253.17999267578125,
             244.75900268554688,
             475.7796630859375,
             364.5304870605469
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_boolean_learning_native.pdf",
-          "source_sha256": "8a234b9ccab1a368d66d7df583b517a74a9a1594203730f7b63e17609514dccd",
+          "source_sha256": "c908da0b1b0dbbbced89a564f602f8bfa9430be4fa5618986d8cb95d5a2cca9f",
           "old_provenance_figure": "figN15",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3403,23 +3403,23 @@
           "source": "N15",
           "source_panel": "G",
           "bbox": [
-            28.0,
+            10.420000076293945,
             366.958984375,
             245.0757598876953,
             484.4367370605469
           ],
-          "width": 217.0757598876953,
+          "width": 234.65575981140137,
           "height": 117.47775268554688,
           "panel": "G",
           "target_rect": [
-            28.0,
+            10.420000076293945,
             366.958984375,
             245.0757598876953,
             484.4367370605469
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_boolean_learning_native.pdf",
-          "source_sha256": "8a234b9ccab1a368d66d7df583b517a74a9a1594203730f7b63e17609514dccd",
+          "source_sha256": "c908da0b1b0dbbbced89a564f602f8bfa9430be4fa5618986d8cb95d5a2cca9f",
           "old_provenance_figure": "figN15",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3429,23 +3429,23 @@
           "source": "N15",
           "source_panel": "H",
           "bbox": [
-            261.20001220703125,
+            253.17999267578125,
             366.958984375,
             480.3813781738281,
             484.4367370605469
           ],
-          "width": 219.18136596679688,
+          "width": 227.20138549804688,
           "height": 117.47775268554688,
           "panel": "H",
           "target_rect": [
-            261.20001220703125,
+            253.17999267578125,
             366.958984375,
             480.3813781738281,
             484.4367370605469
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_boolean_learning_native.pdf",
-          "source_sha256": "8a234b9ccab1a368d66d7df583b517a74a9a1594203730f7b63e17609514dccd",
+          "source_sha256": "c908da0b1b0dbbbced89a564f602f8bfa9430be4fa5618986d8cb95d5a2cca9f",
           "old_provenance_figure": "figN15",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3457,7 +3457,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 493.0,
-      "sha256": "7a31db568eeff28657edd82ab59421b2a667cb860cc46b0d957eb1094b62bfe1",
+      "sha256": "36ee03593293d0fd5c4b84ac6d83a414588404bf296ed048bb23fc3283554d50",
       "source_data_directories": [
         "source_data/boolean_morphology"
       ]
@@ -3473,23 +3473,23 @@
           "source": "N16",
           "source_panel": "A",
           "bbox": [
-            24.0,
+            15.020000457763672,
             4.759007453918457,
             261.050537109375,
             160.43673706054688
           ],
-          "width": 237.050537109375,
+          "width": 246.03053665161133,
           "height": 155.67772960662842,
           "panel": "A",
           "target_rect": [
-            24.0,
+            15.020000457763672,
             4.759007453918457,
             261.050537109375,
             160.43673706054688
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_fixed_profile_budget_native.pdf",
-          "source_sha256": "ee76d1bfb98ce914290ec3ba98abe11cfc302c3d37e80c80143d045ed7882fc1",
+          "source_sha256": "703c18620bb20b716fa400e53fe89232799dc781ca20c00c39d118e250c9713f",
           "old_provenance_figure": "figN16",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3499,23 +3499,23 @@
           "source": "N16",
           "source_panel": "B",
           "bbox": [
-            272.20001220703125,
+            259.32000732421875,
             4.759007453918457,
             509.25054931640625,
             160.43673706054688
           ],
-          "width": 237.050537109375,
+          "width": 249.9305419921875,
           "height": 155.67772960662842,
           "panel": "B",
           "target_rect": [
-            272.20001220703125,
+            259.32000732421875,
             4.759007453918457,
             509.25054931640625,
             160.43673706054688
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_fixed_profile_budget_native.pdf",
-          "source_sha256": "ee76d1bfb98ce914290ec3ba98abe11cfc302c3d37e80c80143d045ed7882fc1",
+          "source_sha256": "703c18620bb20b716fa400e53fe89232799dc781ca20c00c39d118e250c9713f",
           "old_provenance_figure": "figN16",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3525,23 +3525,23 @@
           "source": "N16",
           "source_panel": "C",
           "bbox": [
-            24.0,
+            15.020000457763672,
             162.958984375,
             261.050537109375,
             311.4367370605469
           ],
-          "width": 237.050537109375,
+          "width": 246.03053665161133,
           "height": 148.47775268554688,
           "panel": "C",
           "target_rect": [
-            24.0,
+            15.020000457763672,
             162.958984375,
             261.050537109375,
             311.4367370605469
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_fixed_profile_budget_native.pdf",
-          "source_sha256": "ee76d1bfb98ce914290ec3ba98abe11cfc302c3d37e80c80143d045ed7882fc1",
+          "source_sha256": "703c18620bb20b716fa400e53fe89232799dc781ca20c00c39d118e250c9713f",
           "old_provenance_figure": "figN16",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3551,23 +3551,23 @@
           "source": "N16",
           "source_panel": "D",
           "bbox": [
-            270.3023681640625,
+            259.32000732421875,
             162.958984375,
             494.9268493652344,
             306.4844970703125
           ],
-          "width": 224.62448120117188,
+          "width": 235.60684204101562,
           "height": 143.5255126953125,
           "panel": "D",
           "target_rect": [
-            270.3023681640625,
+            259.32000732421875,
             162.958984375,
             494.9268493652344,
             306.4844970703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_fixed_profile_budget_native.pdf",
-          "source_sha256": "ee76d1bfb98ce914290ec3ba98abe11cfc302c3d37e80c80143d045ed7882fc1",
+          "source_sha256": "703c18620bb20b716fa400e53fe89232799dc781ca20c00c39d118e250c9713f",
           "old_provenance_figure": "figN16",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3577,23 +3577,23 @@
           "source": "N16",
           "source_panel": "E",
           "bbox": [
-            24.0,
+            15.020000457763672,
             313.9590148925781,
-            186.01136779785156,
+            170.1776580810547,
             489.6876220703125
           ],
-          "width": 162.01136779785156,
+          "width": 155.15765762329102,
           "height": 175.72860717773438,
           "panel": "E",
           "target_rect": [
-            24.0,
+            15.020000457763672,
             313.9590148925781,
-            186.01136779785156,
+            170.1776580810547,
             489.6876220703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_fixed_profile_budget_native.pdf",
-          "source_sha256": "ee76d1bfb98ce914290ec3ba98abe11cfc302c3d37e80c80143d045ed7882fc1",
+          "source_sha256": "703c18620bb20b716fa400e53fe89232799dc781ca20c00c39d118e250c9713f",
           "old_provenance_figure": "figN16",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3603,23 +3603,23 @@
           "source": "N16",
           "source_panel": "F",
           "bbox": [
-            189.46665954589844,
+            180.31137084960938,
             313.9590148925781,
             504.85247802734375,
             489.7657470703125
           ],
-          "width": 315.3858184814453,
+          "width": 324.5411071777344,
           "height": 175.80673217773438,
           "panel": "F",
           "target_rect": [
-            189.46665954589844,
+            180.31137084960938,
             313.9590148925781,
             504.85247802734375,
             489.7657470703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_fixed_profile_budget_native.pdf",
-          "source_sha256": "ee76d1bfb98ce914290ec3ba98abe11cfc302c3d37e80c80143d045ed7882fc1",
+          "source_sha256": "703c18620bb20b716fa400e53fe89232799dc781ca20c00c39d118e250c9713f",
           "old_provenance_figure": "figN16",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3631,7 +3631,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 493.0,
-      "sha256": "df8fa6374d598839450d0061442061a5dd8be3f9e4e60a3608fdfd48764377f3",
+      "sha256": "1f2efd9737604c1d487bfc8ec46f684469eda59c11ca38792084ff36b17f692b",
       "source_data_directories": [
         "source_data/credit_rule_extension"
       ]
@@ -3647,23 +3647,23 @@
           "source": "N17",
           "source_panel": "A",
           "bbox": [
-            26.0,
+            17.079999923706055,
             4.759007453918457,
             261.5823974609375,
             219.43675231933594
           ],
-          "width": 235.5823974609375,
+          "width": 244.50239753723145,
           "height": 214.67774486541748,
           "panel": "A",
           "target_rect": [
-            26.0,
+            17.079999923706055,
             4.759007453918457,
             261.5823974609375,
             219.43675231933594
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_credit_optimizer_controls_native.pdf",
-          "source_sha256": "3be11afdaee13b954b914a0195a6c9bdfb855fb62aeae1141bbfc1c67feca2b8",
+          "source_sha256": "193cf1d65c9fc6bb42cd40c51b658b32277cf94c02d8c149985c1d17c2a5e8f7",
           "old_provenance_figure": "figN17",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3673,23 +3673,23 @@
           "source": "N17",
           "source_panel": "B",
           "bbox": [
-            274.20001220703125,
+            265.3399963378906,
             4.759007453918457,
             506.73944091796875,
             219.43675231933594
           ],
-          "width": 232.5394287109375,
+          "width": 241.39944458007812,
           "height": 214.67774486541748,
           "panel": "B",
           "target_rect": [
-            274.20001220703125,
+            265.3399963378906,
             4.759007453918457,
             506.73944091796875,
             219.43675231933594
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_credit_optimizer_controls_native.pdf",
-          "source_sha256": "3be11afdaee13b954b914a0195a6c9bdfb855fb62aeae1141bbfc1c67feca2b8",
+          "source_sha256": "193cf1d65c9fc6bb42cd40c51b658b32277cf94c02d8c149985c1d17c2a5e8f7",
           "old_provenance_figure": "figN17",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3699,23 +3699,23 @@
           "source": "N17",
           "source_panel": "C",
           "bbox": [
-            26.0,
+            17.079999923706055,
             221.95899963378906,
-            275.20001220703125,
+            270.70782470703125,
             466.7657470703125
           ],
-          "width": 249.20001220703125,
+          "width": 253.6278247833252,
           "height": 244.80674743652344,
           "panel": "C",
           "target_rect": [
-            26.0,
+            17.079999923706055,
             221.95899963378906,
-            275.20001220703125,
+            270.70782470703125,
             466.7657470703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_credit_optimizer_controls_native.pdf",
-          "source_sha256": "3be11afdaee13b954b914a0195a6c9bdfb855fb62aeae1141bbfc1c67feca2b8",
+          "source_sha256": "193cf1d65c9fc6bb42cd40c51b658b32277cf94c02d8c149985c1d17c2a5e8f7",
           "old_provenance_figure": "figN17",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3725,23 +3725,23 @@
           "source": "N17",
           "source_panel": "D",
           "bbox": [
-            274.20001220703125,
+            265.3399963378906,
             221.95899963378906,
             506.73944091796875,
             466.7657470703125
           ],
-          "width": 232.5394287109375,
+          "width": 241.39944458007812,
           "height": 244.80674743652344,
           "panel": "D",
           "target_rect": [
-            274.20001220703125,
+            265.3399963378906,
             221.95899963378906,
             506.73944091796875,
             466.7657470703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_credit_optimizer_controls_native.pdf",
-          "source_sha256": "3be11afdaee13b954b914a0195a6c9bdfb855fb62aeae1141bbfc1c67feca2b8",
+          "source_sha256": "193cf1d65c9fc6bb42cd40c51b658b32277cf94c02d8c149985c1d17c2a5e8f7",
           "old_provenance_figure": "figN17",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3753,7 +3753,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 470.0,
-      "sha256": "84c939c49b557688d221d87e7af039507d242236e2480a898ced8a37c0d9b8ac",
+      "sha256": "0880c1b79d61d37affafc1911c897db996b717a0ee855a648e5d9940e99f0b8c",
       "source_data_directories": [
         "source_data/credit_rule_extension"
       ]
@@ -3769,23 +3769,23 @@
           "source": "N18",
           "source_panel": "A",
           "bbox": [
-            28.0,
+            7.767999649047852,
             4.759007453918457,
             291.3247985839844,
             141.44668579101562
           ],
-          "width": 263.3247985839844,
+          "width": 283.5567989349365,
           "height": 136.68767833709717,
           "panel": "A",
           "target_rect": [
-            28.0,
+            7.767999649047852,
             4.759007453918457,
             291.3247985839844,
             141.44668579101562
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_conductance_grouping_native.pdf",
-          "source_sha256": "5b12f26e4f81dde27fe8645f7c474de8a6039ae673a9d6d51536edee7b447914",
+          "source_sha256": "67062a920cfd48c0eea9fe59691741a8ba9dc2e9b51b700adbb85fc33a60b651",
           "old_provenance_figure": "figN18",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3795,23 +3795,23 @@
           "source": "N18",
           "source_panel": "B",
           "bbox": [
-            309.4239501953125,
+            298.413330078125,
             4.759007453918457,
             482.2149658203125,
             162.69735717773438
           ],
-          "width": 172.791015625,
+          "width": 183.8016357421875,
           "height": 157.93834972381592,
           "panel": "B",
           "target_rect": [
-            309.4239501953125,
+            298.413330078125,
             4.759007453918457,
             482.2149658203125,
             162.69735717773438
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_conductance_grouping_native.pdf",
-          "source_sha256": "5b12f26e4f81dde27fe8645f7c474de8a6039ae673a9d6d51536edee7b447914",
+          "source_sha256": "67062a920cfd48c0eea9fe59691741a8ba9dc2e9b51b700adbb85fc33a60b651",
           "old_provenance_figure": "figN18",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3821,23 +3821,23 @@
           "source": "N18",
           "source_panel": "C",
           "bbox": [
-            23.211750030517578,
+            7.767999649047852,
             169.01959228515625,
             248.0913848876953,
             312.0670471191406
           ],
-          "width": 224.87963485717773,
+          "width": 240.32338523864746,
           "height": 143.04745483398438,
           "panel": "C",
           "target_rect": [
-            23.211750030517578,
+            7.767999649047852,
             169.01959228515625,
             248.0913848876953,
             312.0670471191406
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_conductance_grouping_native.pdf",
-          "source_sha256": "5b12f26e4f81dde27fe8645f7c474de8a6039ae673a9d6d51536edee7b447914",
+          "source_sha256": "67062a920cfd48c0eea9fe59691741a8ba9dc2e9b51b700adbb85fc33a60b651",
           "old_provenance_figure": "figN18",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3847,23 +3847,23 @@
           "source": "N18",
           "source_panel": "D",
           "bbox": [
-            269.4117431640625,
+            258.3479919433594,
             169.01959228515625,
             494.2913513183594,
             312.0670471191406
           ],
-          "width": 224.87960815429688,
+          "width": 235.943359375,
           "height": 143.04745483398438,
           "panel": "D",
           "target_rect": [
-            269.4117431640625,
+            258.3479919433594,
             169.01959228515625,
             494.2913513183594,
             312.0670471191406
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_conductance_grouping_native.pdf",
-          "source_sha256": "5b12f26e4f81dde27fe8645f7c474de8a6039ae673a9d6d51536edee7b447914",
+          "source_sha256": "67062a920cfd48c0eea9fe59691741a8ba9dc2e9b51b700adbb85fc33a60b651",
           "old_provenance_figure": "figN18",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3873,23 +3873,23 @@
           "source": "N18",
           "source_panel": "E",
           "bbox": [
-            18.358623504638672,
+            7.767999649047852,
             310.3893127441406,
             257.1053161621094,
             481.46575927734375
           ],
-          "width": 238.7466926574707,
+          "width": 249.33731651306152,
           "height": 171.07644653320312,
           "panel": "E",
           "target_rect": [
-            18.358623504638672,
+            7.767999649047852,
             310.3893127441406,
             257.1053161621094,
             481.46575927734375
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_conductance_grouping_native.pdf",
-          "source_sha256": "5b12f26e4f81dde27fe8645f7c474de8a6039ae673a9d6d51536edee7b447914",
+          "source_sha256": "67062a920cfd48c0eea9fe59691741a8ba9dc2e9b51b700adbb85fc33a60b651",
           "old_provenance_figure": "figN18",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3899,23 +3899,23 @@
           "source": "N18",
           "source_panel": "F",
           "bbox": [
-            268.4492492675781,
+            258.3479919433594,
             310.3893127441406,
             502.34100341796875,
             481.46575927734375
           ],
-          "width": 233.89175415039062,
+          "width": 243.99301147460938,
           "height": 171.07644653320312,
           "panel": "F",
           "target_rect": [
-            268.4492492675781,
+            258.3479919433594,
             310.3893127441406,
             502.34100341796875,
             481.46575927734375
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_conductance_grouping_native.pdf",
-          "source_sha256": "5b12f26e4f81dde27fe8645f7c474de8a6039ae673a9d6d51536edee7b447914",
+          "source_sha256": "67062a920cfd48c0eea9fe59691741a8ba9dc2e9b51b700adbb85fc33a60b651",
           "old_provenance_figure": "figN18",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3927,7 +3927,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 484.0,
-      "sha256": "a17556c33307c511d76d1e777cdc1123f27680f5a8ed1c056b128286a61de244",
+      "sha256": "423fecdaa5e8967c7bb794cd0c2e79135d3202d825a7c0bc16348f9f90df0c29",
       "source_data_directories": [
         "source_data/morphology_conductance"
       ]
@@ -3943,23 +3943,23 @@
           "source": "N19",
           "source_panel": "A",
           "bbox": [
-            27.733623504638672,
+            6.187999725341797,
             4.759007453918457,
             255.12327575683594,
             213.43675231933594
           ],
-          "width": 227.38965225219727,
+          "width": 248.93527603149414,
           "height": 208.67774486541748,
           "panel": "A",
           "target_rect": [
-            27.733623504638672,
+            6.187999725341797,
             4.759007453918457,
             255.12327575683594,
             213.43675231933594
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_conductance_precision_native.pdf",
-          "source_sha256": "c07882dbec68696a256b8a72a24ea78d6f1e5c23106ab93f6a689aba4a3cfd26",
+          "source_sha256": "5b54316d76e494380b1c7797c696f56084d444250f6457201708041d6a4535d2",
           "old_provenance_figure": "figN19",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3969,23 +3969,23 @@
           "source": "N19",
           "source_panel": "B",
           "bbox": [
-            273.20001220703125,
+            256.260009765625,
             4.759007453918457,
             500.3232727050781,
             213.43675231933594
           ],
-          "width": 227.12326049804688,
+          "width": 244.06326293945312,
           "height": 208.67774486541748,
           "panel": "B",
           "target_rect": [
-            273.20001220703125,
+            256.260009765625,
             4.759007453918457,
             500.3232727050781,
             213.43675231933594
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_conductance_precision_native.pdf",
-          "source_sha256": "c07882dbec68696a256b8a72a24ea78d6f1e5c23106ab93f6a689aba4a3cfd26",
+          "source_sha256": "5b54316d76e494380b1c7797c696f56084d444250f6457201708041d6a4535d2",
           "old_provenance_figure": "figN19",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -3995,23 +3995,23 @@
           "source": "N19",
           "source_panel": "C",
           "bbox": [
-            17.127376556396484,
+            6.187999725341797,
             217.75900268554688,
             255.59976196289062,
             350.8063659667969
           ],
-          "width": 238.47238540649414,
+          "width": 249.41176223754883,
           "height": 133.04736328125,
           "panel": "C",
           "target_rect": [
-            17.127376556396484,
+            6.187999725341797,
             217.75900268554688,
             255.59976196289062,
             350.8063659667969
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_conductance_precision_native.pdf",
-          "source_sha256": "c07882dbec68696a256b8a72a24ea78d6f1e5c23106ab93f6a689aba4a3cfd26",
+          "source_sha256": "5b54316d76e494380b1c7797c696f56084d444250f6457201708041d6a4535d2",
           "old_provenance_figure": "figN19",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -4021,23 +4021,23 @@
           "source": "N19",
           "source_panel": "D",
           "bbox": [
-            267.2929992675781,
+            256.260009765625,
             217.75900268554688,
             500.2726135253906,
             353.62200927734375
           ],
-          "width": 232.9796142578125,
+          "width": 244.01260375976562,
           "height": 135.86300659179688,
           "panel": "D",
           "target_rect": [
-            267.2929992675781,
+            256.260009765625,
             217.75900268554688,
             500.2726135253906,
             353.62200927734375
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_conductance_precision_native.pdf",
-          "source_sha256": "c07882dbec68696a256b8a72a24ea78d6f1e5c23106ab93f6a689aba4a3cfd26",
+          "source_sha256": "5b54316d76e494380b1c7797c696f56084d444250f6457201708041d6a4535d2",
           "old_provenance_figure": "figN19",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -4049,7 +4049,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 370.0,
-      "sha256": "0b7eada679725247bce7edf12c26623900b4fec344d1a149d5a37b8cec102863",
+      "sha256": "d8bf2359ec5d1dfa0ee5e32d317bee6a1259cec168169aee709a135fa2dbf229",
       "source_data_directories": [
         "source_data/conductance_credit_demand"
       ]
@@ -4065,23 +4065,23 @@
           "source": "N20",
           "source_panel": "A",
           "bbox": [
-            21.370624542236328,
+            10.619999885559082,
             0.518986701965332,
             307.6193542480469,
             258.0589599609375
           ],
-          "width": 286.24872970581055,
+          "width": 296.9993543624878,
           "height": 257.53997325897217,
           "panel": "A",
           "target_rect": [
-            21.370624542236328,
+            10.619999885559082,
             0.518986701965332,
             307.6193542480469,
             258.0589599609375
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_conductance_optimization_native.pdf",
-          "source_sha256": "719d6db080295869e015394a6cfe1ac16f106f59f4a7943c28b013a445930781",
+          "source_sha256": "7472557cd667e2991d970a2824b96ebe42a24773525330bf2679c0e4353d6173",
           "old_provenance_figure": "figN20",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -4091,23 +4091,23 @@
           "source": "N20",
           "source_panel": "B",
           "bbox": [
-            313.18206787109375,
+            302.413330078125,
             0.518986701965332,
             507.0303955078125,
             249.2339630126953
           ],
-          "width": 193.84832763671875,
+          "width": 204.6170654296875,
           "height": 248.71497631072998,
           "panel": "B",
           "target_rect": [
-            313.18206787109375,
+            302.413330078125,
             0.518986701965332,
             507.0303955078125,
             249.2339630126953
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_conductance_optimization_native.pdf",
-          "source_sha256": "719d6db080295869e015394a6cfe1ac16f106f59f4a7943c28b013a445930781",
+          "source_sha256": "7472557cd667e2991d970a2824b96ebe42a24773525330bf2679c0e4353d6173",
           "old_provenance_figure": "figN20",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -4117,23 +4117,23 @@
           "source": "N20",
           "source_panel": "C",
           "bbox": [
-            26.116748809814453,
+            10.619999885559082,
             256.31695556640625,
-            193.84222412109375,
+            180.01361083984375,
             489.46575927734375
           ],
-          "width": 167.7254753112793,
+          "width": 169.39361095428467,
           "height": 233.1488037109375,
           "panel": "C",
           "target_rect": [
-            26.116748809814453,
+            10.619999885559082,
             256.31695556640625,
-            193.84222412109375,
+            180.01361083984375,
             489.46575927734375
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_conductance_optimization_native.pdf",
-          "source_sha256": "719d6db080295869e015394a6cfe1ac16f106f59f4a7943c28b013a445930781",
+          "source_sha256": "7472557cd667e2991d970a2824b96ebe42a24773525330bf2679c0e4353d6173",
           "old_provenance_figure": "figN20",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -4143,23 +4143,23 @@
           "source": "N20",
           "source_panel": "D",
           "bbox": [
-            190.2500762939453,
+            179.19332885742188,
             256.31695556640625,
-            359.608154296875,
+            344.8666687011719,
             489.46575927734375
           ],
-          "width": 169.3580780029297,
+          "width": 165.67333984375,
           "height": 233.1488037109375,
           "panel": "D",
           "target_rect": [
-            190.2500762939453,
+            179.19332885742188,
             256.31695556640625,
-            359.608154296875,
+            344.8666687011719,
             489.46575927734375
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_conductance_optimization_native.pdf",
-          "source_sha256": "719d6db080295869e015394a6cfe1ac16f106f59f4a7943c28b013a445930781",
+          "source_sha256": "7472557cd667e2991d970a2824b96ebe42a24773525330bf2679c0e4353d6173",
           "old_provenance_figure": "figN20",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -4169,23 +4169,23 @@
           "source": "N20",
           "source_panel": "E",
           "bbox": [
-            354.3834228515625,
+            343.8666687011719,
             256.31695556640625,
             506.349609375,
             489.46575927734375
           ],
-          "width": 151.9661865234375,
+          "width": 162.48294067382812,
           "height": 233.1488037109375,
           "panel": "E",
           "target_rect": [
-            354.3834228515625,
+            343.8666687011719,
             256.31695556640625,
             506.349609375,
             489.46575927734375
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_conductance_optimization_native.pdf",
-          "source_sha256": "719d6db080295869e015394a6cfe1ac16f106f59f4a7943c28b013a445930781",
+          "source_sha256": "7472557cd667e2991d970a2824b96ebe42a24773525330bf2679c0e4353d6173",
           "old_provenance_figure": "figN20",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -4197,7 +4197,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 492.0,
-      "sha256": "642e86c8ddaa83420087af57f79a9f866a30dbb43537abeb5b4a427190455f98",
+      "sha256": "b57f37c3f6d1f19c69a39cdb84303014e15ef22367255dfa0b67a4933fcd8fb1",
       "source_data_directories": [
         "source_data/conductance_credit_demand"
       ]
@@ -4229,7 +4229,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_local_gate_controls_native.pdf",
-          "source_sha256": "03eae0c3159c06269f22dca51c2e7b170ad13e6c7db487b22c376e430e725382",
+          "source_sha256": "72d2e71acd6490f09eeb24d9cc9570c5a730c05167051b8e8740b33559fa6b5a",
           "old_provenance_figure": "figN21",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -4255,7 +4255,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_local_gate_controls_native.pdf",
-          "source_sha256": "03eae0c3159c06269f22dca51c2e7b170ad13e6c7db487b22c376e430e725382",
+          "source_sha256": "72d2e71acd6490f09eeb24d9cc9570c5a730c05167051b8e8740b33559fa6b5a",
           "old_provenance_figure": "figN21",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -4281,7 +4281,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_local_gate_controls_native.pdf",
-          "source_sha256": "03eae0c3159c06269f22dca51c2e7b170ad13e6c7db487b22c376e430e725382",
+          "source_sha256": "72d2e71acd6490f09eeb24d9cc9570c5a730c05167051b8e8740b33559fa6b5a",
           "old_provenance_figure": "figN21",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -4307,7 +4307,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_local_gate_controls_native.pdf",
-          "source_sha256": "03eae0c3159c06269f22dca51c2e7b170ad13e6c7db487b22c376e430e725382",
+          "source_sha256": "72d2e71acd6490f09eeb24d9cc9570c5a730c05167051b8e8740b33559fa6b5a",
           "old_provenance_figure": "figN21",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -4319,7 +4319,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 492.0,
-      "sha256": "068c625ccd9f80acd4d9ecd6f785feacc8836d0b6914e081d83210d2261f6c38",
+      "sha256": "17bdbfb41b77f4fff58d8a25406cd2d603eb2f1f4d0b1cccc5f234864615d732",
       "source_data_directories": [
         "source_data/conductance_local_gate"
       ]
@@ -4351,7 +4351,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-          "source_sha256": "ba9393961e1dc134e3d8f5ffb54eaaba0af53fa84a2437dbb1bf9bb969a20f95",
+          "source_sha256": "e7b8f866b11964781b1babb0d6b624cfebe2eec31469e6bf937d21e35487ffdc",
           "old_provenance_figure": "figN22",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -4361,23 +4361,23 @@
           "source": "N22",
           "source_panel": "B",
           "bbox": [
-            170.8000030517578,
+            161.0,
             4.759007453918457,
             324.0987548828125,
             182.97219848632812
           ],
-          "width": 153.2987518310547,
+          "width": 163.0987548828125,
           "height": 178.21319103240967,
           "panel": "B",
           "target_rect": [
-            170.8000030517578,
+            161.0,
             4.759007453918457,
             324.0987548828125,
             182.97219848632812
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-          "source_sha256": "ba9393961e1dc134e3d8f5ffb54eaaba0af53fa84a2437dbb1bf9bb969a20f95",
+          "source_sha256": "e7b8f866b11964781b1babb0d6b624cfebe2eec31469e6bf937d21e35487ffdc",
           "old_provenance_figure": "figN22",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -4387,23 +4387,23 @@
           "source": "N22",
           "source_panel": "C",
           "bbox": [
-            333.6000061035156,
+            323.6400146484375,
             4.759007453918457,
             509.88763427734375,
             182.97219848632812
           ],
-          "width": 176.28762817382812,
+          "width": 186.24761962890625,
           "height": 178.21319103240967,
           "panel": "C",
           "target_rect": [
-            333.6000061035156,
+            323.6400146484375,
             4.759007453918457,
             509.88763427734375,
             182.97219848632812
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-          "source_sha256": "ba9393961e1dc134e3d8f5ffb54eaaba0af53fa84a2437dbb1bf9bb969a20f95",
+          "source_sha256": "e7b8f866b11964781b1babb0d6b624cfebe2eec31469e6bf937d21e35487ffdc",
           "old_provenance_figure": "figN22",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -4429,7 +4429,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-          "source_sha256": "ba9393961e1dc134e3d8f5ffb54eaaba0af53fa84a2437dbb1bf9bb969a20f95",
+          "source_sha256": "e7b8f866b11964781b1babb0d6b624cfebe2eec31469e6bf937d21e35487ffdc",
           "old_provenance_figure": "figN22",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -4439,23 +4439,23 @@
           "source": "N22",
           "source_panel": "E",
           "bbox": [
-            170.8000030517578,
+            161.0,
             181.75900268554688,
             315.0625,
             325.59613037109375
           ],
-          "width": 144.2624969482422,
+          "width": 154.0625,
           "height": 143.83712768554688,
           "panel": "E",
           "target_rect": [
-            170.8000030517578,
+            161.0,
             181.75900268554688,
             315.0625,
             325.59613037109375
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-          "source_sha256": "ba9393961e1dc134e3d8f5ffb54eaaba0af53fa84a2437dbb1bf9bb969a20f95",
+          "source_sha256": "e7b8f866b11964781b1babb0d6b624cfebe2eec31469e6bf937d21e35487ffdc",
           "old_provenance_figure": "figN22",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -4465,23 +4465,23 @@
           "source": "N22",
           "source_panel": "F",
           "bbox": [
-            333.6000061035156,
+            323.6400146484375,
             181.75900268554688,
             470.6490783691406,
             317.4688720703125
           ],
-          "width": 137.049072265625,
+          "width": 147.00906372070312,
           "height": 135.70986938476562,
           "panel": "F",
           "target_rect": [
-            333.6000061035156,
+            323.6400146484375,
             181.75900268554688,
             470.6490783691406,
             317.4688720703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-          "source_sha256": "ba9393961e1dc134e3d8f5ffb54eaaba0af53fa84a2437dbb1bf9bb969a20f95",
+          "source_sha256": "e7b8f866b11964781b1babb0d6b624cfebe2eec31469e6bf937d21e35487ffdc",
           "old_provenance_figure": "figN22",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -4507,7 +4507,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-          "source_sha256": "ba9393961e1dc134e3d8f5ffb54eaaba0af53fa84a2437dbb1bf9bb969a20f95",
+          "source_sha256": "e7b8f866b11964781b1babb0d6b624cfebe2eec31469e6bf937d21e35487ffdc",
           "old_provenance_figure": "figN22",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -4533,7 +4533,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-          "source_sha256": "ba9393961e1dc134e3d8f5ffb54eaaba0af53fa84a2437dbb1bf9bb969a20f95",
+          "source_sha256": "e7b8f866b11964781b1babb0d6b624cfebe2eec31469e6bf937d21e35487ffdc",
           "old_provenance_figure": "figN22",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -4545,7 +4545,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 484.0,
-      "sha256": "e8d82f51bbc225dd1e545c73d001c5d81afa577ceaeecb71b495fa881b9bbb88",
+      "sha256": "48256e15445f0781a9c46c410be3e9a0da200c2049e9ad55f7040293a3c08caa",
       "source_data_directories": [
         "source_data/physical_alignment_dose",
         "source_data/remaining_physical_experiments",
@@ -4566,23 +4566,23 @@
           "source": "S15",
           "source_panel": "A",
           "bbox": [
-            19.84000015258789,
-            8.110264778137207,
+            9.34000015258789,
+            12.641514778137207,
             234.0581817626953,
             165.45022583007812
           ],
-          "width": 214.21818161010742,
-          "height": 157.33996105194092,
+          "width": 224.71818161010742,
+          "height": 152.80871105194092,
           "panel": "A",
           "target_rect": [
-            19.84000015258789,
-            8.110264778137207,
+            9.34000015258789,
+            12.641514778137207,
             234.0581817626953,
             165.45022583007812
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S15_panels_A-D.pdf",
-          "source_sha256": "4a9f9918a14625f3e7c91d10a64c43501851cbefa79dbbccd3144d8c04769126",
+          "source_sha256": "1ba6d9859574a52b27a94e8402c3a39f6e6c5155cdddfa9778a162ea15a7f5e4",
           "old_provenance_figure": "figS15",
           "old_provenance_entry_ids": [
             "physical_calibration.accessibility",
@@ -4605,23 +4605,23 @@
           "source": "S15",
           "source_panel": "B",
           "bbox": [
-            289.8240051269531,
-            8.110264778137207,
+            279.3240051269531,
+            12.641514778137207,
             508.7594909667969,
             165.54397583007812
           ],
-          "width": 218.93548583984375,
-          "height": 157.43371105194092,
+          "width": 229.43548583984375,
+          "height": 152.90246105194092,
           "panel": "B",
           "target_rect": [
-            289.8240051269531,
-            8.110264778137207,
+            279.3240051269531,
+            12.641514778137207,
             508.7594909667969,
             165.54397583007812
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S15_panels_A-D.pdf",
-          "source_sha256": "4a9f9918a14625f3e7c91d10a64c43501851cbefa79dbbccd3144d8c04769126",
+          "source_sha256": "1ba6d9859574a52b27a94e8402c3a39f6e6c5155cdddfa9778a162ea15a7f5e4",
           "old_provenance_figure": "figS15",
           "old_provenance_entry_ids": [
             "physical_calibration.accessibility",
@@ -4644,23 +4644,23 @@
           "source": "S15",
           "source_panel": "C",
           "bbox": [
-            19.84000015258789,
-            190.49676513671875,
+            9.34000015258789,
+            195.02801513671875,
             236.6833038330078,
             347.8367614746094
           ],
-          "width": 216.84330368041992,
-          "height": 157.33999633789062,
+          "width": 227.34330368041992,
+          "height": 152.80874633789062,
           "panel": "C",
           "target_rect": [
-            19.84000015258789,
-            190.49676513671875,
+            9.34000015258789,
+            195.02801513671875,
             236.6833038330078,
             347.8367614746094
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S15_panels_A-D.pdf",
-          "source_sha256": "4a9f9918a14625f3e7c91d10a64c43501851cbefa79dbbccd3144d8c04769126",
+          "source_sha256": "1ba6d9859574a52b27a94e8402c3a39f6e6c5155cdddfa9778a162ea15a7f5e4",
           "old_provenance_figure": "figS15",
           "old_provenance_entry_ids": [
             "physical_calibration.accessibility",
@@ -4683,23 +4683,23 @@
           "source": "S15",
           "source_panel": "D",
           "bbox": [
-            289.8240051269531,
-            190.49676513671875,
+            279.3240051269531,
+            195.02801513671875,
             512.6240234375,
             347.8367614746094
           ],
-          "width": 222.80001831054688,
-          "height": 157.33999633789062,
+          "width": 233.30001831054688,
+          "height": 152.80874633789062,
           "panel": "D",
           "target_rect": [
-            289.8240051269531,
-            190.49676513671875,
+            279.3240051269531,
+            195.02801513671875,
             512.6240234375,
             347.8367614746094
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S15_panels_A-D.pdf",
-          "source_sha256": "4a9f9918a14625f3e7c91d10a64c43501851cbefa79dbbccd3144d8c04769126",
+          "source_sha256": "1ba6d9859574a52b27a94e8402c3a39f6e6c5155cdddfa9778a162ea15a7f5e4",
           "old_provenance_figure": "figS15",
           "old_provenance_entry_ids": [
             "physical_calibration.accessibility",
@@ -4724,7 +4724,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 360.0,
-      "sha256": "c651fb7b51acac7923c5a7cbd404772ac1363989cd71f8c40b5c6d5ffc0ac065",
+      "sha256": "ab60855734a6379378f4ceca49ad8b0516391231e151299f4a059edcbc407a61",
       "source_data_directories": [
         "source_data/nonlinear_physical_depth_accessibility",
         "source_data/nonlinear_physical_depth_boundary",
@@ -4744,23 +4744,23 @@
           "source": "S18",
           "source_panel": "E",
           "bbox": [
-            2.0,
-            322.8,
-            234.1,
-            472.7
+            20.899999618530273,
+            329.3999938964844,
+            232.85000610351562,
+            471.3500061035156
           ],
-          "width": 232.1,
-          "height": 149.89999999999998,
+          "width": 211.95000648498535,
+          "height": 141.95001220703125,
           "panel": "A",
           "target_rect": [
-            9.550000000000011,
+            16.474996995925892,
             19.0,
-            241.65,
-            168.89999999999998
+            228.42500348091124,
+            160.95001220703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S18_panels_A-K.pdf",
-          "source_sha256": "1724745817a41637c1ea2694a56172a50755e3b5b864112dc3a4256246353f5a",
+          "source_sha256": "37f6cabc1bd80a5443133398adc629e0abad9e7f8f4da55eef95769b6df32dee",
           "old_provenance_figure": "figS18",
           "old_provenance_entry_ids": [
             "alignmentdose.asset",
@@ -4790,23 +4790,23 @@
           "source": "S18",
           "source_panel": "F",
           "bbox": [
-            257.7,
-            322.8,
-            516.9,
-            472.7
+            297.3999938964844,
+            329.3999938964844,
+            488.6000061035156,
+            471.3500061035156
           ],
-          "width": 259.2,
-          "height": 149.89999999999998,
+          "width": 191.20001220703125,
+          "height": 141.95001220703125,
           "panel": "B",
           "target_rect": [
-            249.65,
+            247.42500348091124,
             19.0,
-            508.85,
-            168.89999999999998
+            438.6250156879425,
+            160.95001220703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S18_panels_A-K.pdf",
-          "source_sha256": "1724745817a41637c1ea2694a56172a50755e3b5b864112dc3a4256246353f5a",
+          "source_sha256": "37f6cabc1bd80a5443133398adc629e0abad9e7f8f4da55eef95769b6df32dee",
           "old_provenance_figure": "figS18",
           "old_provenance_entry_ids": [
             "alignmentdose.asset",
@@ -4836,19 +4836,19 @@
           "source": "S28",
           "source_panel": "B",
           "bbox": [
-            6.2,
-            209.5,
-            505.6,
-            389.5
+            7.900000095367432,
+            216.14999389648438,
+            504.3500061035156,
+            387.6000061035156
           ],
-          "width": 499.40000000000003,
-          "height": 180.0,
+          "width": 496.4500060081482,
+          "height": 171.45001220703125,
           "panel": "C",
           "target_rect": [
-            9.499999999999972,
-            191.89999999999998,
-            508.9,
-            371.9
+            16.474996995925892,
+            183.95001220703125,
+            512.9250030040741,
+            355.4000244140625
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S28_panels_A-B.pdf",
@@ -4865,8 +4865,8 @@
       "whole_source_sheet": false,
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
-      "height_pt": 375.8999938964844,
-      "sha256": "0ec8ac26a9415cf6d36fdb01c4a74d390f09aacf9cd78634d8827b7b3bf7139d",
+      "height_pt": 359.4000244140625,
+      "sha256": "22311eaa975467b5e46e0f8c5d9bf4610e221f491eea7bd1eaf89cb3514a4c46",
       "source_data_directories": [
         "source_data/remaining_physical_experiments",
         "source_data/point_dendrite_credit_controls"
@@ -4883,19 +4883,19 @@
           "source": "S10",
           "source_panel": "B",
           "bbox": [
-            139.7,
-            31.1,
-            388.7,
-            142.6
+            140.89999389648438,
+            32.400001525878906,
+            340.6000061035156,
+            139.35000610351562
           ],
-          "width": 249.0,
-          "height": 111.5,
+          "width": 199.70001220703125,
+          "height": 106.95000457763672,
           "panel": "A",
           "target_rect": [
-            6.200000000000017,
+            18.37498779296874,
             19.0,
-            255.20000000000002,
-            130.5
+            218.075,
+            125.95000457763672
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S10_panels_A-H.pdf",
@@ -4920,19 +4920,19 @@
           "source": "S20",
           "source_panel": "B",
           "bbox": [
-            265.8,
-            14.2,
-            514.8,
-            201.3
+            266.8999938964844,
+            15.399999618530273,
+            502.3500061035156,
+            199.60000610351562
           ],
-          "width": 248.99999999999994,
-          "height": 187.10000000000002,
+          "width": 235.45001220703125,
+          "height": 184.20000648498535,
           "panel": "B",
           "target_rect": [
-            263.20000000000005,
+            272.325,
             19.0,
-            512.2,
-            206.10000000000002
+            507.77501220703124,
+            203.20000648498535
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S20_panels_A-B.pdf",
@@ -4951,19 +4951,19 @@
           "source": "S27",
           "source_panel": "B",
           "bbox": [
-            266.0,
-            10.2,
-            515.0,
-            188.6
+            270.3999938964844,
+            11.399999618530273,
+            505.3500061035156,
+            188.60000610351562
           ],
-          "width": 249.0,
-          "height": 178.4,
+          "width": 234.95001220703125,
+          "height": 177.20000648498535,
           "panel": "C",
           "target_rect": [
-            6.199999999999989,
-            229.10000000000002,
-            255.2,
-            407.5
+            18.37498779296874,
+            226.20000648498535,
+            253.325,
+            403.4000129699707
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S27_panels_A-C.pdf",
@@ -4988,19 +4988,19 @@
           "source": "S27",
           "source_panel": "D",
           "bbox": [
-            266.0,
-            208.7,
-            515.0,
-            380.4
+            266.6499938964844,
+            209.89999389648438,
+            505.3500061035156,
+            378.6000061035156
           ],
-          "width": 249.0,
-          "height": 171.7,
+          "width": 238.70001220703125,
+          "height": 168.70001220703125,
           "panel": "D",
           "target_rect": [
-            263.2,
-            229.10000000000002,
-            512.2,
-            400.8
+            272.325,
+            226.20000648498535,
+            511.02501220703124,
+            394.9000186920166
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S27_panels_A-C.pdf",
@@ -5036,9 +5036,9 @@
           ],
           "target_rect": [
             152.7,
-            408.5,
+            404.4000129699707,
             365.7,
-            426.6
+            422.5000129699707
           ],
           "scale": 1.0
         }
@@ -5046,8 +5046,8 @@
       "whole_source_sheet": false,
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
-      "height_pt": 439.6000061035156,
-      "sha256": "a4f26f416459e9be2fc1aee40ceab760e598461ba0e9ae83d076b3a6fbd8bad5",
+      "height_pt": 435.5,
+      "sha256": "105ddb39d791dd4cccf8680631c9c06693a93008de65bb4f57c70405117fdd3c",
       "source_data_directories": [
         "source_data/figure3",
         "source_data/microns_v661_replication",
@@ -5065,19 +5065,19 @@
           "source": "S12",
           "source_panel": "B",
           "bbox": [
-            124.0,
-            19.0,
-            518.4,
-            127.8
+            170.64999389648438,
+            20.149999618530273,
+            511.1000061035156,
+            127.80000305175781
           ],
-          "width": 394.4,
-          "height": 108.8,
+          "width": 340.45001220703125,
+          "height": 107.65000343322754,
           "panel": "A",
           "target_rect": [
-            62.0,
+            90.14998168945311,
             19.0,
-            456.4,
-            127.8
+            430.59999389648436,
+            126.65000343322754
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S12_panels_A-J.pdf",
@@ -5107,19 +5107,19 @@
           "source": "S12",
           "source_panel": "D",
           "bbox": [
-            138.0,
-            175.7,
-            249.1,
-            325.3
+            139.14999389648438,
+            176.89999389648438,
+            248.35000610351562,
+            323.3500061035156
           ],
-          "width": 111.1,
-          "height": 149.60000000000002,
+          "width": 109.20001220703125,
+          "height": 146.45001220703125,
           "panel": "B",
           "target_rect": [
-            87.14999999999998,
-            150.8,
-            198.24999999999997,
-            300.40000000000003
+            90.14998168945311,
+            149.65000343322754,
+            199.34999389648436,
+            296.1000156402588
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S12_panels_A-J.pdf",
@@ -5148,19 +5148,19 @@
           "source": "S12",
           "source_panel": "E",
           "bbox": [
-            270.3,
-            175.7,
-            380.8,
-            325.3
+            272.8999938964844,
+            176.89999389648438,
+            379.8500061035156,
+            323.3500061035156
           ],
-          "width": 110.5,
-          "height": 149.60000000000002,
+          "width": 106.95001220703125,
+          "height": 146.45001220703125,
           "panel": "C",
           "target_rect": [
-            204.24999999999997,
-            150.8,
-            314.75,
-            300.40000000000003
+            212.34999389648436,
+            149.65000343322754,
+            319.3000061035156,
+            296.1000156402588
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S12_panels_A-J.pdf",
@@ -5189,19 +5189,19 @@
           "source": "S12",
           "source_panel": "F",
           "bbox": [
-            402.0,
-            175.7,
-            512.5,
-            325.3
+            404.6499938964844,
+            176.89999389648438,
+            511.6000061035156,
+            323.3500061035156
           ],
-          "width": 110.5,
-          "height": 149.60000000000002,
+          "width": 106.95001220703125,
+          "height": 146.45001220703125,
           "panel": "D",
           "target_rect": [
-            320.75,
-            150.8,
-            431.25,
-            300.40000000000003
+            332.3000061035156,
+            149.65000343322754,
+            439.25001831054686,
+            296.1000156402588
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S12_panels_A-J.pdf",
@@ -5230,19 +5230,19 @@
           "source": "S12",
           "source_panel": "G",
           "bbox": [
-            4.9,
-            334.8,
-            122.7,
-            476.7
+            13.649999618530273,
+            335.8999938964844,
+            121.0999984741211,
+            474.8500061035156
           ],
-          "width": 117.8,
-          "height": 141.89999999999998,
+          "width": 107.44999885559082,
+          "height": 138.95001220703125,
           "panel": "E",
           "target_rect": [
-            119.94999999999999,
-            323.40000000000003,
-            237.75,
-            465.3
+            90.14998168945311,
+            319.1000156402588,
+            197.59998054504393,
+            458.05002784729004
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S12_panels_A-J.pdf",
@@ -5271,19 +5271,19 @@
           "source": "S12",
           "source_panel": "H",
           "bbox": [
-            135.8,
-            334.8,
-            288.5,
-            466.9
+            138.64999389648438,
+            335.8999938964844,
+            286.8500061035156,
+            463.8500061035156
           ],
-          "width": 152.7,
-          "height": 132.09999999999997,
+          "width": 148.20001220703125,
+          "height": 127.95001220703125,
           "panel": "F",
           "target_rect": [
-            245.75,
-            323.40000000000003,
-            398.45,
-            455.5
+            216.59998054504393,
+            319.1000156402588,
+            364.7999927520752,
+            447.05002784729004
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S12_panels_A-J.pdf",
@@ -5313,8 +5313,8 @@
       "whole_source_sheet": false,
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
-      "height_pt": 469.29998779296875,
-      "sha256": "8189aaf21a40bfc358f8593fd41408159a94a36bdccc4d3cda8197aaff58cfe4",
+      "height_pt": 462.0500183105469,
+      "sha256": "d4cf2037061b2429aebac692901dd0ce81c0516844c7873354cb8feca50894cf",
       "source_data_directories": [
         "source_data/microns_inhibitory_routes"
       ]
@@ -5330,23 +5330,23 @@
           "source": "S25",
           "source_panel": "A",
           "bbox": [
-            47.24800109863281,
-            16.2080078125,
+            6.748000144958496,
+            9.281498908996582,
             272.19976806640625,
             120.8260498046875
           ],
-          "width": 224.95176696777344,
-          "height": 104.6180419921875,
+          "width": 265.45176792144775,
+          "height": 111.54455089569092,
           "panel": "A",
           "target_rect": [
-            47.24800109863281,
-            16.2080078125,
+            6.748000144958496,
+            9.281498908996582,
             272.19976806640625,
             120.8260498046875
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S25_panels_A-D.pdf",
-          "source_sha256": "a09839405ae44d155c5393bb46ba58c94c917e35e02db0c1fbd636c5247f3146",
+          "source_sha256": "1cecc1a72ca95ea69cd2ce382eff5ac7d72762a0fba9c600dcff21c934cf4063",
           "old_provenance_figure": "figS25",
           "old_provenance_entry_ids": [
             "irregular.wavelet.asset"
@@ -5374,7 +5374,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S25_panels_A-D.pdf",
-          "source_sha256": "a09839405ae44d155c5393bb46ba58c94c917e35e02db0c1fbd636c5247f3146",
+          "source_sha256": "1cecc1a72ca95ea69cd2ce382eff5ac7d72762a0fba9c600dcff21c934cf4063",
           "old_provenance_figure": "figS25",
           "old_provenance_entry_ids": [
             "irregular.wavelet.asset"
@@ -5406,7 +5406,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S25_panels_A-D.pdf",
-          "source_sha256": "a09839405ae44d155c5393bb46ba58c94c917e35e02db0c1fbd636c5247f3146",
+          "source_sha256": "1cecc1a72ca95ea69cd2ce382eff5ac7d72762a0fba9c600dcff21c934cf4063",
           "old_provenance_figure": "figS25",
           "old_provenance_entry_ids": [
             "irregular.wavelet.asset"
@@ -5440,7 +5440,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S25_panels_A-D.pdf",
-          "source_sha256": "a09839405ae44d155c5393bb46ba58c94c917e35e02db0c1fbd636c5247f3146",
+          "source_sha256": "1cecc1a72ca95ea69cd2ce382eff5ac7d72762a0fba9c600dcff21c934cf4063",
           "old_provenance_figure": "figS25",
           "old_provenance_entry_ids": [
             "irregular.wavelet.asset"
@@ -5458,7 +5458,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 320.3999938964844,
-      "sha256": "ee3f3454b1886c796329e6c44fef22761af036ae62813c283f150a53b4f7a9f2",
+      "sha256": "933c8fe23d782218daeb0122bd61bf3612b52c9a7af055706fb2daddd84f6c2c",
       "source_data_directories": [
         "source_data/irregular_tree_wavelets"
       ]
@@ -5474,23 +5474,23 @@
           "source": "S33",
           "source_panel": "A",
           "bbox": [
-            19.932403564453125,
-            3.9280099868774414,
-            259.7350158691406,
-            145.58758544921875
+            2.361999988555908,
+            0.0015001296997070312,
+            249.5430145263672,
+            148.58758544921875
           ],
-          "width": 239.8026123046875,
-          "height": 141.6595754623413,
+          "width": 247.18101453781128,
+          "height": 148.58608531951904,
           "panel": "A",
           "target_rect": [
-            19.932403564453125,
-            3.9280099868774414,
-            259.7350158691406,
-            145.58758544921875
+            2.361999988555908,
+            0.0015001296997070312,
+            249.5430145263672,
+            148.58758544921875
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S33_panels_A-F.pdf",
-          "source_sha256": "28d4ba09ff83c61615a16d2b9999b911f69bb4f88df8e70d8b113f33d767a6e3",
+          "source_sha256": "3a6ad356326371787c68b40b6f68a0ce03927e9893c5f061cef505ad099392a1",
           "old_provenance_figure": "figS33",
           "old_provenance_entry_ids": [
             "completion.source_data.review_morphology_uncertainty.README.md",
@@ -5519,23 +5519,23 @@
           "source": "S33",
           "source_panel": "B",
           "bbox": [
-            276.622314453125,
-            3.9280099868774414,
+            247.73501586914062,
+            0.0015001296997070312,
             499.1063537597656,
-            154.88131713867188
+            157.88131713867188
           ],
-          "width": 222.48403930664062,
-          "height": 150.95330715179443,
+          "width": 251.371337890625,
+          "height": 157.87981700897217,
           "panel": "B",
           "target_rect": [
-            276.622314453125,
-            3.9280099868774414,
+            247.73501586914062,
+            0.0015001296997070312,
             499.1063537597656,
-            154.88131713867188
+            157.88131713867188
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S33_panels_A-F.pdf",
-          "source_sha256": "28d4ba09ff83c61615a16d2b9999b911f69bb4f88df8e70d8b113f33d767a6e3",
+          "source_sha256": "3a6ad356326371787c68b40b6f68a0ce03927e9893c5f061cef505ad099392a1",
           "old_provenance_figure": "figS33",
           "old_provenance_entry_ids": [
             "completion.source_data.review_morphology_uncertainty.README.md",
@@ -5564,23 +5564,23 @@
           "source": "S33",
           "source_panel": "C",
           "bbox": [
-            16.61638641357422,
-            185.7510986328125,
+            2.361999988555908,
+            181.8245849609375,
             224.6572265625,
-            327.4106750488281
+            330.4106750488281
           ],
-          "width": 208.04084014892578,
-          "height": 141.65957641601562,
+          "width": 222.2952265739441,
+          "height": 148.58609008789062,
           "panel": "C",
           "target_rect": [
-            16.61638641357422,
-            185.7510986328125,
+            2.361999988555908,
+            181.8245849609375,
             224.6572265625,
-            327.4106750488281
+            330.4106750488281
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S33_panels_A-F.pdf",
-          "source_sha256": "28d4ba09ff83c61615a16d2b9999b911f69bb4f88df8e70d8b113f33d767a6e3",
+          "source_sha256": "3a6ad356326371787c68b40b6f68a0ce03927e9893c5f061cef505ad099392a1",
           "old_provenance_figure": "figS33",
           "old_provenance_entry_ids": [
             "completion.source_data.review_morphology_uncertainty.README.md",
@@ -5609,23 +5609,23 @@
           "source": "S33",
           "source_panel": "D",
           "bbox": [
-            276.622314453125,
-            185.7510986328125,
+            253.3559112548828,
+            181.8245849609375,
             493.5551452636719,
-            327.5044250488281
+            330.5044250488281
           ],
-          "width": 216.93283081054688,
-          "height": 141.75332641601562,
+          "width": 240.19923400878906,
+          "height": 148.67984008789062,
           "panel": "D",
           "target_rect": [
-            276.622314453125,
-            185.7510986328125,
+            253.3559112548828,
+            181.8245849609375,
             493.5551452636719,
-            327.5044250488281
+            330.5044250488281
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S33_panels_A-F.pdf",
-          "source_sha256": "28d4ba09ff83c61615a16d2b9999b911f69bb4f88df8e70d8b113f33d767a6e3",
+          "source_sha256": "3a6ad356326371787c68b40b6f68a0ce03927e9893c5f061cef505ad099392a1",
           "old_provenance_figure": "figS33",
           "old_provenance_entry_ids": [
             "completion.source_data.review_morphology_uncertainty.README.md",
@@ -5654,23 +5654,23 @@
           "source": "S33",
           "source_panel": "E",
           "bbox": [
-            14.464374542236328,
-            358.5771789550781,
+            2.361999988555908,
+            354.6506652832031,
             232.14686584472656,
             504.0
           ],
-          "width": 217.68249130249023,
-          "height": 145.42282104492188,
+          "width": 229.78486585617065,
+          "height": 149.34933471679688,
           "panel": "E",
           "target_rect": [
-            14.464374542236328,
-            358.5771789550781,
+            2.361999988555908,
+            354.6506652832031,
             232.14686584472656,
             504.0
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S33_panels_A-F.pdf",
-          "source_sha256": "28d4ba09ff83c61615a16d2b9999b911f69bb4f88df8e70d8b113f33d767a6e3",
+          "source_sha256": "3a6ad356326371787c68b40b6f68a0ce03927e9893c5f061cef505ad099392a1",
           "old_provenance_figure": "figS33",
           "old_provenance_entry_ids": [
             "completion.source_data.review_morphology_uncertainty.README.md",
@@ -5699,23 +5699,23 @@
           "source": "S33",
           "source_panel": "F",
           "bbox": [
-            265.5234069824219,
-            358.5771789550781,
+            253.3559112548828,
+            354.6506652832031,
             504.04083251953125,
-            500.26800537109375
+            503.26800537109375
           ],
-          "width": 238.51742553710938,
-          "height": 141.69082641601562,
+          "width": 250.68492126464844,
+          "height": 148.61734008789062,
           "panel": "F",
           "target_rect": [
-            265.5234069824219,
-            358.5771789550781,
+            253.3559112548828,
+            354.6506652832031,
             504.04083251953125,
-            500.26800537109375
+            503.26800537109375
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S33_panels_A-F.pdf",
-          "source_sha256": "28d4ba09ff83c61615a16d2b9999b911f69bb4f88df8e70d8b113f33d767a6e3",
+          "source_sha256": "3a6ad356326371787c68b40b6f68a0ce03927e9893c5f061cef505ad099392a1",
           "old_provenance_figure": "figS33",
           "old_provenance_entry_ids": [
             "completion.source_data.review_morphology_uncertainty.README.md",
@@ -5746,7 +5746,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 504.0,
-      "sha256": "51bd028ace0f3a2a7e289fe86bb7c0f3732205b95c16399d761d7b3b0c5ff32e",
+      "sha256": "f74c489986b7dfb72166d11ef6997b1ec87042bcd54f283d10be4da33770209a",
       "source_data_directories": [
         "source_data/review_morphology_uncertainty"
       ]
@@ -5762,23 +5762,23 @@
           "source": "N29",
           "source_panel": "A",
           "bbox": [
-            13.264874458312988,
+            2.2080001831054688,
             4.759007453918457,
             294.0369873046875,
             167.616943359375
           ],
-          "width": 280.7721128463745,
+          "width": 291.82898712158203,
           "height": 162.85793590545654,
           "panel": "A",
           "target_rect": [
-            13.264874458312988,
+            2.2080001831054688,
             4.759007453918457,
             294.0369873046875,
             167.616943359375
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_shunt_sensitivity_native.pdf",
-          "source_sha256": "ebdfa6f5343f006daae9784779e2081d8fbe1b96b4b9324af76f62d690ae1750",
+          "source_sha256": "84a4e4a8ed1e2f0e3c2503d4453ec4a75a839e931d0cdc4ff06b115b763c5afc",
           "old_provenance_figure": "figN29",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -5788,23 +5788,23 @@
           "source": "N29",
           "source_panel": "B",
           "bbox": [
-            314.89300537109375,
+            303.9800109863281,
             4.759007453918457,
             475.0422058105469,
             155.60220336914062
           ],
-          "width": 160.14920043945312,
+          "width": 171.06219482421875,
           "height": 150.84319591522217,
           "panel": "B",
           "target_rect": [
-            314.89300537109375,
+            303.9800109863281,
             4.759007453918457,
             475.0422058105469,
             155.60220336914062
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_shunt_sensitivity_native.pdf",
-          "source_sha256": "ebdfa6f5343f006daae9784779e2081d8fbe1b96b4b9324af76f62d690ae1750",
+          "source_sha256": "84a4e4a8ed1e2f0e3c2503d4453ec4a75a839e931d0cdc4ff06b115b763c5afc",
           "old_provenance_figure": "figN29",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -5814,23 +5814,23 @@
           "source": "N29",
           "source_panel": "C",
           "bbox": [
-            30.0,
+            2.2080001831054688,
             175.09231567382812,
             293.64862060546875,
             324.2761535644531
           ],
-          "width": 263.64862060546875,
+          "width": 291.4406204223633,
           "height": 149.183837890625,
           "panel": "C",
           "target_rect": [
-            30.0,
+            2.2080001831054688,
             175.09231567382812,
             293.64862060546875,
             324.2761535644531
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_shunt_sensitivity_native.pdf",
-          "source_sha256": "ebdfa6f5343f006daae9784779e2081d8fbe1b96b4b9324af76f62d690ae1750",
+          "source_sha256": "84a4e4a8ed1e2f0e3c2503d4453ec4a75a839e931d0cdc4ff06b115b763c5afc",
           "old_provenance_figure": "figN29",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -5840,23 +5840,23 @@
           "source": "N29",
           "source_panel": "D",
           "bbox": [
-            314.8999938964844,
+            303.9800109863281,
             175.09231567382812,
             464.27496337890625,
             311.2886657714844
           ],
-          "width": 149.37496948242188,
+          "width": 160.29495239257812,
           "height": 136.19635009765625,
           "panel": "D",
           "target_rect": [
-            314.8999938964844,
+            303.9800109863281,
             175.09231567382812,
             464.27496337890625,
             311.2886657714844
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_shunt_sensitivity_native.pdf",
-          "source_sha256": "ebdfa6f5343f006daae9784779e2081d8fbe1b96b4b9324af76f62d690ae1750",
+          "source_sha256": "84a4e4a8ed1e2f0e3c2503d4453ec4a75a839e931d0cdc4ff06b115b763c5afc",
           "old_provenance_figure": "figN29",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -5866,23 +5866,23 @@
           "source": "N29",
           "source_panel": "E",
           "bbox": [
-            21.249248504638672,
+            2.2080001831054688,
             323.6256408691406,
             197.9893341064453,
             469.60638427734375
           ],
-          "width": 176.74008560180664,
+          "width": 195.78133392333984,
           "height": 145.98074340820312,
           "panel": "E",
           "target_rect": [
-            21.249248504638672,
+            2.2080001831054688,
             323.6256408691406,
             197.9893341064453,
             469.60638427734375
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_shunt_sensitivity_native.pdf",
-          "source_sha256": "ebdfa6f5343f006daae9784779e2081d8fbe1b96b4b9324af76f62d690ae1750",
+          "source_sha256": "84a4e4a8ed1e2f0e3c2503d4453ec4a75a839e931d0cdc4ff06b115b763c5afc",
           "old_provenance_figure": "figN29",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -5908,7 +5908,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_shunt_sensitivity_native.pdf",
-          "source_sha256": "ebdfa6f5343f006daae9784779e2081d8fbe1b96b4b9324af76f62d690ae1750",
+          "source_sha256": "84a4e4a8ed1e2f0e3c2503d4453ec4a75a839e931d0cdc4ff06b115b763c5afc",
           "old_provenance_figure": "figN29",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -5920,7 +5920,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 489.0,
-      "sha256": "e9aba2873070381f16f070b1efd189ebbe123ddef867ebb9c1219e6217d66f1d",
+      "sha256": "6f1d4f8eec259b058cb04a0a4f27c09d4f1bacb2be1c43750fdf87d2525f114a",
       "source_data_directories": [
         "source_data/figure4",
         "source_data/focal_selectivity_phase1",
@@ -5938,23 +5938,23 @@
           "source": "N30",
           "source_panel": "A",
           "bbox": [
-            26.0,
+            20.860000610351562,
             0.518986701965332,
             158.1841278076172,
             189.16888427734375
           ],
-          "width": 132.1841278076172,
+          "width": 137.32412719726562,
           "height": 188.64989757537842,
           "panel": "A",
           "target_rect": [
-            26.0,
+            20.860000610351562,
             0.518986701965332,
             158.1841278076172,
             189.16888427734375
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_shunt_replication_native.pdf",
-          "source_sha256": "2560f5fc0100efbf7f02a4675476f750f49ae79e7f803dfac97a4635d986c167",
+          "source_sha256": "99a77f980e0ad8aff168fe199023c5864e16dd684ace7ce81e02f0e7bd6d72c3",
           "old_provenance_figure": "figN30",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -5964,23 +5964,23 @@
           "source": "N30",
           "source_panel": "B",
           "bbox": [
-            192.13333129882812,
+            187.1133270263672,
             0.518986701965332,
             340.169677734375,
             189.16888427734375
           ],
-          "width": 148.03634643554688,
+          "width": 153.0563507080078,
           "height": 188.64989757537842,
           "panel": "B",
           "target_rect": [
-            192.13333129882812,
+            187.1133270263672,
             0.518986701965332,
             340.169677734375,
             189.16888427734375
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_shunt_replication_native.pdf",
-          "source_sha256": "2560f5fc0100efbf7f02a4675476f750f49ae79e7f803dfac97a4635d986c167",
+          "source_sha256": "99a77f980e0ad8aff168fe199023c5864e16dd684ace7ce81e02f0e7bd6d72c3",
           "old_provenance_figure": "figN30",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -5990,23 +5990,23 @@
           "source": "N30",
           "source_panel": "C",
           "bbox": [
-            358.26666259765625,
+            355.0466613769531,
             0.518986701965332,
             504.1910400390625,
             193.43675231933594
           ],
-          "width": 145.92437744140625,
+          "width": 149.14437866210938,
           "height": 192.9177656173706,
           "panel": "C",
           "target_rect": [
-            358.26666259765625,
+            355.0466613769531,
             0.518986701965332,
             504.1910400390625,
             193.43675231933594
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_shunt_replication_native.pdf",
-          "source_sha256": "2560f5fc0100efbf7f02a4675476f750f49ae79e7f803dfac97a4635d986c167",
+          "source_sha256": "99a77f980e0ad8aff168fe199023c5864e16dd684ace7ce81e02f0e7bd6d72c3",
           "old_provenance_figure": "figN30",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -6016,23 +6016,23 @@
           "source": "N30",
           "source_panel": "D",
           "bbox": [
-            26.0,
+            20.860000610351562,
             192.75900268554688,
             288.8602600097656,
             401.4367370605469
           ],
-          "width": 262.8602600097656,
+          "width": 268.00025939941406,
           "height": 208.677734375,
           "panel": "D",
           "target_rect": [
-            26.0,
+            20.860000610351562,
             192.75900268554688,
             288.8602600097656,
             401.4367370605469
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_shunt_replication_native.pdf",
-          "source_sha256": "2560f5fc0100efbf7f02a4675476f750f49ae79e7f803dfac97a4635d986c167",
+          "source_sha256": "99a77f980e0ad8aff168fe199023c5864e16dd684ace7ce81e02f0e7bd6d72c3",
           "old_provenance_figure": "figN30",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -6042,23 +6042,23 @@
           "source": "N30",
           "source_panel": "E",
           "bbox": [
-            316.73333740234375,
+            310.4533386230469,
             192.75900268554688,
             493.94439697265625,
             401.4367370605469
           ],
-          "width": 177.2110595703125,
+          "width": 183.49105834960938,
           "height": 208.677734375,
           "panel": "E",
           "target_rect": [
-            316.73333740234375,
+            310.4533386230469,
             192.75900268554688,
             493.94439697265625,
             401.4367370605469
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_shunt_replication_native.pdf",
-          "source_sha256": "2560f5fc0100efbf7f02a4675476f750f49ae79e7f803dfac97a4635d986c167",
+          "source_sha256": "99a77f980e0ad8aff168fe199023c5864e16dd684ace7ce81e02f0e7bd6d72c3",
           "old_provenance_figure": "figN30",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -6070,7 +6070,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 414.0,
-      "sha256": "9884e89da168af1228e1afff8dcda945761b337c5d2cbde7a5ea722bbbd54462",
+      "sha256": "41b6281ea8fa455409aab8879243f80f524aff73cf235794d37ec88486857b6c",
       "source_data_directories": [
         "source_data/focal_selectivity_active_ensemble",
         "source_data/focal_selectivity_phase1",
@@ -6090,21 +6090,21 @@
           "bbox": [
             0.5,
             0.518986701965332,
-            202.15028381347656,
+            202.22012329101562,
             179.46800231933594
           ],
-          "width": 201.65028381347656,
+          "width": 201.72012329101562,
           "height": 178.9490156173706,
           "panel": "A",
           "target_rect": [
             0.5,
             0.518986701965332,
-            202.15028381347656,
+            202.22012329101562,
             179.46800231933594
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_measured_transfer_geometry_native.pdf",
-          "source_sha256": "32d8fe80ccec984eaedef82a640699a141ffd13b876a039ec17a2069ab266f19",
+          "source_sha256": "4094348b14a7096257e7937d0081318fdc2f86a1e287d2c49b29b3762b072fe3",
           "old_provenance_figure": "figN31",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -6114,23 +6114,23 @@
           "source": "N31",
           "source_panel": "B",
           "bbox": [
-            212.1666717529297,
+            205.56666564941406,
             0.518986701965332,
             347.0517883300781,
             179.43675231933594
           ],
-          "width": 134.88511657714844,
+          "width": 141.48512268066406,
           "height": 178.9177656173706,
           "panel": "B",
           "target_rect": [
-            212.1666717529297,
+            205.56666564941406,
             0.518986701965332,
             347.0517883300781,
             179.43675231933594
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_measured_transfer_geometry_native.pdf",
-          "source_sha256": "32d8fe80ccec984eaedef82a640699a141ffd13b876a039ec17a2069ab266f19",
+          "source_sha256": "4094348b14a7096257e7937d0081318fdc2f86a1e287d2c49b29b3762b072fe3",
           "old_provenance_figure": "figN31",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -6156,7 +6156,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_measured_transfer_geometry_native.pdf",
-          "source_sha256": "32d8fe80ccec984eaedef82a640699a141ffd13b876a039ec17a2069ab266f19",
+          "source_sha256": "4094348b14a7096257e7937d0081318fdc2f86a1e287d2c49b29b3762b072fe3",
           "old_provenance_figure": "figN31",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -6168,21 +6168,21 @@
           "bbox": [
             0.5,
             183.75900268554688,
-            249.18063354492188,
+            252.62063598632812,
             396.4367370605469
           ],
-          "width": 248.68063354492188,
+          "width": 252.12063598632812,
           "height": 212.677734375,
           "panel": "D",
           "target_rect": [
             0.5,
             183.75900268554688,
-            249.18063354492188,
+            252.62063598632812,
             396.4367370605469
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_measured_transfer_geometry_native.pdf",
-          "source_sha256": "32d8fe80ccec984eaedef82a640699a141ffd13b876a039ec17a2069ab266f19",
+          "source_sha256": "4094348b14a7096257e7937d0081318fdc2f86a1e287d2c49b29b3762b072fe3",
           "old_provenance_figure": "figN31",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -6208,7 +6208,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_measured_transfer_geometry_native.pdf",
-          "source_sha256": "32d8fe80ccec984eaedef82a640699a141ffd13b876a039ec17a2069ab266f19",
+          "source_sha256": "4094348b14a7096257e7937d0081318fdc2f86a1e287d2c49b29b3762b072fe3",
           "old_provenance_figure": "figN31",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -6220,7 +6220,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 403.0,
-      "sha256": "2e4b61c03bd43ef50a8b611ec6f7d7a97e0fbaeba793617de68ccc69560bf6d1",
+      "sha256": "bfdff7b179687933276fcc5614811f40206981bde6362462f44eba36930fd4cc",
       "source_data_directories": [
         "source_data/figure5",
         "source_data/measured_alignment_power",
@@ -6241,23 +6241,23 @@
           "source": "S34",
           "source_panel": "A",
           "bbox": [
-            5.232250213623047,
-            13.726262092590332,
-            248.67938232421875,
+            2.0,
+            18.257511138916016,
+            249.00338745117188,
             214.90594482421875
           ],
-          "width": 243.4471321105957,
-          "height": 201.17968273162842,
+          "width": 247.00338745117188,
+          "height": 196.64843368530273,
           "panel": "A",
           "target_rect": [
-            5.232250213623047,
-            13.726262092590332,
-            248.67938232421875,
+            2.0,
+            18.257511138916016,
+            249.00338745117188,
             214.90594482421875
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S34_panels_A-D.pdf",
-          "source_sha256": "b99db41cf98d07d0bce994f5fbd846eb8fd1adceab77415b20e6d3038b9d40d7",
+          "source_sha256": "6d04a5f2fdc938954d54b7b7cc6884e028abe1c4a06c620f6690606bca797593",
           "old_provenance_figure": "figS34",
           "old_provenance_entry_ids": [
             "completion.source_data.review_response_baselines.README.md",
@@ -6298,23 +6298,23 @@
           "source": "S34",
           "source_panel": "B",
           "bbox": [
-            300.4449157714844,
-            13.726262092590332,
+            289.9449157714844,
+            18.257511138916016,
             508.7384338378906,
             223.4800567626953
           ],
-          "width": 208.29351806640625,
-          "height": 209.75379467010498,
+          "width": 218.79351806640625,
+          "height": 205.2225456237793,
           "panel": "B",
           "target_rect": [
-            300.4449157714844,
-            13.726262092590332,
+            289.9449157714844,
+            18.257511138916016,
             508.7384338378906,
             223.4800567626953
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S34_panels_A-D.pdf",
-          "source_sha256": "b99db41cf98d07d0bce994f5fbd846eb8fd1adceab77415b20e6d3038b9d40d7",
+          "source_sha256": "6d04a5f2fdc938954d54b7b7cc6884e028abe1c4a06c620f6690606bca797593",
           "old_provenance_figure": "figS34",
           "old_provenance_entry_ids": [
             "completion.source_data.review_response_baselines.README.md",
@@ -6355,23 +6355,23 @@
           "source": "S34",
           "source_panel": "C",
           "bbox": [
-            40.57600021362305,
-            244.6734619140625,
-            248.99136352539062,
+            2.0,
+            249.2047119140625,
+            249.39881896972656,
             445.8531494140625
           ],
-          "width": 208.41536331176758,
-          "height": 201.1796875,
+          "width": 247.39881896972656,
+          "height": 196.6484375,
           "panel": "C",
           "target_rect": [
-            40.57600021362305,
-            244.6734619140625,
-            248.99136352539062,
+            2.0,
+            249.2047119140625,
+            249.39881896972656,
             445.8531494140625
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S34_panels_A-D.pdf",
-          "source_sha256": "b99db41cf98d07d0bce994f5fbd846eb8fd1adceab77415b20e6d3038b9d40d7",
+          "source_sha256": "6d04a5f2fdc938954d54b7b7cc6884e028abe1c4a06c620f6690606bca797593",
           "old_provenance_figure": "figS34",
           "old_provenance_entry_ids": [
             "completion.source_data.review_response_baselines.README.md",
@@ -6412,23 +6412,23 @@
           "source": "S34",
           "source_panel": "D",
           "bbox": [
-            300.4449157714844,
-            244.6734619140625,
+            289.9449157714844,
+            249.2047119140625,
             509.2474670410156,
             463.1710205078125
           ],
-          "width": 208.80255126953125,
-          "height": 218.49755859375,
+          "width": 219.30255126953125,
+          "height": 213.96630859375,
           "panel": "D",
           "target_rect": [
-            300.4449157714844,
-            244.6734619140625,
+            289.9449157714844,
+            249.2047119140625,
             509.2474670410156,
             463.1710205078125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S34_panels_A-D.pdf",
-          "source_sha256": "b99db41cf98d07d0bce994f5fbd846eb8fd1adceab77415b20e6d3038b9d40d7",
+          "source_sha256": "6d04a5f2fdc938954d54b7b7cc6884e028abe1c4a06c620f6690606bca797593",
           "old_provenance_figure": "figS34",
           "old_provenance_entry_ids": [
             "completion.source_data.review_response_baselines.README.md",
@@ -6471,7 +6471,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 475.20001220703125,
-      "sha256": "e99167988ef788b5732e17b5e4f7034437a31e70714727a3c81e29b6618f35e6",
+      "sha256": "e58bf68f4f14b764980b586d1608d8a3b3c5c388813ecdffbf33d4e0775707e4",
       "source_data_directories": [
         "source_data/review_response_baselines"
       ]
@@ -6489,21 +6489,21 @@
           "bbox": [
             0.5,
             7.759007453918457,
-            104.31982421875,
+            104.59709930419922,
             152.30392456054688
           ],
-          "width": 103.81982421875,
+          "width": 104.09709930419922,
           "height": 144.54491710662842,
           "panel": "A",
           "target_rect": [
             0.5,
             7.759007453918457,
-            104.31982421875,
+            104.59709930419922,
             152.30392456054688
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S17_panels_A-B.pdf",
-          "source_sha256": "4e48291e28ec06aaa7ef5e4372228897cd4a10f62b8c0593c92983dde44241dc",
+          "source_sha256": "f4ae3ae180ebebb6e9a5e89d01dfd481b57d2a8545354c7b7312af1d27dea413",
           "old_provenance_figure": "figS17",
           "old_provenance_entry_ids": [
             "animalcredit.asset",
@@ -6524,23 +6524,23 @@
           "source": "S17",
           "source_panel": "B",
           "bbox": [
-            119.91987609863281,
+            109.02999877929688,
             0.0,
             337.8138122558594,
             200.0
           ],
-          "width": 217.89393615722656,
+          "width": 228.7838134765625,
           "height": 200.0,
           "panel": "B",
           "target_rect": [
-            119.91987609863281,
+            109.02999877929688,
             0.0,
             337.8138122558594,
             200.0
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S17_panels_A-B.pdf",
-          "source_sha256": "4e48291e28ec06aaa7ef5e4372228897cd4a10f62b8c0593c92983dde44241dc",
+          "source_sha256": "f4ae3ae180ebebb6e9a5e89d01dfd481b57d2a8545354c7b7312af1d27dea413",
           "old_provenance_figure": "figS17",
           "old_provenance_entry_ids": [
             "animalcredit.asset",
@@ -6561,23 +6561,23 @@
           "source": "S17",
           "source_panel": "C",
           "bbox": [
-            336.3365478515625,
+            325.32666015625,
             7.759007453918457,
             486.0718994140625,
             175.2688751220703
           ],
-          "width": 149.7353515625,
+          "width": 160.7452392578125,
           "height": 167.50986766815186,
           "panel": "C",
           "target_rect": [
-            336.3365478515625,
+            325.32666015625,
             7.759007453918457,
             486.0718994140625,
             175.2688751220703
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S17_panels_A-B.pdf",
-          "source_sha256": "4e48291e28ec06aaa7ef5e4372228897cd4a10f62b8c0593c92983dde44241dc",
+          "source_sha256": "f4ae3ae180ebebb6e9a5e89d01dfd481b57d2a8545354c7b7312af1d27dea413",
           "old_provenance_figure": "figS17",
           "old_provenance_entry_ids": [
             "animalcredit.asset",
@@ -6600,7 +6600,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 200.0,
-      "sha256": "2f96257b30f351bbae2aa2c01eef62b4a5bc39018964e65c862b4d480faa617f",
+      "sha256": "87fe94c916ae929711cf2a2356146a2cc4826627949953a2a4da7a8df008afe4",
       "source_data_directories": [
         "source_data/alignment_controlled"
       ]
@@ -6616,23 +6616,23 @@
           "source": "S35",
           "source_panel": "A",
           "bbox": [
-            25.0,
+            2.0,
             4.759007453918457,
-            322.2220153808594,
+            300.44720458984375,
             139.05691528320312
           ],
-          "width": 297.2220153808594,
+          "width": 298.44720458984375,
           "height": 134.29790782928467,
           "panel": "A",
           "target_rect": [
-            25.0,
+            2.0,
             4.759007453918457,
-            322.2220153808594,
+            300.44720458984375,
             139.05691528320312
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S35_panels_A-F.pdf",
-          "source_sha256": "050b111c5eb781f1195af183ccafa6d2813071247cb6f4711b4c1e0e58bbb53c",
+          "source_sha256": "f97defa94f4dc010c45ae73a211c0195dd2f8996dabbe09b08f1efadf28d720c",
           "old_provenance_figure": "figS35",
           "old_provenance_entry_ids": [
             "completion.source_data.prospective_morphology_selection.README.md",
@@ -6947,23 +6947,23 @@
           "source": "S35",
           "source_panel": "B",
           "bbox": [
-            315.1499938964844,
+            293.54998779296875,
             4.759007453918457,
             504.93499755859375,
             138.691162109375
           ],
-          "width": 189.78500366210938,
+          "width": 211.385009765625,
           "height": 133.93215465545654,
           "panel": "B",
           "target_rect": [
-            315.1499938964844,
+            293.54998779296875,
             4.759007453918457,
             504.93499755859375,
             138.691162109375
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S35_panels_A-F.pdf",
-          "source_sha256": "050b111c5eb781f1195af183ccafa6d2813071247cb6f4711b4c1e0e58bbb53c",
+          "source_sha256": "f97defa94f4dc010c45ae73a211c0195dd2f8996dabbe09b08f1efadf28d720c",
           "old_provenance_figure": "figS35",
           "old_provenance_entry_ids": [
             "completion.source_data.prospective_morphology_selection.README.md",
@@ -7278,23 +7278,23 @@
           "source": "S35",
           "source_panel": "C",
           "bbox": [
-            6.135624885559082,
+            2.0,
             156.02822875976562,
             517.1561889648438,
             315.9751892089844
           ],
-          "width": 511.02056407928467,
+          "width": 515.1561889648438,
           "height": 159.94696044921875,
           "panel": "C",
           "target_rect": [
-            6.135624885559082,
+            2.0,
             156.02822875976562,
             517.1561889648438,
             315.9751892089844
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S35_panels_A-F.pdf",
-          "source_sha256": "050b111c5eb781f1195af183ccafa6d2813071247cb6f4711b4c1e0e58bbb53c",
+          "source_sha256": "f97defa94f4dc010c45ae73a211c0195dd2f8996dabbe09b08f1efadf28d720c",
           "old_provenance_figure": "figS35",
           "old_provenance_entry_ids": [
             "completion.source_data.prospective_morphology_selection.README.md",
@@ -7609,23 +7609,23 @@
           "source": "S35",
           "source_panel": "D",
           "bbox": [
-            25.0,
+            2.0,
             318.4974670410156,
-            319.03363037109375,
+            287.7475280761719,
             478.4367370605469
           ],
-          "width": 294.03363037109375,
+          "width": 285.7475280761719,
           "height": 159.93927001953125,
           "panel": "D",
           "target_rect": [
-            25.0,
+            2.0,
             318.4974670410156,
-            319.03363037109375,
+            287.7475280761719,
             478.4367370605469
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S35_panels_A-F.pdf",
-          "source_sha256": "050b111c5eb781f1195af183ccafa6d2813071247cb6f4711b4c1e0e58bbb53c",
+          "source_sha256": "f97defa94f4dc010c45ae73a211c0195dd2f8996dabbe09b08f1efadf28d720c",
           "old_provenance_figure": "figS35",
           "old_provenance_entry_ids": [
             "completion.source_data.prospective_morphology_selection.README.md",
@@ -7940,23 +7940,23 @@
           "source": "S35",
           "source_panel": "E",
           "bbox": [
-            315.1499938964844,
+            296.54998779296875,
             318.4974670410156,
             490.2996826171875,
             476.2845153808594
           ],
-          "width": 175.14968872070312,
+          "width": 193.74969482421875,
           "height": 157.78704833984375,
           "panel": "E",
           "target_rect": [
-            315.1499938964844,
+            296.54998779296875,
             318.4974670410156,
             490.2996826171875,
             476.2845153808594
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S35_panels_A-F.pdf",
-          "source_sha256": "050b111c5eb781f1195af183ccafa6d2813071247cb6f4711b4c1e0e58bbb53c",
+          "source_sha256": "f97defa94f4dc010c45ae73a211c0195dd2f8996dabbe09b08f1efadf28d720c",
           "old_provenance_figure": "figS35",
           "old_provenance_entry_ids": [
             "completion.source_data.prospective_morphology_selection.README.md",
@@ -8273,7 +8273,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 490.0,
-      "sha256": "19eb7d8efc4b5a2dd297b73c932109249274ff4f589ebd585c59700bea78bb66",
+      "sha256": "bc8bf6daf81543bedf9142abef3e588b30bbde0affd456e16bebc386bb4dbfcf",
       "source_data_directories": [
         "source_data/prospective_morphology_selection"
       ]
@@ -8305,7 +8305,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_finite_horizon_native.pdf",
-          "source_sha256": "0bd186ba0544d0c454bde5fb7ad88b461f45a6cafc82594149b3d3247e6bef9f",
+          "source_sha256": "a43d67fd9bd3ea2bfe6c4fba1555c35c3d24efe114669ae545f3f1b0f0651f98",
           "old_provenance_figure": "figN35",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -8331,7 +8331,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_finite_horizon_native.pdf",
-          "source_sha256": "0bd186ba0544d0c454bde5fb7ad88b461f45a6cafc82594149b3d3247e6bef9f",
+          "source_sha256": "a43d67fd9bd3ea2bfe6c4fba1555c35c3d24efe114669ae545f3f1b0f0651f98",
           "old_provenance_figure": "figN35",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -8357,7 +8357,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_finite_horizon_native.pdf",
-          "source_sha256": "0bd186ba0544d0c454bde5fb7ad88b461f45a6cafc82594149b3d3247e6bef9f",
+          "source_sha256": "a43d67fd9bd3ea2bfe6c4fba1555c35c3d24efe114669ae545f3f1b0f0651f98",
           "old_provenance_figure": "figN35",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -8383,7 +8383,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_finite_horizon_native.pdf",
-          "source_sha256": "0bd186ba0544d0c454bde5fb7ad88b461f45a6cafc82594149b3d3247e6bef9f",
+          "source_sha256": "a43d67fd9bd3ea2bfe6c4fba1555c35c3d24efe114669ae545f3f1b0f0651f98",
           "old_provenance_figure": "figN35",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -8409,7 +8409,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_finite_horizon_native.pdf",
-          "source_sha256": "0bd186ba0544d0c454bde5fb7ad88b461f45a6cafc82594149b3d3247e6bef9f",
+          "source_sha256": "a43d67fd9bd3ea2bfe6c4fba1555c35c3d24efe114669ae545f3f1b0f0651f98",
           "old_provenance_figure": "figN35",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -8435,7 +8435,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_finite_horizon_native.pdf",
-          "source_sha256": "0bd186ba0544d0c454bde5fb7ad88b461f45a6cafc82594149b3d3247e6bef9f",
+          "source_sha256": "a43d67fd9bd3ea2bfe6c4fba1555c35c3d24efe114669ae545f3f1b0f0651f98",
           "old_provenance_figure": "figN35",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -8447,7 +8447,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 476.0,
-      "sha256": "bf2d459990530e8c0fdb41595b535fee323d50de43be5f7b6b5d02d016d33a76",
+      "sha256": "beceacfe99b7b00838c366c8125fd13f1aa0eeabe565fcc4b902ae5b40d771f6",
       "source_data_directories": [
         "source_data/morphology_finite_horizon",
         "source_data/prospective_morphology_selection"
@@ -8466,21 +8466,21 @@
           "bbox": [
             22.0,
             3.122006416320801,
-            273.20001220703125,
+            269.46099853515625,
             114.25
           ],
-          "width": 251.20001220703125,
+          "width": 247.46099853515625,
           "height": 111.1279935836792,
           "panel": "A",
           "target_rect": [
             22.0,
             3.122006416320801,
-            273.20001220703125,
+            269.46099853515625,
             114.25
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_morphology_estimation_native.pdf",
-          "source_sha256": "947b7a8ec5cb95e2c985d4b739ff789342156095db938be881faae9c9c3e700f",
+          "source_sha256": "06f874cbb45f43a3c6b7902038c3b3c25f88e2bf2b0a4a6319270bbf7cc780f3",
           "old_provenance_figure": "figN36",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -8490,23 +8490,23 @@
           "source": "N36",
           "source_panel": "B",
           "bbox": [
-            272.20001220703125,
+            268.46099853515625,
             3.122006416320801,
-            501.38824462890625,
+            501.38836669921875,
             126.0703125
           ],
-          "width": 229.188232421875,
+          "width": 232.9273681640625,
           "height": 122.9483060836792,
           "panel": "B",
           "target_rect": [
-            272.20001220703125,
+            268.46099853515625,
             3.122006416320801,
-            501.38824462890625,
+            501.38836669921875,
             126.0703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_morphology_estimation_native.pdf",
-          "source_sha256": "947b7a8ec5cb95e2c985d4b739ff789342156095db938be881faae9c9c3e700f",
+          "source_sha256": "06f874cbb45f43a3c6b7902038c3b3c25f88e2bf2b0a4a6319270bbf7cc780f3",
           "old_provenance_figure": "figN36",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -8532,7 +8532,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_morphology_estimation_native.pdf",
-          "source_sha256": "947b7a8ec5cb95e2c985d4b739ff789342156095db938be881faae9c9c3e700f",
+          "source_sha256": "06f874cbb45f43a3c6b7902038c3b3c25f88e2bf2b0a4a6319270bbf7cc780f3",
           "old_provenance_figure": "figN36",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -8542,23 +8542,23 @@
           "source": "N36",
           "source_panel": "D",
           "bbox": [
-            272.20001220703125,
+            268.46099853515625,
             132.00900268554688,
             497.973876953125,
             237.30636596679688
           ],
-          "width": 225.77386474609375,
+          "width": 229.51287841796875,
           "height": 105.29736328125,
           "panel": "D",
           "target_rect": [
-            272.20001220703125,
+            268.46099853515625,
             132.00900268554688,
             497.973876953125,
             237.30636596679688
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_morphology_estimation_native.pdf",
-          "source_sha256": "947b7a8ec5cb95e2c985d4b739ff789342156095db938be881faae9c9c3e700f",
+          "source_sha256": "06f874cbb45f43a3c6b7902038c3b3c25f88e2bf2b0a4a6319270bbf7cc780f3",
           "old_provenance_figure": "figN36",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -8584,7 +8584,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_morphology_estimation_native.pdf",
-          "source_sha256": "947b7a8ec5cb95e2c985d4b739ff789342156095db938be881faae9c9c3e700f",
+          "source_sha256": "06f874cbb45f43a3c6b7902038c3b3c25f88e2bf2b0a4a6319270bbf7cc780f3",
           "old_provenance_figure": "figN36",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -8594,23 +8594,23 @@
           "source": "N36",
           "source_panel": "F",
           "bbox": [
-            272.20001220703125,
+            268.46099853515625,
             246.25900268554688,
             491.97869873046875,
             355.015625
           ],
-          "width": 219.7786865234375,
+          "width": 223.5177001953125,
           "height": 108.75662231445312,
           "panel": "F",
           "target_rect": [
-            272.20001220703125,
+            268.46099853515625,
             246.25900268554688,
             491.97869873046875,
             355.015625
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_morphology_estimation_native.pdf",
-          "source_sha256": "947b7a8ec5cb95e2c985d4b739ff789342156095db938be881faae9c9c3e700f",
+          "source_sha256": "06f874cbb45f43a3c6b7902038c3b3c25f88e2bf2b0a4a6319270bbf7cc780f3",
           "old_provenance_figure": "figN36",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -8636,7 +8636,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_morphology_estimation_native.pdf",
-          "source_sha256": "947b7a8ec5cb95e2c985d4b739ff789342156095db938be881faae9c9c3e700f",
+          "source_sha256": "06f874cbb45f43a3c6b7902038c3b3c25f88e2bf2b0a4a6319270bbf7cc780f3",
           "old_provenance_figure": "figN36",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -8646,23 +8646,23 @@
           "source": "N36",
           "source_panel": "H",
           "bbox": [
-            272.20001220703125,
+            268.46099853515625,
             356.1187438964844,
             501.35260009765625,
             481.1876220703125
           ],
-          "width": 229.152587890625,
+          "width": 232.8916015625,
           "height": 125.06887817382812,
           "panel": "H",
           "target_rect": [
-            272.20001220703125,
+            268.46099853515625,
             356.1187438964844,
             501.35260009765625,
             481.1876220703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_morphology_estimation_native.pdf",
-          "source_sha256": "947b7a8ec5cb95e2c985d4b739ff789342156095db938be881faae9c9c3e700f",
+          "source_sha256": "06f874cbb45f43a3c6b7902038c3b3c25f88e2bf2b0a4a6319270bbf7cc780f3",
           "old_provenance_figure": "figN36",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -8674,7 +8674,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 493.0,
-      "sha256": "430de3d99a6cc29ddfecb7554614c351a63a7c778caf472ef95f92cfbfc78659",
+      "sha256": "044fe7e3b9fa734e080d7b8aedb0c34b5a4bafbaad822307993e6918ea38908e",
       "source_data_directories": [
         "source_data/morphology_calibration"
       ]

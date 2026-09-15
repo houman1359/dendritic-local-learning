@@ -941,6 +941,27 @@ SIGNED_ROWS = (("original_eight", "Ra150_Rm300", "Initial,\n8 cells", "300"),
                 "15,000"))
 
 
+def signed_fill_key(ax):
+    """A compact neutral key: fill names spatial support, not perturbation."""
+    artists = []
+    # Keep the key immediately above its own axes: at 1.07 it consumes the
+    # preceding row's gutter on the current 444 pt publication canvas.
+    key_y = 1.02
+    for x, label, face in ((0.025, 'descendants', INK),
+                            (0.57, 'off-route', 'white')):
+        artists.extend(ax.plot([x], [key_y], transform=ax.transAxes,
+                               marker='o', linestyle='none',
+                               markersize=MARKER_MS * 0.8,
+                               markerfacecolor=face, markeredgecolor=INK,
+                               markeredgewidth=LW_HAIR, clip_on=False,
+                               zorder=6))
+        artists.append(ax.text(x + 0.04, key_y, label,
+                               transform=ax.transAxes, fontsize=PT_BASE,
+                               color=INK, ha='left', va='center',
+                               clip_on=False, zorder=6))
+    return artists
+
+
 def panel_signed(canvas, ax, summary, cells):
     """Signed log change: the shunt attenuates, the matched injection adds."""
     def pick(cohort, regime, perturbation, category):
@@ -999,10 +1020,10 @@ def panel_signed(canvas, ax, summary, cells):
     # "open = depth-matched off-route" is 98.3 pt and the clear strip left of
     # the zero rule is 73 pt, so the verbatim string wraps at its own hyphen
     # over three lines; the tie to panel C's `depth-matched` row is kept.
-    # Design pass 2026-09-14: the two key blocks (`shunt attenuates; /
-    # injection enhances` and `filled = descendants, / open = depth-matched
-    # off-route`) are gone; caption F names the hue, the sign and the fill
-    # of every mark in this panel.
+    # Keep the spatial fill key even though the former prose blocks are gone.
+    # The caption specifies that off-route sites are depth-matched unrelated
+    # sites, and separately identifies the two perturbation colours/shapes.
+    signed_fill_key(ax)
     # the third label line is a properly chained R_m (the gutter cannot host
     # a mathtext span, and "Rm" beside panel H's R_m read as a typo)
     for index, (_cohort, _regime, _label, rm_value) in enumerate(SIGNED_ROWS):
@@ -1018,8 +1039,8 @@ def panel_signed(canvas, ax, summary, cells):
         ax.annotate("R", xy=(0.0, 0.5), xycoords=sub, xytext=(0.0, 1.6),
                     textcoords="offset points", ha="right", va="center",
                     fontsize=PT_BASE, color=INK, annotation_clip=False)
-    ax.text(-0.006, -0.46, "no change", fontsize=PT_BASE, color=MUTE,
-            ha="right", va="center", zorder=6)
+    # The dashed reference and its zero tick already specify no change;
+    # another label would crowd the spatial key or the first cohort row.
     return out
 
 

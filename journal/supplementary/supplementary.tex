@@ -16,6 +16,9 @@
 \usepackage{xcolor}
 \usepackage{lineno}
 \usepackage[hidelinks,hypertexnames=false]{hyperref}
+\hypersetup{bookmarksdepth=2,bookmarksnumbered=true,
+  pdftitle={Supplementary Information: Dendritic morphology as a dictionary for local credit assignment},
+  pdfauthor={Houman Safaai, Maceo Richards and Bernardo L. Sabatini}}
 
 \raggedbottom
 \setcounter{tocdepth}{1}
@@ -41,15 +44,16 @@
 
 \begin{document}
 \maketitle
-\linenumbers
 \tableofcontents
 \clearpage
 
+\phantomsection
 \section*{How to use this supplement}
+\addcontentsline{toc}{section}{How to use this supplement}
 
 The notes follow the scientific questions in the main paper. They distinguish three roles for a tree: serial forward computation, spatial delivery of learning signals, and a reconstructed cable model. A spatial dictionary is a set of delivery profiles; the coefficients that combine them are a separate information resource. Exact transported errors, best-fit projections and supplied reliability moments are identified as oracles when a restricted learner cannot calculate them.
 
-Each experiment specifies its independent unit. Synapses, sites, scans, data splits and channel draws remain nested within cells, targets or training seeds. All scientific outcomes and exclusions are retained in Source Data, including comparisons summarized numerically rather than drawn again. Tables~\ref{tab:experiment_cohorts} and \ref{tab:source_index} locate the cohorts and their complete records. Negative, small and budget-dependent results are reported beside the claims they qualify.
+Each experiment specifies its independent unit. Synapses, sites, scans, data splits and channel draws remain nested within cells, targets or training seeds. Table~\ref{tab:notation} defines recurring symbols and their coordinate systems. All scientific outcomes and exclusions are retained in Source Data, including comparisons summarized numerically rather than drawn again. Tables~\ref{tab:experiment_cohorts} and \ref{tab:source_index} locate the cohorts and their complete records. Negative, small and budget-dependent results are reported beside the claims they qualify.
 
 \begin{center}
 \small
@@ -70,6 +74,10 @@ Design extension & What can be selected from data & Section~\ref{note:selection_
 \end{tabular}
 \end{center}
 \clearpage
+
+\input{curated/si_notation}
+\clearpage
+\linenumbers
 
 \input{curated/si_01_exact}
 \input{curated/si_01_exact_figures}

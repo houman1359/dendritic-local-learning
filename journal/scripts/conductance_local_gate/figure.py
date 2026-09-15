@@ -181,8 +181,8 @@ HIST_SEED = 982211                      # descriptive bootstrap RNG, as report.p
 # grows 8 pt so B's four cards draw their trees larger; rows 1 and 2 are sized
 # to their marks (the lock pass carves ~14 pt off the top of row 2 for row 1's
 # x labels and row 2's letters, so its axes are ~100 pt).  Gutters 30 pt.  No
-# data panel carries a title: C and D are tagged 'aligned' / 'opposed' in the
-# band above their traces, and the statistics prose of D and F is reduced to
+# data panel carries a claim title: C and D have separate aligned/opposed
+# condition headers above the axes, and the statistics prose of D and F is reduced to
 # the marks and the two values the running text quotes.  Row 2 stays 4/4/4:
 # at three modules E and G are 64 pt wide, under the 0.70 aspect floor, and
 # G's two direct labels no longer clear its seed columns.
@@ -971,6 +971,16 @@ def curves(ax, t, task, *, legend=False):
     return ax
 
 
+def condition_label(ax, label):
+    """Name the task above the axes, separately from the shared rule key."""
+    artist = ax.annotate(label, xy=(0.98, 1.0), xycoords='axes fraction',
+                         xytext=(0.0, 3.0), textcoords='offset points',
+                         fontsize=PT_BASE, color=INK, ha='right', va='bottom',
+                         annotation_clip=False, zorder=6)
+    ax._condition_label = artist
+    return artist
+
+
 def curve_annotations(ax, t, task):
     """Direct labels, the statistics tag and (D) the bound-contact mark."""
     band = t['band']
@@ -1038,12 +1048,9 @@ def curve_annotations(ax, t, task):
                 ha='left', va='center',
                 zorder=6, annotation_clip=False)
     w = axes_w_pt(ax) - 4.0
-    # Design pass 2026-09-14: the panel titles are gone, so each panel names
-    # its target in the band above the traces (INK, top right; C's top left
-    # holds the sanctioned rule key).
-    ax.text(TEXT_RIGHT, 0.965, 'aligned targets' if aligned
-            else 'opposed targets', transform=ax.transAxes, fontsize=PT_BASE,
-            color=INK, ha='right', va='top', zorder=6)
+    # A separate, symmetric condition header prevents the aligned task from
+    # reading as another entry in C's two-column credit-rule key.
+    condition_label(ax, 'Aligned targets' if aligned else 'Opposed targets')
     if aligned:
         # QA 2026-09-10 (visual review): 'Adam 0.03 . n = 20 seeds' and
         # 'mean +- 95 % pointwise seed bootstrap' are the caption's own words
@@ -1513,8 +1520,7 @@ def build(cfg, tables, tuning):
                      title='Context shunts one branch')
     b = canvas.panel('B', 0, 5, 7, schematic=True, lock=False,
                      title='Four deliveries of the somatic error')
-    # data panels carry no titles (design pass 2026-09-14): C and D tag
-    # their target inside the axes, E-G are named by their axis titles
+    # C and D have compact condition headers; E-G need only their axis titles.
     c = canvas.panel('C', 1, 0, 6)
     d = canvas.panel('D', 1, 6, 6)
     e = canvas.panel('E', 2, 0, 4)
@@ -1572,6 +1578,11 @@ def build(cfg, tables, tuning):
     gap = min_separation_pt(canvas.fig, task['gate_tag'], inset_frame)
     assert gap >= 3.0, f'A: closed-gate tag clears the inset by {gap:.1f} pt'
     printed['A']['gate_tag_to_inset_pt'] = round(gap, 2)
+    condition_gap = min_separation_pt(canvas.fig, [c._condition_label],
+                                      [c.get_legend()])
+    assert condition_gap >= 4.0, (
+        f'C: condition header clears rule legend by only {condition_gap:.1f} pt')
+    printed['C']['condition_to_legend_pt'] = round(condition_gap, 2)
     printed['_geometry'] = dict(
         height_pt=HEIGHT_PT, rows_pt=list(ROWS_PT),
         schematic_fraction_b12=round(SCHEMATIC_FRACTION, 4),

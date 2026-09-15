@@ -299,13 +299,13 @@ Y_LIM_C = (-4.0, 100.0)
 
 #: The shipped caption (analysis/figure_overhaul_20260908/v2/fig3/TEXT.md).
 #: Counted under CF-8 by :func:`caption_words` and recorded in the manifest.
-CAPTION = r"""\caption{\textbf{Ancestry routes help only where the tree's partition matches the task, and only when the coefficients are supplied.}
+CAPTION = r"""\caption{\textbf{Ancestry-route benefits depend on task alignment and accurate coefficient selection.}
 \textbf{A}, Eight streams enter terminals $b_1$--$b_8$ of a balanced tree; context $c$ selects $b_3$, whose block sets the logit $z$, and the $K=4$ capsule delivers $\delta_0$ to $b_3$ and sibling $b_4$. Junctions define feedback supports only; the tinted band gives each tier's coefficient by tree distance.
 \textbf{B}, Ancestry dictionaries $A$ ($8\times K$): $K$ columns of $8/K$ terminals, the channel carrying $b_3$'s credit green and the others grey; $K=8$ is the identity, $A=I$. Raw class-signal sums are $-3.05$, $-0.05$, $+0.85$, $+1.00$; beside them, absolute delivered credit for context $c=b_3$ under the four controls at $K=4$ (one random-sparse/dense draw), each row normalized by its maximum: $|\Phi_{cb}|/\max_b|\Phi_{cb}|$.
 \textbf{C}, Held-out accuracy across budgets for the ancestry route, the deranged route and the best matched control (per-seed maximum over four controls); 20 paired seeds, means with 95\% seed-bootstrap intervals (smaller than the markers where invisible).
 \textbf{D}, Task-matched versus degree- and depth-matched rewired tree under ancestry feedback: $+23.15$ [$21.03$, $25.32$] and $+5.02$ [$4.19$, $5.94$] points at $K=2,4$, exact ties at $K=1,8$; 20 paired seeds. Bracketed intervals are paired 95\% seed-bootstrap intervals, reported, not drawn; the bars are per-condition.
 \textbf{E}, Ancestry minus each control at $K=4$, each row labelled with its positive seeds of 20 and Holm-adjusted $P$ across four budgets (top row) or four controls; the top row uses the per-seed best of the four controls below it, so its seeds repeat theirs; the deranged control is off scale, printed as its value; 20 paired seeds, means with 95\% seed-bootstrap intervals.
-\textbf{F}, Coefficient source across the calibration $\times$ cue-noise grid at zero delay: soft readout (left, solid) and exploratory hard readout (middle, dashed, coincident at noise 0), labelled by calibration size, against the oracle ceiling, chance and the frozen-profile floor; right, paired accuracy minus oracle for the cells named on the rows (hard ties the oracle in every seed at noise 0). At 256 cues and noise 0.5 the soft readout exceeds the floor by $+7.16$ [$6.26$, $8.07$] points; 20 fresh seeds, 95\% seed-bootstrap bands and intervals.
+\textbf{F}, Coefficient source across the calibration $\times$ cue-noise grid at zero delay: soft readout (left, solid) and exploratory hard readout (middle, dashed, coincident at noise 0), labelled by calibration size, against the oracle ceiling, chance and frozen-profile floor; right, paired accuracy minus oracle (faint dots, individual seeds; large symbols, means; whiskers, 95\% seed-bootstrap intervals). Hard selection ties the oracle at noise 0. At 256 cues and noise 0.5, soft exceeds the floor by $+7.16$ [$6.26$, $8.07$] points; 20 fresh seeds, 95\% seed-bootstrap bands.
 Teal ramps in \textbf{A} and \textbf{F} are ordinal within this figure; \textbf{C}--\textbf{F} report epoch 80 and \textbf{A},\textbf{B} are schematics.
 Source Data: \texttt{source\_data/curated\_publication/figure\_03\_plotted.csv}.}"""
 
@@ -611,10 +611,36 @@ def gap_seeds():
                     .set_index("seed").heldout_accuracy
                 oracle = cell[cell.method.eq("oracle_context")] \
                     .set_index("seed").heldout_accuracy
-                diff = (learned - oracle).dropna().to_numpy(float) * 100.0
-                assert len(diff) == 20, (readout, size, noise, len(diff))
+                assert learned.index.is_unique and oracle.index.is_unique
+                assert set(learned.index) == set(oracle.index)
+                diff = (learned - oracle) * 100.0
+                assert len(diff) == 20 and np.isfinite(diff).all(), \
+                    (readout, size, noise, len(diff))
+                assert all(int(seed) == seed for seed in diff.index)
                 out[(readout, size, noise)] = diff
     return out
+
+
+def gap_seed_records(seeds):
+    """The five drawn F-forest rows, retaining their actual training seeds.
+
+    The zero-noise hard row displays the 256-cue cohort; the 16- and 64-cue
+    versions coincide exactly and are checked by ``panel_gaps``.  It is
+    twenty plotted differences, not sixty independent observations.
+    """
+    records = []
+    for readout, size, noise, label in GAP_ROWS:
+        fan = seeds[(readout, size, noise)]
+        assert fan.index.is_unique and len(fan) == 20
+        for seed, difference in fan.items():
+            records.append(dict(
+                panel="F", record="paired_seed", readout=readout,
+                calibration_samples=size, cue_noise_sd=noise,
+                cue_delay_trials=0, epoch=80, control="oracle_context",
+                seed=int(seed), accuracy_difference_pp=float(difference),
+                display_row=label, n_seeds=20))
+    assert len(records) == 100
+    return records
 
 
 def encoder_contrast(table, size, noise, control):
@@ -1307,12 +1333,11 @@ def build():
     # beside the five-row forest at six.  Row 2 is panel F as three facets:
     # the soft and the hard readout at three modules each on one shared y
     # axis, and the paired accuracy-minus-oracle forest at six.  The 30 pt
-    # vertical gutter is what the schematic row needs; between the two data
-    # rows the lock pass carves the x-label and letter overhang out of row 2
-    # (row weight 110, axes ~96 pt), which is how Fig. 1 keeps its rows
-    # 11.8 pt apart at the same gutter.
-    canvas = NativeCanvas(450 / 72, 3, row_weights=[126, 96, 110],
-                          hgutter_pt=28, vgutter_pt=30,
+    # vertical gutter was enough before F's letter also cleared the oracle
+    # label above its right facet. Add 2 pt to both row gutters and 4 pt to
+    # the page, preserving every axes size while clearing that full panel.
+    canvas = NativeCanvas(454 / 72, 3, row_weights=[126, 96, 110],
+                          hgutter_pt=28, vgutter_pt=32,
                           margins=Margins(left=44, right=12, top=22, bottom=36))
     a = canvas.panel("A", 0, 0, 4, title="Eight-stream task tree",
                      schematic=True, lock=False)
@@ -1336,6 +1361,9 @@ def build():
         canvas.declare_reserve(name, left=20)
     for name in ("D", "F_hard"):
         canvas.declare_reserve(name, right=20)
+    # Keep the former 97.8-pt facet height: the extra gutter must remain
+    # blank, not be reclaimed by the automatic top-reserve calculation.
+    canvas.declare_reserve("F", top=12.2)
 
     panel_task(a, tiers)
     raw = panel_dictionaries(b, prediction, supports)
@@ -1412,6 +1440,7 @@ def build():
                 for r in enc_c[enc_c.cue_delay_trials.eq(0)].to_dict("records")]
     display += [dict(panel="F", record="paired_contrast", readout="hard", **r)
                 for r in hard_c[hard_c.cue_delay_trials.eq(0)].to_dict("records")]
+    display += gap_seed_records(seeds)
 
     sources = [CONFIG, ENCODER_CONFIG,
                DATA / "seed_outcomes.csv", DATA / "condition_summary.csv",

@@ -561,7 +561,7 @@ def build(path: Path = OUT):
     cv_curves = Curves(curves, protocol["checkpoints"])
 
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 3, hgutter_pt=HGUTTER_PT, vgutter_pt=VGUTTER_PT,
-                      margins=MARGINS)
+                      margins=MARGINS, letter_clearance=True)
     ax_a = cv.panel("A", 0, 0, 6, grid="y", title="Pairwise: rates selected per rule")
     ax_b = cv.panel("B", 0, 6, 6, grid="y", title=f"Pairwise: common rate {COMMON_RATE:g}")
     ax_c = cv.panel("C", 1, 0, 6, grid="y", title="Quartic: selected rates and common rate")

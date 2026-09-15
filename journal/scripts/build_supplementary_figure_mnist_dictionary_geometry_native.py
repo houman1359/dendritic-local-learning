@@ -318,7 +318,7 @@ def build(path: Path = OUT):
     assert len(seed_contrasts) == 560 and len(capture) == 240
 
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 2, hgutter_pt=HGUTTER_PT, vgutter_pt=VGUTTER_PT,
-                      margins=MARGINS)
+                      margins=MARGINS, letter_clearance=True)
     ax_a = cv.panel("A", 0, 0, 6, grid="y", title="Shunting: ten fresh paired seeds")
     ax_b = cv.panel("B", 0, 6, 6, grid="y", title="Raw additive: ten fresh paired seeds")
     ax_c = cv.panel("C", 1, 0, 8, grid="y", title="Added within-tree resolution")

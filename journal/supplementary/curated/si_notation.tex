@@ -1,0 +1,31 @@
+\phantomsection
+\section*{Notation guide}
+\addcontentsline{toc}{section}{Notation guide}
+
+\begin{table}[!htbp]
+\centering
+\caption{Core notation. Each dictionary and gradient is defined in its stated coordinate system; the same tree can support different delivery and update representations. Symbols specific to an experiment are defined in its section.}
+\label{tab:notation}
+\small
+\begin{tabularx}{\textwidth}{p{0.24\textwidth}X}
+\toprule
+Symbol & Meaning \\
+\midrule
+$V_n$, $a_n=f_n(V_n)$ & Compartment voltage and transmitted activity. \\
+$g_i,x_i,g_ix_i$; $E_i^{\rm rev}$ & Maximal conductance, presynaptic activity, open conductance and reversal potential. Excitation and inhibition differ through driving forces, not signed conductances. \\
+$g_n^{\rm tot},R_n^{\rm tot}$ & Total open conductance and its reciprocal input resistance. \\
+$\delta^V_n$, $\delta^a_n$; $q_n$ & Loss derivatives in voltage/activity coordinates. In interaction-task diagnostics, $q_n=\partial u_0/\partial u_n$; in the implicit/cable analysis, the adjoint satisfies $J_V^{\mathsf T}\bm q=\nabla_{\bm V}\mathcal L$. \\
+$A_u$, $A_T$ & Compartmental delivery matrix and anatomical support lifted to synaptic coordinates, respectively (Eqs.~\ref{eq:s_routed_field}, \ref{eq:s_dictionary}). \\
+$\Phi_{T,K}$ & Synaptic-update dictionary after eligibility or anatomical weighting, route gains and channel selection: $D_eA_T\operatorname{diag}(\bm\beta)S_K$. Distinct from the compartmental matrix $A_u$. \\
+$K$, $\bm c$; $\Gamma$ & Profile budget, delivered coefficients and diagonal delivery gains. Rank may be smaller than $K$. \\
+$W$, $P_{\Phi,W}$; $\mathcal C_K$ & Positive coordinate weights, weighted projector and specified per-field or aggregate energy capture. The anatomical kernel in Eq.~\ref{eq:s_kernel} is separately defined. \\
+$C$, $C_0$, $C_{\rm res}$ & Total, broadcast and residual capture for one cell: $C_{\rm res}=(C-C_0)/(1-C_0)$. Spatial share $C-C_0$ instead uses total energy as its denominator. \\
+$\bm g$, $\bm d$, $\bm m$, $V$ & Exact gradient, routed-update estimator, its conditional mean and covariance in the moment bound. \\
+$M$, $\Sigma$, $U$, $\eta^*$ & Fixed routing operator, estimator-noise covariance, certified one-step decrease and bound-optimal nonnegative step. \\
+$d_i=E_{\rm E}-V_i$, $\gamma_i=q_id_i$; $\Lambda_k$ & Local driving force, excitatory-conductance gradient and localization index in the focal-shunt analysis; these are distinct from the routed-update vector $\bm d$ above. \\
+$H_{\rm c},D_{\rm r}$; $H_{\rm p},D_{\rm p}$ & Task-credit hierarchy/routed resolution, and latent task hierarchy/physical stage count. Bracketed morphologies are specified separately for each cohort. \\
+$\chi$, $\alpha$, $a$ & Branch conflict, physical-task sensor alignment and imposed route-span energy fraction, respectively. \\
+$G$, $R_a$, $R_m$, $\kappa$ & Reciprocal conductance matrix, axial resistivity, specific membrane resistance and focal shunt dose. \\
+\bottomrule
+\end{tabularx}
+\end{table}

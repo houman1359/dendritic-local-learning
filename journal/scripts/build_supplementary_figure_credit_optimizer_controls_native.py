@@ -314,7 +314,7 @@ def build(path: Path = OUT):
 
     # ── the canvas ───────────────────────────────────────────────────────
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 2, hgutter_pt=HGUTTER_PT, vgutter_pt=VGUTTER_PT,
-                      margins=MARGINS)
+                      margins=MARGINS, letter_clearance=True)
     axes = {}
     for i, panel in enumerate("ABCD"):
         axes[panel] = cv.panel(panel, i // 2, 6 * (i % 2), 6, grid="y", title=TITLES[panel])

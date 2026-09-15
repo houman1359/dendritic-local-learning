@@ -586,6 +586,16 @@ def current_plotted_table(effect_summary, effects, scan_metrics, all_scans,
     return exact_id_table(rows)
 
 
+def label_scan_rug(ax, rug_y):
+    """Distinguish descriptive scan values from target-level inference."""
+    return ax.annotate('All scans\n(descriptive)',
+                       xy=(0.0, float(np.mean([min(rug_y), max(rug_y)]))),
+                       xycoords=('axes fraction', 'data'),
+                       xytext=(-4.0, 0.0), textcoords='offset points',
+                       fontsize=PT_BASE, color=GRAY, ha='right', va='center',
+                       annotation_clip=False, zorder=6)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--emit-main', action='store_true',
@@ -785,6 +795,7 @@ def main():
     ax_b.plot(scan_values, rug_y, linestyle='none',
               marker='o', markersize=SEED_MS, markerfacecolor='white',
               markeredgecolor=GRAY, markeredgewidth=LW_HAIR, zorder=3.5)
+    label_scan_rug(ax_b, rug_y)
     rug_bot = float(rug_y.max())
     ax_b.set_ylim(rug_bot + 0.35, -0.70)
     # CF-7 zero rule, CLIPPED to the row band plus the scan rug.  forest()'s
@@ -797,9 +808,8 @@ def main():
               dashes=(2.6, 2.0), zorder=1.0, solid_capstyle='butt')
     ax_b.text(-0.012, -0.52, 'no alignment', fontsize=PT_BASE,
               color=GRAY, ha='right', va='center', zorder=6)
-    # (design pass 2026-09-14: the `13 scan values (descriptive)` and the
-    # `positive = ancestry alignment` lines are gone; caption B names the
-    # thirteen all-eligible-scan circles and the axis title carries the sign)
+    # The concise rug label distinguishes its thirteen scan values from the
+    # seven-target estimate above; it does not introduce a second inference.
 
     # -- C ----------------------------------------------------------------
     canvas.forest(ax_c, c_rows, value_label='Target-level association',

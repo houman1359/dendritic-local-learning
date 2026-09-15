@@ -671,7 +671,7 @@ def build(path: Path = OUT):
     assert report["balanced_trees"] == 3 and report["depth_3_trees"] == 12
 
     canvas = NativeCanvas(CANVAS_H_PT / 72.0, 3, hgutter_pt=HGUTTER_PT,
-                          vgutter_pt=VGUTTER_PT, margins=MARGINS)
+                          vgutter_pt=VGUTTER_PT, margins=MARGINS, letter_clearance=True)
     ax_a = canvas.panel("A", 0, 0, 5, title="Seven exact Boolean truth tables")
     ax_b = canvas.panel("B", 0, 5, 7, title="All trees: regression obstruction")
     ax_c = canvas.panel("C", 1, 0, 5, schematic=True,

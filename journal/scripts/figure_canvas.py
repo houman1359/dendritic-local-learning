@@ -424,7 +424,7 @@ class NativeCanvas:
     def __init__(self, height_in, nrows=1, *, row_weights=None,
                  hgutter_pt=HGUTTER_PT, vgutter_pt=VGUTTER_PT,
                  margins=None, module_cols=MODULE_COLS, letters=True,
-                 style=True, lock_reserves=True):
+                 style=True, lock_reserves=True, letter_clearance=True):
         if style:
             apply_neurips_style()
         height_in = float(height_in)
@@ -444,6 +444,7 @@ class NativeCanvas:
         self._weights = weights
         self.auto_letters = bool(letters)
         self.lock_enabled = bool(lock_reserves)
+        self.letter_clearance = bool(letter_clearance)
         self.axes: dict[str, plt.Axes] = {}
         self._records: list[dict] = []
         self._letters: list[dict] = []
@@ -629,7 +630,7 @@ class NativeCanvas:
             y = box.y1 * self.height_pt + item["dy_pt"]
             if renderer is not None:
                 try:
-                    tight = ax.get_tightbbox(renderer).transformed(
+                    tight = self._panel_content_bbox(ax, renderer).transformed(
                         self.fig.dpi_scale_trans.inverted())
                 except Exception:
                     tight = None
@@ -771,11 +772,128 @@ class NativeCanvas:
                 ix = min(lb.x1, ob.x1) - max(lb.x0, ob.x0)
                 iy = min(lb.y1, ob.y1) - max(lb.y0, ob.y0)
                 if ix > 1.0 and iy > 1.0:
-                    findings.append(
-                        f"letter {item['letter']!r} overlaps a neighbouring "
-                        f"panel's ink")
-                    break
+                    # A tight union includes blank corners beside titles
+                    # and colorbars. Check the actual axes/text in that
+                    # corner rather than treating the union as solid ink.
+                    from matplotlib.text import Text
+                    other_ax = next(a for a in self.axes.values()
+                                    if id(a) == other_id)
+                    actual = [other_ax.get_window_extent(renderer)]
+                    actual += [t.get_window_extent(renderer)
+                               for t in other_ax.findobj(Text)
+                               if t.get_visible() and t.get_text()]
+                    if any(min(lb.x1, b.x1)-max(lb.x0, b.x0)>1 and
+                           min(lb.y1, b.y1)-max(lb.y0, b.y0)>1
+                           for b in actual):
+                        findings.append(
+                            f"letter {item['letter']!r} overlaps a neighbouring "
+                            f"panel's ink")
+                        break
         return findings
+
+    def _panel_content_bbox(self, ax, renderer, *, include_subpanels=True):
+        """Full decorated panel, including explicitly bound satellite axes."""
+        from matplotlib.transforms import Bbox
+        members = [ax]
+        # Consecutive unlettered subplots in one row belong to the preceding
+        # lettered panel (for example the three axes of main Figure 3F).
+        host = next((r for r in self._records
+                     if self.axes[r["name"]] is ax), None)
+        if include_subpanels and host and host.get("_letter"):
+            following = sorted((r for r in self._records
+                                if r["row"] == host["row"] and
+                                r["col"] > host["col"]), key=lambda r:r["col"])
+            for rec in following:
+                if rec.get("_letter"):
+                    break
+                members.append(self.axes[rec["name"]])
+        members += [sat["ax"] for sat in self._satellites
+                    if sat["host"] in members]
+        boxes = [member.get_tightbbox(renderer) for member in members
+                 if member.get_visible()]
+        return Bbox.union([box for box in boxes if box is not None])
+
+    def reserve_letter_clearance(self):
+        """Reserve the letter gutter in EVERY column, without rescaling type.
+
+        Existing reserve locks account for axis labels but formerly let those
+        labels consume the panel-letter gutter. Choose one shared letter
+        margin for each true column, to the left of its widest decoration.
+        Only when that margin would leave the page is extra panel space
+        reserved. Rows remain aligned. This changes
+        presentation geometry only, never data coordinates or axis limits.
+        """
+        enforce_tokens(self.fig)
+        for _ in range(4):
+            self.fig.canvas.draw()
+            renderer = self.fig.canvas.get_renderer()
+            scale = 72.0 / self.fig.dpi
+            self._sync_letters()
+            needed = {}
+            for item in self._letters:
+                box = self._panel_content_bbox(item["ax"], renderer)
+                letter = item["art"].get_window_extent(renderer)
+                deficit = ((letter.x1 - box.x0) * scale
+                           + LETTER_GAP_PT + 1.0)
+                col = int(item.get("col", 0))
+                needed[col] = max(needed.get(col, 0.0), deficit)
+            # Move the entire column's letters together, preserving all axes
+            # widths whenever the existing page margin has sufficient room.
+            for col, deficit in list(needed.items()):
+                members = [item for item in self._letters
+                           if int(item.get("col", 0)) == col]
+                left = min(item["art"].get_position()[0]*self.width_pt
+                           for item in members)
+                move = min(max(0.0, deficit), max(0.0, left-4.0))
+                for item in members:
+                    item["dx_pt"] += move
+                needed[col] = max(0.0, deficit-move)
+            changed = False
+            for rec in self._records:
+                delta = max(0.0, needed.get(int(rec["col"]), 0.0))
+                if delta < .05:
+                    continue
+                ax = self.axes[rec["name"]]
+                before = ax.get_position()
+                width = before.width * self.width_pt
+                if width - delta < 24.0:
+                    raise ValueError(f"{rec['name']}: insufficient width for "
+                                     "full panel-letter clearance")
+                ax.set_position([before.x0 + delta / self.width_pt,
+                                 before.y0,
+                                 before.width - delta / self.width_pt,
+                                 before.height])
+                for sat in self._satellites:
+                    if sat["host"] is ax:
+                        self._remap_satellite(sat, before, ax.get_position())
+                changed = True
+            if not changed:
+                break
+        self.fig.canvas.draw()
+        self._sync_letters()
+        # Retain enough page margin when a title pushes a row's letters up.
+        renderer = self.fig.canvas.get_renderer()
+        scale = 72.0 / self.fig.dpi
+        row_by_ax = {id(self.axes[r["name"]]): r["row"]
+                     for r in self._records}
+        shifts = {}
+        for item in self._letters:
+            lb = item["art"].get_window_extent(renderer)
+            delta = lb.y1 * scale - (self.height_pt - 2.0)
+            row = row_by_ax[id(item["ax"])]
+            shifts[row] = max(shifts.get(row, 0.0), delta)
+        for rec in self._records:
+            delta = max(0.0, shifts.get(rec["row"], 0.0))
+            if delta <= .05:
+                continue
+            ax = self.axes[rec["name"]]; before = ax.get_position()
+            ax.set_position([before.x0, before.y0, before.width,
+                             before.height - delta / self.height_pt])
+            for sat in self._satellites:
+                if sat["host"] is ax:
+                    self._remap_satellite(sat, before, ax.get_position())
+        self.fig.canvas.draw()
+        self._sync_letters()
 
     # -- column-locked reserves -------------------------------------------
     def _record_for(self, panel):
@@ -1044,7 +1162,8 @@ class NativeCanvas:
     # -- output -----------------------------------------------------------
     PUBLIC_RECORD_KEYS = ("name", "row", "col", "colspan", "rowspan",
                           "x0_pt", "y0_pt", "w_pt", "h_pt", "schematic",
-                          "locked", "tx0_pt", "tx1_pt")
+                          "locked", "tx0_pt", "tx1_pt", "ty0_pt", "ty1_pt",
+                          "letter", "letter_content_bbox")
 
     def manifest(self):
         try:
@@ -1061,16 +1180,29 @@ class NativeCanvas:
             # checks need exactly that.
             if renderer is not None:
                 try:
-                    tb = ax.get_tightbbox(renderer).transformed(
+                    tb = self._panel_content_bbox(ax, renderer,
+                            include_subpanels=False).transformed(
                         self.fig.dpi_scale_trans.inverted())
                     rec["tx0_pt"] = round(tb.x0 * 72.0, 3)
                     rec["tx1_pt"] = round((tb.x0 + tb.width) * 72.0, 3)
+                    rec["ty0_pt"] = round(tb.y0 * 72.0, 3)
+                    rec["ty1_pt"] = round(tb.y1 * 72.0, 3)
+                    if rec.get("_letter"):
+                        group = self._panel_content_bbox(ax, renderer).transformed(
+                            self.fig.dpi_scale_trans.inverted())
+                        rec["letter_content_bbox"] = [
+                            round(group.x0*72, 3),
+                            round(self.height_pt-group.y1*72, 3),
+                            round(group.x1*72, 3),
+                            round(self.height_pt-group.y0*72, 3)]
                 except Exception:
                     pass
             rec["x0_pt"] = round(box.x0 * self.width_pt, 3)
             rec["y0_pt"] = round(box.y0 * self.height_pt, 3)
             rec["w_pt"] = round(box.width * self.width_pt, 3)
             rec["h_pt"] = round(box.height * self.height_pt, 3)
+            rec["letter"] = next((item["letter"] for item in self._letters
+                                  if item["ax"] is ax), None)
             panels.append({k: rec[k] for k in self.PUBLIC_RECORD_KEYS
                            if k in rec})
         letters = [
@@ -1124,6 +1256,8 @@ class NativeCanvas:
         """
         if self.lock_enabled if lock is None else lock:
             self.lock_reserves()
+        if self.letter_clearance:
+            self.reserve_letter_clearance()
         letter_findings = self.align_letters()
         problems = save_native(self.fig, path, manifest=self.manifest(),
                                name=name, png=png, dpi=dpi, quiet=quiet)

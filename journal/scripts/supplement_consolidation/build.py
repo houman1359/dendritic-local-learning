@@ -22,6 +22,7 @@ from __future__ import annotations
 import argparse,csv,hashlib,json,re,sys,math
 from pathlib import Path
 import fitz
+import numpy as np
 from matplotlib import font_manager
 
 J=Path(__file__).resolve().parents[2]; HERE=Path(__file__).resolve().parent
@@ -39,7 +40,62 @@ W=518.4
 PASTE_SCALE=1.0        # the source ladder is the printed ladder
 MIN_SCALE=0.74         # floor for a frozen inventory that cannot fit at 1.0
 HEIGHT_CAP=540.        # the graphics standard's cap for one supplement sheet
-MARGIN=4.; GUTTER=8.; GUTTER3=6.; LETTER_BAND=15.
+MARGIN=4.; GUTTER=8.; GUTTER3=2.; LETTER_BAND=15.
+LETTER_GUTTER=11.0  # 9-pt bold letter advance plus the 3.4-pt content gap
+# Preserve the reviewed scientific grouping; trimming blank crop margins must
+# not silently move a task or comparison into a different row.
+ROW_COUNTS={
+ 'credit_validation':(2,1), 'reliability_gain':(2,2),
+ 'same_span_conditioning':(2,2), 'image_generalization':(3,2),
+ 'input_coverage_depth':(3,3), 'branch_conflict_controls':(2,2),
+ 'ancestry_coefficients':(1,2), 'physical_optimizer':(2,1),
+ 'anatomy_capacity_controls':(2,2), 'inhibitory_spatial_controls':(1,3,2),
+}
+
+
+def column_widths(rows):
+ """Common decorated-content widths for repeated row grids."""
+ widths={}
+ for sub in rows:
+  for col,q in enumerate(sub):
+   widths[len(sub),col]=max(widths.get((len(sub),col),0),q['width'])
+ return widths
+
+
+def prepared_panel(key, oldletter):
+ """Remove only declared lettering/masks; retain the scientific vector art."""
+ source=fitz.open(J/REG[key]['path']);sp=source[0];masks=[]
+ for letter in REG[key]['letters']:
+  sp.add_redact_annot(fitz.Rect(letter['bbox']),fill=None)
+ for rr in REMOVED_SHARED_REGIONS.get(key,[])+PANEL_REDACTIONS.get((key,oldletter),[]):
+  sp.add_redact_annot(fitz.Rect(rr),fill=None);masks.append(fitz.Rect(rr))
+ if REG[key]['letters'] or masks:sp.apply_redactions(images=0,graphics=0,text=0)
+ for rr in masks:sp.draw_rect(rr,color=None,fill=(1,1,1),width=0)
+ for patch in PANEL_PATCHES.get((key,oldletter),[]):
+  with fitz.open(J/REG[patch['source']]['path']) as aux:
+   sp.show_pdf_page(fitz.Rect(patch['target_bbox']),aux,0,clip=fitz.Rect(patch['bbox']))
+ return source
+
+
+def trimmed_panel_bounds(key, oldletter, bbox):
+ """Measure empty crop margins, without rasterizing the publication output.
+
+ The source crop remains the ownership boundary. Only genuinely blank pixels
+ are trimmed, after old panel letters are removed. Explicit restored text is
+ included so it can never be cropped off by this layout-only operation.
+ """
+ with prepared_panel(key,oldletter) as doc:
+  clip=fitz.Rect(bbox);zoom=4.0
+  pix=doc[0].get_pixmap(matrix=fitz.Matrix(zoom,zoom),clip=clip,
+                       colorspace=fitz.csGRAY,alpha=False)
+  arr=np.frombuffer(pix.samples,dtype=np.uint8).reshape(pix.height,pix.width)
+  yy,xx=np.where(arr<250)
+  if not len(xx):return clip
+  tight=fitz.Rect((pix.x+xx.min())/zoom,(pix.y+yy.min())/zoom,
+                  (pix.x+xx.max()+1)/zoom,(pix.y+yy.max()+1)/zoom)
+  # Keep the original crop wherever restored axis text will be inserted.
+  if PANEL_TEXT.get((key,oldletter)):return clip
+  return fitz.Rect(tight.x0-.6,tight.y0-.6,tight.x1+.6,tight.y1+.6)&clip
 
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def spans(page):return [s for b in page.get_text('dict')['blocks'] for l in b.get('lines',[]) for s in l['spans']]
@@ -104,7 +160,7 @@ def partitions(n,max_count=3):
  for k in range(1,min(max_count,n)+1):
   for rest in partitions(n-k,max_count):yield [k]+rest
 
-def layout(items,legend_h=0.):
+def layout(items,legend_h=0.,counts=None):
  """One uniform paste scale for the whole figure, at most PASTE_SCALE.
 
  The scale is 1.0 whenever the frozen panel inventory fits the canvas and the
@@ -112,14 +168,16 @@ def layout(items,legend_h=0.):
  ladder inside one figure stays uniform (SI_PLAN 5.1 / review 4d).
  """
  best=None
- for counts in partitions(len(items)):
+ for counts in ([counts] if counts is not None else partitions(len(items))):
   start=0;rows=[];swidth=PASTE_SCALE
   for count in counts:
    sub=items[start:start+count];start+=count
-   width=sum(q['width'] for q in sub)
-   rowgutter=GUTTER3 if count==3 else GUTTER
-   swidth=min(swidth,(W-2*MARGIN-rowgutter*(count-1))/width)
    rows.append(sub)
+  widths=column_widths(rows)
+  for sub in rows:
+   count=len(sub);width=sum(widths[count,c] for c in range(count))
+   rowgutter=GUTTER3 if count==3 else GUTTER
+   swidth=min(swidth,(W-2*MARGIN-rowgutter*(count-1)-LETTER_GUTTER*count)/width)
   base=sum(max(q['height'] for q in sub) for sub in rows)+legend_h
   chrome=LETTER_BAND*len(rows)+GUTTER*(len(rows)-1)+2*MARGIN
   sheight=(HEIGHT_CAP-chrome)/base if base>0 else PASTE_SCALE
@@ -195,8 +253,10 @@ def main():
   for key,letters in groups:
    if letters=='*':letters='*' if not REG[key]['letters'] else ''.join(sorted(q['letter'] for q in REG[key]['letters']))
    for oldletter in letters:
-    bbox=fitz.Rect(bounds[key][oldletter]);items.append({'source':key,'source_panel':oldletter,'bbox':list(bbox),'width':bbox.width,'height':bbox.height})
-  panelmap=[];issues=[];ancillary=[];scale=1.0
+    bbox=fitz.Rect(bounds[key][oldletter])
+    if not whole:bbox=trimmed_panel_bounds(key,oldletter,bbox)
+    items.append({'source':key,'source_panel':oldletter,'bbox':list(bbox),'width':bbox.width,'height':bbox.height})
+  panelmap=[];issues=[];ancillary=[];scale=1.0;letter_layout=None
   if ident in WHOLE_CROPS:
    key=groups[0][0];source=fitz.open(J/REG[key]['path']);clip=fitz.Rect(WHOLE_CROPS[ident]);output=fitz.open();p=output.new_page(width=clip.width,height=clip.height);p.show_pdf_page(p.rect,source,0,clip=clip)
    for item in items:panelmap.append(dict(item,panel=item['source_panel'],target_rect=item['bbox'],scale=1.0))
@@ -207,40 +267,40 @@ def main():
   else:
    legend_specs=SHARED_LEGENDS.get(ident,[])
    legend_raw=sum((r[3]-r[1]) for _,r in legend_specs)
-   rows,height,scale=layout(items,legend_h=legend_raw)
+   rows,height,scale=layout(items,legend_h=legend_raw,counts=ROW_COUNTS[ident])
    legend_h=legend_raw*scale+10*len(legend_specs)+(22 if ident in NATIVE_LEGENDS else 0)
    height=height-legend_raw*scale+legend_h
    output=fitz.open();p=output.new_page(width=W,height=height)
    p.insert_font(fontname='PanelSans',fontfile=bold);p.insert_font(fontname='ReflowAxis',fontfile=book)
+   letter_layout={'schema':'panel-letter-layout/1','panels':[]}
+   widths=column_widths([sub for sub,_,_ in rows])
+   max_width=max(sum(widths[len(sub),c]*scale+LETTER_GUTTER for c in range(len(sub)))
+                 +(GUTTER3 if len(sub)==3 else GUTTER)*(len(sub)-1)
+                 for sub,_,_ in rows)
    y=MARGIN;nextletter=0
-   for sub,rowscale,rowh in rows:
+   for row_index,(sub,rowscale,rowh) in enumerate(rows):
     rowgutter=GUTTER3 if len(sub)==3 else GUTTER
-    total=sum(q['width']*scale for q in sub)+rowgutter*(len(sub)-1)
-    x=(W-total)/2
-    for q in sub:
-     key=q['source'];oldletter=q['source_panel'];source=fitz.open(J/REG[key]['path']);sp=source[0]
+    x=(W-max_width)/2
+    for col_index,q in enumerate(sub):
+     key=q['source'];oldletter=q['source_panel'];source=prepared_panel(key,oldletter);sp=source[0]
      # Remove only the source's original panel letters; underlying vectors remain.
      # fill=None: a filled redaction box is painted as a STROKED rectangle at the
      # PDF default width of 1.0 pt, which is not a line-weight token and put one
      # stray path per redaction into every cropped sheet.  The text still goes;
      # the regions that must also hide line art are masked below, unstroked.
-     masks=[]
-     for letter in REG[key]['letters']:
-      rr=fitz.Rect(letter['bbox']);sp.add_redact_annot(rr,fill=None)
-     for rr in REMOVED_SHARED_REGIONS.get(key,[])+PANEL_REDACTIONS.get((key,oldletter),[]):
-      sp.add_redact_annot(fitz.Rect(rr),fill=None);masks.append(fitz.Rect(rr))
-     if REG[key]['letters'] or key in REMOVED_SHARED_REGIONS or (key,oldletter) in PANEL_REDACTIONS:sp.apply_redactions(images=0,graphics=0,text=0)
-     for rr in masks:sp.draw_rect(rr,color=None,fill=(1,1,1),width=0)
      for patch in PANEL_PATCHES.get((key,oldletter),[]):
-      aux=fitz.open(J/REG[patch['source']]['path']);sp.show_pdf_page(fitz.Rect(patch['target_bbox']),aux,0,clip=fitz.Rect(patch['bbox']));ancillary.append(dict(patch,target_source_panel=key+oldletter,source_asset=REG[patch['source']]['path'],source_sha256=REG[patch['source']]['sha256']))
-     clip=fitz.Rect(q['bbox']);target=fitz.Rect(x,y+LETTER_BAND,x+clip.width*scale,y+LETTER_BAND+clip.height*scale)
+      ancillary.append(dict(patch,target_source_panel=key+oldletter,source_asset=REG[patch['source']]['path'],source_sha256=REG[patch['source']]['sha256']))
+     clip=fitz.Rect(q['bbox']);target=fitz.Rect(x+LETTER_GUTTER,y+LETTER_BAND,x+LETTER_GUTTER+clip.width*scale,y+LETTER_BAND+clip.height*scale)
      p.show_pdf_page(target,source,0,clip=clip)
      for tt in PANEL_TEXT.get((key,oldletter),[]):
       origin=[target.x0+(tt['origin'][0]-clip.x0)*scale,target.y0+(tt['origin'][1]-clip.y0)*scale];p.insert_text(origin,tt['text'],fontname='ReflowAxis',fontsize=tt['fontsize']*scale,rotate=tt.get('rotate',0));ancillary.append(dict(tt,target_source_panel=key+oldletter,target_origin=origin))
      newletter=chr(65+nextletter);nextletter+=1
-     p.insert_text((target.x0+1,y+10.4),newletter,fontname='PanelSans',fontsize=JS.PT_LETTER,color=(.1,.12,.13))
+     p.insert_text((x,y+10.4),newletter,fontname='PanelSans',fontsize=JS.PT_LETTER,color=(.1,.12,.13))
+     letter_layout['panels'].append({'letter':newletter,'row':row_index,
+       'column':'leading' if col_index==0 else f'{len(sub)}_col{col_index}',
+       'content_bbox':list(target)})
      panelmap.append(dict(q,panel=newletter,target_rect=list(target),scale=scale))
-     x=target.x1+rowgutter
+     x+=LETTER_GUTTER+widths[len(sub),col_index]*scale+rowgutter
     y+=rowh+GUTTER
    for key,r in legend_specs:
     source=fitz.open(J/REG[key]['path']);sp=source[0]
@@ -257,7 +317,8 @@ def main():
      yy=y+1;p.draw_line((x,yy-3),(x+11,yy-3),color=entry['color'],width=JS.LW_DATA);p.insert_text((x+15,yy),entry['label'],fontname='ReflowAxis',fontsize=JS.PT_BASE);ancillary.append(dict(entry,role='native shared legend',source='S14',origin=[x,yy]));x+=110
   scales[ident]=round(scale,4)
   if args.only is None or args.only==ident:
-   output.set_metadata({'title':title or re.sub(r'\\textbf\{([^}]+)\}.*',r'\1',originals[groups[0][0]],flags=re.S),'author':'Safaai, Richards and Sabatini','creator':'supplement_consolidation/build.py; native vector-panel reflow','keywords':json.dumps({'schema':'native-vector-reflow/1','id':ident,'figure':f'S{number}','paste_scale':round(scale,4),'panels':panelmap},separators=(',',':'))})
+   source_metadata=json.loads(output.metadata.get('keywords') or '{}')
+   output.set_metadata({'title':title or re.sub(r'\\textbf\{([^}]+)\}.*',r'\1',originals[groups[0][0]],flags=re.S),'author':'Safaai, Richards and Sabatini','creator':'supplement_consolidation/build.py; native vector-panel reflow','keywords':json.dumps({'schema':'native-vector-reflow/1','id':ident,'figure':f'S{number}','paste_scale':round(scale,4),'panels':panelmap,'source_layout':source_metadata if whole else None,'letter_layout':letter_layout},separators=(',',':'))})
    output.save(dest,garbage=4,deflate=True,no_new_id=True)
    output[0].get_pixmap(matrix=fitz.Matrix(1.5,1.5)).save(OUT/(ident+'.png'))
   for p in panelmap:

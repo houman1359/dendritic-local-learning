@@ -108,6 +108,8 @@ overlap-audit:
 
 layout-audit:
 	$(PYTHON) scripts/audit_latex_layout.py
+	$(PYTHON) scripts/audit_letter_alignment.py --strict
+	$(PYTHON) scripts/audit_row_separation.py --strict
 
 submission-bundle: combined layout-audit
 	$(PYTHON) scripts/build_submission_bundle.py --force --software-archive submission/Dendritic_credit_assignment_software.zip

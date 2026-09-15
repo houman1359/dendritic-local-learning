@@ -7,7 +7,7 @@
     "source_data/measured_alignment_power/input_audit.json": "13b6f9be0cc091e3d8b629fc496fd157ed1e1ee682ba5eb1b3cb890c848d4cea",
     "scripts/measured_alignment_power/report.py": "71a57a470c93a49612e9803cd8236b03ba38aeb2b6cfa21c382a61898f690db4",
     "scripts/measured_alignment_power/model.py": "6170181a9bd9bf4f3c95e3b63c2c49d5a7a873f418c7483f528e4c080c4b1f9e",
-    "scripts/figure_canvas.py": "ebfaf161136972a7461aafe57140731f01e988d34d57ed514db9536da75ce863",
+    "scripts/figure_canvas.py": "7f2983ff0c52a30dd5ba9bdeccc6fda940b4366ad872cbf0755fec5daa1dd7aa",
     "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a",
     "source_data/measured_alignment_power/runs/chunk_00.npz": "fa36f9eca3fa66a44681cbc339340419a02b6b9d6b7b328a50aaadb70889a6c9",
     "source_data/measured_alignment_power/runs/chunk_00.json": "97222801a3003a1d7346590dcc99e1464e91b81222e5b15693ae8ec2eb73c3c3",
@@ -58,7 +58,13 @@
     "source_data/measured_alignment_power/RESULTS.json": "c4e5d721eabc86c8697e43663ebac9122a3968fd97e9f37f27a4889c6eb53ea9"
   },
   "figure_files": {
-    "source_data/measured_alignment_power/figures/measured_alignment_sensitivity.pdf": "3e12a8ad0a8d29d272906d0f4970ed7ea83f089f369a13d2718728b041692bfb",
-    "source_data/measured_alignment_power/figures/measured_alignment_sensitivity.png": "9b75ac3d10e4401c6b54426c31d5f4069512a6d1f2d417af6873750c7ef202f8"
+    "source_data/measured_alignment_power/figures/measured_alignment_sensitivity.pdf": "7c8e6251372b371f70e095970a83510c45de2dd8aca8d423bb99f772dced2676",
+    "source_data/measured_alignment_power/figures/measured_alignment_sensitivity.png": "91616a589b77a7d29698c5e018a39e5dffbaabae431ea55aa75a56397eac2fb2"
+  },
+  "render_revision_20260914": {
+    "scope": "Panel-letter layout only, redrawn from the existing summary tables; protocol, execution records and numerical summaries are unchanged.",
+    "previous_canvas_sha256": "ebfaf161136972a7461aafe57140731f01e988d34d57ed514db9536da75ce863",
+    "previous_pdf_sha256": "3e12a8ad0a8d29d272906d0f4970ed7ea83f089f369a13d2718728b041692bfb",
+    "previous_png_sha256": "9b75ac3d10e4401c6b54426c31d5f4069512a6d1f2d417af6873750c7ef202f8"
   }
 }

@@ -1,30 +1,7 @@
 % Compact tables; repeated endpoint grids are available in the indexed Source Data.
-\subsection*{Reference tables and source-data index}
-
-\begin{table}[tbp]
-\centering
-\caption{Core notation. Symbols are defined at first use; this index distinguishes quantities that recur in different coordinate systems.}
-\label{tab:notation}
-\small
-\begin{tabularx}{\textwidth}{p{0.24\textwidth}X}
-\toprule
-Symbol & Meaning \\
-\midrule
-$V_n$, $a_n=f_n(V_n)$ & Compartment voltage and transmitted activity. \\
-$g_i,x_i,g_ix_i$; $E_i^{\rm rev}$ & Maximal conductance, presynaptic activity, open conductance and reversal potential; E/I polarity does not require signed conductances. \\
-$G_n^{\rm tot},R_n^{\rm tot}$ & Total open conductance and its reciprocal input resistance. \\
-$\delta^V_n$, $\delta^a_n$; $q_n$ & Errors in voltage/activity coordinates; root-to-unit output derivative. In reciprocal cables, $\bm q$ denotes the current-source adjoint. \\
-$\Phi$, $K$, $\bm c$ & Spatial-profile dictionary, column budget and delivered coefficients. Rank can be smaller than column count. \\
-$\Gamma$ & Route-gain matrix in the delivery equation; the rectangular anatomical kernel of Eq.~\ref{eq:s_kernel} is separately defined. \\
-$W$, $P_{\Phi,W}$; $\mathcal C_K$ & Positive coordinate weights, weighted projector and explicitly specified per-field or aggregate energy capture. \\
-$\bm g$, $\bm d$, $\bm m$, $V$ & Exact gradient, routed-update estimator, its conditional mean and covariance. \\
-$M$, $\Sigma$, $U$ & Fixed routing operator, estimator-noise covariance and one-step moment bound. \\
-$H_{\rm c},D_{\rm r}$; $H_{\rm p},D_{\rm p}$ & Task-credit hierarchy/routed resolution, and latent task hierarchy/physical stage count. \\
-$\chi$, $\alpha$, $a$ & Branch conflict, physical-task sensor alignment and imposed route-span energy fraction, respectively. \\
-$G$, $R_a$, $R_m$, $\kappa$ & Reciprocal conductance matrix, axial resistivity, specific membrane resistance and focal shunt dose. \\
-\bottomrule
-\end{tabularx}
-\end{table}
+\phantomsection
+\section*{Reference tables and source-data index}
+\addcontentsline{toc}{section}{Reference tables and source-data index}
 
 \begin{table}[tbp]
 \centering
@@ -91,6 +68,7 @@ Repeated H2/H3 architecture-by-placement interactions & 32.43 / 31.27 \\
 \centering
 \caption{Claim and evidence index. Each row identifies the question answered by the corresponding controlled comparison; scope and inferential details are stated once in its methods.}
 \label{tab:claim_boundaries}
+\pdfbookmark[2]{Claim and evidence index}{si-evidence-index}
 \small
 \begin{tabularx}{\textwidth}{p{0.22\textwidth}X}
 \toprule
@@ -110,6 +88,7 @@ Can an initial score choose morphology? & The original scalar selector lost to a
 \end{table}
 
 \clearpage
+\pdfbookmark[2]{Cohort and protocol index}{si-cohort-index}
 \begin{longtable}{p{0.23\textwidth}p{0.35\textwidth}p{0.32\textwidth}}
 \caption{Cohort and protocol index. Counts refer to runs within a study, not sums of independent replications. Detailed seed ranges, pairing, stopping and selection are given in the cited sections and source configurations.}\label{tab:experiment_cohorts}\\
 \toprule
@@ -137,6 +116,7 @@ Imposed/external controls & Eight arbors with forty streams each; six external a
 \bottomrule
 \end{longtable}
 
+\pdfbookmark[2]{Source-data index}{si-source-index}
 \begin{longtable}{p{0.25\textwidth}p{0.67\textwidth}}
 \caption{Source index for endpoint grids and metadata. All paths are relative to the released \texttt{source\_data/} directory. These records retain the complete per-unit outcomes, contrasts and exclusions behind condensed or omitted print tables; figure-source mappings provide the individual panel joins.}\label{tab:source_index}\\
 \toprule

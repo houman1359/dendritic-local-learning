@@ -66,6 +66,8 @@ if __name__ == "__main__":
     for p in sorted(glob.glob("figures/main/figure_[0-9][0-9].pdf")):
         g = gaps(p)
         if g is None:
+            print(f"{p.split('/')[-1]:16s} UNVERIFIED: missing layout metadata")
+            bad += 1
             continue
         print(f"{p.split('/')[-1]:16s} " + "  ".join(
             f"r{i}|r{i+1}={v:5.1f}pt({v * 25.4 / 72:4.2f}mm)"
@@ -73,3 +75,5 @@ if __name__ == "__main__":
             for i, v in enumerate(g)))
         bad += sum(1 for v in g if v < FLOOR_PT)
     print(f"\nboundaries below {FLOOR_PT} pt (3 mm): {bad}")
+    if strict and bad:
+        raise SystemExit(1)

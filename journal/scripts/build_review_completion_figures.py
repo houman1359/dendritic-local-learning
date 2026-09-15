@@ -324,7 +324,12 @@ def morphology():
     ax.set(xlabel="Mean of the two captures",ylabel="Series-resistance minus\nmean-radius capture",xlim=(.1,.6),ylim=(-.06,.06))
     ax.set_yticks([-.06,-.03,0,.03,.06])
     centre_grid(fig,axs,margin_pt=6.)
-    enforce_tokens(fig);fig.savefig(OUT/"figure_S33_panels_A-F.pdf");plt.close(fig)
+    from panel_letter_layout import finish_panel_letters
+    enforce_tokens(fig)
+    groups=[(chr(65+i),i//2,i%2,[ax]+([cb.ax] if i==0 else []))
+            for i,ax in enumerate(axs.ravel())]
+    metadata=finish_panel_letters(fig,groups)
+    fig.savefig(OUT/"figure_S33_panels_A-F.pdf",metadata=metadata);plt.close(fig)
 
 
 if __name__=="__main__":

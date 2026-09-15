@@ -379,9 +379,7 @@ def panel_b(ax, primary, outcomes, summary):
     ax.set_yticks([-0.25, 0.0, 0.25, 0.5, 0.75], ["−0.25", "0.00", "0.25", "0.50", "0.75"])
     ax.set_ylabel("baseline − estimated regret\n(mean; Bonferroni 97.5% CI)")
     note(ax, "dots: 80 tasks per column\nopen: family means (n = 4)", corner="tl")
-    note_lines(ax, [f"margin {MARGIN:g} NMSE:", f"{margin_pt:.1f} pt here, not drawn;",
-                    "both 97.5% lower", "bounds exceed it",
-                    f"({lower_bounds[0]:.3f}, {lower_bounds[1]:.3f})"], corner="tr")
+    note_lines(ax, ["lower bounds", f"> {MARGIN:g} NMSE"], corner="tr")
     print(f"[B] margin {MARGIN:g} NMSE = {margin_pt:.2f} pt on the axis (< LW_REF {LW_REF} pt): "
           f"stated, not drawn; lower bounds {lower_bounds[0]:.3f}, {lower_bounds[1]:.3f}")
 

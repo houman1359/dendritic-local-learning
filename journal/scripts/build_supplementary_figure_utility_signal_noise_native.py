@@ -617,12 +617,12 @@ def build(path: Path = OUT):
           f"{check_alignment_tables(runs, cells, curves, contrasts, summary):.1e}")
 
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 3, row_weights=ROW_PT, hgutter_pt=HGUTTER_PT,
-                      vgutter_pt=VGUTTER_PT, margins=MARGINS)
+                      vgutter_pt=VGUTTER_PT, margins=MARGINS, letter_clearance=True)
     ax_a = cv.panel("A", 0, 0, 6, schematic=True, title="Fixed-operator special case")
     ax_b = cv.panel("B", 0, 6, 6, title="Spectral capture advantage: subtree − random")
     ax_c = cv.panel("C", 1, 0, 6, grid="y", title="Hierarchy × resolution")
     ax_d = cv.panel("D", 1, 6, 6, title="Projection boundary: Δ loss")
-    ax_e = cv.panel("E", 2, 0, 4, grid="y", title="Trained checkpoints, one held-out batch")
+    ax_e = cv.panel("E", 2, 0, 4, grid="y", title="Trained checkpoints,\none held-out batch")
     ax_f = cv.panel("F", 2, 4, 4, grid="y", title="Iterative learning, eight arbors")
     ax_g = cv.panel("G", 2, 8, 4, grid="y", title="Rank–noise trade-off (analytic)")
     for ax in (ax_b, ax_c, ax_d):

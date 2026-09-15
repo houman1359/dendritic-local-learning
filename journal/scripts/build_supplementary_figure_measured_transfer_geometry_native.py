@@ -612,8 +612,8 @@ def panel_calibration(ax, audit):
     ax.set_yticks([-0.01, -0.005, 0.0, 0.005, 0.01], ["−0.01", "−0.005", "0", "0.005", "0.01"])
     ax.set_xlim(-0.02, 0.60)
     ax.set_xticks([0, 0.2, 0.4, 0.6], ["0", "0.2", "0.4", "0.6"])
-    ax.set_xlabel("measured split-half r (odd/even repeats)")
-    ax.set_ylabel("simulated − measured\nsplit-half r")
+    ax.set_xlabel("calibration target (split-half r)")
+    ax.set_ylabel("simulated − calibration target\n(split-half r)")
     ax.grid(True, axis="y", zorder=0, linewidth=LW_HAIR, alpha=0.9, color=COLORS["grid"])
     handles = [
         records,
@@ -622,7 +622,7 @@ def panel_calibration(ax, audit):
                label=f"negative measured r, set to 0 (n = {int(negative.sum())} of {N_RECORDS};\n"
                      f"raw −{abs(raw_negative[0]):.3f} and −{abs(raw_negative[1]):.3f})"),
         Line2D([], [], color=MUTE, lw=LW_REF, dashes=DASHES,
-               label="simulated mean = measured"),
+               label="simulated mean = calibration target"),
     ]
     key = ax.legend(handles=handles, loc="upper left", ncol=1, frameon=False,
                     fontsize=PT_BASE, handlelength=1.8, handletextpad=0.5,
@@ -671,7 +671,7 @@ def build(path: Path = OUT):
     ax_b = cv.panel("B", 0, 5, 3, title="Four-route support\ntarget 1, session 4, scan 10")
     ax_c = cv.panel("C", 0, 8, 4, title="Response prediction")
     ax_d = cv.panel("D", 1, 0, 6, title="Fixed-profile fidelity: update reconstruction")
-    ax_e = cv.panel("E", 1, 6, 6, title="Reliability calibration: simulated − measured")
+    ax_e = cv.panel("E", 1, 6, 6, title="Reliability calibration: simulated − target")
     for ax in (ax_a, ax_b, ax_d, ax_e):
         ax.set_title(ax.get_title(), fontsize=PT_EMPH, color=INK, pad=TITLE_PAD, fontweight="normal")
     ax_c.set_title(ax_c.get_title(), fontsize=PT_EMPH, color=INK, pad=TITLE_PAD + 9.0, fontweight="normal")

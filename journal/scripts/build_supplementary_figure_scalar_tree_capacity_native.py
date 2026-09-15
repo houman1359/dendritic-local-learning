@@ -605,7 +605,7 @@ def build(path: Path = OUT, *, png=False):
     assert (v2.max_abs_parameter < 1.0 + 1e-12).all() and (v2.normalized_mse < 7e-30).all()
 
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 3, row_weights=ROW_PT, hgutter_pt=HGUTTER_PT,
-                      vgutter_pt=VGUTTER_PT, margins=MARGINS)
+                      vgutter_pt=VGUTTER_PT, margins=MARGINS, letter_clearance=True)
     a = cv.panel("A", 0, 0, 4, schematic=True, title="Fixed spectrum; different interactions")
     b1 = cv.panel("B", 0, 4, 4, letter="", grid="both", title="Full-cut bound, rank ≤ 2")
     b2 = cv.panel("B_centered", 0, 8, 4, letter="", grid="both",
@@ -654,8 +654,12 @@ def build(path: Path = OUT, *, png=False):
     # measured reserve grows and the row keeps its height
     x_mid = (b1.get_position().x0 + b2.get_position().x1) / 2.0
     y_top = max(ax.get_position().y1 for ax in (b1, b2)) * CANVAS_H_PT
-    cv.fig.text(x_mid, (y_top + B_SUPER_DY_PT) / CANVAS_H_PT, B_SUPER_TITLE,
-                ha="center", va="baseline", fontsize=PT_TITLE, color=INK, zorder=6)
+    from matplotlib.transforms import blended_transform_factory
+    b1.text(x_mid, 1+B_SUPER_DY_PT/(b1.get_position().height*CANVAS_H_PT),
+            B_SUPER_TITLE, transform=blended_transform_factory(cv.fig.transFigure,
+                                                              b1.transAxes),
+            ha="center", va="baseline", fontsize=PT_TITLE, color=INK,
+            clip_on=False, zorder=6)
     problems = cv.save(path, name="figure_scalar_tree_capacity_native", png=png)
     for problem in problems:
         print(f"    {problem}")

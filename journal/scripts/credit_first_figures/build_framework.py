@@ -630,7 +630,7 @@ def deliveries(ax):
     for i, (cell, (title, hero, footer)) in enumerate(zip(cells, specs)):
         core = f.task_card(cell, title=title, emphasis=hero)
         core_pt = core[3] * f.h_pt
-        band_pt = 11.0                      # the card's own footer line
+        band_pt = 17.0                      # footer, including subscript clearance
         delta_pt = 12.0                     # room under the soma for delta-0
         rect = (core[0] + (core[2] - X(tree_w_pt)) / 2.0,
                 core[1] + Y(band_pt + delta_pt), X(tree_w_pt),
@@ -672,17 +672,19 @@ def deliveries(ax):
                               alpha_tags=True)
             f.badge((cell[0] + cell[2] - X(3.5), cell[1] + cell[3] - Y(3.0)),
                     "exact")
+        # Keep the subscript descenders inside the card, not on its lower
+        # border.  The equation tokens extend below their nominal baseline.
+        footer_y = core[1] + Y(9.5)
         if footer is None:                  # card 3: the path-gain equation
             # one typography for delta-hat-n: the same (base, sub) token
             # pair panel A's equation band uses, never a bare "n" span.
-            _, _, starts = chain(f, (cell[0] + cell[2] / 2.0,
-                                     core[1] + Y(3.5)),
+            _, _, starts = chain(f, (cell[0] + cell[2] / 2.0, footer_y),
                                  [("δ", "n"), " = ", ("α", "3"), ("α", "2"),
                                   ("α", "1"), ("δ", "0")], size=PT_BASE,
                                  color=INK, ha="center")
-            hat(f, starts[0], core[1] + Y(3.5), _text_w_pt(ax, "δ", PT_BASE))
+            hat(f, starts[0], footer_y, _text_w_pt(ax, "δ", PT_BASE))
         else:
-            chain(f, (cell[0] + cell[2] / 2.0, core[1] + Y(3.5)), footer,
+            chain(f, (cell[0] + cell[2] / 2.0, footer_y), footer,
                   size=PT_BASE, color=MUTE, ha="center")
     f.require_soma_lowest()
     f.require_delta0()

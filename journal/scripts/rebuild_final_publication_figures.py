@@ -70,13 +70,21 @@ def export_display_tables() -> None:
     output = ROOT / "source_data/curated_publication"
     output.mkdir(parents=True, exist_ok=True)
     records = []
-    for number in sorted(PROVENANCE_DIR):
-        directory = PROVENANCE_DIR[number]
-        source = ROOT / "figures/provenance" / directory / f"figure_{number:02d}_plotted.csv"
-        destination = output / source.name
-        shutil.copyfile(source, destination)
-        if sha256(source) != sha256(destination):
-            raise RuntimeError(f"Display-table copy failed: {source}")
+    for number in sorted(set(RESTORED_MAIN) | set(FOCUSED_MAIN)):
+        destination = output / f"figure_{number:02d}_plotted.csv"
+        if number in PROVENANCE_DIR:
+            directory = PROVENANCE_DIR[number]
+            source = ROOT / "figures/provenance" / directory / destination.name
+            shutil.copyfile(source, destination)
+            if sha256(source) != sha256(destination):
+                raise RuntimeError(f"Display-table copy failed: {source}")
+        else:
+            # These builders emit directly into curated_publication. Do not
+            # replace their fresh tables with older provenance-directory twins,
+            # or drop their records when writing the aggregate manifest.
+            source = ROOT / "scripts" / FOCUSED_MAIN[number]
+            if not destination.is_file():
+                raise FileNotFoundError(f"Direct display table is missing: {destination}")
         records.append({"figure": number, "source": str(source.relative_to(ROOT)),
                         "path": str(destination.relative_to(ROOT)),
                         "sha256": sha256(destination),
@@ -96,7 +104,13 @@ def export_display_tables() -> None:
         "`figures/provenance/credit_clarity_20260908/`. Promoted capture, "
         "coefficient and continuous-gate panels use already completed studies. "
         "Exploratory coefficient comparisons remain distinct from primary "
-        "noisy-cue outcomes.\n")
+        "noisy-cue outcomes.\n\n"
+        "Figure 1 panels C-G are emitted by "
+        "`scripts/credit_first_figures/build_framework.py`; panels A and B "
+        "are schematics and contribute no rows.\n\n"
+        "Figure 2 panels C-H are emitted by `scripts/build_main_figure_04.py` "
+        "from `source_data/path_necessity_fashion/` and "
+        "`source_data/trained_subtree_address/`.\n")
 
 
 def record_render_environment() -> None:

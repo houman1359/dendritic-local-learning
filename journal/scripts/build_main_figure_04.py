@@ -1026,10 +1026,10 @@ def forgetting_forest(canvas: NativeCanvas, ax, summary: pd.DataFrame,
                       seeds: pd.DataFrame, contrasts: pd.DataFrame) -> dict:
     """Context-0 accuracy lost after a context switch, four credit routes.
 
-    Design pass 2026-09-14: the forest and nothing else.  The right-aligned
-    value column, the ``never learned`` note and the four-line footer that
-    filled the strip under the rows are gone -- the headline interval, the
-    paired contrast, the failed acquisition and n are in the caption -- and
+    Design pass 2026-09-14: the right-aligned value column and the four-line
+    footer are gone; the headline interval, paired contrast and n are in
+    the caption.  A short ``not learned`` label remains beside derangement
+    because its near-zero forgetting does not demonstrate retention, and
     the four rows take the whole box.  E is an unlocked panel: its measured
     row-label gutter is a private inset, so H (the same module column, one
     row down) keeps the strip's shared axes width.
@@ -1063,6 +1063,10 @@ def forgetting_forest(canvas: NativeCanvas, ax, summary: pd.DataFrame,
             dashes=(2.6, 2.0), solid_capstyle="butt")
     ax.annotate("no accuracy loss", xy=(0.0, -0.45), xycoords=("data", "data"),
                 xytext=(2.5, 0.0), textcoords="offset points",
+                fontsize=PT_BASE, color=MUTE, ha="left", va="center",
+                zorder=6, annotation_clip=False)
+    ax.annotate("not learned", xy=(rows[2]["mean"], out["ypos"][2]),
+                xytext=(7.0, 0.0), textcoords="offset points",
                 fontsize=PT_BASE, color=MUTE, ha="left", va="center",
                 zorder=6, annotation_clip=False)
     c = contrasts[contrasts.contrast.eq("correct - neuron shared")

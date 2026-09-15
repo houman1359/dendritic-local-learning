@@ -152,7 +152,10 @@ def main():
     panel_title(d, "D", "Training-only partner filtering")
     DEST.parent.mkdir(parents=True, exist_ok=True)
     _token_weights(fig)
-    fig.savefig(DEST, metadata={"CreationDate": None, "ModDate": None})
+    from panel_letter_layout import finish_panel_letters
+    metadata=finish_panel_letters(fig,[('A',0,0,[a,ac]),('B',0,1,[b]),
+                                       ('C',1,0,[c]),('D',1,1,[d])])
+    fig.savefig(DEST, metadata=metadata)
     fig.savefig(SOURCE / "figure_S34_preview.png", dpi=180)
     (SOURCE / "figure_S34_provenance.json").write_text(json.dumps({
         "script": str(Path(__file__).relative_to(ROOT)),

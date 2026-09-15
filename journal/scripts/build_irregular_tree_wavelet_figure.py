@@ -284,7 +284,10 @@ def main() -> None:
     audit_layout(fig, "fig_irregular_tree_wavelets")
     audit_text_over_data(fig, "fig_irregular_tree_wavelets")
     FIGURE.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(FIGURE, metadata={"CreationDate": None, "ModDate": None})
+    from panel_letter_layout import finish_panel_letters
+    metadata = finish_panel_letters(fig, [(chr(65+i), i//2, i%2, [ax])
+                                         for i, ax in enumerate(axes.ravel())])
+    fig.savefig(FIGURE, metadata=metadata)
     plt.close(fig)
 
 

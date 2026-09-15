@@ -315,10 +315,11 @@ def build_s18():
             rrow('h3_serial_minus_grouped__rewired_tree__d3','serial − point\nreversed'),
             rrow('h3_serial_grouped_alignment_interaction__d3','aligned − reversed\n(derived)',hollow=True),
             rrow('h3_star_minus_grouped__aligned__d3','star − point\naligned')]
-    f_rows=[rrow('h2_alignment_interaction__serial_bp','serial BP','bp'),
+    # S18F is published as S24B: use the same arm hues as S22B.
+    f_rows=[rrow('h2_alignment_interaction__serial_bp','serial BP','ink'),
             rrow('h2_alignment_interaction__grouped_bp','grouped BP','point_mlp'),
             rrow('h2_alignment_interaction__shared_local','shared\nLocalCA','local'),
-            rrow('h2_alignment_interaction__path_local','path\nLocalCA','pathway')]
+            rrow('h2_alignment_interaction__path_local','path\nLocalCA','bp')]
     segments=[(-1.6,1.6),(18,35.5)];ticks=[[0],[20,25,30,35]]
     _seed_forest(e,segments,e_rows,xlabel='paired difference (pp)',ticks=ticks)
     _seed_forest(f,segments,f_rows,xlabel='paired difference (pp)',ticks=ticks)

@@ -77,6 +77,12 @@ def test_figure4_exports_every_drawn_seed_trajectory_and_dot(displays):
                                    rtol=0, atol=1e-9)
 
 
+def test_figure4_learning_curves_identify_their_tasks(displays):
+    _, canvas = displays[4]
+    assert {name: canvas.axes[name].get_title() for name in ('C', 'D', 'E')} == {
+        'C': 'Pairwise', 'D': 'Quartic', 'E': 'Nested control'}
+
+
 def test_figure6_exports_all_drawn_epochs_and_stopping_markers(displays):
     rows, _ = displays[6]
     assert rows.record.notna().all()

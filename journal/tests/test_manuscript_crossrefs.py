@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import ast
 import re
 from pathlib import Path
 
@@ -107,10 +108,24 @@ def _supplement_figure_numbers() -> set[int]:
         if numbers:
             return numbers
     # Fall back on the registry the supplement is built from.
-    spec = SUPPLEMENT_SPEC.read_text(encoding="utf-8")
-    count = len(re.findall(r"^\s{4}FigureSpec\(", spec, re.MULTILINE))
+    tree = ast.parse(SUPPLEMENT_SPEC.read_text(encoding="utf-8"))
+    assignment = next(node for node in tree.body if isinstance(node, ast.Assign)
+                      and any(isinstance(target, ast.Name) and target.id == "FIGURES"
+                              for target in node.targets))
+    figures = ast.literal_eval(assignment.value)
+    assert len({figure[0] for figure in figures}) == len(figures)
+    count = len(figures)
     assert count, "cannot determine the supplement's figure inventory"
     return set(range(1, count + 1))
+
+
+def test_supplement_inventory_without_compiled_aux(monkeypatch, tmp_path) -> None:
+    # LaTeX also briefly empties this file at the start of a rebuild. The
+    # fallback must read the actual tuple registry, not a retired API name.
+    empty_aux = tmp_path / "supplementary.aux"
+    empty_aux.touch()
+    monkeypatch.setitem(globals(), "SUPPLEMENT_AUX", empty_aux)
+    assert _supplement_figure_numbers() == set(range(1, 37))
 
 
 def _cited_supplementary_figures(text: str) -> set[int]:

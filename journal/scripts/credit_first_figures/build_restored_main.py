@@ -1036,8 +1036,8 @@ def figure4():
     # 2.34 under the 2.40 cap); the two data rows are sized to
     # their marks (the lock pass carves ~14 pt off the top of row 2 for
     # row 1's x labels and row 2's letters, so its axes are ~96 pt like
-    # row 1's).  No data panel carries a title or a sub-title line: the
-    # caption already states the frozen rates, the three stalled quartic
+    # row 1's).  Only neutral task names remain above C-E; the
+    # caption states the frozen rates, the three stalled quartic
     # seeds, the depth-four control, the 20/20 positive deficits and the
     # 1,024-update oracle checkpoint, and every series is direct-labelled.
     c = NativeCanvas(456 / 72, 3, row_weights=[122, 100, 114], hgutter_pt=30,
@@ -1052,24 +1052,14 @@ def figure4():
     f4_title(b, 'Where each rule delivers credit')
     f4_delivery_panel(b, radii)
 
-    spec = {'matching': ('Pairwise: broadcast fits', ('frozen Adam rates',),
-                         ('n = 20 paired seeds', COLORS['mute'])),
-            'quartet': ('Quartic: only exact fits',
-                        ('3 of 20 exact seeds stall',
-                         'all at floor by 4,096'),
-                        ('broadcast and calibrated broadcast',
-                         COLORS['mute'])),
-            'nested': ('Nested control: depth 4',
-                       ('depth 4, unmatched spectrum',),
-                       # QA 2026-09-10 (minor): plan section 4 prints the seed
-                       # count ONCE in row 1 (bottom-left of C); E's second
-                       # copy is dropped.  The empty right slot is kept so
-                       # C, D and E set their sub-titles on one baseline.
-                       ('', COLORS['mute']))}
+    # Neutral task names identify the three conditions without reinstating
+    # claim-style headlines or the removed statistics paragraphs.
+    task_labels = {'matching': 'Pairwise', 'quartet': 'Quartic',
+                   'nested': 'Nested control'}
     curve_axes = {}
     for letter, col, task in (('C', 0, 'matching'), ('D', 4, 'quartet'),
                               ('E', 8, 'nested')):
-        ax = c.panel(letter, 1, col, 4, title=None, grid='none')
+        ax = c.panel(letter, 1, col, 4, title=task_labels[task], grid='none')
         curve_axes[task] = ax
         if task == 'nested':
             tint_patch(ax, ('rect', FIG4_XLIM[0], FIG4_YLIM[0],
@@ -1096,7 +1086,6 @@ def figure4():
                xytext=(-2.0, -1.6), textcoords='offset points', ha='right',
                va='top', fontsize=PT_BASE, color=COLORS['bp'])
     e = curve_axes['nested']
-    f4_badge(e, .965, .965, 'control')
     # QA 2026-09-09 (minor, recorded deviation): the plan's upper-left inset
     # [0.03, 0.62, 0.20, 0.34] is occupied -- both broadcast means sit at
     # NMSE ~ 1 across the whole top of E -- so the icon takes the free field
@@ -1218,8 +1207,8 @@ def figure4():
             'waiver: none',
         'design pass 2026-09-14':
             'rows 122/100/114 at 30 pt gutters (row 2 carved 18 pt at the '
-            'top by a declared reserve); no titles, sub-titles or n / interval '
-            'lines on C-H (all in the caption); F drops its in-plot endpoint '
+            'top by a declared reserve); neutral task names on C-E, no claim '
+            'titles, sub-titles or n / interval lines on C-H; F drops its in-plot endpoint '
             'key (caption names both diamond states); B drops its radius '
             'sub-line (caption carries 0.133-0.386); the six 4-module panels '
             'share one 25 pt reserve split per column (25+0, 20+5, 15+10) so '

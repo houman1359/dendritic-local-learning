@@ -287,9 +287,12 @@ def main() -> None:
     fig.canvas.draw()
     audit_layout(fig, "fig_supp_nonlinear_depth_calibration")
     audit_text_over_data(fig, "fig_supp_nonlinear_depth_calibration")
+    from panel_letter_layout import finish_panel_letters
+    metadata=finish_panel_letters(fig,[(chr(65+i),i//2,i%2,[ax])
+                                      for i,ax in enumerate(axes.ravel())])
     fig.savefig(
         FIGURES / "fig_supp_nonlinear_depth_calibration.pdf",
-        metadata={"CreationDate": None, "ModDate": None},
+        metadata=metadata,
     )
     fig.savefig(FIGURES / "fig_supp_nonlinear_depth_calibration.png", dpi=600)
     plt.close(fig)

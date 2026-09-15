@@ -1,9 +1,9 @@
 {
   "figure": "Figure 3",
   "output": "figures/components/credit_first_figure_03.pdf",
-  "output_sha256": "d834d84238a56de8d7b2213e531f60e3588b1fcdfde860baa885607426c51415",
+  "output_sha256": "eebcb9f58f608eee044863ccf23acb35ad6f90f6a0ae4b44dd6ce50b923a0c8e",
   "plotted_table": "source_data/curated_publication/figure_03_plotted.csv",
-  "plotted_table_sha256": "f6d11bb66255bcf46a0f4774ceacd578a10982f54acf8ae452f2071ad3cfcf8c",
+  "plotted_table_sha256": "5da940fa16b99f32db31209b65ee58bccac52e7146be95c2dea9fe7cf258a5ee",
   "panel_sources": {
     "A": "Schematic, no data: the frozen task configuration (configs/trained_subtree_address/full_factorial_confirmatory.json) drawn on the shared balanced feedback tree; selected +1.00 and sibling / same-half / opposite-half distractor coefficients.",
     "B": "Schematic, no data: ancestry dictionaries A (8 x K) from grouped_routes(correct_ancestry_subtrees) with the card footers the raw group sums of figure_03_coefficient_prediction.csv, and the delivered support of b3's credit under the four matched controls at K = 4 (figure_03_control_supports.csv, rng seed 0). The control heatmap shows absolute delivered fields \u03a6[c, b] divided by the maximum absolute value within each row; the source table retains the signed, unit-norm field values.",
@@ -28,10 +28,10 @@
     "source_data/review_coefficient_hard_readout/paired_contrasts.csv": "46b214de8efef2e8640cce199a1cbb032477ec0e9ec62fdbc727e471705751e1"
   },
   "builders_sha256": {
-    "scripts/credit_first_figures/build_ancestry.py": "ddad1fcbd31ad5c224c938407cb00b73e8e65508b9009f61c932960148240013",
+    "scripts/credit_first_figures/build_ancestry.py": "909dc1c52986d232049668472ec4cab79dfda2620f82ad01c5fe6a514d8c6fa7",
     "scripts/routing_figure_panels.py": "b6a38d2f1329add30c30e3e98317f3d5a3946a2133a75303d458723b32faf521",
     "scripts/run_trained_subtree_address_full_factorial.py": "c5d75b8ea9bc29d7fd24ca53c360c4bbdf825d7fa31f84727af4b7dd47e875dd",
-    "scripts/figure_canvas.py": "ebfaf161136972a7461aafe57140731f01e988d34d57ed514db9536da75ce863",
+    "scripts/figure_canvas.py": "7f2983ff0c52a30dd5ba9bdeccc6fda940b4366ad872cbf0755fec5daa1dd7aa",
     "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a",
     "scripts/native_schematics.py": "68530ec60f85e496b9b0ba7a7ad53510dce2fae91cc38231046c1175e1cb7aeb",
     "scripts/credit_first_figures/focused_provenance.py": "b7ade95b88e7d10a43bab01716dee6211bc2f09735b605d489c0012a147ecea7"

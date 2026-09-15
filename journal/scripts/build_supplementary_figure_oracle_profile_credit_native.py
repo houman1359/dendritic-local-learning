@@ -428,7 +428,7 @@ def build(path: Path = OUT):
           f"max |error| {err:.2e}; floors {floors}")
 
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 3, row_weights=ROW_PT, hgutter_pt=HGUTTER_PT,
-                      vgutter_pt=VGUTTER_PT, margins=MARGINS)
+                      vgutter_pt=VGUTTER_PT, margins=MARGINS, letter_clearance=True)
     ax_a = cv.panel("A", 0, 0, 6, grid="y", title="Adam, compatible trees: final test error")
     ax_b = cv.panel("B", 0, 6, 6, grid="y", title="SGD, compatible trees: final test error")
     ax_c = cv.panel("C", 1, 0, 6, grid="y", title="Exact credit: input assignment matters")

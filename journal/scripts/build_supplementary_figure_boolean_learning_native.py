@@ -530,7 +530,7 @@ def build(path: Path = OUT, *, png=False):
                      "sgd": {"broadcast": 0.01, "exact": 0.03}}
 
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 4, hgutter_pt=HGUTTER_PT,
-                      vgutter_pt=VGUTTER_PT, margins=MARGINS)
+                      vgutter_pt=VGUTTER_PT, margins=MARGINS, letter_clearance=True)
     a = cv.panel("A", 0, 0, 6)
     b = cv.panel("B", 0, 6, 6)
     c = cv.panel("C", 1, 0, 6)

@@ -443,7 +443,7 @@ def build(path: Path = OUT):
     assert 0.0289 < inc_final.min() and inc_final.max() < 0.0319, (inc_final.min(), inc_final.max())
 
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 3, row_weights=ROW_PT, hgutter_pt=HGUTTER_PT,
-                      vgutter_pt=VGUTTER_PT, margins=MARGINS)
+                      vgutter_pt=VGUTTER_PT, margins=MARGINS, letter_clearance=True)
     ax_a = cv.panel("A", 0, 0, 7, schematic=True, title="Fixed physical shape; three input groupings")
     ax_b = cv.panel("B", 0, 7, 5, grid="y", title="Interaction bound")
     ax_c = cv.panel("C", 1, 0, 6, grid="y", title="Adam: test error by credit rule")

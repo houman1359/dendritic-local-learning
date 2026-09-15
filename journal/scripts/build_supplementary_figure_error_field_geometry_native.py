@@ -352,7 +352,7 @@ def build(path: Path = OUT):
     assert (grad.trained_broadcast_mode.isin(["per_soma", "per_soma_shared"])).all()
 
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 2, hgutter_pt=HGUTTER_PT, vgutter_pt=VGUTTER_PT,
-                      margins=MARGINS)
+                      margins=MARGINS, letter_clearance=True)
     ax_a = cv.panel("A", 0, 0, 6, grid="y", title="Direction: gradient cosine")
     ax_b = cv.panel("B", 0, 6, 6, grid="y", title="Amplitude: transport by depth")
     ax_c = cv.panel("C", 1, 0, 6, grid="y", title="Variation: within-depth residual")
