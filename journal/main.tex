@@ -173,7 +173,7 @@ For \(N\) examples, the branch-specific and neuron-shared gradient estimates wer
 \end{equation}
 The indicator $\mathbf{1}[\cdot]$ is one when its condition holds, zero otherwise; $1/B$ matches scale without supplying branch information. A feedback selector and a branch-local eligibility gate give the same update (Fig.~\ref{fig:branchconflict}B), testing access to selection rather than a need for independently computed external errors. We call these the branch-specific and neuron-shared rules. A deranged route instead delivers the same signal to the neighbouring branch at matched rank and sparsity (Fig.~\ref{fig:branchconflict}B, bottom row).
 
-With centered, symmetric class evidence, the shared-mode prediction crosses zero at \(\chi_c=B/[2(B-1)]\): 1, \(2/3\) and \(4/7\) for two, four and eight branches (Fig.~\ref{fig:branchconflict}C; Methods). The measured initial signed utility of the neuron-shared update tracked this line to within 0.018 at all twenty-four sampled cells, although its bootstrap interval excluded the prediction in eleven of them (Fig.~\ref{fig:branchconflict}C). This is a statement about initialization: the trained chance crossing is a separate endpoint, displaced from the boundary because update alignment is lost during learning (Methods; Supplementary Fig.~S10B--D). It nonetheless followed the predicted order \(B=8<4<2\) in 20 of 20 seeds, and five two-branch seeds never reached chance within the sweep (Fig.~\ref{fig:branchconflict}D). Selection also protects what has already been learned: in a separate two-stream interference task, neuron-shared credit erased a previously acquired context, losing 55.7 accuracy points \([53.8, 57.6]\), while branch-specific subtree routes lost none in all ten seeds (Fig.~\ref{fig:branchconflict}E; Supplementary Fig.~S10A).
+With centered, symmetric class evidence, the shared-mode prediction crosses zero at \(\chi_c=B/[2(B-1)]\): 1, \(2/3\) and \(4/7\) for two, four and eight branches (Fig.~\ref{fig:branchconflict}C; Methods). The measured initial signed utility of the neuron-shared update tracked this line to within 0.018 at all twenty-four sampled cells, although its bootstrap interval excluded the prediction in eleven of them (Fig.~\ref{fig:branchconflict}C). This is a statement about initialization: the trained chance crossing is a separate endpoint, displaced from the boundary because update alignment is lost during learning (Methods; Supplementary Fig.~S10B--D). It nonetheless followed the predicted order \(B=8<4<2\) in 20 of 20 seeds, and five two-branch seeds never reached chance within the sweep (Fig.~\ref{fig:branchconflict}D). Selection also protects what has already been learned: in a separate synthetic two-stream interference task, neuron-shared credit erased a previously acquired context, losing 55.7 accuracy points \([53.8, 57.6]\), while branch-specific subtree routes lost none in all ten seeds (Fig.~\ref{fig:branchconflict}E; Supplementary Fig.~S10A).
 
 At zero conflict, the branch-specific and neuron-shared rules achieved similar accuracy. Their difference increased with conflict, reaching 34.9--58.2 percentage points at full conflict across the tested branch counts (20 paired seeds; Fig.~\ref{fig:branchconflict}F--H). In every seed, the advantage of correct routing increased with conflict. A deranged route sent every signal to the wrong branch at matched rank and sparsity. It was harmful even at zero conflict, reducing accuracy by 12--25 points relative to branch-specific selection, whereas the neuron-shared rule was indistinguishable from branch-specific selection there (Fig.~\ref{fig:branchconflict}F--H, \(\chi=0\)); at high conflict the deranged rule settled near 22\% correct at every branch count, well below the 50\% chance level, as did the neuron-shared rule at $B=4$ and $B=8$; the two-branch neuron-shared rule also fell below chance on average, to 45.1\%. BP and the gated point matched branch-specific selection exactly in every seed, as required by their algebraic equivalence (Fig.~\ref{fig:branchconflict}B; Source Data; Supplementary Section~S3). Branch-count comparisons do not hold capacity fixed.
 
@@ -184,33 +184,34 @@ The neuron-shared rule reached chance at lower conflict as branch count increase
 \includegraphics[width=\textwidth]{main/figure_02.pdf}
 \captionsetup{skip=4pt}
 \caption{\textbf{Neuron-shared credit tolerates redundant inputs but fails as branch inputs conflict.}
-\textbf{A}, Context-gated Fashion-MNIST task; schematic, no data. Carmine ring tagged $c$, the
-context gate on the selected branch, drawn open; closed gates filled, their proximal segments faded;
-ink arrow, $\delta_0$. Tile rows, conflict dose $\chi=0$ and $\chi=1$.
-\textbf{B}, Three deliveries of $\delta_0$ on identical fans; schematic:
+\textbf{A}, Context-gated binary branch selection using Fashion-MNIST classes 0 and 6 ($B=4$ schematic).
+Context selects the branch whose image determines target $y$; $x_y$ and $x_{1-y}$ denote target- and opposite-class inputs.
+Open carmine gate $c$, selected branch; filled gates and faded stems, inactive branches; ink arrow, $\delta_0$.
+Tiles show conflict doses $\chi=0,1$.
+\textbf{B}, Three deliveries on identical fans:
 branch-specific $\delta\mathbf{1}[b=b^\star]$ (green capsule, identical to BP and to a gated
 point), neuron-shared $\delta/B$ (amber bus, one drop per junction) and a deranged
 route $\delta\mathbf{1}[b\equiv b^\star+1\pmod B]$ (grey capsule; cyclic indexing).
 Branch selection is a diagonal gain $\Gamma$ (Eq.~\ref{eq:routedfield}).
 \textbf{C}, Analytic $s(\chi)=1-2\chi(B-1)/B$ (lines; the teal ramp is ordinal in $B$) against the
-neuron-shared rule's measured initial signed utility (open markers). Lower strip, the same three series as residuals (measured $-$ analytic; hairline, mean; ribbon, 95\% interval) on a $\pm0.026$ scale. $n=20$ seeds per cell,
+neuron-shared rule's measured initial signed utility (open markers). Inset residuals (measured $-$ analytic): hairlines, means; ribbons, 95\% intervals; $\pm0.026$ scale. $n=20$ seeds per cell,
 mean and 95\% seed-bootstrap interval at initialization.
 \textbf{D}, Analytic $\chi_c=B/[2(B-1)]$ (open ink-edged diamonds) against the trained mean neuron-shared
 curve's first chance crossing (amber) and each seed's first at-or-below-chance dose ($\times n$,
 seeds at that level); trained crossings 0.964, 0.668 and 0.573 (exact two-sided sign test on the predicted
 order, $P=1.9\times10^{-6}$). The strip above the axis break holds five $B=2$ non-crossing seeds;
 $n=20$ seeds per $B$, sweep levels without intervals, endpoint state.
-\textbf{E}, Context-0 accuracy loss after mixed-context acquisition and context-1-only training in the two-stream task, for four
-routes: neuron-shared (amber square), branch-specific (green circle), deranged (grey filled
+\textbf{E}, Separate synthetic two-stream task: context-0 accuracy loss after mixed-context acquisition and context-1-only training.
+Routes: neuron-shared (amber square), branch-specific (green circle), deranged (grey filled
 triangle) and a random dense rank-2 field (grey open diamond);
 faint dots, individual seeds; branch-specific minus neuron-shared $-55.7$ [$-57.7$, $-53.8$] points, paired Wilcoxon $P=0.002$. Deranged routing never learned (held-out 19.6\%); its near-zero accuracy loss does not indicate memory retention. Depth-shared equalled neuron-shared in every seed and is not drawn. $n=10$ paired
-training seeds, mean and 95\% seed-bootstrap interval.
+seeds, mean and 95\% seed-bootstrap interval.
 \textbf{F--H}, Held-out accuracy against $\chi$ at $B=2$, $4$ and $8$ for \textbf{B}'s three
-deliveries; dashed vertical, $\chi_c$; dashed horizontal, chance; faint dots, individual seeds.
-The branch-specific arm is $\chi$-invariant by construction and is drawn as one line, band and
-seed fan. Grey tags, the deranged $-$ branch-specific difference at $\chi=0$; amber tags,
+deliveries; dashed vertical, $\chi_c$; dashed horizontal, binary chance (50\%); faint dots, seeds.
+Branch-specific accuracy is $\chi$-invariant by construction (one line, band and seed fan).
+Grey tags, deranged $-$ branch-specific at $\chi=0$; amber tags,
 branch-specific $-$ neuron-shared at $\chi=1$. $n=20$
-paired seeds, mean and 95\% seed-bootstrap band at the endpoint state.
+paired seeds, mean and 95\% seed-bootstrap band at the endpoint.
 Source Data: \texttt{source\_data/curated\_publication/figure\_02\_plotted.csv}.}
 \label{fig:branchconflict}
 \end{figure}
@@ -311,8 +312,8 @@ The gate coarsens the exact rule's strong context-dependent gain ratio. At match
 \textbf{B}, Four deliveries of $\delta_0$ on identical trees: local distal gate ($\times\,\mathbb{1}[a_p=0]$ at terminals, unit above), exact path ($\alpha$ factors), unit broadcast and two-profile oracle (fixed, nonuniform distal profiles $\bm p_1,\bm p_2$, scaled by oracle amplitudes $\hat c_1,\hat c_2$; proximal and somatic multipliers one). The hard local gate restricts $\Gamma$ (Eq.~\ref{eq:routedfield}) to $\{0,1\}$; the continuous gate in \textbf{F} gives $(0,1]$. Schematic.
 \textbf{C},\textbf{D}, Held-out NMSE for aligned and opposed targets; means of 20 paired seeds with 95\% pointwise bootstrap bands; rule key in \textbf{C} (exact path solid, gate dashed, oracle dotted, unit broadcast solid); tick in \textbf{D}, the median first bound contact at 717 updates. Exact path, gate and oracle coincide within the line width from 256 updates to the 4,096-update rule, and separate beyond it.
 \textbf{E}, Opposed-minus-aligned difference in broadcast-minus-gate NMSE at both windows, hairlines joining seeds; dashed rule, no interaction; $n=20$ paired seeds, 95\% paired whole-seed bootstrap intervals at validation-selected states, sign-flip $P=3.8\times10^{-6}$ (Holm).
-\textbf{F}, Opposed NMSE in the 4,096-update window by gate shape and placement; filled/open distal-gate diamonds denote the hard gate $\mathbb{1}[a_p=0]$ and continuous gate $1/(1+g^{\rm I}_p a_p)$, both with filled seed clouds; small open circles, each column's rule at Adam 0.01 (left) and 0.1 (right); dashed rule, unit broadcast. At the swapped gate, spread and intervals are narrower than the markers; at the two shapes only the intervals are. $n=20$ seeds per condition and rate, 95\% whole-seed bootstrap intervals, validation-selected states.
-\textbf{G}, Earlier cohort: distal gradient retained after context averaging at initial and broadcast-trained weights, hairlines joining seeds; dashed rule at 1. Exact-credit means coincide at the two states but the trained distribution splits, five of twenty below 0.17. $n=20$ seeds, 95\% whole-seed bootstrap intervals.
+\textbf{F}, Opposed NMSE in the 4,096-update window by gate shape and placement; filled/open distal-gate diamonds denote the hard gate $\mathbb{1}[a_p=0]$ and continuous gate $1/(1+g^{\rm I}_p a_p)$, with filled seed clouds; small open circles, means at Adam 0.01 (left) and 0.1 (right), hard gate only in the distal-gate column; dashed rule, unit broadcast. At the swapped gate, spread and intervals are narrower than the markers; at the two shapes only the intervals are. $n=20$ seeds per condition and rate, 95\% whole-seed bootstrap intervals, validation-selected states.
+\textbf{G}, Earlier cohort: distal gradient retained after context averaging at initial and calibrated-broadcast-trained weights, hairlines joining seeds; dashed rule at 1. Exact-credit means coincide across states; five of twenty trained values fall below 0.17. $n=20$ seeds, 95\% whole-seed bootstrap intervals.
 Source Data: \texttt{source\_data/curated\_publication/figure\_05\_plotted.csv}.}
 \label{fig:conductancecredit}
 \end{figure}
@@ -339,7 +340,7 @@ Within D3, the LocalCA exact-path-minus-shared-soma accuracy gap changed from $+
 \textbf{B}, Generative model: nested gains act on 4, 2 and 1 blocks of the stream, flat gains on eight blocks, local-ratio inputs inside every module; sensors report tier $\ell$ at fidelity $\alpha$. Schematic, no data.
 \textbf{C}, Serial-minus-grouped-point accuracy at fixed D3 under exact BP, by task family and fidelity (colours ordinal here); pale dots, ten per-seed differences at $\alpha=1$; open marker, the exact local-ratio tie, not a sampled null (LocalCA counterpart, Supplementary Fig.~S22D).
 \textbf{D}, Three-tier task: accuracy against serial depth for three credit arms, a raw-additive mechanism control, two resource-matched controls (grouped and reversed, dodged in depth, agreeing within 0.5 points) and the point-network ceiling. Intervals are smaller than the markers except for the additive arm, whose means shift by up to 1.6 points across re-runs; the four-tier cohort is separate and not drawn.
-\textbf{E}, Validation-selected accuracy for six 600-epoch restarts (not continuations); dotted, each rule's autograd-broadcast variant, the local one overprinting shared soma; thin grey, the D1 reference, lightened in this panel once fewer than eight of its ten fits run. Paired labels name arms whose 600-epoch ends differ by 0.48 and 0.02 points.
+\textbf{E}, Validation-selected accuracy for six conditions restarted for up to 600 epochs (ten seeds each, not continuations); dotted, each rule's autograd-broadcast variant, the local one overprinting shared soma; thin grey, the D1 reference, lightened below eight active fits. Paired labels name arms whose 600-epoch ends differ by 0.48 and 0.02 points.
 \textbf{F}, Best validation loss for the same arms; open markers, D1 stopping epochs.
 \textbf{G,H}, Paired exact-path-minus-shared-soma differences in accuracy and cross-entropy; the grey vertical span in \textbf{G} is the 300--325 window over which the interval straddles zero intermittently; the dashed rule in \textbf{E}--\textbf{H} is the 180-epoch budget.
 Large markers are means over ten paired seeds; bars and shading are descriptive 95\% seed-bootstrap intervals, of each arm's mean in \textbf{D}--\textbf{F} apart from the two broadcast arms, and of the paired difference elsewhere, pointwise in \textbf{E}--\textbf{H}; accuracy endpoints are validation-selected. Source Data: \texttt{source\_data/curated\_publication/figure\_06\_plotted.csv}.}
@@ -442,7 +443,7 @@ A separate passive-tree model predicted each target's responses from its recorde
 model-conditional 80\% detection requires an observed partial rank correlation near 0.25.}
 \textbf{A}, Two contact pairs on one arbor, one sharing a soma-to-ancestor path
 (green patch), the other linked to the soma by dashed hairlines; filled blue discs, excitatory
-contacts; open magenta ring, an inhibitory partner; right, their responses. No data: stimulus recordings, no $\delta_0$.
+contacts; open magenta ring, an inhibitory partner; right, schematic responses, not measured traces. No credit is delivered ($\delta_0$ absent). Cohort labels distinguish 69 partners in selected scans from thirteen eligible scans overall, all from seven targets.
 \textbf{B}, Ancestry--response partial rank correlation, selected scans; dots, the seven
 target values; open circles, the thirteen all-eligible-scan values (same targets, stacked where
 they would overlap); diamond, mean with 95\% target-bootstrap interval ($n=7$): $-0.069\,[-0.251, 0.106]$; right, $3/7\,+$, targets with positive values.
@@ -517,7 +518,7 @@ Common-checkpoint diagnostics compare rules at identical weights and states. Exa
 
 \subsection*{Contextual conflict and ancestry routing}
 
-The branch-conflict task uses Eqs.~\ref{eq:branchconflictforward}--\ref{eq:branchconflictupdates}, with independent opposite-class replacements of nonselected Fashion-MNIST inputs at probability $\chi$. Twenty paired seeds cross $B=2,4,8$ with eight doses. Gated-point and BP calculations receive equivalent updates; A deranged route changes recipients at fixed rank and support. A separate two-stream interference cohort (ten paired seeds 4100--4109, $K=2$ subtree routes, two contexts) trains on balanced examples from both contexts for sixty epochs, then on context 1 alone for twelve epochs, and measures context-0 accuracy before and after the latter phase on 1,024 held-out examples; the decrease is reported as context-switch forgetting (\texttt{source\_data/trained\_subtree\_address/}).
+The branch-conflict task uses Eqs.~\ref{eq:branchconflictforward}--\ref{eq:branchconflictupdates}, with independent opposite-class replacements of nonselected Fashion-MNIST inputs at probability $\chi$. Twenty paired seeds cross $B=2,4,8$ with eight doses. Gated-point and BP calculations receive equivalent updates; a deranged route changes recipients at fixed rank and support. A separate synthetic two-stream interference cohort (ten paired seeds 4100--4109, $K=2$ subtree routes, two contexts) trains on balanced examples from both contexts for sixty epochs, then on context 1 alone for twelve epochs, and measures context-0 accuracy before and after the latter phase on 1,024 held-out examples; the decrease is reported as context-switch forgetting (\texttt{source\_data/trained\_subtree\_address/}).
 
 Under centered, symmetric class evidence, shared-mode compatibility is $s(\chi)=1-2\chi(B-1)/B$, with zero at $\chi_c=B/[2(B-1)]$. Trained crossings are evaluated separately by mean-curve interpolation and each seed's first sampled at-or-below-chance dose, retaining non-crossings. Checkpoint re-execution reproduces endpoints and compares exact/shared fields at both common and own trained states (Supplementary Fig.~S10B--D). The measured counterpart of $s(\chi)$, reported as the initial signed utility, is the Source Data column \texttt{mean\_initial\_signed\_utility}: the initialization-state inner product of the neuron-shared update with the exact update, signed and normalized so that the analytic $s(\chi)$ is its prediction. It is distinct from the nonnegative capture $U$ reported elsewhere.
 
