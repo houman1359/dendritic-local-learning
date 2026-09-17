@@ -1,7 +1,0 @@
-{
-  "utc": "2026-09-05T16:11:29.348774+00:00",
-  "status": "exploratory_followup_designed_after_soft_encoder_outcomes_before_hard_readout_outcomes",
-  "protocol": "Reuse identical encoder,data,seeds; deterministic argmax readout; retain full grid; no tuning",
-  "wrapper_sha256": "9eab37b0c92e87e51a3d9f6f2279c1e63e2378d8a01f3148b1220ced604652e6",
-  "parent_report_sha256": "c8e2e7fc375fd8f8235e84f6ef8d6cb7cb4bb63de0c59b5e04d8671a9915feaf"
-}

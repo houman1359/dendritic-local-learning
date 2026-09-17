@@ -1,7 +1,0 @@
-{
-  "protocol_sha256": "1fc33b46fdcd7e6c2f84aa9236190f9a17281c4cb5db4cb6b9d6ab720a299cf1",
-  "seed": 2026090799,
-  "n_replicates": 1000,
-  "scope": "Check only; no data-dependent adjustment of the declared Spearman-to-Pearson moment calibration.",
-  "output_sha256": "77c52fcbfc6cba0bd97eff5758b4ef9f914ad31495a17bf1b678c4ba220f915f"
-}

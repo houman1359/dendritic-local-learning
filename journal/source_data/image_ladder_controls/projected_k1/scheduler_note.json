@@ -1,7 +1,0 @@
-{
-  "base_development_job": "44916696",
-  "base_completed": 90,
-  "projected_k1_development_job": "44920249",
-  "resource_change": "Raised addendumdevelopmentconcurrency4to12onlyafterthebase90fitscompleted; same scientificconditions and budgets",
-  "joint_advance_job": "44920270"
-}

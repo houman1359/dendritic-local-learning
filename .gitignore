@@ -31,16 +31,11 @@ journal/submission/*.zip.sha256
 # The active branch is also synchronized to Overleaf.  Keep analysis-ready
 # result tables and generated reading copies local: canonical TeX sources and
 # publication figure PDFs are tracked, while the complete frozen evidence
-# snapshot remains recoverable from archive/pre-overleaf-prune-20260820.
+# snapshot remains recoverable from archive/pre-overleaf-cleanup-20260917.
 journal/source_data/*
 !journal/source_data/README.md
-!journal/source_data/provenance_manifest.tsv
-!journal/source_data/path_necessity_fashion/
-!journal/source_data/path_necessity_fashion/**
-!journal/source_data/route_dictionary_atlas/
-!journal/source_data/route_dictionary_atlas/**
-!journal/source_data/mnist_between_within_factorial/
-!journal/source_data/mnist_between_within_factorial/**
+!journal/source_data/curated_publication/
+!journal/source_data/curated_publication/**
 journal/main.pdf
 journal/main_with_supplementary.pdf
 journal/supplementary/supplementary.pdf
@@ -67,8 +62,26 @@ journal/data/
 
 # Experiment configurations are local execution inputs and are not needed to
 # compile the Overleaf manuscript. A tracked snapshot remains on
-# archive/pre-overleaf-prune-20260820.
+# archive/pre-overleaf-cleanup-20260917.
 journal/configs/**/*.yaml
 journal/configs/**/*.yml
 neurips/configs/**/*.yaml
 neurips/configs/**/*.yml
+
+# Internal review notes, generated inventories and contact sheets are local.
+# Removing tracking does not remove these files from the research checkout.
+journal/analysis/
+journal/configs/supplement_consolidation/contact_sheet*.pdf
+journal/configs/credit_first_provenance/panel_sources.json
+journal/configs/credit_first_provenance/retained_supplementary.tsv
+journal/configs/figure_structure/retained_evidence.tsv
+journal/scripts/supplement_consolidation/original_provenance.json
+
+# The presentation remains available through Git LFS on the archive branch;
+# Overleaf does not support LFS. Keep its local full-size copy unchanged.
+journal/LLR_n.pptx
+
+# Current publication PDFs only; legacy panel sheets remain local/archive.
+journal/figures/main/*.pdf
+!journal/figures/main/figure_0[1-9].pdf
+journal/figures/supplementary/*.pdf

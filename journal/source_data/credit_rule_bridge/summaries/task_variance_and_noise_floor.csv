@@ -1,4 +1,0 @@
-model,task,clean_target_variance,label_noise_variance,expected_label_noise_nmse,training_half_mse_gradient_denominator,population_nmse_denominator,test_nmse_denominator
-algebraic,matching,1.0,0.0225,0.0225,1.0,1.0,1.0
-algebraic,quartet,0.5,0.0225,0.045,0.5,0.5,0.5
-algebraic,nested,1.0,0.0225,0.0225,1.0,1.0,1.0

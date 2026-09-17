@@ -1,7 +1,0 @@
-family,shape,tied_win_count,fractional_win_count
-quadratic_matching,balanced,74,48.5
-quadratic_matching,comb,0,0.0
-quadratic_matching,mixed,82,56.5
-quartic_partition,balanced,35,14.333333333333332
-quartic_partition,comb,31,10.333333333333332
-quartic_partition,mixed,31,10.333333333333332

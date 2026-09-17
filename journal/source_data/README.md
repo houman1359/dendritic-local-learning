@@ -4,8 +4,12 @@ This directory holds the numerical record for the standalone Article
 *Dendritic morphology as a dictionary for local credit assignment*. Some large
 result tables are ignored by the Overleaf-synchronized Git branch; release
 archives are assembled from explicit current-file allowlists with source hashes.
-The historical `archive/pre-overleaf-prune-20260820` reference is not available
-in this checkout and is not assumed to recover missing execution artifacts.
+Only this README and `curated_publication/` are tracked here on `main`.
+The full previously tracked data and provenance snapshot is preserved on
+`archive/pre-overleaf-cleanup-20260917` at commit
+`fbe379aef67a59a0827396f2b6b636dc1dabe0cd`, and all local files were retained
+during untracking. This snapshot does not claim to recover artifacts that were
+already missing. See `../REPOSITORY_LAYOUT.md` for access and build boundaries.
 
 `provenance_manifest.tsv` maps stable historical entry IDs to current figures,
 panels, source paths, generators and replication units. Figure assets and

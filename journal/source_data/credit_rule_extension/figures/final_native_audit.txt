@@ -1,3 +1,0 @@
-physical_depth_followup.pdf: 0 violations
-credit_rule_extension.pdf: 0 violations
-credit_rule_extension_controls.pdf: 0 violations

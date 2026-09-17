@@ -1,8 +1,0 @@
-{
-  "cohort": "fresh",
-  "pilot": "Budgeted 16-step selector; evaluated before endpoint outcomes",
-  "predictions_sha256": "77fcf432b4c3f89642723390bb9ae10d229cb5ff31f2f1b4d9d867e34c9fb1d5",
-  "protocol_sha256": "689abe998236c9cd9154eb1dd35ea0dec374d08f478b5df64b432f71a584e32d",
-  "sealed_utc": "2026-09-05T18:09:08.471508+00:00",
-  "seed": 9319
-}

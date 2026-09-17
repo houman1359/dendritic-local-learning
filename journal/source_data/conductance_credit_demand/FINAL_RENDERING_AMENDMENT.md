@@ -1,9 +1,0 @@
-# Final conductance rendering amendment
-
-Retain the current final figure outputs. The four presentation changes are recorded explicitly, with their historical and final SHA-256 values, in `final_rendering_amendment.json`.
-
-For S52, isolated rerenders reproduce both sets of file hashes exactly: Matplotlib 3.10.9 produces the historical files, and Matplotlib 3.10.6 produces the final files. The PDF bytes differ only in the producer-version string. Text, coordinates and all 201 vector drawing objects are identical, as are the decoded PNG pixels. The provenance JSON differs only in the PDF hash. Visual inspection found no material overlap, clipping or readability issue. Both renders preserved all 41 scientific inputs, reproduced all 96 rate means from the 288 retained endpoints and left the frozen follow-up decisions unchanged.
-
-For main Figure 5, the final provenance record reproduces exactly from the verified builder. Its PDF, PNG, figure-source CSV and nominal-tuning CSV are byte-identical to the historical inventory; all nine scientific input hashes and the builder hash also match. The original provenance JSON bytes were not retained, so its field-level difference cannot be established. Its original checksum remains in the historical inventory and amendment; no unsupported explanation of the old metadata is asserted.
-
-`study_source_inventory_pre_final_render_20260907.tsv` preserves the complete 1,052-entry pre-render inventory byte for byte (SHA-256 `e52a4a4ec2eeada26b2ec9efa30711a211e7694c3a376c8cac011aade6407143`). The current `study_source_inventory.tsv` updates only the four explicitly amended presentation identities and adds this note, the amendment JSON and the preserved inventory snapshot. The immutable scientific handoff inventory is unchanged. No scientific source, numerical result, analysis choice or fit changed; final release inventories identify the actual shipped bytes.

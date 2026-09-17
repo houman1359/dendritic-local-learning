@@ -1,6 +1,0 @@
-{
-  "source": "source_data/morphology_calibration/policy_outcomes.csv",
-  "sha256": "861a84345401b3744f9c4c15c7476042b39385f1609964b84618628b7ca3bf7d",
-  "builder": "scripts/build_morphology_calibration_figure_tables.py",
-  "intervals": "pointwise95%;10000 whole-seed bootstrap draws; family means first for pooled summaries; does not replace adjusted primary contrast intervals"
-}

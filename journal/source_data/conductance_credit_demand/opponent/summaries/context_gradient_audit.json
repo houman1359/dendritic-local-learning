@@ -1,6 +1,0 @@
-{
-  "matched_gradient_checks": 2560,
-  "maximum_absolute_error": 0.0,
-  "scope": "Shared model parameters and inputs per evaluated rule; diagnostic set never used for training or selection.",
-  "source_sha256": "3fcd55e0b7d3efcfd30c87fa4254db427a1b76c179beb06189230098394fbb2a"
-}

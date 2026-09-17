@@ -1,7 +1,0 @@
-endpoint,comparison,unit,n_targets,mean,ci95_low,ci95_high,positive_targets
-common_checkpoint_update_capture,random anatomical routes,update match,7,-0.12624419681,-0.192202592732,-0.0275720944374,1
-common_checkpoint_update_capture,site-shuffled routes,update match,7,-0.207023321877,-0.370961085163,-0.0456477429134,2
-heldout_normalized_mse,random anatomical routes,normalized MSE,7,0.00126086998735,-0.00893288451897,0.0114865600118,5
-heldout_normalized_mse,site-shuffled routes,normalized MSE,7,0.00699148821715,-0.0208202894051,0.0318828644435,4
-structure_function_partial_r,scan_complete,partial rank correlation,7,-0.0484970176243,-0.223969809949,0.118289595519,3
-structure_function_partial_r,selected_scans,partial rank correlation,7,-0.0694614452169,-0.250817828682,0.105545551658,3

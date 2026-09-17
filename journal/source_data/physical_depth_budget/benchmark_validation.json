@@ -1,9 +1,0 @@
-{
-  "status": "training_passed;collector_path_repaired",
-  "epochs": 20,
-  "device": "cuda",
-  "gpu_training_seconds_per_epoch": 0.6121033797359192,
-  "archived_first20_validation_max_abs_difference": 4.17723655701252e-05,
-  "model_results_dir": "drafts/dendritic-local-learning/journal/source_data/physical_depth_budget/benchmark/condition_40/depth_budget_benchmark_20260906_090257",
-  "note": "Underlying training and final evaluation completed; collector initially assumed output root rather than timestamped subdirectory. Retained all artifacts, no learning change."
-}

@@ -4,9 +4,18 @@ This directory contains the canonical manuscript prepared as a *Nature Communica
 
 Nine main figures follow this task-to-credit argument. A matched pairwise/quartic comparison tests fixed spatial credit on the same trees, inputs and initializations, and a context-dependent conductance task tests local inhibitory gating with explicit proximal-credit controls. Physical-depth experiments examine the dependence on optimizer and training budget. Reconstructed arbors test the capacity of anatomy-derived routes beyond a shared broadcast. The final figure separates empirical ancestry–response similarity from an offline transfer-geometry diagnostic. The measured responses do not establish endogenous dendritic credit assignment.
 
-The Supplementary Information contains 35 figures, S1–S35. It retains the representability and morphology-estimation analyses, the unsuccessful prospective initialization-based selector, Boolean controls, alternative optimizers and expanded biological/model diagnostics. These support the credit argument without replacing it with a general morphology-selection claim. The current display map is in [figures/README.md](figures/README.md).
+The Supplementary Information contains 36 figures, S1–S36. It retains the representability and morphology-estimation analyses, the unsuccessful prospective initialization-based selector, Boolean controls, alternative optimizers and expanded biological/model diagnostics. These support the credit argument without replacing it with a general morphology-selection claim. The current display map is in [figures/README.md](figures/README.md).
 
 ## Files and reproducibility
+
+The Overleaf-synchronized `main` branch tracks the manuscript, publication figures,
+source code and compact publication tables. Bulk results, YAML execution records,
+internal reviews, generated reading copies and the presentation remain local.
+The complete previously tracked snapshot is preserved on
+[`archive/pre-overleaf-cleanup-20260917`](https://github.com/houman1359/dendritic-local-learning/tree/archive/pre-overleaf-cleanup-20260917)
+at commit `fbe379aef67a59a0827396f2b6b636dc1dabe0cd`.
+This archive is a preservation snapshot, not a certified submission release.
+See [REPOSITORY_LAYOUT.md](REPOSITORY_LAYOUT.md) for recovery and build boundaries.
 
 - `main.tex` and `supplementary/supplementary.tex` are the canonical text sources; their local TeX inputs are required for complete builds.
 - `main.pdf`, `supplementary/supplementary.pdf` and `main_with_supplementary.pdf` are generated reading copies. Their page counts must be taken from the final compiled files.
@@ -31,7 +40,14 @@ make combined
 make audit
 ```
 
-`rebuild_final_publication_figures.py` renders the current nine main and 35 supplementary figures from retained evidence. Historical builder numbers can differ from publication numbers; running an old compositor directly can restore an obsolete layout. Figure generation uses Python, NumPy, pandas, SciPy, Matplotlib and PyMuPDF. Manuscripts require pdfLaTeX/BibTeX. Biological reanalysis additionally requires the upstream data/cache access documented by each pipeline.
+`rebuild_final_publication_figures.py` renders the current nine main and 36 supplementary figures from retained evidence. Historical builder numbers can differ from publication numbers; running an old compositor directly can restore an obsolete layout. Figure generation uses Python, NumPy, pandas, SciPy, Matplotlib and PyMuPDF. Manuscripts require pdfLaTeX/BibTeX. Biological reanalysis additionally requires the upstream data/cache access documented by each pipeline.
+
+A fresh checkout of `main` can compile the Article and Supplementary Information
+using their tracked PDF figures. Rebuilding figures, running the complete
+scientific audit, or packaging a software/data release also requires the frozen
+inputs retained locally and on the archive branch; compact plotted tables are
+not substitutes for those inputs. Do not force-add bulk inputs back to `main`
+to build a release; use a separate full-evidence checkout.
 
 After the text, figures, panel provenance and Source Data are finalized, commit the scientific inputs and rebuild the software and other bundles in dependency order. [RELEASE_WORKFLOW.md](RELEASE_WORKFLOW.md) describes committed-source packaging, the isolated installation smoke and the explicit noise-generator choices. [OVERLEAF_README.md](OVERLEAF_README.md) describes the manuscript project. Existing archives can be stale even when their checksums are valid.
 

@@ -1,8 +1,0 @@
-family,formula,and_gates,or_gates,xor_gates,minimum_exact_depth,exact_compatible_trees,exact_compatible_balanced_trees,minimum_balanced_normalized_mse_lower_bound
-and4,a AND b AND c AND d,3,0,0,2,15,3,0.0
-or4,a OR b OR c OR d,0,3,0,2,15,3,0.0
-parity4,a XOR b XOR c XOR d,0,0,3,2,15,3,0.0
-or_of_ands,(a AND b) OR (c AND d),2,1,0,2,1,1,0.0
-xor_of_ands,(a AND b) XOR (c AND d),2,0,1,2,1,1,0.0
-and_of_xors,(a XOR b) AND (c XOR d),1,0,2,2,1,1,0.0
-nested,a AND (b OR (c AND d)),2,1,0,3,1,0,0.1254605659901545

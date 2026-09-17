@@ -1,3 +1,0 @@
-# Conductance task development log
-
-Before any learning outcomes, the symmetric-coupling prototype (four couplings all 10) was checked with teacher seed 19. Its whole six-unit path field had rank-one capture 0.935792; the two constant proximal adjoints dominate this norm. The candidate construction was changed to a fixed asymmetric daughter coupling pattern (20, 0.2) in each subtree. This preserves all four leaves and all 16 trainable conductances and increases the relative energy of context-gated distal paths. This is a disclosed model-design choice, not a comparison selected on learning-rule outcomes. The original geometric check and this change precede the development protocol freeze.

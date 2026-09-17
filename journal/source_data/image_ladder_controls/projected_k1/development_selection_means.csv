@@ -1,7 +1,0 @@
-architecture,arm,multiplier,validation_loss
-additive,projected_k1,0.3,0.09543087891737619
-additive,projected_k1,1.0,0.09489437848991818
-additive,projected_k1,3.0,0.0920265082385805
-shunting,projected_k1,0.3,0.09824864210022821
-shunting,projected_k1,1.0,0.09438904760943519
-shunting,projected_k1,3.0,0.09593249597152075

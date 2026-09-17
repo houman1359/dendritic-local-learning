@@ -49,8 +49,8 @@ data/microns_expanded/
 data/microns_morphology_expanded/
 data/microns_v661_replication/
 
-# Internal audits and historical snapshots. Keep the root-level Markdown
-# evidence records, but not their generated work directories or montages.
+# Internal audits and historical snapshots are local/archive material;
+# the repository-root ignore policy also excludes root-level review records.
 analysis/*/
 analysis/*.log
 analysis/*_stdout.json

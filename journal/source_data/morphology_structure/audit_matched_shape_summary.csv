@@ -1,7 +1,0 @@
-family,left_shape,right_shape,n_task_assignment_pairs,mean_difference,min_difference,max_difference,n_left_worse,n_tied,n_left_better
-quadratic_matching,comb,balanced,420,0.2041666666774189,0.0,0.75,319,101,0
-quadratic_matching,comb,mixed,420,0.12857142858351128,-2.220446049250313e-16,0.5000000000000066,180,240,0
-quadratic_matching,mixed,balanced,420,0.07559523809390763,-0.4999999999999999,0.5,162,220,38
-quartic_partition,comb,balanced,140,0.014285714285714289,-1.1102230246251565e-16,0.5,4,136,0
-quartic_partition,comb,mixed,140,2.3790493384824783e-18,-1.1102230246251565e-16,1.1102230246251565e-16,0,140,0
-quartic_partition,mixed,balanced,140,0.014285714285714285,-1.1102230246251565e-16,0.5,4,136,0

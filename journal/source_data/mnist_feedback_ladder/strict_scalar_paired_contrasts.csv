@@ -1,3 +1,0 @@
-architecture,n_paired_seeds,strict_mean_accuracy,legacy_mean_accuracy,mean_strict_minus_legacy,ci95_low,ci95_high,materiality_margin_accuracy,practically_equivalent,strict_higher_seeds,legacy_higher_seeds,tied_seeds,exact_two_sided_sign_flip_p
-shunting,15,0.8587799866994222,0.9073666413625081,-0.04858665466308594,-0.056693331499894466,-0.03993999540805817,0.005,False,0,15,0,6.103515625e-05
-additive,15,0.8931466420491536,0.915886648495992,-0.02274000644683838,-0.02699351261059443,-0.017960007985432944,0.005,False,0,14,1,0.0001220703125

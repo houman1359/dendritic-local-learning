@@ -1,7 +1,0 @@
-{
-  "interpretation": "Unweighted q capture identical under relabeling of the exact same state; error weighting and its separately optimized profile may change.",
-  "maximum_unweighted_capture_difference": 0.0,
-  "script_sha256": "8af41de8543bbbb4334e627bdc401105a51ad0a157cba8fc361ce01cfaf0e142",
-  "state_pairs": 80,
-  "status": "passed"
-}
