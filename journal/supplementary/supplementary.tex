@@ -11,7 +11,13 @@
 \usepackage{graphicx}
 \usepackage[font=small]{caption}
 \captionsetup{skip=6pt}   % tighter than the 10 pt default so a 540 pt sheet and its legend share a page (DECISIONS G8)
-\graphicspath{{../figures/}}
+\ifdefined\DendriticLocalLearningRepoRoot
+  \graphicspath{{journal/figures/}}
+  \newcommand{\supplementbibliography}{journal/references}
+\else
+  \graphicspath{{../figures/}}
+  \newcommand{\supplementbibliography}{../references}
+\fi
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage{xcolor}
 \usepackage{lineno}
@@ -126,5 +132,5 @@ Design extension & What can be selected from data & Section~\ref{note:selection_
 \input{curated/si_dendrinet_selection_table}
 \clearpage
 \bibliographystyle{unsrtnat}
-\bibliography{../references}
+\bibliography{\supplementbibliography}
 \end{document}

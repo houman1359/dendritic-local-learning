@@ -1,87 +1,48 @@
-# LaTeX intermediates
-*.aux
-*.bbl
-*.blg
-*.fdb_latexmk
-*.fls
-*.log
-*.out
-*.synctex.gz
-*.toc
-/*.md
-__pycache__/
-*.py[cod]
-presentations/*
-#!presentations/ml_workshop_15_20min/
-#!presentations/ml_workshop_15_20min/build_speaker_guide.py
-#!presentations/ml_workshop_15_20min/speaker_guide.html
-#!presentations/ml_workshop_15_20min/dendritic_credit_ml_workshop_speaker_guide.pdf
-#presentations/ml_workshop_15_20min/__pycache__/
+# This branch is the Overleaf manuscript, not the research-data distribution.
+# Overleaf limits editable text to 7 MB per project and 2 MB per file.
+# Keep only compilation inputs; research files remain untouched locally and
+# are preserved in archive/research-before-overleaf-cleanup-20260918.
+# Ignore rules alone do not untrack files: use git rm --cached when needed.
 
-# Reproducible raster previews; publication assets are vector PDFs.
-journal/figures/components/*.png
-journal/figures/generated/*.png
-journal/figures/main/*.png
-journal/figures/supplementary/*.png
+/*
+!/.gitignore
+!/.gitattributes
+!/LICENSE
+!/OVERLEAF_README.txt
+!/main.tex
+!/supplementary.tex
+!/journal/
+!/neurips/
 
-# Rebuilt submission archives and checksums.
-journal/submission/*.zip
-journal/submission/*.zip.sha256
+# Active journal manuscript and complete Supplementary Information.
+/journal/*
+!/journal/main.tex
+!/journal/references.bib
+!/journal/supplementary/
+!/journal/figures/
+/journal/supplementary/*
+!/journal/supplementary/supplementary.tex
+!/journal/supplementary/curated/
+/journal/supplementary/curated/*
+!/journal/supplementary/curated/*.tex
 
-# The active branch is also synchronized to Overleaf.  Keep analysis-ready
-# result tables and generated reading copies local: canonical TeX sources and
-# publication figure PDFs are tracked, while the complete frozen evidence
-# snapshot remains recoverable from archive/pre-overleaf-cleanup-20260917.
-journal/source_data/*
-!journal/source_data/README.md
-!journal/source_data/curated_publication/
-!journal/source_data/curated_publication/**
-journal/main.pdf
-journal/main_with_supplementary.pdf
-journal/supplementary/supplementary.pdf
-/main.pdf
-neurips/figures/data/
-neurips/figures/*.png
-neurips/local_credit_assignment.pdf
-neurips/local_credit_assignment_arxiv.pdf
+# Final vector sheets only, not previews, provenance tables, intermediate
+# components, old layouts, or figure-generation scripts.
+/journal/figures/*
+!/journal/figures/main/
+!/journal/figures/supplementary/
+/journal/figures/main/*
+!/journal/figures/main/figure_0[1-9].pdf
+/journal/figures/supplementary/*
+!/journal/figures/supplementary/curated/
+/journal/figures/supplementary/curated/*
+!/journal/figures/supplementary/curated/*.pdf
 
-# Generated presentation outputs and superseded decks stay local.  The active
-# TeX sources and the vector PDF assets they embed remain tracked.
-presentations/credit_tree_lib_test.pdf
-presentations/dendritic_credit_workshop.pdf
-presentations/legacy_decks/
-presentations/ml_workshop_15_20min/.render_tmp/
-
-# Talks are maintained in drafts/presentation/credit_assignment, outside this
-# manuscript repository. Ignore any local duplicate used while testing assets.
-/presentation/
-
-# Public connectomics downloads are cached locally; immutable checksums,
-# selected cohorts, and analysis-ready derivatives live under source_data/.
-journal/data/
-
-# Experiment configurations are local execution inputs and are not needed to
-# compile the Overleaf manuscript. A tracked snapshot remains on
-# archive/pre-overleaf-cleanup-20260917.
-journal/configs/**/*.yaml
-journal/configs/**/*.yml
-neurips/configs/**/*.yaml
-neurips/configs/**/*.yml
-
-# Internal review notes, generated inventories and contact sheets are local.
-# Removing tracking does not remove these files from the research checkout.
-journal/analysis/
-journal/configs/supplement_consolidation/contact_sheet*.pdf
-journal/configs/credit_first_provenance/panel_sources.json
-journal/configs/credit_first_provenance/retained_supplementary.tsv
-journal/configs/figure_structure/retained_evidence.tsv
-journal/scripts/supplement_consolidation/original_provenance.json
-
-# The presentation remains available through Git LFS on the archive branch;
-# Overleaf does not support LFS. Keep its local full-size copy unchanged.
-journal/LLR_n.pptx
-
-# Current publication PDFs only; legacy panel sheets remain local/archive.
-journal/figures/main/*.pdf
-!journal/figures/main/figure_0[1-9].pdf
-journal/figures/supplementary/*.pdf
+# Keep the NeurIPS manuscript for comparison, without execution scripts,
+# configurations, result tables, or generated previews.
+/neurips/*
+!/neurips/*.tex
+!/neurips/*.sty
+!/neurips/figures/
+/neurips/figures/*
+!/neurips/figures/*.pdf
