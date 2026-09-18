@@ -1,0 +1,243 @@
+\subsection{Sensory selection in DendriNet populations}
+\label{sec:dendrinet_selection}
+
+The independent seven-compartment implementation isolates the gate mechanism.
+To test its transfer to the production network implementation, we trained
+DendriNet populations with fixed, grouped input contacts. The principal
+configuration contained sixteen somata, each with a $[4,2]$ tree: eight
+terminal compartments, four proximal compartments and one soma. Each pair
+of terminals received two features of one sensory stream. An affine readout
+combined the sixteen somatic voltages. Leak and reversal potentials were
+those of the artificial conductance models in Methods. All excitatory,
+inhibitory and coupling conductances, and the readout, were plastic; input
+supports were fixed rather than chosen by adaptive contact selection.
+
+\paragraph{Tasks and forward controls.}
+For four streams indexed by $b=0,1,2,3$, independent latent features
+$z_{bj}\sim\mathcal U[-2,2]$, $j=1,2$, supplied positive terminal inputs
+$\exp(z_{bj})$ and $\exp(-z_{bj})$. A one-hot cue $\bm c$ selected one stream.
+Every terminal also received the same four excitatory cue channels, so none
+of the forward controls lacked context information. The targets were
+specified independently of the network:
+\begin{equation}
+y=\sum_{b=0}^3 c_b(-1)^b
+\left[\frac{\tanh z_{b1}+\tanh z_{b2}}2
+       +\beta\tanh z_{b1}\tanh z_{b2}\right].
+\label{eq:si_selection_target}
+\end{equation}
+Alternating signs prescribe opposed feature tuning across streams. They do
+not supply targets to the network. The primary task sets $\beta=0$ and uses
+identity compartment outputs. A secondary condition sets $\beta=0.25$ and
+uses $\tanh(V_p)$ at proximal compartments, allowing the two features to
+interact. This secondary condition changes both target and representation;
+it is not an isolated test of the effect of adding a nonlinearity.
+
+In the shunting forward model, proximal inhibitory activity was
+$a_b^{\rm I}=4(1-c_b)$. With $D_p^0=1+\sum_i g_{i\to p}^{\rm den}$ and child current
+$I_p=\sum_i g_{i\to p}^{\rm den}a_i$, the proximal voltage was
+$V_p^{\rm sh}=I_p/(D_p^0+g_p^{\rm I}a_b^{\rm I})$. Tonic inhibition replaced
+$a_b^{\rm I}$ by its training-distribution mean $\bar a^{\rm I}=3$; the excitatory cue inputs
+were unchanged. A current-injection control preserved that tonic denominator
+but varied a context-dependent current:
+\begin{equation}
+V_p^{\rm cur}=
+\frac{I_p-g_p^{\rm I}(a_b^{\rm I}-\bar a^{\rm I})\bar V_p}
+     {D_p^0+g_p^{\rm I}\bar a^{\rm I}}.
+\end{equation}
+Here $\bar V_p$ was the mean tonic voltage at initialization, estimated
+using training inputs and then held fixed. This matches the incremental
+inhibitory current at that reference voltage, not the full voltage
+distribution throughout training. Shunting, tonic and current models had
+the same parameter count, cue channels and paired initial parameters.
+
+\paragraph{Learning rules.}
+The local rules detached intercompartment connections when differentiating
+the loss, while retaining each compartment's exact local derivatives.
+The affine readout supplied a separate somatic error to each neuron:
+\begin{equation}
+\widehat y=\sum_{u=1}^{16}w_u^{\rm out}V_u+b^{\rm out},\qquad
+\ell=\frac{(\widehat y-y)^2}{2\operatorname{Var}_{\rm train}(y)},\qquad
+\delta_u^V=\frac{w_u^{\rm out}(\widehat y-y)}{\operatorname{Var}_{\rm train}(y)}.
+\end{equation}
+Training averaged $\ell$ over the minibatch. Thus broadcast here means
+sharing a neuron's error across its own compartments, not sharing one
+scalar across all sixteen neurons.
+Proximal and somatic updates used this error without spatial attenuation.
+At a terminal whose proximal parent was $p$, the relative-resistance rule
+instead delivered
+\begin{equation}
+\widehat\delta_{ui}^V=\delta_u^V h_{up},\qquad
+h_{up}=\frac{D_{up}^0}{D_{up}^0+g_{up}^{\rm I}a_b^{\rm I}}.
+\label{eq:si_dendrinet_gate}
+\end{equation}
+Unit broadcast set $h=1$. A wrong-branch control cyclically permuted
+the four parent gates within each neuron. A uniform-gain control replaced
+them by their within-neuron root-mean-square,
+$h_u^{\rm rms}=(\sum_{p=1}^4h_{up}^2/4)^{1/2}$, preserving
+the gate-vector norm but not the norm of the eligibility-weighted parameter
+update. Exact BP provided a reference. All five rules shared the same
+forward model within a condition and trained the same parameters.
+In the tonic and current controls, the local gate still used the supplied
+trial-dependent inhibitory cue. These conditions therefore test a proposed
+credit signal without its corresponding forward shunt, not the exact
+resistance of those alternative forward models. In the nonlinear-parent
+condition the gate omitted the parent's activation derivative. Local
+training accessed neither exact path products nor exact-gradient diagnostics.
+
+The chain rule explains this distinction. In the shunting model, exact
+terminal credit is
+\begin{equation}
+\delta_{ui}^V=\delta_u^V\,
+\frac{g_{p\to u}^{\rm den}g_{i\to p}^{\rm den}}{D_uD_p^0}
+h_{up} f'_p(V_p),\qquad
+D_u=1+\sum_p g_{p\to u}^{\rm den}.
+\end{equation}
+At fixed weights, the prefactor is constant across examples. With identity
+parent outputs, $f'_p=1$ and the relative-resistance gate preserves the
+entire context dependence of terminal transport, but not its branch-specific
+constant factors. With nonlinear parents, $f'_p=1-\tanh^2(V_p)$ varies with
+both input and context. Resistance alone no longer supplies all of the
+example-dependent transport. This predicts a limitation of the particular
+gate, not an inability of local signals in general to support nonlinear
+dendritic learning.
+
+\paragraph{Distractor stress test and development.}
+The held-out stress test replaced only irrelevant latent inputs by
+$z_{bj}^{(s)}=[1+(s-1)(1-c_b)]z_{bj}$, with
+$s\in\{1,1.5,2,2.5,3\}$. Relevant features, cue and target were identical
+across severities within a seed. Because the input encoding is exponential,
+this manipulation broadens the presynaptic-rate distribution nonlinearly.
+The ordinary test set was an independent draw from the training distribution;
+it was not the $s=1$ member of the stress-test sample. This is a synthetic
+robustness test, not a natural-image benchmark.
+
+Three development seeds (2026092100--2026092102) compared Adam rates
+0.01, 0.03 and 0.1 for each forward/rule combination over 2,048 updates,
+giving 180 trajectories. Minimum mean validation NMSE selected one rate
+per condition. The fresh cohort used twenty disjoint paired seeds
+(2026092200--2026092219), the selected rates and 4,096 updates: 400
+trajectories over the three identity-output forward models and the
+shunting nonlinear-parent condition. Training, validation and test sizes
+were 2,048, 1,024 and 4,096; batches contained 128 examples. Validation
+every 128 updates, including initialization, selected the checkpoint.
+NMSE divided by the variance of targets in the evaluation split.
+Log conductances were clipped to $[-9,9]$ and gradient norms to ten;
+bound and clipping contacts were recorded. Rates and checkpoints were
+not selected using test or distractor-stress outcomes.
+
+Two primary contrasts were specified before fresh outcomes: broadcast
+minus relative-resistance NMSE, and uniform-RMS minus relative-resistance
+NMSE, both at $s=3$ in the identity-output shunting condition. Two-sided
+paired sign-flip tests were Holm-adjusted over these two contrasts;
+95\% percentile intervals resampled whole seeds. Other comparisons were
+descriptive. Common-state diagnostics measured the core-gradient cosine
+and the change in NMSE after an equal-length, $10^{-3}$ displacement in
+log-conductance space, holding the readout fixed. These diagnostics neither
+generated nor selected the local training updates. The protocol followed
+the exploratory cohort below and was internally frozen, not externally
+preregistered.
+
+\paragraph{Fresh-seed outcomes and boundary.}
+Table~\ref{tab:dendrinet_selection} reports all fresh conditions. In the
+separable shunting task at severity three, the paired broadcast-minus-gate
+NMSE difference was 0.01038 [0.00864, 0.01244], and the uniform-RMS-minus-gate
+difference was 0.00959 [0.00816, 0.01120]. Both were positive in all twenty
+seeds; both Holm-adjusted sign-flip $P$ values were $3.81\times10^{-6}$.
+Mean errors were 0.010506 for broadcast, 0.009716 for uniform RMS,
+0.0001213 for the relative-resistance gate and 0.0001191 for exact BP.
+The near agreement of the last two means is not an equivalence test.
+Wrong-branch gating gave 0.06017. Ordinary-test errors were small for all
+three principal rules, so the most pronounced benefit concerns robustness
+outside the training input range, rather than rescue of ordinary task learning.
+
+The forward controls separated this credit benefit from input suppression.
+At severity three, exact BP gave mean NMSE 0.2435 with tonic inhibition and
+0.3056 with matched current injection, compared with 0.0001191 with
+forward shunting. Relative-resistance gating gave 0.2420 and 0.2250 in the
+two alternative forwards. All twenty paired differences favored shunting
+for each of the three principal rules. These comparisons concern trained
+forward models; they do not hold their final weights fixed. Nor do the
+differences in differences imply a synergistic interaction: the absolute
+broadcast-minus-gate reduction was larger in the poorly performing
+tonic and current controls.
+
+At common exact-trained shunting states, the mean core-gradient cosine with
+exact BP was 0.312 for broadcast, 0.484 for relative-resistance gating and
+0.416 for uniform RMS gating. Mean NMSE decreases after equal-length core
+steps were $1.02\times10^{-6}$, $1.57\times10^{-6}$ and
+$1.37\times10^{-6}$, respectively, with the readout fixed. These descriptive
+diagnostics support a directional contribution beyond a change in overall
+update magnitude; they do not establish equivalence of training trajectories.
+
+A secondary common-rate check was specified during fresh execution,
+without altering the primary protocol. Sixty additional trajectories on
+the same twenty seeds supplied the three missing rule--rate combinations,
+allowing broadcast, uniform RMS and the spatial gate to be compared at both
+Adam 0.03 and 0.1. The gate reduced distractor error in all twenty seeds
+against each control at each rate. The broadcast-minus-gate differences
+were 0.01031 [0.00857, 0.01236] at 0.03 and
+0.000681 [0.000543, 0.000849] at 0.1. Thus the effect persisted at common
+rates but its magnitude was rate-sensitive; these repeated seed blocks
+are not a second independent confirmation.
+
+The nonlinear-parent interaction condition gave a different result.
+Exact BP reached mean ordinary-test NMSE $5.06\times10^{-5}$, whereas
+relative-resistance gating gave 0.05109, broadcast 0.04712 and uniform
+RMS gating 0.04893. This task is learnable by the nonlinear network under
+exact credit, but the tested resistance-only approximation did not recover
+that performance. The contrast is consistent with its missing parent-gain
+factor; the experiment does not isolate that factor from every other
+optimization difference. Bound contacts also limit interpretation: in the
+separable shunting cohort, 12/20 exact and 7/20 gated trajectories contacted
+a bound, compared with none for broadcast or uniform RMS. In the nonlinear
+condition the respective counts were 2/20, 18/20, 19/20 and 19/20. These
+counts cover full trajectories, not only selected checkpoints. Tonic and
+current controls also frequently contacted bounds. No claim of unbounded
+or asymptotically optimal learning follows.
+
+All 400 primary-cohort checkpoints reproduced their ordinary-test and five
+stress-test NMSEs exactly on replay. All sixty common-rate checkpoints
+reproduced those outcomes to absolute tolerance $10^{-10}$. Complete
+endpoints, validation trajectories, paired contrasts, diagnostics and source
+hashes are retained in
+\path{source_data/curated_publication/inhibitory_selection_*}; generators
+and verification code are in \path{scripts/inhibitory_selection/}.
+
+\paragraph{Exploratory cohort and its representation limit.}
+An earlier matrix crossed one or sixteen somata, two or four streams
+using configurations $(1,2)$, $(16,2)$ and $(16,4)$, selection or graded
+mixture targets, three forward models, five rules and two rates
+(0.01 and 0.03). Three paired development seeds gave 540 trajectories
+of 1,024 updates with log-conductance bounds $[-7,7]$. Mixture cues
+were sampled from $\operatorname{Dirichlet}(1,\ldots,1)$ and weighted
+all streams in Eq.~\ref{eq:si_selection_target}. All compartments had
+identity outputs, but the target included $\beta=0.25$.
+
+That configuration cannot represent its within-stream product term:
+conditional on the cue, each terminal depends on one latent feature,
+proximal denominators depend only on context, and the soma and readout
+combine feature functions additively. For independent symmetric inputs,
+the product is orthogonal to every such additive predictor. Writing
+$v=\mathbb E[\tanh^2z]=1-\tanh(2)/2$, the population squared-error floor
+normalized by target variance is
+\begin{equation}
+\frac{\beta^2v^2}{v/2+\beta^2v^2}
+=\frac{v}{8+v}=0.06081\quad(\beta=0.25).
+\end{equation}
+The same ratio applies to the independent-stream mixture after averaging
+the squared cue weights. It is not label noise or evidence of failed credit
+assignment. The primary follow-up removes this term; the nonlinear-parent
+condition instead removes the additive-model obstruction, without assuming
+exact representability of the entire target.
+
+The pilot motivated the robustness question. In the sixteen-neuron,
+four-stream shunting condition, mean selection NMSE at $s=3$ was 0.0655
+with relative-resistance gating, 0.0830 with broadcast, 0.0826 with uniform
+RMS gating and 0.1475 with wrong-branch gating; exact BP gave 0.0653.
+The same local gate did not improve graded mixtures: its NMSE was 0.1669,
+versus 0.1622 with broadcast and 0.1571 with uniform RMS gating.
+These are descriptive means over three development seeds, not confirmation
+or evidence of equivalence. Of 90 selected rates, 89 were the grid maximum;
+92 of 270 selected runs chose the training cap and 50 contacted a bound.
+The full matrix, including the unfavorable outcomes, is retained in
+\path{source_data/curated_publication/inhibitory_transfer_pilot_*}.

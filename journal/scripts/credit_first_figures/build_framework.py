@@ -561,7 +561,7 @@ def credit_entry(ax):
     f.text((X(card_x + card_w / 2.0), Y(loss_y + 12.0)), "loss L",
            size=PT_BASE, color=INK)
     chain(f, (X(card_x + card_w / 2.0), Y(loss_y + 4.5)),
-          [("δ", "u"), " = ∂L/∂", ("y", "u")], size=PT_BASE, color=INK,
+          [("δ", "u"), " = ∂L/∂", ("z", "u")], size=PT_BASE, color=INK,
           ha="center")
     f.text((X(card_x + card_w), Y(loss_y + loss_h + 14.0)), "×128",
            size=PT_BASE, color=MUTE, ha="right")
@@ -1347,10 +1347,10 @@ def main():
     canvas = NativeCanvas(472 / 72, 3, row_weights=[126, 126, 100],
                           hgutter_pt=40, vgutter_pt=30,
                           margins=Margins(left=36, right=12, top=22, bottom=38))
-    a = canvas.panel("A", 0, 0, 4, schematic=True, title="From loss to one arbor",
+    a = canvas.panel("A", 0, 0, 4, schematic=True, title="DendriNet image classifier",
                      lock=False)
     b = canvas.panel("B", 0, 4, 8, schematic=True,
-                     title="Three ways to spread one somatic error")
+                     title="From shared feedback to exact paths")
     # C and D start in the same grid columns as E and F below them, so the
     # forest label gutter locked on those columns is shared rather than paid
     # by the forests alone (the canvas locks reserves per column).

@@ -281,14 +281,8 @@ def f4_targets_panel(ax):
             core, depth=3, mode='forward', trunk=True, output='y',
             input_labels=[('x', str(i + 1)) for i in range(8)])
         f4_operator_badges(f, nodes, FIG4_BADGES[kind])
-        # QA 2026-09-09: the 74 pt card is below the library's per-terminal
-        # label pitch, so the two outer inputs are named beside their
-        # contacts (x1 left, x8 right); the caption says 'outer two labelled'.
-        t_first, t_last = nodes.terminals[0], nodes.terminals[-1]
-        f.subscript((nodes[t_first][0] - f.fx(3.2), nodes[t_first][1]), 'x', '1',
-                    size=PT_BASE, color=COLORS['mute'], ha='right', va='center')
-        f.subscript((nodes[t_last][0] + f.fx(3.2), nodes[t_last][1]), 'x', '8',
-                    size=PT_BASE, color=COLORS['mute'], ha='left', va='center')
+        # balanced_tree already labels the input span above the canopy.
+        # Do not repeat x1/x8 beside the same contacts at this small scale.
         f.error_in(nodes.soma, side='right', label='δ0')
     f.require_soma_lowest()
     f.require_delta0()
@@ -743,7 +737,7 @@ def f4_energy(ax, eigen, diag, rows, ramp):
                 for k, m in zip(kk, ref))
     ax.set_xlabel('Best fitted directions k', fontsize=PT_LABEL,
                   color=COLORS['ink'])
-    ax.set_ylabel('Captured path-field energy', fontsize=PT_LABEL,
+    ax.set_ylabel('Path-field energy captured (fraction)', fontsize=PT_LABEL,
                   color=COLORS['ink'])
     ax.xaxis.set_major_locator(FixedLocator([uni_x, 1, 2, 3, 4, 5, 6]))
     ax.set_xticklabels(['uniform\nnot fitted', '1', '2', '3', '4', '5', '6'])
@@ -910,14 +904,14 @@ def f4_shuffle(ax, contrast, endpoints, rows, ramp):
 
 
 FIG4_CAPTION = r"""\caption{\textbf{Input-spectrum-matched targets develop different credit geometry and different tolerance of calibrated broadcast credit.}
-\textbf{A}, Pairwise and quartic targets on one shared balanced tree: soma lowest, inputs $x_1$--$x_8$ (outer two labelled), student output $y$, somatic error $\delta_0$, only the junction badges differing; tree, initialization, examples and input-sensitivity second moment $I_8/4$ are shared. Schematic, no data.
-\textbf{B}, The three credit rules over the six nonsomatic sites: exact path (per-site $\bm q(x)$), unit broadcast (amber bus) and calibrated broadcast (blue bus; drop-dot radii are the mean absolute calibrated weight, $0.133$--$0.386$, signs mixed, set at step $0$ from 256 unlabeled examples). Schematic, no data.
-\textbf{C}, Held-out NMSE against updates on the pairwise target at the frozen rule-specific rates; label-noise floor dashed ($n=20$ paired seeds, 95\% percentile bootstrap bands, fixed checkpoints).
-\textbf{D}, As \textbf{C} for the quartic target, all twenty exact trajectories drawn: three stall past the primary checkpoint and reach the floor by 4,096 updates ($n=20$ seeds, 95\% bands, fixed checkpoints).
-\textbf{E}, A depth-four nested control on its own tree, not sharing $I_8/4$ ($n=20$ seeds, 95\% bands, fixed checkpoints); \textbf{C}--\textbf{E} denominators are the clean target variances ($1.0$, $0.5$, $1.0$), so heights are not comparable, and the teal ramp orders targets within this figure only.
-\textbf{F}, Quartic minus pairwise difference in calibrated-broadcast minus exact NMSE at four budgets; dots the paired seeds, filled diamonds endpoint states, open diamonds validation-selected states ($n=20$ seeds, 95\% paired percentile intervals, 20 of 20 positive at every budget).
-\textbf{G}, Cumulative exact-trained path-field energy captured by the best $k$ oracle directions, the uniform profile a separate unfitted category and the nested mean dashed ($n=20$ seeds, 95\% percentile intervals, fixed checkpoint at 1,024 updates).
-\textbf{H}, Exact-path NMSE rises when leaf input assignments are shuffled at fixed shape and parameter count; grey dots the paired seeds ($n=20$ seeds per target, 95\% paired percentile intervals, 20 of 20 positive, endpoint state at 1,024 updates; copy in Supplementary Fig.~S13C).
+\textbf{A}, Pairwise (two-input products) and quartic (four-input products) targets on a compatible seven-unit scalar tree with inputs $x_1$--$x_8$. Junction badges indicate teacher interactions; $y,\delta_0$ are student output and error. Units are multi-affine, not conductance-based; both tasks use squared-error loss.
+\textbf{B}, The three credit rules over the six nonsomatic sites: exact path (per-site $\bm q(x)$), unit broadcast (amber bus) and calibrated broadcast (blue bus; drop-dot radii are the mean absolute calibrated weight, $0.133$--$0.386$, signs mixed). Schematic, except the radii.
+\textbf{C}, Held-out NMSE against updates on the pairwise target at rule-specific rates; label-noise floor dashed; the vertical dashed line in \textbf{C}--\textbf{E} is the 1,024-update primary checkpoint used in \textbf{G} and \textbf{H}.
+\textbf{D}, As \textbf{C} for the quartic target, twenty exact trajectories drawn.
+\textbf{E}, A depth-four nested control on its own tree, not sharing the $I_8/4$ input-sensitivity second moment. In \textbf{C}--\textbf{E}, $n=20$ paired seeds with 95\% percentile bootstrap bands at fixed checkpoints; the three panels share one axis, but their clean target variances are $1.0$, $0.5$, $1.0$, so equal NMSEs imply different unnormalized errors and equal label-noise variances give different floors; the teal ramp orders targets within this figure only.
+\textbf{F}, Quartic minus pairwise difference in calibrated-broadcast minus exact NMSE; rows are training-update budgets; dots the paired seeds, filled diamonds endpoint and open diamonds validation-selected states ($n=20$ seeds, 95\% paired percentile intervals).
+\textbf{G}, Cumulative exact-trained path-field energy captured by the best $k$ oracle directions, the uniform profile a separate unfitted category, series dodged in $k$ against overprinting. Grey dashed, the step-0 initial spectrum shared by the pairwise and quartic trees; horizontal dashed, the $0.95$ threshold; the nested mean is dashed ($n=20$ seeds, 95\% percentile intervals, at 1,024 updates).
+\textbf{H}, Exact-path NMSE increase, shuffled minus compatible leaf input assignments, at fixed shape and parameter count; circles, one task family each; dark plus, the three-family average within each seed ($0.575$ $[0.557, 0.592]$). Grey dots the paired seeds, whose pairwise and nested distributions are bimodal, so those means are not typical seeds; intervals printed under each marker ($n=20$ seeds per target, 95\% paired percentile intervals, endpoint state).
 Source Data: \texttt{source\_data/curated\_publication/figure\_04\_plotted.csv}.}"""
 
 
@@ -1045,7 +1039,7 @@ def figure4():
                      margins=Margins(left=40, right=5, top=24, bottom=36))
     a = c.panel('A', 0, 0, 5, title=None, schematic=True, lock=False,
                 inset_pt=(10, 10, 8, 10))
-    f4_title(a, 'Two targets, one shared tree')
+    f4_title(a, 'Two targets on one scalar tree')
     f4_targets_panel(a)
     b = c.panel('B', 0, 5, 7, title=None, schematic=True, lock=False,
                 inset_pt=(10, 10, 8, 10))
@@ -2130,10 +2124,10 @@ def f6_paired(ax, paired, metric, rows, *, ylim, yticks, ylabel, marks,
 
 
 F6_CAPTION = r'''\caption{\textbf{Task organization sets the forward benefit of serial dendrites, and the training budget sets the credit-rule ranking.}
-\textbf{A}, Eight nonsomatic compartments per soma in one stage (D1 $[8]$) or three (D3 $[2,1,2]$): blue, the excitatory class-bearing contacts; carmine, inhibitory sensors, all tiers in D1 and one per stage in D3; $\delta_0$, somatic error; footer, the grouped-point control. Schematic, no data.
-\textbf{B}, Generative model: nested gains act on 4, 2 and 1 blocks of the stream, flat gains on eight blocks, local-ratio inputs inside every module; sensors report tier $\ell$ at fidelity $\alpha$. Schematic, no data.
+\textbf{A}, Eight nonsomatic compartments per soma in one stage (D1 $[8]$) or three (D3 $[2,1,2]$): blue, the excitatory class-bearing contacts; carmine, inhibitory sensors, all tiers in D1 and one per stage in D3; $\delta_0$, somatic error; footer, the grouped-point control. Schematic.
+\textbf{B}, Generative model: nested gains act on 4, 2 and 1 blocks of the stream, flat gains on eight blocks, local-ratio inputs inside every module; sensors report tier $\ell$ at fidelity $\alpha$. Schematic.
 \textbf{C}, Serial-minus-grouped-point accuracy at fixed D3 under exact BP, by task family and fidelity (colours ordinal here); pale dots, ten per-seed differences at $\alpha=1$; open marker, the exact local-ratio tie, not a sampled null (LocalCA counterpart, Supplementary Fig.~S22D).
-\textbf{D}, Three-tier task: accuracy against serial depth for three credit arms, a raw-additive mechanism control, two resource-matched controls (grouped and reversed, dodged in depth, agreeing within 0.5 points) and the point-network ceiling. Intervals are smaller than the markers except for the additive arm, whose means shift by up to 1.6 points across re-runs; the four-tier cohort is separate and not drawn.
+\textbf{D}, Three-tier task: accuracy against serial depth; exact BP (black), exact-path LocalCA (red-brown) and shared-soma LocalCA (amber), a raw-additive mechanism control, two resource-matched controls (grouped and reversed, dodged in depth, agreeing within 0.5 points) and the point-network ceiling. Intervals are smaller than the markers except for the additive arm, whose means shift by up to 1.6 points across re-runs; the four-tier cohort is separate and not drawn.
 \textbf{E}, Validation-selected accuracy for six conditions restarted for up to 600 epochs (ten seeds each, not continuations); dotted, each rule's autograd-broadcast variant, the local one overprinting shared soma; thin grey, the D1 reference, lightened below eight active fits. Paired labels name arms whose 600-epoch ends differ by 0.48 and 0.02 points.
 \textbf{F}, Best validation loss for the same arms; open markers, D1 stopping epochs.
 \textbf{G,H}, Paired exact-path-minus-shared-soma differences in accuracy and cross-entropy; the grey vertical span in \textbf{G} is the 300--325 window over which the interval straddles zero intermittently; the dashed rule in \textbf{E}--\textbf{H} is the 180-epoch budget.

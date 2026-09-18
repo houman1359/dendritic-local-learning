@@ -121,6 +121,8 @@ JOURNAL_DIRECTORIES = (
     "scripts/shunt_ancestry_gain", "scripts/credit_first_figures",
     "scripts/conductance_credit_demand", "scripts/image_ladder_controls",
     "scripts/conductance_local_gate", "scripts/credit_rule_extension",
+    "scripts/conductance_gate_generalization", "scripts/inhibitory_credit_transfer",
+    "scripts/inhibitory_selection",
     "scripts/measured_alignment_power", "scripts/physical_depth_followup",
     "scripts/supplement_consolidation",
 )

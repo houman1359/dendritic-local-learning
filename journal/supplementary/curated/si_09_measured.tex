@@ -67,6 +67,13 @@ No reliability correction was applied, and the primary cohort retained all
 partners regardless of this diagnostic; thresholds of 0.1 and 0.2 were used
 only in sensitivity analyses.
 
+For partner pair $i,j$, shared-path fraction is the soma-to-common-ancestor
+path length divided by the shorter of their two soma-to-contact path lengths
+(denominator floored at $10^{-9}\,\mu$m). The same value is used in the
+observed-data statistic and its simulated counterpart. The covariance kernel
+used to generate simulated responses below has a different, geometric-mean
+normalization, chosen to guarantee positive semidefiniteness.
+
 The controlled shared-ancestry statistic was computed separately within each
 target. Functional similarity and shared-path fraction were rank transformed.
 The two controls were $\log(1+d_{\mathrm{Euclidean}})$ and

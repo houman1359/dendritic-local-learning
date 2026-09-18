@@ -17,7 +17,7 @@
     "h": "residual_capture at K = 8 per cohort from each cohort's cell_method_summary.csv (initial 8, disjoint 47, Pinky 8) for ancestry, surrogate tree, depth bins, random routes and the common-constrained SVD; the cells themselves are drawn behind each mean and are rows of figure_07_plotted.csv; 20,000-draw cell bootstrap, seed 202609061 + 100 g + i; Pinky site counts and eligibility from pinky/cohort_inclusion.csv"
   },
   "source_sha256": {
-    "scripts/credit_first_figures/build_anatomy.py": "38233276b176c938a245f0450d6e4756d0542cee17e6e7d232766822abde3349",
+    "scripts/credit_first_figures/build_anatomy.py": "a04733c8c430f807c6eda0860a3a1aeeda4f234fbbcd889816da955c17b33a6a",
     "scripts/build_main_figure_07.py": "8dd526d60d35b572a17a68c77c1813279756251052d4921471d77c3fb16b885e",
     "scripts/credit_first_figures/source_data_export.py": "140262b3750a3fbe56fe9d92323788b05553dbb7cb24bb56ca75dce8b7501ee6",
     "scripts/figure_canvas.py": "7f2983ff0c52a30dd5ba9bdeccc6fda940b4366ad872cbf0755fec5daa1dd7aa",

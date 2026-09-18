@@ -267,8 +267,10 @@ def panel_statistic(f, subtitle_lines):
     f.text((nodes.soma[0], core_y0 + f.fy(1.5)), 'no shared path',
            size=PT_BASE, color=GRAY, ha='center', va='bottom')
 
-    # the E/I register: partners are not all excitatory
-    f.contact(nodes['T5'], kind='inh', active=False)
+    # The recorded presynaptic partners in this functional cohort are
+    # excitatory. Inhibitory-bearing routes belong to the separate anatomy
+    # analyses, not to this measured-partner schematic.
+    f.contact(nodes['T5'], kind='exc')
 
     # tuning sketches, one per pair, with a leader back to the pair
     col_x = f.fx(tree_w_pt + 10.0)

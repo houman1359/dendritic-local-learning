@@ -29,3 +29,49 @@ $G$, $R_a$, $R_m$, $\kappa$ & Reciprocal conductance matrix, axial resistivity, 
 \bottomrule
 \end{tabularx}
 \end{table}
+
+\subsection*{Reading conventions across experiments}
+
+Bold symbols are vectors or matrices; $\mathsf T$ denotes transpose,
+$\|\cdot\|$ the Euclidean norm, $\|\cdot\|_F$ the matrix Frobenius norm,
+and $\mathbf1[\cdot]$ an indicator. Hats denote supplied approximations or
+estimates; primes denote post-intervention values in the cable experiments.
+An \emph{oracle} uses an exact field or target-dependent quantity that is
+not available to the restricted learner. A seed is one independent draw of
+the paired training problem, not one neuron, trial or checkpoint.
+
+Morphology $[b_1,\ldots,b_D]$ lists daughter counts from soma to tips, with
+$\sum_{d=1}^D\prod_{r=1}^db_r$ nonsomatic compartments. D1--D4 label physical
+stage counts, but not a universal compartment inventory: main Fig.~6 fixes
+eight modules, whereas Supplementary Fig.~S9 fixes sixteen terminals.
+Feedback budget $K$ counts delivery profiles and is not physical depth.
+Lower-case $k$ in a fitted spectrum counts its leading singular directions.
+
+Scalar feedback shares one coefficient \emph{across neurons}. Per-neuron
+(or within-neuron) broadcast instead shares each neuron's own coefficient
+\emph{within its arbor}; it does not make all neurons receive the same
+error. Projected broadcast obtains its coefficient from the exact
+compartmental field, unlike somatic broadcast. A local gate changes this
+within-arbor delivery using supplied inhibitory activity. The hard,
+shunt-proportional and relative-resistance gates are distinct rules,
+defined in Section~\ref{note:conductance_learning}.
+
+For the DendriNet selection cohort, $b$ indexes four sensory streams,
+$z_{bj}$ is a latent feature, $c_b$ is its one-hot selection cue,
+$a_b^{\rm I}=4(1-c_b)$ is inhibitory activity, and $s$ is distractor severity.
+$D_p^0$ denotes a proximal compartment's leak-plus-coupling conductance;
+$h_p=D_p^0/(D_p^0+g_p^{\rm I}a_b^{\rm I})$ is its relative-resistance gate. These task cues are
+distinct from the delivery coefficients $\bm c_u$ in $A_u\bm c_u$.
+In main Fig.~8B only, $B$ is the ancestry-block indicator matrix,
+$\bm h$ the baseline cable transfer, and $\bm\eta$ the block-gain vector;
+this $\bm\eta$ is not the scalar learning rate $\eta$.
+
+NMSE is mean squared prediction error divided by the specified reference.
+The algebraic interaction tasks use clean target variance despite noisy
+labels; noiseless conductance tasks use the evaluation target variance.
+The measured-response prediction study instead divides by the held-out error
+of the training-mean predictor (Section~S9). These are not one shared normalization.
+Accuracy is a fraction or percent of correctly classified examples; a
+percentage-point contrast subtracts two percentages. Capture is a squared-
+energy projection ratio in the named field and coordinate system, not an
+accuracy, gradient cosine or fraction of gradient surviving context averaging.

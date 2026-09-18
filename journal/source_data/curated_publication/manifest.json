@@ -32,7 +32,7 @@
       "figure": 5,
       "source": "scripts/conductance_local_gate/figure.py",
       "path": "source_data/curated_publication/figure_05_plotted.csv",
-      "sha256": "a708e5edb519fe4da1e887043b3a10c1ea0676cc731ab7fb745eef90564fef70",
+      "sha256": "df0032d6620ba0507f3d59fe0a8347a2f87f2443026508d82359b30e8faebec9",
       "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
     },
     {

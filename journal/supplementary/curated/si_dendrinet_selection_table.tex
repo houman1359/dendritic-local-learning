@@ -1,0 +1,45 @@
+\begin{table}[!htbp]
+\centering
+\caption{Sensory selection in sixteen-neuron DendriNet populations.
+Mean NMSE over twenty fresh paired seeds, using development-selected rates and
+validation-selected checkpoints. Each neuron contains a $[4,2]$ tree. The
+primary target is separable and uses identity outputs; the secondary target
+contains within-stream interactions and uses nonlinear proximal outputs.
+All five rules train the same forward model within a condition. Strong
+distractors scale irrelevant latent inputs by three; ordinary test and stress
+test samples are independent. Lower is better. Section~\ref{sec:dendrinet_selection}
+defines targets, gating, controls, paired inference and limitations; per-seed
+outcomes, intervals and bound contacts accompany Source Data.}
+\label{tab:dendrinet_selection}
+\small
+\begin{tabular}{llrr}
+\toprule
+Condition & Learning rule & Ordinary test & Strong distractors \\
+\midrule
+Separable, shunting & Exact BP & $9.64\times10^{-5}$ & $1.19\times10^{-4}$ \\
+ & Unit broadcast & $1.58\times10^{-4}$ & 0.0105 \\
+ & Relative-resistance gate & $9.50\times10^{-5}$ & $1.21\times10^{-4}$ \\
+ & Wrong-branch gate & $9.94\times10^{-4}$ & 0.0602 \\
+ & Uniform RMS gate & $1.55\times10^{-4}$ & 0.0097 \\
+\addlinespace
+Separable, tonic & Exact BP & $3.64\times10^{-4}$ & 0.2435 \\
+ & Unit broadcast & $3.44\times10^{-4}$ & 0.4570 \\
+ & Relative-resistance gate & $1.62\times10^{-4}$ & 0.2420 \\
+ & Wrong-branch gate & $3.77\times10^{-4}$ & 0.8909 \\
+ & Uniform RMS gate & $3.12\times10^{-4}$ & 0.4167 \\
+\addlinespace
+Separable, current & Exact BP & $3.41\times10^{-4}$ & 0.3056 \\
+ & Unit broadcast & $3.22\times10^{-4}$ & 0.5144 \\
+ & Relative-resistance gate & $1.57\times10^{-4}$ & 0.2250 \\
+ & Wrong-branch gate & $5.97\times10^{-4}$ & 0.5889 \\
+ & Uniform RMS gate & $2.98\times10^{-4}$ & 0.4701 \\
+\addlinespace
+Interaction, shunting & Exact BP & $5.06\times10^{-5}$ & 0.0024 \\
+ & Unit broadcast & 0.0471 & 0.0518 \\
+ & Relative-resistance gate & 0.0511 & 0.0551 \\
+ & Wrong-branch gate & 0.0564 & 0.1289 \\
+ & Uniform RMS gate & 0.0489 & 0.0548 \\
+\addlinespace
+\bottomrule
+\end{tabular}
+\end{table}

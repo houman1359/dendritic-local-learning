@@ -107,6 +107,7 @@ from native_schematics import (BADGE_STYLE, CONTACT_DIA_PT, Frame, _lerp,  # noq
 
 sys.path.insert(0, str(J / 'scripts/credit_first_figures'))
 import focused_provenance  # noqa: E402
+from inhibitory_selection import figure_panels as population_figures  # noqa: E402
 
 FIG = OUT / 'figures'
 PDF = FIG / 'local_gate_primary.pdf'
@@ -186,10 +187,10 @@ HIST_SEED = 982211                      # descriptive bootstrap RNG, as report.p
 # the marks and the two values the running text quotes.  Row 2 stays 4/4/4:
 # at three modules E and G are 64 pt wide, under the 0.70 aspect floor, and
 # G's two direct labels no longer clear its seed columns.
-ROWS_PT = [116, 112, 114]
-VGUTTER_PT = 30
+ROWS_PT = [106, 86, 97, 98.5]
+VGUTTER_PT = 20
 HGUTTER_PT = 30
-MARGINS = dict(left=54, right=12, top=22, bottom=32)
+MARGINS = dict(left=54, right=12, top=20, bottom=26)
 LETTER_DX_PT = 26.0
 # reserves are declared BEFORE anything is drawn: every width test in the
 # panels (label wrapping, category pitch, direct-label anchors) is measured
@@ -200,13 +201,13 @@ LETTER_DX_PT = 26.0
 # lines now that it names the double difference it plots, and the rotated
 # stack needs 1.1 pt more than the old single line.  Declared for every
 # data panel alike, so C = D and E = F = G stay exact.
-LEFT_RESERVE_PT = 18.5
+LEFT_RESERVE_PT = 22.0
 # 8, not 4: D's and F's log tick stacks (the '10' label, its raised exponent
 # and the axis title) reach 33.6 pt into a 30 pt gutter, so the lock pass
 # pads their left neighbours' right edge by RESERVE_PAD_PT; declaring the
 # same 8 pt on every data panel keeps C = D and E = F = G exact.
-RIGHT_RESERVE_PT = 8.0
-HEIGHT_PT = MARGINS['top'] + sum(ROWS_PT) + 2 * VGUTTER_PT + MARGINS['bottom']
+RIGHT_RESERVE_PT = 12.0
+HEIGHT_PT = MARGINS['top'] + sum(ROWS_PT) + (len(ROWS_PT)-1) * VGUTTER_PT + MARGINS['bottom']
 LIVE_W_PT = 518.4 - MARGINS['left'] - MARGINS['right']
 LIVE_H_PT = HEIGHT_PT - MARGINS['top'] - MARGINS['bottom']
 _MODULE_W_PT = (LIVE_W_PT - 11 * HGUTTER_PT) / 12.0
@@ -620,7 +621,7 @@ PERTURB_A = ('nominal teacher; every fitted teacher is independently '
 
 def panel_task(ax, tuning):
     f = Frame(ax)
-    core = f.task_card((0.0, 0.0, 1.0, 1.0), footer=FOOTER_A)
+    core = f.task_card((0.0, f.fy(4.5), 1.0, 1.0-f.fy(4.5)), footer=FOOTER_A)
     x0, y0, w, h = core
     w_pt, h_pt = w * f.w_pt, h * f.h_pt
     right_w = 66.0                      # the inset column, at the card's right
@@ -663,7 +664,7 @@ def panel_task(ax, tuning):
     f.subscript(f._off(jl, -4.6, -12.0), 'a', 'p', ' = 0', color=gate,
                 ha='right', va='top')
     col_x = x0 + w - f.fx(right_w + 3.0)
-    rect = (col_x, y0 + f.fy(46.0), f.fx(right_w), f.fy(32.0))
+    rect = (col_x, y0 + f.fy(41.5), f.fx(right_w), f.fy(32.0))
     n0 = len(ax.texts)
     # anchored from the inset column, not from J2: run east from J2 and the
     # tag crosses the inset's y spine, a collision no audit can see
@@ -697,8 +698,8 @@ def panel_task(ax, tuning):
     inner.tick_params(labelsize=PT_BASE, pad=1.5)
     inner.text(0.0, 0.04, 'z', fontsize=PT_BASE, color=INK, ha='center',
                va='bottom')
-    f.text((col_x, y0 + f.fy(83.5)), 'teacher V', size=PT_BASE, ha='left',
-           va='center')
+    # The caption identifies teacher voltage; repeating it above the inset
+    # collides with the schematic heading in the expanded nine-panel sheet.
     # QA 2026-09-09 (2): the two line samples are deleted -- Fig 5 carries
     # exactly one key (panel C; PLAN section 4 C, AMENDMENTS CF-5) -- and each
     # teacher curve is named by its own direct label.  'both subtrees' is
@@ -795,112 +796,41 @@ def key_lines(f, core, key_x_pt, lines, *, lead_pt=10.0):
 
 
 def panel_deliveries(ax):
+    """Enlarge the novel mechanism; do not repeat exact/broadcast cartoons."""
     f = Frame(ax)
-    gap_x, gap_y = f.fx(8.0), f.fy(5.0)
-    cw, ch = (1.0 - gap_x) / 2.0, (1.0 - gap_y) / 2.0
-    cells = {'hero': (0.0, ch + gap_y, cw, ch),
-             'exact': (cw + gap_x, ch + gap_y, cw, ch),
-             'broadcast': (0.0, 0.0, cw, ch),
-             'oracle': (cw + gap_x, 0.0, cw, ch)}
-    key_x = 50.0
-    shunting, gate = COLORS['shunting'], COLORS['gate']
-
-    cell = cells['hero']
-    core = f.task_card(cell, title='Local distal gate', emphasis=True)
-    f.badge((cell[0] + cell[2] - f.fx(4.0), cell[1] + cell[3] - f.fy(3.5)),
-            'local rule')
-    nodes = card_tree(f, core)
-    subtree_delivery(f, nodes, ['JL'], 'shunting', 'shunting')
-    # AMENDMENTS B10: the caption's Gamma sentence needs an on-artwork referent
-    f.text((core[0] + f.fx(key_x - 5.0), core[1] + core[3] - f.fy(5.0)), 'Γ',
-           size=PT_BASE, color=COLORS['gate'], ha='right', va='center')
-    open_head(f, _lerp(nodes.soma, nodes['JR'], 0.16),
-              _lerp(nodes.soma, nodes['JR'], 0.84), shunting)
-    key_lines(f, core, key_x, [
-        (['distal × 1[', 'a', ('sub', 'p'), ' = 0]'], INK),
-        (['proximal, soma × 1'], INK),
-        (['context + local'], MUTE),
-        (['eligibility only'], MUTE)])
-
-    cell = cells['exact']
-    core = f.task_card(cell, title='Exact path')
-    f.badge((cell[0] + cell[2] - f.fx(4.0), cell[1] + cell[3] - f.fy(3.5)),
-            'exact')
-    nodes = card_tree(f, core)
-    # one chain per subtree into the two inner terminals: chains into all four
-    # would repaint the whole arbor and lose the ghost comparison geometry.
-    f.credit_delivery(nodes, mode='exact', targets=['T2', 'T3'],
-                      alpha_tags=True)
-    # QA 2026-09-09 (2): the hand-set alpha-2 tag is restored, on the DISTAL
-    # segment of the route (mid JL->T2) rather than above the terminal, where
-    # it ran into the card title.  The junction factor is set by hand as
-    # well: credit_delivery drops its own
-    # alpha tags below ALPHA_TAG_MIN_PITCH_PT, and this card's terminal pitch
-    # is 6.8 pt, so without this the key line 'proximal x a1' has no referent
-    # QA 2026-09-09 (2): the junction factor is set beside the PROXIMAL
-    # segment it multiplies (mid soma->JL) rather than at JL itself: the
-    # JL->T2 route is only 7.6 pt long, so two tags anchored at its two ends
-    # share a line, and the proximal midpoint drops this one 7.2 pt clear.
-    _p1 = _lerp(nodes.soma, nodes['JL'], 0.5)
-    f.subscript((_p1[0] - f.fx(2.6), _p1[1]), 'α', '1', size=PT_BASE,
-                color=COLORS['bp'], ha='right', va='center')
-    # the distal factor, set by hand: the library tags only the junction
-    # factor on a depth-2 route.  This card's whole tree is 23.2 x 12.5 pt and
-    # the JL->T2 route is 4.3 pt long, so the two 8.3 x 10.1 pt tags cannot
-    # both sit beside it: alpha_1 takes the proximal segment (above) and
-    # alpha_2 is set over its own terminal, 3.7 pt above T2 -- 2.4 pt under
-    # the card title and 2.1 pt over alpha_1's box.
-    # QA 2026-09-10: 4.8 pt, not 3.7 -- the tag is set va='center', so at 3.7
-    # its descender box sat on the 1.6-pt terminal disc (JUNCTION_R_PT + the
-    # glyph's 2.5-pt half-height + 0.7 pt of air = 4.8), and T2 is the canopy
-    # top, whose height does not move with the foot.
-    f.subscript((nodes['T2'][0], nodes['T2'][1] + f.fy(4.8)), 'α', '2',
-                size=PT_BASE, color=COLORS['bp'], ha='center', va='center')
-    key_lines(f, core, key_x, [
-        (['distal × ', 'α', ('sub', '1'), 'α', ('sub', '2')], INK),
-        (['proximal × ', 'α', ('sub', '1')], INK),
-        (['context sets ', 'α', ('sub', '2')], MUTE)])
-
-    cell = cells['broadcast']
-    core = f.task_card(cell, title='Unit broadcast')
-    nodes = card_tree(f, core)
-    bus_targets = nodes.terminals + ['JL', 'JR']
-    seen = set(map(id, ax.patches))
-    f.credit_delivery(nodes, mode='neuron', targets=bus_targets)
-    # QA 2026-09-10: the library ends every drop 2.8 pt short of its site.  On
-    # the two junctions that standoff is right (the gate ring is 3.4 pt across,
-    # so a longer drop would spear it), but on a bare terminal it reads as a bus
-    # hovering over the canopy rather than delivering into it.  The glyph stays
-    # the library's (rail, riser, source dot, heads); only the four terminal
-    # tips are carried 1.6 pt further down, to the same 1.2-pt standoff the
-    # subtree arrows on cards 1 and 4 keep from their roots.
-    drops = [a for a in ax.patches
-             if id(a) not in seen and isinstance(a, FancyArrowPatch)]
-    for target, art in zip(bus_targets, drops):
-        if target not in nodes.terminals:
-            continue
-        (ax0, ay0), (ax1, ay1) = art._posA_posB
-        art.set_positions((ax0, ay0), (ax1, ay1 - f.fy(1.6)))
-    key_lines(f, core, key_x, [
-        (['all six sites × 1'], INK),
-        (['soma × 1'], INK),
-        (['one scalar,'], MUTE),
-        (['no address'], MUTE)])
-
-    cell = cells['oracle']
-    core = f.task_card(cell, title='Two-profile oracle')
-    f.badge((cell[0] + cell[2] - f.fx(4.0), cell[1] + cell[3] - f.fy(3.5)),
-            'oracle')
-    nodes = card_tree(f, core)
-    distal_oracle_delivery(f, nodes)
-    key_lines(f, core, key_x, [
-        (['distal 1 × p', ('sub', '1'), 'ĉ', ('sub', '1')], INK),
-        (['distal 2 × p', ('sub', '2'), 'ĉ', ('sub', '2')], INK),
-        (['proximal, soma × 1'], INK),
-        (['fixed p; oracle ĉ'], MUTE)], lead_pt=9.0)
+    gap = f.fx(10.0)
+    width = (1.0 - gap) / 2.0
+    for index, oracle in enumerate((False, True)):
+        cell = (index * (width + gap), f.fy(17.0), width, 1 - f.fy(17.0))
+        core = f.task_card(cell, title='Oracle profiles' if oracle else 'Local distal gate',
+                           emphasis=not oracle)
+        x0, y0, w, h = core
+        rect = (x0 + f.fx(6), y0 + f.fy(30), w - f.fx(12), h - f.fy(36))
+        nodes = f.balanced_tree(rect, depth=2, trunk=False, mode='plain', ghost=True)
+        f.gate(nodes['JR'], closed=True, descendants=None, nodes=nodes,
+               node='JR', badge=None)
+        f.error_in(nodes.soma, side='left')
+        if oracle:
+            distal_oracle_delivery(f, nodes)
+            lines = [
+                (['distal: p', ('sub', 'j'), 'ĉ', ('sub', 'j')], INK),
+                (['ĉ from exact field'], COLORS['oracle']),
+            ]
+        else:
+            subtree_delivery(f, nodes, ['JL'], 'shunting', 'shunting')
+            open_head(f, _lerp(nodes.soma, nodes['JR'], 0.16),
+                      _lerp(nodes.soma, nodes['JR'], 0.84), COLORS['shunting'])
+            lines = [
+                (['distal: 1[', 'a', ('sub', 'p'), ' = 0]'], INK),
+                (['inhibitory context only'], MUTE),
+            ]
+        for row, (parts, colour) in enumerate(lines):
+            chain_frame(f, (x0 + w / 2, y0 + f.fy(14 - 10 * row)),
+                        parts, color=colour, ha='center')
+    f.text((.5, f.fy(7)), 'Both: proximal and soma × 1',
+           size=PT_BASE, color=MUTE, ha='center', va='center')
     f.require_soma_lowest()
     f.require_delta0()
-    del gate
 
 
 # ── C / D: learning curves ────────────────────────────────────────────────
@@ -1007,24 +937,8 @@ def curve_annotations(ax, t, task):
     # broadcast curve at this height and would strike the text.
     chain_data(ax, (0.98, y_frac(4.0e-2) if aligned else 0.86), amber_parts,
                color=AMBER_TEXT, ha='right', transform=ax.transAxes)
-    # the three coincident rules, named once, with a hairline leader that
-    # stops short of the trio's own band
-    trio_parts = ['exact, gate, oracle ≈ '] + sci_parts(
-        printed['trio_mean'], digits=0)
-    _, trio_w = chain_data(ax, (0.02, y_frac(6.0e-5)), trio_parts, color=INK,
-                           ha='left', transform=ax.transAxes)
-    band_low = band[(band.task == task) & (band.rule != 'unit_broadcast')
-                    ].groupby('step').ci_low.min()
-    # QA 2026-09-10 (visual review): the leader ends under the bundle AT THE
-    # 4,096 checkpoint, which is the step the printed value belongs to.  It
-    # used to stop at 1,024, an order of magnitude above that value, and read
-    # as a fifth trace hanging in clear space.
-    x_lead = float(PRIMARY['budget'])
-    y_lead = float(np.interp(x_lead, band_low.index, band_low.values)) * 0.75
-    x_start = 0.02 + (trio_w + 6.0) / axes_w_pt(ax)
-    ax.plot([x_data(ax, x_start), x_lead],
-            [y_data(y_frac(6.0e-5) - 0.018), y_lead],
-            color=MUTE, lw=LW_HAIR, zorder=2)
+    # The caption explains the coincident traces and the text gives their
+    # endpoints. Keep numerical provenance, without a second in-axis summary.
     # the window reference is named at the top of its own dotted rule.  The
     # rule stops at REF_TOP, just above the highest trace, so it cannot strike
     # through the text band above it (HEAD's and v1's dotted rule ran the full
@@ -1059,9 +973,7 @@ def curve_annotations(ax, t, task):
         # the decade of head that held them.  Only the interpolation caveat,
         # which the caption does not carry, stays on the panel, in the free
         # corner under the trio's own label.
-        note = ['12 saved checkpoints;', 'segments are interpolation']
-        printed['annotation_lines'] = list(note)
-        stack(ax, 0.02, 0.155, note, ha='left', lead_pt=8.0)
+        printed['annotation_lines'] = []
     else:
         # Design pass 2026-09-14: the 'validation-selected broadcast 0.49
         # (E, F)' readout line is gone; the running text carries both the
@@ -1195,7 +1107,7 @@ F_ORDER = ('exact', 'hard_distal_unit_proximal',
            'swapped_distal_unit_proximal', 'hard_distal_and_proximal')
 F_ONE = ('Exact path', 'Distal gate', 'Swapped gate', 'Also proximal')
 F_LONG = ('Exact\npath', 'Distal\ngate', 'Swapped\ngate', 'Gate also\nproximal')
-F_SHORT = ('Exact\npath', 'Distal\ngate', 'Swapped\ngate', 'Also\nproximal')
+F_SHORT = ('Exact\npath', 'Distal\ngate', 'Wrong\ngate', 'Both\nlevels')
 # QA 2026-09-10 (visual review).  The two gate SHAPES are dodged inside the
 # distal-gate tick and the secondary-rate circles now hang off the TICK, one
 # pair per category, instead of off each mark: dodged off both shapes they
@@ -1476,10 +1388,10 @@ def cancellation(ax, t):
     # LEFT end, the only place in this panel no seed and no hairline reaches,
     # which frees the band over the trained column for the exact-credit label.
     reference_line(ax, 1.0, label=None)
-    ax.annotate('no cancellation', xy=(-0.5, 1.0), xytext=(1.0, -1.4),
+    ax.annotate('no cancellation', xy=(-0.5, 1.0), xytext=(1.0, 1.8),
                 textcoords='offset points', fontsize=PT_BASE, color=MUTE,
-                ha='left', va='top', zorder=5)
-    ax.set_ylabel('Distal gradient retained')
+                ha='left', va='bottom', zorder=5)
+    ax.set_ylabel('Distal gradient\nretained fraction')
     style_panel(ax)
     # direct labels in the corridor the two seed columns leave open
     # QA 2026-09-11 (regression check): 'exact credit' used to sit ABOVE the
@@ -1509,7 +1421,7 @@ def cancellation(ax, t):
 
 # ── assembly ──────────────────────────────────────────────────────────────
 def build(cfg, tables, tuning):
-    canvas = NativeCanvas(HEIGHT_PT / 72, 3, row_weights=ROWS_PT,
+    canvas = NativeCanvas(HEIGHT_PT / 72, 4, row_weights=ROWS_PT,
                           hgutter_pt=HGUTTER_PT, vgutter_pt=VGUTTER_PT,
                           margins=Margins(**MARGINS))
     # the letter column moves out to 26 pt so the y-label stacks of C and E can
@@ -1519,14 +1431,16 @@ def build(cfg, tables, tuning):
     a = canvas.panel('A', 0, 0, 5, schematic=True, lock=False,
                      title='Context shunts one branch')
     b = canvas.panel('B', 0, 5, 7, schematic=True, lock=False,
-                     title='Four deliveries of the somatic error')
+                     title='Local selection versus oracle profiles')
     # C and D have compact condition headers; E-G need only their axis titles.
     c = canvas.panel('C', 1, 0, 6)
     d = canvas.panel('D', 1, 6, 6)
     e = canvas.panel('E', 2, 0, 4)
     f_ = canvas.panel('F', 2, 4, 4)
     g = canvas.panel('G', 2, 8, 4)
-    data_panels = ('C', 'D', 'E', 'F', 'G')
+    h = canvas.panel('H', 3, 0, 6)
+    i = canvas.panel('I', 3, 6, 6)
+    data_panels = ('C', 'D', 'E', 'F', 'G', 'H', 'I')
     for n in data_panels:
         canvas.declare_reserve(n, left=LEFT_RESERVE_PT, right=RIGHT_RESERVE_PT)
     canvas.lock_reserves()
@@ -1540,6 +1454,7 @@ def build(cfg, tables, tuning):
                    E=interaction(e, tables),
                    F=placement(f_, tables),
                    G=cancellation(g, tables))
+    printed.update(population_figures.population_panels(h, i, plain_log_ticks))
     axis_break(c, 64.0)
     axis_break(d, 64.0)
     # the oracle badge, pinned in points to C's axes corner after its entry
@@ -1611,15 +1526,22 @@ PANEL_SOURCES = {
                 'source_data/conductance_local_gate/summaries/condition_means.csv'],
     'main_5G': ['source_data/conductance_local_gate/figures/historical_cancellation_source.csv',
                 'source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv'],
+    'main_5H': ['source_data/curated_publication/inhibitory_selection_summary.csv',
+                'source_data/curated_publication/inhibitory_selection_provenance.json'],
+    'main_5I': ['source_data/curated_publication/inhibitory_selection_endpoints.csv',
+                'source_data/curated_publication/inhibitory_selection_summary.csv',
+                'source_data/curated_publication/inhibitory_selection_provenance.json'],
 }
 PANEL_SCOPE = {
     'main_5A': 'Seven-compartment circuit, E/I contacts, the context gate and the local distal gate’s addressed subtree; inset: nominal unperturbed teacher terminal voltage against the latent feature. Schematic, no data.',
-    'main_5B': 'The four deliveries of the somatic error defined by model.delivered (local distal gate, exact path, unit broadcast, two-profile oracle). The oracle has two fixed nonuniform distal profiles p1/p2 with exact-field amplitudes c1/c2, and unit proximal/somatic multipliers. Its equal terminal dots identify support sites, not weight magnitude. Schematic, no data.',
+    'main_5B': 'Local distal gating versus two-profile oracle delivery, with unit proximal/somatic multipliers in both. Exact path and unit broadcast remain data comparators, defined in preceding figures and the caption rather than redrawn here. Oracle terminal dots identify support sites, not weight magnitude. Schematic, no data.',
     'main_5C': 'Aligned targets, Adam 0.03, four prespecified rules, 20 paired simulation seeds; means with 95 % pointwise whole-seed bootstrap bands at 12 fixed checkpoints.',
     'main_5D': 'Opposed targets, same cohort and readout as C; bound-contact mark from all_curves.first_bound_step; validation-selected broadcast mean from condition_means.',
     'main_5E': 'Opposed-minus-aligned difference of broadcast-minus-gate NMSE at both windows, validation-selected states, 20 paired seeds joined across windows; prespecified sign-flip test, Holm-adjusted.',
     'main_5F': 'Opposed NMSE at validation-selected states within the 4,096-update window: exact path, the local distal gate in its hard and continuous shapes, the swapped gate and the gate-also-proximal control, at all three Adam rates.',
     'main_5G': 'Earlier cohort seeds 2101–2120; fraction of the distal-parameter gradient retained after context averaging at matched initial and broadcast-trained weight states.',
+    'main_5H': 'Independent 20-seed DendriNet population cohort: sixteen [4,2] neurons, separable externally specified four-stream selection target, exact BP, broadcast and relative-resistance credit; mean held-out NMSE and paired-seed bootstrap bands across irrelevant-input severity. Other rules and the nonlinear-parent condition are retained in Table S14 and full source tables.',
+    'main_5I': 'Same population cohort at severity three; shunting, tonic and reference-voltage-matched current forward controls retain identical cue inputs and parameter counts. Every seed and mean with 95% whole-seed bootstrap intervals; exact BP, broadcast and relative-resistance credit.',
 }
 
 
@@ -1687,6 +1609,7 @@ def display_rows(tables, printed):
                          seed=r.historical_seed, state=r.state,
                          rule=r.evaluated_rule,
                          value=r.context_cancellation_ratio))
+    rows.extend(population_figures.display_rows())
     return rows
 
 
@@ -1699,20 +1622,22 @@ def figure_provenance(cfg, printed, problems, audit):
     inputs = list(sorted((OUT / 'summaries').glob('*.csv'))) + [
         OUT / 'protocol.json', OUT / 'protocol_freeze.json',
         J / 'source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv']
+    inputs += list(sorted((J / 'source_data/curated_publication').glob('inhibitory_selection_*')))
     code = [Path(__file__), Path(__file__).with_name('report.py'),
             Path(__file__).with_name('portable_contract.py'),
             Path(__file__).with_name('model.py'),
             J / 'scripts/journal_style.py', J / 'scripts/figure_canvas.py',
             J / 'scripts/native_schematics.py',
             J / 'scripts/credit_tree_schematics.py']
+    code += [J / 'scripts/inhibitory_selection/figure_panels.py']
 
     def hashes(paths):
         return {str(p.relative_to(J)): digest(p) for p in paths}
     record = dict(
         status='PASS',
-        scope='Current figure-only rendering; frozen protocol and numerical '
-              'summary bytes unchanged. Initial numerical audit retains its '
-              'historical render hashes.',
+        scope='Panels A–G retain the original frozen experiments and numerical '
+              'summaries. H–I add a separately frozen, 20-seed production DendriNet '
+              'selection cohort. The renderer trains no model.',
         protocol_sha256=digest(OUT / 'protocol.json'),
         fresh_seeds=cfg['fresh_seeds'],
         historical_seeds=list(range(2101, 2121)),
@@ -1773,11 +1698,14 @@ def main():
                   Path(__file__).with_name('model.py'),
                   J / 'scripts/figure_canvas.py',
                   J / 'scripts/native_schematics.py',
+                  J / 'scripts/inhibitory_selection/figure_panels.py',
                   J / 'scripts/journal_style.py'],
         panels={key: {'sources': PANEL_SOURCES[key], 'scope': PANEL_SCOPE[key]}
                 for key in PANEL_SOURCES},
         emit_main=True, layout_findings=problems,
-        notes=('Main Figure 5 (fig:conductancecredit), overhaul v2. '
+        notes=('Main Figure 5 (fig:conductancecredit): A–G retain the mechanism '
+               'cohorts; H–I add the completed fresh DendriNet population cohort. '
+               'Rendering only; no training is performed by this builder. '
                + G4_WAIVER + ' ' + KEY_EXCEPTION))
     for line in problems:
         print('layout:', line)
