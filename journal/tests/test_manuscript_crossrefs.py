@@ -13,7 +13,7 @@ MAIN_PANEL_INVENTORY = {
     "fig:branchconflict": "abcdefgh",
     "fig:subtreefactorial": "abcdef",
     "fig:prospective": "abcdefgh",
-    "fig:conductancecredit": "abcdefg",
+    "fig:conductancecredit": "abcdefghi",
     "fig:physicaldepth": "abcdefgh",
     "fig:topology": "abcdefgh",
     "fig:focal": "abcdefgh",

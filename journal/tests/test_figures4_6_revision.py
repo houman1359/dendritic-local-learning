@@ -150,5 +150,9 @@ def test_oracle_support_drawing_excludes_proximal_and_soma():
     source = ast.get_source_segment(GATE.read_text(), next(
         node for node in tree.body if isinstance(node, ast.FunctionDef)
         and node.name == 'panel_deliveries'))
-    assert "'distal 1 × p'" in source and "'distal 2 × p'" in source
-    assert "'proximal, soma × 1'" in source and "'fixed p; oracle ĉ'" in source
+    # The enlarged two-card schematic indexes the two profiles by j instead
+    # of repeating two tiny formula lines; its nonlocal coefficient source
+    # and unit proximal/somatic factors must remain explicit.
+    assert "'distal: p'" in source and "('sub', 'j')" in source
+    assert "'ĉ from exact field'" in source
+    assert "'Both: proximal and soma × 1'" in source

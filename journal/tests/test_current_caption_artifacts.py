@@ -19,6 +19,7 @@ def manuscript_caption(label):
 @pytest.mark.parametrize("builder,constant,label", [
     ("build_ancestry.py", "CAPTION", "fig:subtreefactorial"),
     ("build_anatomy.py", "CAPTION", "fig:topology"),
+    ("build_restored_main.py", "FIG4_CAPTION", "fig:prospective"),
     ("build_restored_main.py", "F6_CAPTION", "fig:physicaldepth"),
 ])
 def test_current_caption_constant_matches_manuscript(builder, constant, label):
