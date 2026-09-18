@@ -1,5 +1,0 @@
-figure,panel,record_type,series,x_label,x,y,ci_low,ci_high,n,inferential_unit,interval_type,endpoint,source_table
-S17,A,source_index,,,,,,,,,,,source_data/credit_rule_extension/figures/controls_figure_source.csv
-S17,B,source_index,,,,,,,,,,,source_data/credit_rule_extension/figures/controls_figure_source.csv
-S17,C,source_index,,,,,,,,,,,source_data/credit_rule_extension/figures/controls_figure_source.csv
-S17,D,source_index,,,,,,,,,,,source_data/credit_rule_extension/figures/controls_figure_source.csv

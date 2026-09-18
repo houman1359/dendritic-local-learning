@@ -1,6 +1,0 @@
-figure,panel,record_type,series,x_label,x,y,ci_low,ci_high,n,inferential_unit,interval_type,endpoint,source_table
-S27,A,source_index,,,,,,,,,,,source_data/irregular_tree_wavelets
-S27,B,source_index,,,,,,,,,,,source_data/irregular_tree_wavelets/cohort_scale_summary.csv
-S27,C,source_index,,,,,,,,,,,source_data/irregular_tree_wavelets/cell_scale_summary.csv
-S27,C,source_index,,,,,,,,,,,source_data/irregular_tree_wavelets/cohort_scale_summary.csv
-S27,D,source_index,,,,,,,,,,,source_data/irregular_tree_wavelets/cohort_scale_summary.csv

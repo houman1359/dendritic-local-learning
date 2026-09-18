@@ -1,6 +1,0 @@
-figure,panel,record_type,series,x_label,x,y,ci_low,ci_high,n,inferential_unit,interval_type,endpoint,source_table
-S1,A,source_index,,,,,,,,,,,source_data/figure2/path_gain_cv_runs.csv
-S1,B,source_index,,,,,,,,,,,source_data/figure2/path_gain_cv_runs.csv
-S1,C,source_index,,,,,,,,,,,source_data/figure2/path_gain_cv_runs.csv
-S1,D,source_index,,,,,,,,,,,source_data/figure2/path_gain_cv_runs.csv
-S1,E,source_index,,,,,,,,,,,source_data/figure2/path_gain_cv_runs.csv

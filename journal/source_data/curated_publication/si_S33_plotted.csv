@@ -1,7 +1,0 @@
-figure,panel,record_type,series,x_label,x,y,ci_low,ci_high,n,inferential_unit,interval_type,endpoint,source_table
-S33,A,source_index,,,,,,,,,,,source_data/animal_learning_francioni/animal_common_signed_modes.csv
-S33,A,source_index,,,,,,,,,,,source_data/animal_learning_francioni/animal_signed_contrasts.csv
-S33,A,source_index,,,,,,,,,,,source_data/animal_learning_francioni/neuron_sd_residual_distributions.csv
-S33,B,source_index,,,,,,,,,,,source_data/animal_learning_francioni/animal_common_signed_modes.csv
-S33,B,source_index,,,,,,,,,,,source_data/animal_learning_francioni/animal_signed_contrasts.csv
-S33,B,source_index,,,,,,,,,,,source_data/animal_learning_francioni/neuron_sd_residual_distributions.csv

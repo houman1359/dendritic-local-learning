@@ -1,6 +1,0 @@
-figure,panel,record_type,series,x_label,x,y,ci_low,ci_high,n,inferential_unit,interval_type,endpoint,source_table
-S20,A,source_index,,,,,,,,,,,source_data/conductance_credit_demand/opponent/supplementary_figures/supplement_opponent_controls_source.csv
-S20,B,source_index,,,,,,,,,,,source_data/conductance_credit_demand/opponent/supplementary_figures/supplement_opponent_controls_source.csv
-S20,C,source_index,,,,,,,,,,,source_data/conductance_credit_demand/opponent/supplementary_figures/supplement_opponent_controls_source.csv
-S20,D,source_index,,,,,,,,,,,source_data/conductance_credit_demand/opponent/expanded_rates/figure_expanded_rates_source.csv
-S20,E,source_index,,,,,,,,,,,source_data/conductance_credit_demand/opponent/expanded_rates/figure_expanded_rates_source.csv
