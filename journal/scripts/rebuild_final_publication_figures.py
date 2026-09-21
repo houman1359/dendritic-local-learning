@@ -153,6 +153,7 @@ def main() -> None:
         export_display_tables()
     if not args.main_only:
         run_script("supplement_consolidation/build.py")
+        run_script("review_completion/checkpoint_figure.py")
     record_render_environment()
     from build_submission_bundle import MAIN_FIGURES, SUPPLEMENTARY_FIGURES, verify_figure_allowlist
     verify_figure_allowlist()

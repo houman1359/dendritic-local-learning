@@ -9,7 +9,7 @@ def test_main_defines_capture_scales_before_interpreting_them():
     text = (JOURNAL / "main.tex").read_text()
     definition = r"$C_{\rm res}=(C-C_0)/(1-C_0)$"
     assert definition in text
-    assert text.index(definition) < text.index("Varying $K$ separates the common signal")
+    assert text.index(definition) < text.index("Adding spatial profiles captured substantial structure")
     assert "within each cell before averaging across cells" in text
 
 
@@ -21,7 +21,7 @@ def test_focal_contrast_is_between_localization_indices_not_factors():
     caption = text.split(r"\label{fig:focal}")[0].rsplit(r"\caption{", 1)[1]
     assert "adjoint is additionally substituted while driving force remains post-shunt" in caption
     assert "not a subtraction of gradient factors" in caption
-    assert "always relative to the same baseline" in text
+    assert "both localizations measured relative to the same baseline" in text
     assert "unprimed factors remain at baseline" in text
     assert "q'd'-d'" not in text
 

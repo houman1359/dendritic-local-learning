@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "layout": "Ten numbered main figures, including separate conductance-mechanism and population-rescue figures;36 supplementary figures.",
+  "layout": "Ten numbered main figures, including separate conductance-mechanism and population-rescue figures;37 supplementary figures.",
   "physical_figure_pending": false,
   "retained_template": "configs/figure_structure/retained_evidence.tsv",
   "assets": [
@@ -366,12 +366,20 @@
     },
     {
       "figure": "fig6",
-      "panel": "a-g",
+      "panel": "a-e",
       "path": "figures/main/figure_06.pdf",
       "component": "figures/main/figure_06.pdf",
       "generator": "scripts/review_completion/population_figure.py",
       "entry_id": "creditfirst.fig6.asset",
       "notes": "Independent numbered population figure: task, assignment, rate controls, nonlinear rescue and separable target control."
+    },
+    {
+      "figure": "figS37",
+      "path": "figures/supplementary/curated/checkpoint_computation.pdf",
+      "component": "figures/supplementary/curated/checkpoint_computation.pdf",
+      "generator": "scripts/review_completion/checkpoint_figure.py",
+      "panel": "a-j",
+      "notes": "Checkpoint-only visualization of all seeds from two existing cohorts; no training."
     }
   ],
   "records": [
@@ -86963,6 +86971,69 @@
       "generator": "scripts/review_completion/scaled_gradient_identity.py",
       "replication_unit": "120 existing selected states and 20 paired initial states; no new training cohort",
       "notes": "Equation 8 checked in optimized log-conductance coordinates before clipping; maximum relative residual 1.08e-15 (rounded upward)."
+    },
+    {
+      "path": "source_data/checkpoint_computation/branch_tuning.csv",
+      "figure": "figS37",
+      "panel": "a-j",
+      "role": "Checkpoint-only learned computation and plotting source",
+      "generator": "scripts/review_completion/checkpoint_computation.py",
+      "replication_unit": "20 single-neuron seeds and a separate 20-seed rescue cohort; existing checkpoints only",
+      "notes": "Original validation-selected states; no new training or outcome-based seed selection."
+    },
+    {
+      "path": "source_data/checkpoint_computation/checkpoint_computation_provenance.json",
+      "figure": "figS37",
+      "panel": "a-j",
+      "role": "Checkpoint-only learned computation and plotting source",
+      "generator": "scripts/review_completion/checkpoint_computation.py",
+      "replication_unit": "20 single-neuron seeds and a separate 20-seed rescue cohort; existing checkpoints only",
+      "notes": "Original validation-selected states; no new training or outcome-based seed selection."
+    },
+    {
+      "path": "source_data/checkpoint_computation/component_errors.csv",
+      "figure": "figS37",
+      "panel": "a-j",
+      "role": "Checkpoint-only learned computation and plotting source",
+      "generator": "scripts/review_completion/checkpoint_computation.py",
+      "replication_unit": "20 single-neuron seeds and a separate 20-seed rescue cohort; existing checkpoints only",
+      "notes": "Original validation-selected states; no new training or outcome-based seed selection."
+    },
+    {
+      "path": "source_data/checkpoint_computation/figure_S37_plotted.csv",
+      "figure": "figS37",
+      "panel": "a-j",
+      "role": "Checkpoint-only learned computation and plotting source",
+      "generator": "scripts/review_completion/checkpoint_figure.py",
+      "replication_unit": "20 single-neuron seeds and a separate 20-seed rescue cohort; existing checkpoints only",
+      "notes": "Original validation-selected states; no new training or outcome-based seed selection."
+    },
+    {
+      "path": "source_data/checkpoint_computation/figure_S37_provenance.json",
+      "figure": "figS37",
+      "panel": "a-j",
+      "role": "Checkpoint-only learned computation and plotting source",
+      "generator": "scripts/review_completion/checkpoint_figure.py",
+      "replication_unit": "20 single-neuron seeds and a separate 20-seed rescue cohort; existing checkpoints only",
+      "notes": "Original validation-selected states; no new training or outcome-based seed selection."
+    },
+    {
+      "path": "source_data/checkpoint_computation/population_surfaces.csv",
+      "figure": "figS37",
+      "panel": "a-j",
+      "role": "Checkpoint-only learned computation and plotting source",
+      "generator": "scripts/review_completion/checkpoint_computation.py",
+      "replication_unit": "20 single-neuron seeds and a separate 20-seed rescue cohort; existing checkpoints only",
+      "notes": "Original validation-selected states; no new training or outcome-based seed selection."
+    },
+    {
+      "path": "source_data/checkpoint_computation/protocol.json",
+      "figure": "figS37",
+      "panel": "a-j",
+      "role": "Checkpoint-only learned computation and plotting source",
+      "generator": "scripts/review_completion/checkpoint_computation.py",
+      "replication_unit": "20 single-neuron seeds and a separate 20-seed rescue cohort; existing checkpoints only",
+      "notes": "Original validation-selected states; no new training or outcome-based seed selection."
     }
   ],
   "supporting_groups": [

@@ -67,6 +67,7 @@ SUPPLEMENTARY_FIGURES = (
     'supplementary/curated/original_selector.pdf',
     'supplementary/curated/finite_horizon.pdf',
     'supplementary/curated/morphology_estimation.pdf',
+    'supplementary/curated/checkpoint_computation.pdf',
 )
 
 FIGURES = MAIN_FIGURES + SUPPLEMENTARY_FIGURES

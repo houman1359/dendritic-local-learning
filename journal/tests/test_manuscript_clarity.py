@@ -44,16 +44,16 @@ def test_tasks_are_defined_before_population_outcomes():
     target = source.index(r"y=\sum_{b=0}^3c_b(-1)^b")
     severity = source.index(r"[1+(s-1)(1-c_b)]z_{bj}")
     gate = source.index(r"h_{up}=D_{up}^0/(D_{up}^0+g_{up}^{\rm I}a_b^{\rm I})")
-    result = source.index("The gate's benefit was strongest under distractor stress.")
+    result = source.index("Resistance gating helped most under strong distractors.")
     assert target < severity < gate < result
-    assert "both the target and parent nonlinearity changed" in source
+    assert "parent nonlinearity and target changed together" in source
 
 
 def test_capture_and_context_cancellation_are_different_definitions():
     source = (J / "main.tex").read_text()
     assert r"\mathcal C(A;\bm\delta)=\frac{\|P_A\bm\delta\|^2}{\|\bm\delta\|^2}" in source
     assert r"\|\sum_c p_c\bm v_c\|/\sum_c p_c\|\bm v_c\|" in source
-    assert "one means no cancellation" in source
+    assert "one indicating no cancellation" in source
 
 
 def test_supplement_explains_shared_path_and_nmse_normalizations():
@@ -68,7 +68,8 @@ def test_supplement_explains_shared_path_and_nmse_normalizations():
 def test_all_current_si_figures_have_a_caption_and_panel_letters():
     import fitz
     count = 0
-    for path in sorted((J / "supplementary/curated").glob("*_figures.tex")):
+    from tex_sources import tex_sources
+    for path in tex_sources(J / "supplementary/supplementary.tex"):
         for block in re.findall(r"\\begin\{figure\}.*?\\end\{figure\}", path.read_text(), re.S):
             asset = re.search(r"\\includegraphics\[[^]]*\]\{([^}]+)\}", block).group(1)
             assert r"\caption{" in block
@@ -76,4 +77,5 @@ def test_all_current_si_figures_have_a_caption_and_panel_letters():
                 words = {w[4] for w in pdf[0].get_text("words")}
                 assert "A" in words, asset
             count += 1
-    assert count == 36
+    from build_submission_bundle import SUPPLEMENTARY_FIGURES
+    assert count == len(SUPPLEMENTARY_FIGURES) == 37
