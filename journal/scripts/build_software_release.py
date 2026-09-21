@@ -130,7 +130,7 @@ JOURNAL_DIRECTORIES = (
     "scripts/inhibitory_selection", "scripts/inhibitory_rescue",
     "scripts/review_completion", "scripts/submission_revision",
     "scripts/measured_alignment_power", "scripts/physical_depth_followup",
-    "scripts/supplement_consolidation",
+    "scripts/supplement_consolidation", "scripts/inherited_neurips",
 )
 JOURNAL_ANALYSIS_RECORDS = (
     "ANIMAL_DATA_CONTRACT.md",

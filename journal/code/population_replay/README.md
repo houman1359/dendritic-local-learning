@@ -41,3 +41,13 @@ bitwise. Outputs record the actual Python, Torch and NumPy versions. Original
 selection/rescue checkpoints remain in the separately retained study archives;
 the compact software package does not redistribute them. The complete original
 source hash inventory remains in the frozen protocols, including omitted files.
+
+## Figure 4 noise controls
+
+After the documented Source Data restoration into `article_analysis/`, run
+`python -B code/population_replay/noise_replay.py --journal . --seed 2026092100
+--output NEW_DIRECTORY` (one line). This verifies the original source identities,
+records any declared release substitutions and relocates the protocol's paths.
+The frozen numerical runner is unchanged. Repeat for the twenty original seeds
+2026092100–2026092119. `--smoke` retains the paired task/noise/rate construction
+but stops after one update and explicitly excludes its outputs from evidence.
