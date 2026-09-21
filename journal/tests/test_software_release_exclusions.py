@@ -65,3 +65,22 @@ def test_protocol_workers_survive_export_and_explicit_copy_only() -> None:
     assert release.excluded(Path("worker.sh"))
     assert release.excluded(Path("journal/scripts/unrelated/worker.sh"))
     assert release.excluded(Path("journal/scripts/conductance_local_gate/other.sh"))
+
+
+def test_cleanroom_helper_is_required_and_survives_directory_copy(tmp_path: Path) -> None:
+    release = _load("_release_cleanroom", JOURNAL / "scripts" / "build_software_release.py")
+    name = Path("code/release_noise/cleanroom_worker.sh")
+    assert release.repository_file_allowed(Path("journal") / name, "paper")
+    assert (Path("journal") / name).as_posix() in release.required_article_input_paths(JOURNAL)
+    source = tmp_path / "code"
+    helper = source / "release_noise/cleanroom_worker.sh"
+    helper.parent.mkdir(parents=True)
+    helper.write_bytes((JOURNAL / name).read_bytes())
+    (helper.parent / "unrelated.sh").write_text("not a release helper\n")
+    destination = tmp_path / "copy"
+    assert release.copy_tree_allowlisted(source, destination) == 1
+    assert (destination / "release_noise/cleanroom_worker.sh").read_bytes() == helper.read_bytes()
+    for prefix in ("article_analysis", "journal_package/journal"):
+        assert not release.excluded(Path(prefix) / name)
+    assert release.excluded(Path("cleanroom_worker.sh"))
+    assert release.excluded(Path("unrelated/cleanroom_worker.sh"))

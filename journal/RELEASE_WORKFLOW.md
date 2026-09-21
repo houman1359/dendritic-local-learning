@@ -41,6 +41,19 @@ cp -R SOFTWARE/dendritic_modeling/. "$REVIEWER_BUILD/"
 
 Replace `SOFTWARE` with the extracted release directory. The private build copy prevents setuptools from writing build artifacts into the checksummed archive contents. The smoke imports the installed model/training entry points, exercises the installed core's released noise-loader hook and verifies both noise transformations on tiny tensors. It asserts that the core comes from the fresh virtual environment. It does not download MNIST or stand in for full model training. `code/release_noise/cleanroom_worker.sh` provides the same bounded CPU-queue check in the local Slurm environment; it records `pip freeze`, `pip check`, smoke results and focused test results.
 
+The worker accepts `SOFTWARE ENV REPORTS [install|reinstall|reuse]`. It resolves
+all three paths relative to the caller before changing directories, creates the
+report directory, and runs the focused tests from `SOFTWARE/article_analysis`.
+It explicitly uses `-c /dev/null --rootdir . --confcutdir .` so pytest does not
+search the caller's checkout or shared-filesystem ancestors for configuration.
+Use `reuse` only with an already installed, recorded reviewer environment. The
+same isolated test command can be run manually from `SOFTWARE/article_analysis`:
+
+```bash
+/path/to/reviewer-venv/bin/python -B -m pytest -c /dev/null --rootdir . --confcutdir . \
+  -p no:cacheprovider -q tests/test_release_noise.py tests/test_software_release_repositories.py
+```
+
 The tested compatibility constraints include NumPy 1.26.4, WandB 0.23.1, protobuf 6.33.5 and PyMuPDF 1.28.2. WandB 0.23.1 cannot import with the shared environment's protobuf major version 7. The core's remaining dependencies are declared in its released `pyproject.toml`; the clean installation report records their resolved versions. PyMuPDF supplies the figure assembly module `fitz`. Figure recreation also uses Matplotlib, NumPy, pandas and SciPy, plus the renderer's external Nimbus Sans fonts. PDF manuscript builds require an external TeX installation. MICRONS/CAVE and DANDI/NWB analyses additionally require their service clients, original data/cache access and any upstream credentials; these data and credentials are not distributed. MNIST, Fashion-MNIST and CIFAR-10 require upstream torchvision data or an existing cache.
 
 [The environment guide](code/release_noise/ENVIRONMENTS.md) maps the main studies

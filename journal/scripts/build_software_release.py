@@ -522,6 +522,10 @@ def excluded(relative: Path) -> bool:
         return True
     if "/".join(relative.parts[-3:]) in FROZEN_WORKER_RECORDS:
         return False
+    # The documented reviewer helper is portable and has no embedded data paths.
+    # Match its directory as well as its name, including code-directory copying.
+    if relative.parts[-2:] == ("release_noise", "cleanroom_worker.sh"):
+        return False
     if relative.suffix.lower() in EXCLUDED_SUFFIXES:
         return True
     if relative.name.startswith("slurm_"):
