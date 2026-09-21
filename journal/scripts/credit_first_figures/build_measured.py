@@ -232,8 +232,8 @@ def _wrapped(lines):
 def panel_statistic(f, subtitle_lines):
     """Two contact pairs on one arbor; one shares a soma-to-ancestor path."""
     band = f.footer(_wrapped([
-        'recorded during stimuli, not learning']),
-        band_pt=10.5, min_frame_pt=60.0)
+        'Stimulus-response recordings;', 'no learning assay']),
+        band_pt=21.0, min_frame_pt=60.0)
     sub_pt = 10.5 * len(subtitle_lines)
     top = 1.0 - f.fy(sub_pt)
     for i, line in enumerate(subtitle_lines):
@@ -244,7 +244,7 @@ def panel_statistic(f, subtitle_lines):
     core_pt = core_h * f.h_pt
     foot_pt, head_pt = 11.0, 9.0        # tag strip under the soma / over the canopy
     tree_w_pt = min(80.0, 0.64 * f.w_pt)   # the slot was under-filled
-    nodes = f.balanced_tree((0.0, core_y0 + f.fy(foot_pt), f.fx(tree_w_pt),
+    nodes = f.balanced_tree((-f.fx(3.0), core_y0 + f.fy(foot_pt), f.fx(tree_w_pt),
                              f.fy(core_pt - foot_pt - head_pt)),
                             depth=3, mode='forward', labels=True, trunk=True,
                             output='y')
@@ -275,7 +275,7 @@ def panel_statistic(f, subtitle_lines):
     # tuning sketches, one per pair, with a leader back to the pair
     col_x = f.fx(tree_w_pt + 10.0)
     w = 1.0 - col_x
-    h_pt = 29.0
+    h_pt = min(19.0, max(9.0, (core_pt - 34.0) / 2.0))
     bots = (core_y0 + f.fy(core_pt - h_pt - 11.0),
             core_y0 + f.fy(foot_pt + 0.5))
     # the pair-1 leader starts clear of the 'shared path' label's own box:
@@ -537,8 +537,7 @@ def current_plotted_table(effect_summary, effects, scan_metrics, all_scans,
     """Export the current B--F panels, not the superseded A--C layout.
 
     Summary estimates and the individual targets/scans remain separate record
-    types.  D-inset retains negative reliabilities with drawn=False; their
-    omission from the histogram does not remove them from the source data.
+    types.  D-inset includes every finite reliability estimate, including negatives.
     """
     from source_data_export import exact_id_table
 
@@ -573,7 +572,7 @@ def current_plotted_table(effect_summary, effects, scan_metrics, all_scans,
                 for r in power.to_dict('records'))
     rows.append(dict(panel='D', record='observed_estimate', **selected.to_dict()))
     rows.extend(dict(panel='D-inset', record='repeat_reliability',
-                     drawn=bool(r['measured_split_half_spearman'] >= 0), **r)
+                     drawn=bool(np.isfinite(r['measured_split_half_spearman'])), **r)
                 for r in reliability.to_dict('records'))
     for i, site in enumerate(metadata['site_segment_ids']):
         for j, route in enumerate(metadata['selected_route_segments']):
@@ -668,8 +667,8 @@ def main():
     n_partners = int(selected.n_partners.sum())
     p_lo = int(scan_metrics.n_presynaptic_partners.min())
     p_hi = int(scan_metrics.n_presynaptic_partners.max())
-    subtitle_a = [f'{n_targets} targets, {n_partners} partners,',
-                  f'{n_scans} scans ({p_lo}–{p_hi} per scan)']
+    subtitle_a = [f'Selected: {n_targets} targets, {n_partners} partners',
+                  f'All: {n_scans} scans, 102 partners']
 
     # -- B: the two cohorts ------------------------------------------------
     pa = effect_summary[effect_summary.endpoint.eq(
@@ -728,11 +727,7 @@ def main():
     hist_edges = np.linspace(-0.2, 0.6, 9)
     hist_counts, _ = np.histogram(reliab, bins=hist_edges)
     assert int(hist_counts.sum()) == n_records
-    # the inset axis starts at 0: the two records with r < 0 are one count
-    # each and print as a 0.5 pt slab indistinguishable from the axis line,
-    # so a quarter of the inset width was held open for marks no reader can
-    # see or count (visual review 2026-09-10).  The two are not deleted from
-    # the accounting -- they are named in the caption and recorded below.
+    # Negative reliabilities are displayed and retained in the audit.
     n_negative = int(hist_counts[hist_edges[1:] <= 0.0].sum())
     keep = hist_edges[1:] > 0.0
     assert n_negative == 2 and int(hist_counts[keep].sum()) == n_records - 2
@@ -754,7 +749,7 @@ def main():
     # titles, and every line of caption prose they held -- B's rug and sign
     # notes, C's cohort line and sign key, D's lambda note, F's three key
     # lines -- is gone; the caption states each of them.
-    canvas = NativeCanvas(448 / 72, 3, row_weights=[112, 108, 112],
+    canvas = NativeCanvas(490 / 72, 3, row_weights=[132, 130, 112],
                           hgutter_pt=30, vgutter_pt=30,
                           margins=Margins(left=40, right=14, top=22, bottom=34))
     ax_a = canvas.panel('A', 0, 0, 5, schematic=True,
@@ -769,6 +764,7 @@ def main():
     # row 1's x labels hang 20 pt into the gutter: a 14 pt declared top
     # reserve keeps the two rows 3 mm apart (audit_row_separation)
     canvas.declare_reserve('F', top=14.0)
+    canvas.declare_reserve('B', top=14.0)
 
     # -- B ----------------------------------------------------------------
     # Only the SELECTED-SCAN cohort is drawn here.  The all-thirteen-scan
@@ -813,32 +809,18 @@ def main():
     # The concise rug label distinguishes its thirteen scan values from the
     # seven-target estimate above; it does not introduce a second inference.
 
-    # -- C ----------------------------------------------------------------
-    canvas.forest(ax_c, c_rows, value_label='Target-level association',
-                  xlim=(-0.5, 0.5), reference=None, reference_label='', tag='')
-    ax_c.set_xticks([-0.5, -0.25, 0.0, 0.25, 0.5])
-    ax_c.set_xticklabels(['−0.5', '−0.25', '0', '0.25', '0.5'])
-    ax_c.set_ylim(3.58, -0.66)
-    ax_c.plot([0.0, 0.0], [-0.45, len(c_rows) - 0.55], color=GRAY, lw=LW_REF,
-              dashes=(2.6, 2.0), zorder=1.0, solid_capstyle='butt')
-    ax_c.text(-0.012, -0.56, 'no alignment', fontsize=PT_BASE, color=GRAY,
-              ha='right', va='center', zorder=6)
-    # Row 4 is not a correlation: it is a difference in mean similarity
-    # between same-branch and different-branch pairs, so its interval is the
-    # narrowest in the panel for a reason that is NOT greater precision
-    # (visual review 2026-09-10).  A hairline separates it from the three
-    # rank correlations above; the caption names the change of quantity.
-    ax_c.plot([-0.5, 0.5], [2.54, 2.54], color=COLORS['edge'], lw=LW_HAIR,
-              zorder=1.2, solid_capstyle='butt')
-    # The tree-distance sign key rides ON its own row, in the empty left half
-    # of that band (its leftmost target value is -0.200), instead of as a
-    # third line of prose below the fourth band: it keys one row, not the
-    # panel (visual review 2026-09-10).  The row label cannot carry it --
-    # '(+ = closer)' is ~40 pt at PT_BASE against a 46 pt label column and a
-    # third label line overruns the 22 pt row pitch.
-    # (design pass 2026-09-14: the `+ = closer` key and the `all 13 scans;
-    # n = 7 target cells` line are gone; caption C states that tree distance
-    # is sign-flipped and gives the cohort)
+    # C separates correlations from the difference in mean similarity.
+    ax_c.set_axis_off()
+    upper = ax_c.inset_axes([0, .49, 1, .51])
+    lower = ax_c.inset_axes([0, -.02, 1, .18])
+    for axis, rows, label in ((upper, [dict(row, label=row['label'].replace('\n', ' ')) for row in c_rows[:3]], 'Rank correlation'),
+                              (lower, c_rows[3:], 'Mean similarity difference')):
+        canvas.forest(axis, rows, value_label=label, xlim=(-.5, .5),
+                      reference=0., reference_label='', tag='', band=False)
+        axis.set_xticks([-.5, 0, .5], ['−0.5', '0', '0.5'])
+        axis.tick_params(labelsize=PT_BASE, pad=1, length=2)
+        axis.xaxis.labelpad = 1
+    canvas.declare_reserve('C', left=54, bottom=22)
 
     # -- D ----------------------------------------------------------------
     for rel, colour, name in (('perfect', CEIL, 'perfect reliability'),
@@ -917,16 +899,14 @@ def main():
               color=GRAY, ha='left', va='center', zorder=6)
     # 0.29, not 0.255: on the shorter 2026-09-14 row the inset's rotated
     # `records` label reached the measured-reliability curve
-    inset = _data_inset(ax_d, (0.290, 0.10, 0.255, 0.40))
+    inset = _data_inset(ax_d, (0.290, 0.17, 0.255, 0.34))
     for lo, hi, count in zip(hist_edges[:-1], hist_edges[1:], hist_counts):
-        if hi <= 0.0:          # drawn nowhere: see n_negative above
-            continue
         inset.bar(lo, count, width=hi - lo, align='edge',
                   facecolor=tint_pct(ROUTE, 40), edgecolor=ROUTE,
                   linewidth=LW_HAIR, zorder=3)
-    inset.set(xlim=(0.0, 0.6), ylim=(0, 46))
-    inset.set_xticks([0.0, 0.2, 0.4, 0.6])
-    inset.set_xticklabels(['0', '0.2', '0.4', '0.6'])
+    inset.set(xlim=(-0.2, 0.6), ylim=(0, 46))
+    inset.set_xticks([-0.2, 0.0, 0.3, 0.6])
+    inset.set_xticklabels(['−0.2', '0', '0.3', '0.6'])
     inset.set_yticks([0, 20, 40])
     inset.set_xlabel('split-half r', fontsize=PT_BASE, labelpad=1.0)
     inset.set_ylabel('records', fontsize=PT_BASE, labelpad=1.0)
@@ -1089,7 +1069,7 @@ def main():
                      inset_bins=[int(v) for v in hist_counts],
                      inset_bin_edges=[float(v) for v in hist_edges],
                      inset_records=n_records,
-                     inset_records_drawn=n_records - n_negative,
+                     inset_records_drawn=n_records,
                      inset_negative_records=n_negative,
                      inset_partners=n_partners_unique),
         panel_f=dict(mean_coverage_pct=mean_cov,

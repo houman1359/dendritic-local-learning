@@ -353,9 +353,9 @@ CAPTION = r"""\caption{\textbf{Ancestry routes sparsely compress modeled focal-s
 \textbf{B}, Seven ancestry routes plus broadcast at budget $K=8$; matrix $A_8$ groups sites into eight tree-ordered blocks. Supports nest.
 \textbf{C}, Signed log-gradient change per unit relative shunt dose, modeled for route 3. Block means are normalized by the field's maximum absolute value before area weighting. Capture is the fraction of excitatory-contact-area-weighted field energy reproduced by projection onto the dictionary (Eq.~\ref{eq:reconstructioncapture}).
 \textbf{D}, Total capture against profile budget. Bands show per-condition cell uncertainty, not paired contrasts; dashed line, shared-broadcast capture 0.203. $n=47$ cells, 46 at $K=16$.
-\textbf{E}, Spatial share $C-C_0$ for six dictionaries at eight profiles; $C$ is total capture and $C_0$ broadcast capture. The dashed broadcast value is a scale reference, already removed from every bar. Cell means without intervals.
+\textbf{E}, Spatial share $C-C_0$ for six dictionaries at eight profiles; $C$ is total capture and $C_0$ broadcast capture. Cell means without intervals.
 \textbf{F}, Ancestry capture minus each cell's 200-surrogate mean, plotted against that mean. Open green circles identify eleven cells where at least half the surrogates match or exceed the actual tree. Open black diamond, cohort mean with intervals on both coordinates; dashed line, zero difference.
-\textbf{G}, Paired ancestry-minus-control differences in residual (filled) and total (open) capture; one unit equals 100 percentage points. All within-cell differences are drawn; four of 188 are clipped at the axis edge. Adjacent columns give nonzero-entry fraction, rank and positive-cell count, not cable-length costs.
+\textbf{G}, Paired ancestry-minus-control differences in residual (filled) and total (open) capture; one unit equals 100 percentage points. All 188 within-cell differences are shown without clipping. Adjacent columns give nonzero-entry fraction, rank and positive-cell count, not cable-length costs.
 \textbf{H}, Residual capture $(C-C_0)/(1-C_0)$ for the initial and disjoint MICrONS cohorts (one mouse) and Pinky (second mouse); $n=8,47,8$.
 \textbf{E--G}: $n=47$; \textbf{E--H}: eight profiles. Symbols and whiskers/bands denote means and 95\% cell-bootstrap intervals where drawn; small dots denote cells. These modeled passive fields test compression, not observed teaching. Source Data: \texttt{source\_data/curated\_publication/figure\_08\_plotted.csv}.}"""
 
@@ -1183,30 +1183,10 @@ def panel_e(ax, summaries, floor):
     ax.set_xticks([0.0, 0.2, 0.4, 0.6])
     ax.set_yticks(range(6), [FAMILIES[m]["short"] for m in ORDER])
     ax.tick_params(axis="y", which="major", length=0, pad=3.0)
-    ax.set_xlabel("Spatial share of field energy")
+    ax.set_xlabel("Capture beyond broadcast")
     style_panel(ax, grid="x")
     ax.spines["bottom"].set_bounds(0.0, E_XMAX)
     ax.spines["left"].set_bounds(-0.45, 5.45)
-    # the constant the bars are measured against, drawn once, as a reference
-    # rather than as 20 % of every bar (CF-7).  Its tag is set by hand in the
-    # head strip: reference_line puts the tag at the end of the span, which on
-    # this inverted ordinate is under the panel, in row 2's paper.
-    # Regression repair 2026-09-11: drawn at the library's default zorder 1
-    # the dashes sat UNDER the zorder-2 bars and survived only in the white
-    # gaps between them, so the one comparison this panel makes (and the one
-    # fact worth reading, Random's 0.201 just below the 0.203 broadcast) was
-    # invisible across every bar.  The reference is drawn above the bars and
-    # their edges, still one dashed mute rule (CF-7).
-    # A white halo (LW_DATA, the widest sanctioned stroke) sits under the
-    # dashes so they also read across the ink-coloured Depth bar, where mute
-    # on ink is a 1-step contrast; on paper the halo is invisible.
-    halo, = ax.plot([floor, floor], [-0.62, 5.55], color="white",
-                    lw=LW_DATA, zorder=3.8, solid_capstyle="butt")
-    halo.set_dashes((2.2 * LW_REF / LW_DATA, 1.8 * LW_REF / LW_DATA))
-    reference_line(ax, floor, axis="x", label="", span=(-0.62, 5.55),
-                   zorder=4)
-    ax.text(floor - 0.012, -0.72, f"broadcast {floor:.3f}", fontsize=PT_BASE,
-            color=COLORS["mute"], ha="right", va="center")
     return pd.DataFrame(rows)
 
 
@@ -1279,9 +1259,9 @@ def panel_f(ax, pairs):
 
 
 # ── row 2 ────────────────────────────────────────────────────────────────
-G_XLIM = (-25.0, 88.0)      # data to +55, then the three printed columns
-G_FAN_MAX = 55.0
-G_COLS = ((74.0, "nonzero"), (87.0, "rank"))
+G_XLIM = (-45.0, 142.0)      # full cell range, followed by annotation columns
+G_FAN_MAX = 95.0
+G_COLS = ((122.0, "nonzero"), (140.0, "rank"))
 G_RIGHT = 20.0            # keeps the 7-module panel inside the aspect band
 
 
@@ -1363,6 +1343,7 @@ def panel_g(canvas, ax, report, tables, summaries):
                     marker="<" if side < 0 else ">", ms=SEED_MS + 0.8,
                     mfc=colour, mec="none", alpha=0.75, zorder=2.4,
                     clip_on=True)
+    assert beyond == 0, "Every cell must be visible on the plotted scale"
     for i, (mean, lo, hi) in enumerate(second):
         colour = COLORS[FAMILIES[CONTROLS[i]]["color"]]
         y = ypos[i] + 0.22
@@ -1407,7 +1388,7 @@ def panel_g(canvas, ax, report, tables, summaries):
                              f"{item['rank']:.2f}{dagger}")):
             ax.text(x, ypos[i], value, fontsize=PT_BASE, color=COLORS["ink"],
                     ha="right", va="center", zorder=5)
-    ax.set_xticks([-20, 0, 20, 40])
+    ax.set_xticks([-40, 0, 40, 80])
     # the scale stops where the data stops: the drawn spine ends at the
     # column rule, so the reserved band that carries the printed wiring and
     # rank columns is not read as 60-88 pp of plotted space
@@ -1422,8 +1403,7 @@ def panel_g(canvas, ax, report, tables, summaries):
     # the rank column prints 5.66\u2020 on the row itself, and the count is
     # set in the `cells +` column's own n/N notation.
     ax.text(G_XLIM[0] + 0.5, 4.04,
-            f"\u2020 rank-limited (of 8); {beyond}/"
-            f"{sum(len(i['seeds']) for i in extra)} beyond the axis",
+            "\u2020 rank-limited (of 8)",
             fontsize=PT_BASE, color=COLORS["mute"], ha="left", va="bottom",
             zorder=5)
     ancestry = eight.loc[ANCESTRY]

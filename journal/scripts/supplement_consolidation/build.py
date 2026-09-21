@@ -213,6 +213,8 @@ def clean_caption(s):
  # captions, rewritten to the frozen supplement numbering (SI_NUMBERING 3).
  ('Supplementary Fig.~S45D,E','Supplementary Fig.~S8B,C'),
  ('the normalized dose response is in Supplementary Fig.~S48','the normalized dose response is in main Fig.~8D'),
+ ("are main Fig.~4H's contrast",'give the leaf-assignment contrast reported in the main text'),
+ ('The same condition as main Fig.~4E, repeated as the reference','The nested-target condition reported in the main text, shown as the reference'),
  ('neuron-specific','per-neuron'),
  ('matched-width (MW) scalar-fallback','matched-width scalar fallback'),
  ]:s=s.replace(old,new)

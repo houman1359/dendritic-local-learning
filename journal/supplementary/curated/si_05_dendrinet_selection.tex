@@ -243,3 +243,9 @@ or evidence of equivalence. Of 90 selected rates, 89 were the grid maximum;
 92 of 270 selected runs chose the training cap and 50 contacted a bound.
 The full matrix, including the unfavorable outcomes, is retained in
 \path{source_data/curated_publication/inhibitory_transfer_pilot_*}.
+
+\subsubsection*{Raw-gradient scale identity at archived states}
+\label{sec:gradient_scale_identity}
+At fixed parameters, the augmented terminal log-conductance gradient equals the exact gradient divided by the positive example-independent factor $\kappa_{ui}$ in main Eq.~8. This statement also holds after minibatch averaging. It does not equate optimizer histories or trajectories. Table~\ref{tab:population_coordinates} distinguishes terminal, proximal, somatic and readout differentiation and shows why proximal eligibility already includes its own output derivative.
+
+A deterministic checkpoint-only check used all 120 validation-selected original-bound Adam states (six rules, twenty seeds), plus the twenty paired initial states. At each state, raw gradients before clipping were computed on the same 512 diagnostic examples, normalized by training-target variance. Across all 280 terminal parameter-block comparisons, the maximum relative Euclidean residual between the exact gradient and $\kappa$ times the augmented gradient was $1.08\times10^{-15}$ (maximum absolute component residual $1.05\times10^{-17}$, rounded upward). All scales were positive. Checkpoint and frozen-runtime hashes were verified; no training or new independent cohort was added. The pre-execution protocol, per-state results and input hashes accompany \path{curated_publication/scaled_gradient_identity.csv} and its provenance record.

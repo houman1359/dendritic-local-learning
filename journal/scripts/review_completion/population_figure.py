@@ -1,6 +1,6 @@
 """Main Figure 6 (fig:conductancepopulation).
 
-Redesign 2026-09-21 (review completion): six panels on a three-row canvas.
+Redesign 2026-09-21 (review completion): five panels on a three-row canvas.
 A, the task schematic with the terminal learning-signal delivery key;
 B, assignment under distractor stress with direct end labels (coincident
 curves keep their line patterns and are named in the caption);
@@ -35,7 +35,7 @@ PT = 7.0
 C = {'exact': COLORS['bp'], 'broadcast': COLORS['scalar'], 'resistance': COLORS['shunting'],
      'swapped': COLORS['point_mlp'], 'uniform_rms': COLORS['mute'],
      'derivative': COLORS['additive'], 'shuffled_derivative': COLORS['highlight']}
-NAME = {'exact': 'Exact', 'broadcast': 'Broadcast', 'resistance': 'Resistance h',
+NAME = {'exact': 'Exact', 'broadcast': 'Broadcast', 'resistance': 'Resistance gate h',
         'derivative': 'Augmented h f′', 'shuffled_derivative': 'Shuffled f′',
         'swapped': 'Wrong branch', 'uniform_rms': 'Uniform RMS'}
 DASH = (0, (2.6, 1.6))
@@ -156,7 +156,7 @@ def task_panel(ax):
         y = 0.84 - 0.115 * k
         ax.text(x0, y, name, fontsize=PT, color=C[rule], ha='left', va='center')
         chain(ax, 0.82, y, formula, color=ink)
-    notes = [[('h: relative parent resistance', 0)], [('f′', 0), ('p', -1), (': parent sensitivity', 0)],
+    notes = [[('h: relative parent resistance', 0)], [('f′', 0), ('p', -1), (': parent output slope', 0)],
              [('κ: fixed across examples at given', 0)], [('parameters; changes with learning', 0)]]
     for k, note in enumerate(notes):
         chain(ax, x0, 0.335 - 0.095 * k, note, color=COLORS['mute'])
@@ -193,7 +193,7 @@ def stress_panel(ax, summary, log_ticks):
     label(ends['broadcast'], 'Broadcast', C['broadcast'], 1.0, 'bottom')
     label(ends['broadcast'], 'Uniform RMS', C['uniform_rms'], -1.0, 'top')
     label(ends['exact'], 'Exact', C['exact'], 1.0, 'bottom')
-    label(ends['exact'], 'Resistance h', C['resistance'], -1.0, 'top')
+    label(ends['exact'], 'Resistance gate h', C['resistance'], -1.0, 'top')
     return ends
 
 
@@ -228,6 +228,9 @@ def strip_panel(ax, original, rate, log_ticks):
         xl.append(label)
     ax.set_xticks(xt, xl)
     ax.set_xlim(-.55, 4.9)
+    ax.text(.285, 1.035, "Shunting", transform=ax.transAxes, ha="center", va="center", fontsize=PT, color=COLORS["mute"])
+    ax.text(.805, 1.035, "Forward controls", transform=ax.transAxes, ha="center", va="center", fontsize=PT, color=COLORS["mute"])
+    ax.axvline(2.72, color=COLORS["grid"], lw=LW_HAIR, ymin=.06, ymax=.92)
 
 
 # ── D: context alignment at archived checkpoints ───────────────────────────
@@ -253,7 +256,7 @@ def alignment_panel(ax, seeds, summary):
     ax.set_yticks([0, .5, 1.])
     ax.set_yticklabels(['0', '0.5', '1'])
     ax.set_ylabel('Alignment (cosine)', fontsize=8)
-    ax.set_xticks(range(5), ['Exact', 'Broadcast', 'Resistance h', 'Wrong\nbranch', 'Uniform\nRMS'])
+    ax.set_xticks(range(5), ['Exact', 'Broadcast', 'Resistance\ngate h', 'Wrong\nbranch', 'Uniform\nRMS'])
     ax.set_xlim(-.55, 4.55)
     ax.tick_params(axis='x', labelsize=PT, pad=3)
     handles = [Line2D([], [], marker='o', ms=4.2, mfc=COLORS['ink'], mec=COLORS['ink'], lw=0),
@@ -298,7 +301,7 @@ def rescue_panel(ax, rescue, common, separable, contrasts, log_ticks):
                          condition='selected rates'))
     handles = [Line2D([], [], marker=m, ms=4.2, mfc='white', mec=COLORS['ink'], lw=0)
                for m in 'Dos']
-    ax.legend(handles, ['Selected rates', 'Common rate 0.03', 'Separable target'],
+    ax.legend(handles, ['Selected rates', 'Common rate 0.03', 'No interaction; same tanh parents; rate 0.03'],
               loc='upper left', ncol=3, frameon=False, fontsize=PT, handletextpad=.4,
               columnspacing=1.2, borderaxespad=.2)
 

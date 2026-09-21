@@ -784,8 +784,8 @@ def panel_relations(canvas, ax, category):
                 markeredgecolor=INJECT, markeredgewidth=LW_ERR, zorder=4.0)
     shunt_d = category[("focal shunt", "descendant")][1][0]
     inject_d = category[("matched additive", "descendant")][1][0]
-    ax.text(0.156, -0.44, "focal shunt", fontsize=PT_BASE, color=SHUNT,
-            ha="right", va="center", zorder=6)
+    ax.text(0.156, -0.58, "focal shunt", fontsize=PT_BASE, color=SHUNT,
+            ha="right", va="bottom", zorder=6)
     ax.annotate("matched injection", xy=(inject_d + 0.004, 0.28),
                 xytext=(0.156, 0.62), textcoords="data", fontsize=PT_BASE,
                 color=INJECT, ha="right", va="center", zorder=6,
@@ -1495,6 +1495,14 @@ def build(emit_main=True):
     panel_interventions(a)
     panel_gain_dictionary(b, gains)
 
+    for axes, label in (((c, d, e), "Permissive normalized model"),
+                        ((g_f, g, h), "Physical calibration")):
+        for axis in axes:
+            canvas.declare_reserve(axis, top=15.0)
+        canvas.lock_reserves()
+        box0, box1 = axes[0].get_position(), axes[-1].get_position()
+        canvas.fig.text((box0.x0 + box1.x1) / 2, box0.y1 + 10 / (canvas.fig.get_figheight() * 72),
+                        label, fontsize=PT_BASE, color=INK, ha="center", va="bottom")
     style_direct_color_labels(canvas.fig)
     output = J / "figures/components/focused_main_08.pdf"
     findings = canvas.save(output, name="focused_main_08", dpi=400)

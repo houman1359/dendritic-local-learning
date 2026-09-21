@@ -573,7 +573,7 @@ def repository_file_allowed(relative: Path, scope: str | None) -> bool:
     if name == "LICENSE" or relative in {path for path, _ in ARCHIVED_ANALYSIS_SCRIPTS}:
         return True
     if name in {
-        "journal/main.tex", "journal/references.bib", "journal/Makefile",
+        "journal/main.tex", "journal/references.bib", "journal/naturemag.bst", "journal/Makefile",
         "journal/pytest.ini", "journal/RELEASE_WORKFLOW.md",
         "journal/README.md", "journal/OVERLEAF_README.md",
         "journal/figures/README.md",

@@ -304,8 +304,8 @@ CAPTION = r"""\caption{\textbf{Ancestry-route benefits depend on task alignment 
 \textbf{B}, Ancestry dictionaries: $K$ profiles, each spanning $8/K$ terminals; green, selected profile; grey, other profiles. Full resolution is $A=I_8$. Footers give raw class-signal sums before route normalization. Control rows show signed delivered credit normalized by each row's maximum absolute value for the same context at four channels; random-sparse and dense routes are illustrative draws.
 \textbf{C}, Held-out accuracy against channel budget for ancestry, deranged delivery and the per-seed best of four matched controls.
 \textbf{D}, Task-matched versus degree- and depth-matched rewired trees with ancestry feedback. Error bars describe each condition, not the paired difference; shared and fully resolved routes coincide.
-\textbf{E}, Paired ancestry-minus-control differences at four channels. Labels give positive-seed counts and Holm-adjusted $P$ values across four budgets for the best-control comparison, or four individual controls. Best-control seeds are the same seeds used in those individual comparisons. The deranged contrast lies off scale and is printed numerically.
-\textbf{F}, Learning route coefficients from noisy cues at zero delay: soft readout (solid) and exploratory hard selection (dashed), with calibration size labeled. Reference lines show oracle delivery, chance and a frozen profile. Hard selection matches the oracle for noise-free cues. The paired-difference strip shows accuracy minus oracle; faint dots, seeds; larger symbols and whiskers, means and intervals. Cue noise is its Gaussian standard deviation; calibration size counts training cues.
+\textbf{E}, Paired ancestry-minus-control differences at four channels. Labels give positive-seed counts and Holm-adjusted $P$ values across four budgets for the best-control comparison, or four individual controls. The best control is a hindsight reference using those same seeds. The deranged contrast lies off scale and is printed numerically.
+\textbf{F}, Cue encoder supervised by supplied route-activation targets, at zero delay: soft readout (solid) and exploratory hard selection (dashed), with calibration size labeled. Reference lines show oracle delivery, chance and a frozen profile. Hard selection matches the oracle for noise-free cues. The paired-difference strip shows accuracy minus oracle; faint dots, seeds; larger symbols and whiskers, means and intervals. Cue noise is its Gaussian standard deviation; calibration size counts training cues.
 \textbf{C--F}: epoch-80 outcomes, $n=20$ paired seeds per cohort; means and 95\% seed-bootstrap intervals or bands. Intervals smaller than symbols are not visible. \textbf{F} uses a separate cohort. Teal ramps in \textbf{A,F} are ordinal within this figure.
 Source Data: \texttt{source\_data/curated\_publication/figure\_03\_plotted.csv}.}"""
 
@@ -1130,7 +1130,7 @@ def panel_forest(canvas, ax, contrasts, pairs):
             va="center")
     # QA 2026-09-10: the badge sits just right of the top row's own fan, and
     # E's caption states what the ceiling row is.
-    _badge(ax, (max(rows[0]["seeds"]) + 0.45, 0.0), "ceiling", ha="left",
+    _badge(ax, (max(rows[0]["seeds"]) + 0.45, 0.0), "ceiling", text="hindsight", ha="left",
            va="center")
     # CF-7: zero drawn once, and only over the rows it refers to.  The rule
     # is an axvline, so its y data are AXES FRACTIONS; clip it to the row

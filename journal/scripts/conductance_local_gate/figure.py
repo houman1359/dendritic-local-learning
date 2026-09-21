@@ -661,14 +661,14 @@ def panel_task(ax, tuning):
     f.error_in(nodes.soma, label='δ0', side='right')
     gate = COLORS['gate']
     jl, jr = nodes['JL'], nodes['JR']
-    f.subscript(f._off(jl, -4.6, -12.0), 'a', 'p', ' = 0', color=gate,
+    chain_frame(f, f._off(jl, -4.6, -12.0), ['a', ('sub', 'p'), ('sup', 'I'), ' = 0'], color=gate,
                 ha='right', va='top')
     col_x = x0 + w - f.fx(right_w + 3.0)
     rect = (col_x, y0 + f.fy(41.5), f.fx(right_w), f.fy(32.0))
     n0 = len(ax.texts)
     # anchored from the inset column, not from J2: run east from J2 and the
     # tag crosses the inset's y spine, a collision no audit can see
-    f.subscript((col_x - f.fx(4.0), jr[1] - f.fy(13.0)), 'a', 'p', ' = 10',
+    chain_frame(f, (col_x - f.fx(4.0), jr[1] - f.fy(13.0)), ['a', ('sub', 'p'), ('sup', 'I'), ' = 10'],
                 color=gate, ha='right', va='top')
     gate_tag = list(ax.texts[n0:])
     lift = CONTACT_DIA_PT * 0.5 + 3.0
@@ -821,7 +821,7 @@ def panel_deliveries(ax):
             open_head(f, _lerp(nodes.soma, nodes['JR'], 0.16),
                       _lerp(nodes.soma, nodes['JR'], 0.84), COLORS['shunting'])
             lines = [
-                (['distal: 1[', 'a', ('sub', 'p'), ' = 0]'], INK),
+                (['distal: 1[', 'a', ('sub', 'p'), ('sup', 'I'), ' = 0]'], INK),
                 (['inhibitory context only'], MUTE),
             ]
         for row, (parts, colour) in enumerate(lines):

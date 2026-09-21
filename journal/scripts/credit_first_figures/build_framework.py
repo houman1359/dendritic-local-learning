@@ -874,9 +874,6 @@ def accuracy(ax, conditions, seeds, paired, within):
         group = seeds[seeds.architecture.eq(architecture)]
         pivot = group.pivot(index="seed", columns="arm",
                             values="test_accuracy").loc[:, list(ARMS)]
-        for _, seed in pivot.iterrows():
-            ax.plot(xs + offset, 100 * seed.to_numpy(), color=color,
-                    alpha=0.16, lw=LW_HAIR, zorder=1)
         for x, arm in zip(xs, ARMS):
             values = 100 * group[group.arm.eq(arm)].sort_values("seed").test_accuracy.to_numpy()
             ax.plot(x + offset + np.linspace(-0.05, 0.05, 10), values,
@@ -1155,6 +1152,10 @@ def capture(ax, per_seed, summary):
         ax.text(label_x, float(row["mean"]), architecture.capitalize(),
                 ha="left", va="center", fontsize=PT_BASE,
                 color=label_color(COLORS[architecture]), zorder=6)
+    ax.plot([1.40], [0.61], marker="o", ms=4, mfc="white", mec=MUTE, lw=0)
+    ax.text(1.56, 0.61, "initial", fontsize=PT_BASE, va="center", color=MUTE)
+    ax.plot([1.40], [0.52], marker="o", ms=4, mfc=MUTE, mec=MUTE, lw=0)
+    ax.text(1.56, 0.52, "trained", fontsize=PT_BASE, va="center", color=MUTE)
     printed.update(identity)
     ax.set(xlim=(xlo, xhi), ylim=(0.45, 1.10), xticks=xs,
            xticklabels=[lab for _, lab in drawn],
@@ -1350,7 +1351,7 @@ def main():
     a = canvas.panel("A", 0, 0, 4, schematic=True, title="DendriNet image classifier",
                      lock=False)
     b = canvas.panel("B", 0, 4, 8, schematic=True,
-                     title="From shared feedback to exact paths")
+                     title="Voltage-error schematic; image rules use activation errors")
     # C and D start in the same grid columns as E and F below them, so the
     # forest label gutter locked on those columns is shared rather than paid
     # by the forests alone (the canvas locks reserves per column).
@@ -1387,7 +1388,7 @@ def main():
                           tag_sides=("left", "left", "right", "left"),
                           arch_code=True)
     out_f = cohort_forest(canvas, f_, cohorts, "exact",
-                          value_label="Exact path − per neuron (pp)",
+                          value_label="Accuracy difference (pp)",
                           xlim=(-2.35, 1.05), xticks=[-2, -1, 0, 1],
                           tag_sides=("left", "left", "left", "right"))
     # QA 2026-09-10: F's title claims a resolution of 0.2 pp and its coarsest
@@ -1405,7 +1406,17 @@ def main():
     # four rows it certified three cohorts against a test never run on them,
     # on an axis that plots a different contrast.  It is now confined to the
     # CIFAR-10 row, with that contrast drawn inside it as its own mark.
-    cifar_y = out_f["ypos"][-1]
+    for text in list(f_.texts):
+        if text.get_text() == "no effect":
+            text.remove()
+    cifar_y = out_f["ypos"][-1] + 0.85
+    f_.set_ylim(4.6, -1.1)
+    f_.plot([-2.35, 1.05], [3.43, 3.43], color=COLORS["edge"], lw=LW_HAIR)
+    f_.annotate("CIFAR-10\nexact − BP", xy=(0.0, cifar_y + 0.30),
+                xycoords=("axes fraction", "data"), xytext=(-6, 0),
+                textcoords="offset points", fontsize=PT_BASE, color=MUTE,
+                ha="right", va="center")
+    f_.text(-2.25, -0.83, "Exact − per neuron", fontsize=PT_BASE, color=MUTE)
     # a slim strip under the CIFAR row, so the row's own marks and its seed
     # tag stay outside the margin that does not apply to them
     tint_patch(f_, ("rect", -equivalence["margin_pp"], cifar_y + 0.04,
@@ -1417,7 +1428,7 @@ def main():
     f_.plot([equivalence["low_pp"], equivalence["high_pp"]],
             [cifar_y + 0.30] * 2, color=COLORS["bp"], lw=LW_ERR, zorder=4.0,
             solid_capstyle="butt")
-    f_.text(equivalence["margin_pp"] - 0.08, cifar_y + 0.30, "vs BP",
+    f_.text(equivalence["margin_pp"] - 0.08, cifar_y + 0.30, "±1 pp",
             ha="right", va="center", fontsize=PT_BASE, color=MUTE, zorder=6)
     printed_g = capture(g, cap_seed, cap_summary)
 

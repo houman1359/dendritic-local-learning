@@ -1632,7 +1632,7 @@
       },
       "C": {
         "content": "Paired exact-credit NMSE increase after shuffling leaf input assignments at fixed tree shape and parameter count.",
-        "reason": "Replaced by panel C of the native render N13, drawn from the same paired-contrast table and printed as S13C; the Adam strips are reproduced at the main-text type scale as Fig. 4H.",
+        "reason": "Replaced by panel C of the native render N13, drawn from the same paired-contrast table and printed as S13C; the Adam strips support the leaf-assignment contrast discussed in the main text.",
         "numbers_at": "source_data/morphology_credit/"
       },
       "D": {

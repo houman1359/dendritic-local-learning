@@ -110,8 +110,8 @@ def test_figure4_noise_panel_exports_both_rate_policies(displays):
         means = dots.groupby('noise').value.mean().sort_index()
         np.testing.assert_allclose(means, summaries.set_index('noise')['mean'].sort_index(),
                                    rtol=0, atol=1e-12)
-    assert canvas.axes['E'].get_ylabel() == 'Interaction deficit'
-    assert canvas.axes['E'].get_legend() is None
+    assert canvas.axes['E'].get_ylabel() == 'Interaction-dependent\ncredit deficit'
+    assert [t.get_text() for t in canvas.axes['E'].get_legend().get_texts()] == ['Selected rates', 'Common rate 0.003']
 
 
 def test_figure6_exports_all_drawn_epochs_and_stopping_markers(displays):

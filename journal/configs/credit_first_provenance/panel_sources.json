@@ -86945,6 +86945,24 @@
       "generator": "scripts/submission_revision/analyze_sgd.py",
       "replication_unit": "3 reused development seeds;not confirmatory inference",
       "notes": "No test outcomes evaluated. Success criterion failed at all6rates;no fresh follow-up launched."
+    },
+    {
+      "path": "source_data/curated_publication/scaled_gradient_identity.csv",
+      "figure": "Methods",
+      "panel": "terminal_gradient_identity",
+      "role": "Checkpoint-only raw terminal gradient identity verification",
+      "generator": "scripts/review_completion/scaled_gradient_identity.py",
+      "replication_unit": "120 existing selected states and 20 paired initial states; no new training cohort",
+      "notes": "Equation 8 checked in optimized log-conductance coordinates before clipping; maximum relative residual 1.08e-15 (rounded upward)."
+    },
+    {
+      "path": "source_data/curated_publication/scaled_gradient_identity_provenance.json",
+      "figure": "Methods",
+      "panel": "terminal_gradient_identity",
+      "role": "Checkpoint-only raw terminal gradient identity verification",
+      "generator": "scripts/review_completion/scaled_gradient_identity.py",
+      "replication_unit": "120 existing selected states and 20 paired initial states; no new training cohort",
+      "notes": "Equation 8 checked in optimized log-conductance coordinates before clipping; maximum relative residual 1.08e-15 (rounded upward)."
     }
   ],
   "supporting_groups": [

@@ -112,6 +112,7 @@ def test_allowlist_omits_presentations_internal_logs_and_other_project_drivers()
         assert not release.repository_file_allowed(Path(path), 'implementation')
     assert release.repository_file_allowed(Path('journal/scripts/credit_rule_bridge/models.py'), 'paper')
     assert release.repository_file_allowed(Path('journal/code/release_noise/frozen_generators.py'), 'paper')
+    assert release.repository_file_allowed(Path('journal/naturemag.bst'), 'paper')
     assert release.repository_file_allowed(Path('src/dendritic_modeling/networks/architectures/replacement/__init__.py'), 'implementation')
 
 

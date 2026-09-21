@@ -38,6 +38,7 @@ def inputs() -> dict[Path, Path]:
         ROOT / "main.tex": Path("main.tex"),
         ROOT / "main.bbl": Path("main.bbl"),
         ROOT / "references.bib": Path("references.bib"),
+        ROOT / "naturemag.bst": Path("naturemag.bst"),
         ROOT / "OVERLEAF_README.md": Path("OVERLEAF_README.md"),
         ROOT / "figures" / "README.md": Path("figures/README.md"),
         ROOT / "supplementary" / "supplementary.tex": Path("supplementary/supplementary.tex"),

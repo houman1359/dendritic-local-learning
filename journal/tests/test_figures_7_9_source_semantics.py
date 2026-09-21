@@ -136,7 +136,8 @@ def test_figure10_source_data_uses_current_panels_and_keeps_nested_units():
         "detection_probability": 42, "observed_estimate": 1}
     inset = table[table.panel.eq("D-inset")]
     assert len(inset) == 125 and inset.pre_pt_root_id.nunique() == 102
-    assert inset.drawn.eq(True).sum() == 123
+    assert inset.drawn.eq(True).sum() == 125
+    assert inset.loc[inset.measured_split_half_spearman < 0, "drawn"].all()
     e = table[table.panel.eq("E")]
     matrix = e.pivot(index="input_row", columns="route_column", values="value")
     actual = np.load(SOURCES / "credit_first_figures/figure_08_actual_support.npz")["matrix"]

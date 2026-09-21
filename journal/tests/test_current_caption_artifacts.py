@@ -71,11 +71,11 @@ def test_conductance_caption_defines_gate_and_population_keys():
     assert "hard distal gate" in mechanism
     assert r"\ContinuedFloat" not in population
     assert r"\label{fig:conductancepopulation}" in population
-    assert "terminal learning-signal delivery" in population
-    assert "fixed across examples at given parameters but changing during learning" in population
-    assert "recipient assignment, not the Adam trajectory" in population
+    assert "Terminal delivery" in population
+    assert "fixed across examples at current parameters but changing during learning" in population
+    assert "context-averaged raw log-conductance gradients" in population
     assert "two predefined primary contrasts with Holm-adjusted" in population
-    assert r"\textbf{E} twenty new paired seeds" in population
+    assert r"\textbf{E} uses twenty new paired seeds" in population
     for letter in "ABCDE":
         assert r"\textbf{" + letter in population
     assert r"\textbf{F}" not in population
@@ -87,3 +87,21 @@ def test_main_uses_full_supplementary_table_reference_form():
     assert references
     for match in references:
         assert source[:match.start()].endswith("Supplementary "), match.group()
+
+
+def test_supplement_rebuild_preserves_current_main_panel_references():
+    import importlib.util
+    import sys
+    directory = JOURNAL / 'scripts/supplement_consolidation'
+    sys.path.insert(0, str(directory))
+    spec = importlib.util.spec_from_file_location('current_supplement_spec', directory / 'specification.py')
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    captions = json.loads((JOURNAL / 'configs/supplement_consolidation/captions.json').read_text())
+    for identifier in ('oracle_profile_credit', 'credit_optimizer_controls'):
+        current = captions[identifier]
+        assert 'main Fig.~4H' not in current
+        assert 'same condition as main Fig.~4E' not in current
+        assert 'main text' in current
+    # The authoritative specification, not only its generated TeX, must be fixed.
+    assert "are main Fig.~4H's contrast" not in (directory / 'specification.py').read_text()

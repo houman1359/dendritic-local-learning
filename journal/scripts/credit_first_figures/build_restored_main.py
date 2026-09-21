@@ -1114,10 +1114,18 @@ def figure4():
     # all keep equal axes widths.
     pad_right = max(locks['C'][1], locks['F'][1])
     c.declare_reserve('C', right=pad_right)
-    c.declare_reserve('D', left=20.0, right=5.0 + pad_right)
+    c.declare_reserve('D', left=20.0, right=4.2 + pad_right)
     c.declare_reserve('E', left=15.0, right=10.0 + pad_right)
     c.declare_reserve('F', right=pad_right)
     c.declare_reserve('G', left=15.0, right=10.0 + pad_right)
+    # Match total measured reserves, including the new two-line noise label.
+    for _ in range(2):
+        measured = c.lock_reserves()
+        for group in (('C', 'D', 'E'), ('F', 'G')):
+            total = max(measured[name][0] + measured[name][1] for name in group)
+            for name in group:
+                c.declare_reserve(name, left=measured[name][0],
+                                  right=total - measured[name][0])
 
     sources = ['credit_rule_bridge/protocol_freeze.json',
                'credit_rule_bridge/figures/initial_profile_source.csv',
@@ -2008,10 +2016,10 @@ def f6_paired(ax, paired, metric, rows, *, ylim, yticks, ylabel, marks,
     return ax
 
 
-F6_CAPTION = r"""\caption{\textbf{Task organization sets the forward benefit of serial dendrites, and the training budget sets the credit-rule ranking.}
+F6_CAPTION = r"""\caption{\textbf{Serial computation benefits distributed gain correction, while credit-rule accuracy rankings depend on training duration.}
 \textbf{A}, Equal-compartment morphologies: one stage (D1, $[8]$) or three (D3, $[2,1,2]$). Blue, excitatory class-bearing contacts; carmine, inhibitory gain sensors; $\delta_0$, somatic error. D1 receives all gain tiers together; D3 separates them by stage. Footer, grouped-point control.
 \textbf{B}, Gain supports: nested fine/coarse/global blocks, flat equal-resolution blocks, or local ratios with an excitation-matched inhibitory sensor in each module. $\alpha$ denotes sensor fidelity.
-\textbf{C}, Serial-minus-grouped-point accuracy at fixed D3 under exact BP. Colors order fidelity; pale dots show ten paired differences at full fidelity. Open marker, analytic local-ratio tie, not an empirical null. LocalCA counterpart: Supplementary Fig.~S22D.
+\textbf{C}, Serial-minus-grouped-point accuracy at fixed D3 under exact BP. Colors distinguish gain-support families; pale dots show ten paired differences at full fidelity. Open marker, analytic local-ratio tie, not an empirical null. LocalCA counterpart: Supplementary Fig.~S22D.
 \textbf{D}, Three-tier task across serial depths: exact BP (black), exact-path LocalCA (red-brown), shared-soma LocalCA (amber), additive integration, grouped/reversed resource controls and a point-network reference. Resource controls are offset horizontally. Most intervals are smaller than symbols; the separate four-tier cohort is not shown.
 \textbf{E}, Validation-selected accuracy for six restarted conditions, up to 600 epochs. Dotted lines, autograd-broadcast variants, one coinciding with shared-soma LocalCA. Thin grey, D1 reference, lightened below eight active fits. Labels identify paired endpoint comparisons.
 \textbf{F}, Best validation loss for the same conditions; open markers indicate D1 stopping epochs.

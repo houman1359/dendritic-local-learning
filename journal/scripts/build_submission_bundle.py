@@ -79,6 +79,7 @@ REQUIRED_FILES = {
     JOURNAL / "OVERLEAF_README.md": Path("OVERLEAF_README.md"),
     JOURNAL / "figures" / "README.md": Path("figures/README.md"),
     JOURNAL / "references.bib": Path("references.bib"),
+        JOURNAL / "naturemag.bst": Path("naturemag.bst"),
     JOURNAL / "supplementary" / "supplementary.tex": Path(
         "supplementary/supplementary.tex"
     ),
