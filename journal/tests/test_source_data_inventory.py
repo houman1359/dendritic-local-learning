@@ -80,10 +80,10 @@ def test_source_data_destinations_are_unique_and_sources_exist() -> None:
 def test_every_curated_panel_releases_its_declared_numerical_sources() -> None:
     files = list(builder.FILES)
     assets = curated_assets()
-    # The original 36 compositions are joined by one directly rendered
-    # checkpoint figure, which has its own registry and numerical inputs.
+    # The original 36 compositions are joined by two directly rendered
+    # figures with their own registries and numerical inputs.
     assert len(assets) == 36
-    assert len(builder.SUPPLEMENTARY_FIGURES) == 37
+    assert len(builder.SUPPLEMENTARY_FIGURES) == 38
     assert 'supplementary/curated/checkpoint_computation.pdf' in builder.SUPPLEMENTARY_FIGURES
     for filename in ('branch_tuning.csv', 'population_surfaces.csv',
                      'component_errors.csv', 'figure_S37_plotted.csv'):

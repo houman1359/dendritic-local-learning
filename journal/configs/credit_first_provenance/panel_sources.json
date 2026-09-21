@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "layout": "Ten numbered main figures, including separate conductance-mechanism and population-rescue figures;37 supplementary figures.",
+  "layout": "Ten numbered main figures, including separate conductance-mechanism and population-rescue figures; 38 supplementary figures.",
   "physical_figure_pending": false,
   "retained_template": "configs/figure_structure/retained_evidence.tsv",
   "assets": [
@@ -380,6 +380,14 @@
       "generator": "scripts/review_completion/checkpoint_figure.py",
       "panel": "a-j",
       "notes": "Checkpoint-only visualization of all seeds from two existing cohorts; no training."
+    },
+    {
+      "figure": "figS38",
+      "path": "figures/supplementary/curated/optional_extensions.pdf",
+      "component": "figures/supplementary/curated/optional_extensions.pdf",
+      "generator": "scripts/review_completion/optional_extension_paper_figure.py",
+      "panel": "a-d",
+      "notes": "Two prospective twenty-seed cohorts; no recurrent training."
     }
   ],
   "records": [
@@ -87034,6 +87042,195 @@
       "generator": "scripts/review_completion/checkpoint_computation.py",
       "replication_unit": "20 single-neuron seeds and a separate 20-seed rescue cohort; existing checkpoints only",
       "notes": "Original validation-selected states; no new training or outcome-based seed selection."
+    },
+    {
+      "path": "source_data/optional_extensions/contrasts.csv",
+      "figure": "figS38",
+      "panel": "a-d",
+      "role": "Sensitivity-proxy and learned-routing complete cohorts, diagnostics and frozen protocols",
+      "generator": "scripts/review_completion/optional_extension_analysis.py",
+      "replication_unit": "Two separate 20-seed cohorts; rate policies reuse seeds",
+      "notes": "All 153 development and 460 fresh fits retained; 84 superseded pilot fits separately identified; temporal study deferred without training."
+    },
+    {
+      "path": "source_data/optional_extensions/development.csv",
+      "figure": "figS38",
+      "panel": "a-d",
+      "role": "Sensitivity-proxy and learned-routing complete cohorts, diagnostics and frozen protocols",
+      "generator": "scripts/review_completion/optional_extension_analysis.py",
+      "replication_unit": "Two separate 20-seed cohorts; rate policies reuse seeds",
+      "notes": "All 153 development and 460 fresh fits retained; 84 superseded pilot fits separately identified; temporal study deferred without training."
+    },
+    {
+      "path": "source_data/optional_extensions/development_protocol.json",
+      "figure": "figS38",
+      "panel": "a-d",
+      "role": "Sensitivity-proxy and learned-routing complete cohorts, diagnostics and frozen protocols",
+      "generator": "scripts/review_completion/optional_extension_analysis.py",
+      "replication_unit": "Two separate 20-seed cohorts; rate policies reuse seeds",
+      "notes": "All 153 development and 460 fresh fits retained; 84 superseded pilot fits separately identified; temporal study deferred without training."
+    },
+    {
+      "path": "source_data/optional_extensions/diagnostics.csv",
+      "figure": "figS38",
+      "panel": "a-d",
+      "role": "Sensitivity-proxy and learned-routing complete cohorts, diagnostics and frozen protocols",
+      "generator": "scripts/review_completion/optional_extension_analysis.py",
+      "replication_unit": "Two separate 20-seed cohorts; rate policies reuse seeds",
+      "notes": "All 153 development and 460 fresh fits retained; 84 superseded pilot fits separately identified; temporal study deferred without training."
+    },
+    {
+      "path": "source_data/optional_extensions/endpoints.csv",
+      "figure": "figS38",
+      "panel": "a-d",
+      "role": "Sensitivity-proxy and learned-routing complete cohorts, diagnostics and frozen protocols",
+      "generator": "scripts/review_completion/optional_extension_analysis.py",
+      "replication_unit": "Two separate 20-seed cohorts; rate policies reuse seeds",
+      "notes": "All 153 development and 460 fresh fits retained; 84 superseded pilot fits separately identified; temporal study deferred without training."
+    },
+    {
+      "path": "source_data/optional_extensions/figure_S38_plotted.csv",
+      "figure": "figS38",
+      "panel": "a-d",
+      "role": "Sensitivity-proxy and learned-routing complete cohorts, diagnostics and frozen protocols",
+      "generator": "scripts/review_completion/optional_extension_paper_figure.py",
+      "replication_unit": "Two separate 20-seed cohorts; rate policies reuse seeds",
+      "notes": "All 153 development and 460 fresh fits retained; 84 superseded pilot fits separately identified; temporal study deferred without training."
+    },
+    {
+      "path": "source_data/optional_extensions/figure_S38_provenance.json",
+      "figure": "figS38",
+      "panel": "a-d",
+      "role": "Sensitivity-proxy and learned-routing complete cohorts, diagnostics and frozen protocols",
+      "generator": "scripts/review_completion/optional_extension_paper_figure.py",
+      "replication_unit": "Two separate 20-seed cohorts; rate policies reuse seeds",
+      "notes": "All 153 development and 460 fresh fits retained; 84 superseded pilot fits separately identified; temporal study deferred without training."
+    },
+    {
+      "path": "source_data/optional_extensions/fresh_protocol.json",
+      "figure": "figS38",
+      "panel": "a-d",
+      "role": "Sensitivity-proxy and learned-routing complete cohorts, diagnostics and frozen protocols",
+      "generator": "scripts/review_completion/optional_extension_analysis.py",
+      "replication_unit": "Two separate 20-seed cohorts; rate policies reuse seeds",
+      "notes": "All 153 development and 460 fresh fits retained; 84 superseded pilot fits separately identified; temporal study deferred without training."
+    },
+    {
+      "path": "source_data/optional_extensions/histories.csv",
+      "figure": "figS38",
+      "panel": "a-d",
+      "role": "Sensitivity-proxy and learned-routing complete cohorts, diagnostics and frozen protocols",
+      "generator": "scripts/review_completion/optional_extension_analysis.py",
+      "replication_unit": "Two separate 20-seed cohorts; rate policies reuse seeds",
+      "notes": "All 153 development and 460 fresh fits retained; 84 superseded pilot fits separately identified; temporal study deferred without training."
+    },
+    {
+      "path": "source_data/optional_extensions/pilot_v1_STATUS.json",
+      "figure": "figS38",
+      "panel": "a-d",
+      "role": "Sensitivity-proxy and learned-routing complete cohorts, diagnostics and frozen protocols",
+      "generator": "scripts/review_completion/optional_extension_analysis.py",
+      "replication_unit": "Two separate 20-seed cohorts; rate policies reuse seeds",
+      "notes": "All 153 development and 460 fresh fits retained; 84 superseded pilot fits separately identified; temporal study deferred without training."
+    },
+    {
+      "path": "source_data/optional_extensions/pilot_v1_development_protocol.json",
+      "figure": "figS38",
+      "panel": "a-d",
+      "role": "Sensitivity-proxy and learned-routing complete cohorts, diagnostics and frozen protocols",
+      "generator": "scripts/review_completion/optional_extension_analysis.py",
+      "replication_unit": "Two separate 20-seed cohorts; rate policies reuse seeds",
+      "notes": "All 153 development and 460 fresh fits retained; 84 superseded pilot fits separately identified; temporal study deferred without training."
+    },
+    {
+      "path": "source_data/optional_extensions/pilot_v1_provenance.json",
+      "figure": "figS38",
+      "panel": "a-d",
+      "role": "Sensitivity-proxy and learned-routing complete cohorts, diagnostics and frozen protocols",
+      "generator": "scripts/review_completion/optional_extension_analysis.py",
+      "replication_unit": "Two separate 20-seed cohorts; rate policies reuse seeds",
+      "notes": "All 153 development and 460 fresh fits retained; 84 superseded pilot fits separately identified; temporal study deferred without training."
+    },
+    {
+      "path": "source_data/optional_extensions/pilot_v1_summary.csv",
+      "figure": "figS38",
+      "panel": "a-d",
+      "role": "Sensitivity-proxy and learned-routing complete cohorts, diagnostics and frozen protocols",
+      "generator": "scripts/review_completion/optional_extension_analysis.py",
+      "replication_unit": "Two separate 20-seed cohorts; rate policies reuse seeds",
+      "notes": "All 153 development and 460 fresh fits retained; 84 superseded pilot fits separately identified; temporal study deferred without training."
+    },
+    {
+      "path": "source_data/optional_extensions/provenance.json",
+      "figure": "figS38",
+      "panel": "a-d",
+      "role": "Sensitivity-proxy and learned-routing complete cohorts, diagnostics and frozen protocols",
+      "generator": "scripts/review_completion/optional_extension_analysis.py",
+      "replication_unit": "Two separate 20-seed cohorts; rate policies reuse seeds",
+      "notes": "All 153 development and 460 fresh fits retained; 84 superseded pilot fits separately identified; temporal study deferred without training."
+    },
+    {
+      "path": "source_data/optional_extensions/proxy_diagnostics_provenance.json",
+      "figure": "figS38",
+      "panel": "a-d",
+      "role": "Sensitivity-proxy and learned-routing complete cohorts, diagnostics and frozen protocols",
+      "generator": "scripts/review_completion/optional_proxy_diagnostics.py",
+      "replication_unit": "Two separate 20-seed cohorts; rate policies reuse seeds",
+      "notes": "All 153 development and 460 fresh fits retained; 84 superseded pilot fits separately identified; temporal study deferred without training."
+    },
+    {
+      "path": "source_data/optional_extensions/proxy_fidelity.csv",
+      "figure": "figS38",
+      "panel": "a-d",
+      "role": "Sensitivity-proxy and learned-routing complete cohorts, diagnostics and frozen protocols",
+      "generator": "scripts/review_completion/optional_proxy_diagnostics.py",
+      "replication_unit": "Two separate 20-seed cohorts; rate policies reuse seeds",
+      "notes": "All 153 development and 460 fresh fits retained; 84 superseded pilot fits separately identified; temporal study deferred without training."
+    },
+    {
+      "path": "source_data/optional_extensions/range_amendment.json",
+      "figure": "figS38",
+      "panel": "a-d",
+      "role": "Sensitivity-proxy and learned-routing complete cohorts, diagnostics and frozen protocols",
+      "generator": "scripts/review_completion/optional_extension_analysis.py",
+      "replication_unit": "Two separate 20-seed cohorts; rate policies reuse seeds",
+      "notes": "All 153 development and 460 fresh fits retained; 84 superseded pilot fits separately identified; temporal study deferred without training."
+    },
+    {
+      "path": "source_data/optional_extensions/router_selected_state.csv",
+      "figure": "figS38",
+      "panel": "a-d",
+      "role": "Sensitivity-proxy and learned-routing complete cohorts, diagnostics and frozen protocols",
+      "generator": "scripts/review_completion/optional_proxy_diagnostics.py",
+      "replication_unit": "Two separate 20-seed cohorts; rate policies reuse seeds",
+      "notes": "All 153 development and 460 fresh fits retained; 84 superseded pilot fits separately identified; temporal study deferred without training."
+    },
+    {
+      "path": "source_data/optional_extensions/routing.csv",
+      "figure": "figS38",
+      "panel": "a-d",
+      "role": "Sensitivity-proxy and learned-routing complete cohorts, diagnostics and frozen protocols",
+      "generator": "scripts/review_completion/optional_extension_analysis.py",
+      "replication_unit": "Two separate 20-seed cohorts; rate policies reuse seeds",
+      "notes": "All 153 development and 460 fresh fits retained; 84 superseded pilot fits separately identified; temporal study deferred without training."
+    },
+    {
+      "path": "source_data/optional_extensions/scope_amendment.json",
+      "figure": "figS38",
+      "panel": "a-d",
+      "role": "Sensitivity-proxy and learned-routing complete cohorts, diagnostics and frozen protocols",
+      "generator": "scripts/review_completion/optional_extension_analysis.py",
+      "replication_unit": "Two separate 20-seed cohorts; rate policies reuse seeds",
+      "notes": "All 153 development and 460 fresh fits retained; 84 superseded pilot fits separately identified; temporal study deferred without training."
+    },
+    {
+      "path": "source_data/optional_extensions/summary.csv",
+      "figure": "figS38",
+      "panel": "a-d",
+      "role": "Sensitivity-proxy and learned-routing complete cohorts, diagnostics and frozen protocols",
+      "generator": "scripts/review_completion/optional_extension_analysis.py",
+      "replication_unit": "Two separate 20-seed cohorts; rate policies reuse seeds",
+      "notes": "All 153 development and 460 fresh fits retained; 84 superseded pilot fits separately identified; temporal study deferred without training."
     }
   ],
   "supporting_groups": [

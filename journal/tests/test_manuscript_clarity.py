@@ -78,4 +78,4 @@ def test_all_current_si_figures_have_a_caption_and_panel_letters():
                 assert "A" in words, asset
             count += 1
     from build_submission_bundle import SUPPLEMENTARY_FIGURES
-    assert count == len(SUPPLEMENTARY_FIGURES) == 37
+    assert count == len(SUPPLEMENTARY_FIGURES) == 38

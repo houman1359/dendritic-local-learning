@@ -1,0 +1,20 @@
+\clearpage
+\begin{table}[p]
+\centering
+\small
+\caption{\textbf{Prespecified paired contrasts for approximate sensitivity and learned routing.} Differences are ordinary-test NMSE of the first rule minus the comparison; negative values favor the first rule. Sensitivity contrasts use the common Adam rate 0.03. Routing contrasts use development-selected rates (0.03 for augmented and uniform routing, 0.1 for resistance); the same qualitative result holds at common rate 0.03. Each study has twenty fresh paired seeds. Intervals resample whole pairs 20,000 times; exact two-sided sign-flip tests are Holm-adjusted across these six contrasts. Every first rule had lower error in all twenty pairs. Complete endpoints, selected/common rates, stress tests and bounds are in \texttt{source\_data/optional\_extensions/}.}
+\label{tab:optional_extensions}
+\begin{tabularx}{\textwidth}{@{}X X r r@{}}
+\toprule
+First rule & Comparison & Mean difference [95\% CI] & Holm $P$ \\
+\midrule
+Four-bin sensitivity & Resistance gate & $-0.05078$ [$ -0.05157, -0.05004 $] & $1.14\times10^{-5}$ \\
+Four-bin sensitivity & Shuffled four-bin & $-0.04804$ [$ -0.04907, -0.04701 $] & $1.14\times10^{-5}$ \\
+Noisy sensitivity (SD 0.5) & Resistance gate & $-0.05077$ [$ -0.05155, -0.05003 $] & $1.14\times10^{-5}$ \\
+Noisy sensitivity (SD 0.5) & Shuffled noisy & $-0.04848$ [$ -0.04932, -0.04767 $] & $1.14\times10^{-5}$ \\
+Learned routing, augmented & Uniform routing, augmented & $-0.76409$ [$ -0.76942, -0.75812 $] & $1.14\times10^{-5}$ \\
+Learned routing, augmented & Learned routing, resistance & $-0.05322$ [$ -0.05422, -0.05222 $] & $1.14\times10^{-5}$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+\clearpage
