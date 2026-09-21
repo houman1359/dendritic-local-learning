@@ -1,7 +1,7 @@
 {
   "figure": "Figure 4",
   "output": "figures/components/restored_main_04.pdf",
-  "output_sha256": "3949fe811b9074f78ff5339421c959056e5bee3a761b3c9c39b7a1d4b6e25cbd",
+  "output_sha256": "c25885b06f09e7450f4dd8e658c16bed9cbe10b1e94b8e302f96ad8754a6efca",
   "panel_sources": {
     "A": "Schematic. credit_rule_bridge/protocol_freeze.json (protocol.algebraic, protocol.fresh_seeds): the two targets, the shared balanced tree and the twenty fresh paired seeds. No measured series.",
     "B": "Schematic. credit_rule_bridge/figures/initial_profile_source.csv (site, junction, mean_profile, mean_abs_profile, n_seeds) sets the six drop-dot radii; figures/figure_provenance.json and protocol_freeze.json fix the calibration protocol (256 unlabeled examples at step 0).",
@@ -9,8 +9,7 @@
     "D": "credit_rule_extension/summaries/all_curves.csv, algebraic Adam at the frozen selected rates, all twenty fresh seeds, every saved checkpoint from 64 to 16,384 updates; noise floor from credit_rule_bridge/summaries/task_variance_and_noise_floor.csv.",
     "F": "credit_rule_extension/summaries/paired_contrasts.csv (quartet_minus_matching, calibrated_broadcast minus exact interaction, selected-rate Adam, endpoint and validation-selected states at 1,024/4,096/8,192/16,384) with the twenty paired seeds from paired_seed_contrasts.csv.",
     "G": "credit_resolution_bridge/capture/matched_bridge_eigenvalues.csv (path_q, exact, selected-rate Adam, steps 0 and 1,024) as a per-seed cumulative spectrum; uniform-profile and rank-one capture from credit_rule_extension/summaries/all_diagnostics.csv at 1,024 and 16,384 updates; rank95 means (1.00/4.60/5.05) from matched_bridge_spectra.csv.",
-    "E": "New twenty-seed noise sensitivity at inherited selected rates; clean full-domain interaction deficit at 16384 updates.",
-    "H": "Same new seed blocks at inherited common Adam rate 0.003; fixed-absolute, noise-free and matched relative noise."
+    "E": "New twenty-seed noise sensitivity, clean full-domain interaction deficit at 16384 updates, at inherited selected rates (diamonds) and inherited common Adam rate 0.003 (circles); fixed-absolute, noise-free and matched relative noise."
   },
   "source_sha256": {
     "source_data/credit_rule_bridge/protocol_freeze.json": "eca67103897fc3f4251844479ad99ab04ae61544b3f176389ec82ff0760c01d4",
@@ -34,11 +33,11 @@
     "source_data/curated_publication/noise_controls_provenance.json": "4f7b1d7a4a610247123f8ec2187b92cc516351a7787f360cf62fcb01065ba7b3"
   },
   "builder_sha256": {
-    "scripts/credit_first_figures/build_restored_main.py": "acae588e0e7da90416cf53c613ddb120e8cd6599f4197d076be2772274f5034c",
+    "scripts/credit_first_figures/build_restored_main.py": "d1a0ab648a3c6b5202d8a7d04742a0743c7f6f500135e91798c1f54f04fcff9d",
     "scripts/credit_first_figures/focused_main_evidence.py": "e045f0fc26ce8554af19f7d2b1ee9683ec852899f19e02e76e78163b0d74e773",
     "scripts/figure_canvas.py": "7f2983ff0c52a30dd5ba9bdeccc6fda940b4366ad872cbf0755fec5daa1dd7aa",
     "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a",
-    "scripts/review_completion/noise_panels.py": "ada03de91580cae47d26332aabf454369e3458045b342b41dbf7d628c0f45e56"
+    "scripts/review_completion/noise_panels.py": "7b11b3e61c7e95585e21cc0c6786a26fc979cfafa79b3cbfe767b1becdf14400"
   },
   "source_data_immutable": true,
   "new_experiments": 0,
@@ -53,7 +52,7 @@
   "csv_parse_mode": "round_trip; replay equality checked to floating-point precision",
   "canvas_contract": {
     "revision": "2026-09-20 review completion",
-    "noise_panels": "E and H replace duplicated nested and shuffled-leaf displays, retained in Supplementary Figs S17A and S13C.",
+    "noise_panels": "E replaces the duplicated nested and shuffled-leaf displays (Supplementary Figs S17A and S13C) and shows both inherited rate policies; the former H merged into it.",
     "noise_scope": "New paired seeds, inherited rates, clean full-domain outcomes; common-rate panel reuses seeds.",
     "rank95_at_1024": {
       "matching": 1.0,

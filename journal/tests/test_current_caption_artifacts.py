@@ -67,14 +67,18 @@ def test_conductance_caption_defines_gate_and_population_keys():
     first = next(i for i, block in enumerate(figures)
                  if r"\label{fig:conductancecredit}" in block)
     mechanism, population = figures[first:first + 2]
-    assert "``Wrong gate'' reverses distal selection" in mechanism
+    assert "``Wrong branch'' reverses distal selection" in mechanism
+    assert "hard distal gate" in mechanism
     assert r"\ContinuedFloat" not in population
     assert r"\label{fig:conductancepopulation}" in population
-    assert r"Colors follow \textbf{E}" in population
-    assert "Dots, seeds; open diamonds, means" in population
-    assert r"\textbf{F,G} reuse rescue seeds" in population
-    for letter in "ABCDEFG":
-        assert letter in population
+    assert "terminal learning-signal delivery" in population
+    assert "fixed across examples at given parameters but changing during learning" in population
+    assert "recipient assignment, not the Adam trajectory" in population
+    assert "two predefined primary contrasts with Holm-adjusted" in population
+    assert r"\textbf{E} twenty new paired seeds" in population
+    for letter in "ABCDE":
+        assert r"\textbf{" + letter in population
+    assert r"\textbf{F}" not in population
 
 
 def test_main_uses_full_supplementary_table_reference_form():

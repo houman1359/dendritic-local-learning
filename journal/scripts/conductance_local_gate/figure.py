@@ -117,11 +117,11 @@ DASH = (0, (2.2, 1.8))
 # ── frozen vocabulary (AMENDMENTS §4a) and the series register (§5) ───────
 RULES = {
     'exact': ('Exact path', 'bp'),
-    'hard_distal_unit_proximal': ('Local distal gate', 'shunting'),
-    'shunt_proportional_unit_proximal': ('Local distal gate', 'shunting'),
+    'hard_distal_unit_proximal': ('Hard distal gate', 'shunting'),
+    'shunt_proportional_unit_proximal': ('Continuous distal gate', 'shunting'),
     'unit_broadcast': ('Unit broadcast', 'scalar'),
     'ancestry_two_leaf_oracle_unit_proximal': ('Two-profile oracle', 'oracle'),
-    'swapped_distal_unit_proximal': ('Swapped gate', 'point_mlp'),
+    'swapped_distal_unit_proximal': ('Wrong branch', 'point_mlp'),
     'hard_distal_and_proximal': ('Gate also proximal', 'highlight'),
     'calibrated_broadcast': ('Calibrated broadcast', 'scalar'),
 }
@@ -802,7 +802,7 @@ def panel_deliveries(ax):
     width = (1.0 - gap) / 2.0
     for index, oracle in enumerate((False, True)):
         cell = (index * (width + gap), f.fy(17.0), width, 1 - f.fy(17.0))
-        core = f.task_card(cell, title='Oracle profiles' if oracle else 'Local distal gate',
+        core = f.task_card(cell, title='Oracle profiles' if oracle else 'Hard distal gate',
                            emphasis=not oracle)
         x0, y0, w, h = core
         rect = (x0 + f.fx(6), y0 + f.fy(30), w - f.fx(12), h - f.fy(36))
@@ -1105,9 +1105,9 @@ def interaction(ax, t):
 # ── F: gate shape versus gate placement ───────────────────────────────────
 F_ORDER = ('exact', 'hard_distal_unit_proximal',
            'swapped_distal_unit_proximal', 'hard_distal_and_proximal')
-F_ONE = ('Exact path', 'Distal gate', 'Swapped gate', 'Also proximal')
-F_LONG = ('Exact\npath', 'Distal\ngate', 'Swapped\ngate', 'Gate also\nproximal')
-F_SHORT = ('Exact\npath', 'Distal\ngate', 'Wrong\ngate', 'Both\nlevels')
+F_ONE = ('Exact path', 'Distal gate', 'Wrong branch', 'Also proximal')
+F_LONG = ('Exact\npath', 'Distal\ngate', 'Wrong\nbranch', 'Gate also\nproximal')
+F_SHORT = ('Exact\npath', 'Distal\ngate', 'Wrong\nbranch', 'Both\nlevels')
 # QA 2026-09-10 (visual review).  The two gate SHAPES are dodged inside the
 # distal-gate tick and the secondary-rate circles now hang off the TICK, one
 # pair per category, instead of off each mark: dodged off both shapes they

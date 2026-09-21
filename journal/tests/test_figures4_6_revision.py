@@ -84,12 +84,17 @@ def test_figure4_learning_curves_identify_their_tasks(displays):
     assert canvas.axes['C'].get_ylabel() == 'Held-out NMSE'
 
 
-def test_figure4_noise_panels_export_their_paired_estimand(displays):
+def test_figure4_noise_panel_exports_both_rate_policies(displays):
+    """2026-09-21: the former E (selected rates) and H (common rate) share one panel E,
+    encoded by marker shape; every paired estimand is still exported per policy."""
     rows, canvas = displays[4]
     original = pd.read_csv(ROOT / 'source_data/curated_publication/noise_controls_curves.csv')
-    for panel, common in [('E', False), ('H', True)]:
-        dots = rows[rows.panel.eq(panel) & rows.record.eq('paired seed difference')]
-        summaries = rows[rows.panel.eq(panel) & rows.record.eq('summary')]
+    assert 'H' not in set(rows.panel)
+    for policy, common in [('selected', False), ('common', True)]:
+        dots = rows[rows.panel.eq('E') & rows.record.eq('paired seed difference')
+                    & rows.rate_policy.eq(policy)]
+        summaries = rows[rows.panel.eq('E') & rows.record.eq('summary')
+                         & rows.rate_policy.eq(policy)]
         assert len(dots) == 60 and len(summaries) == 3
         assert set(dots.noise) == {'fixed_absolute', 'noise_free', 'relative_matched'}
         assert dots.common_rate.eq(common).all()
@@ -105,7 +110,8 @@ def test_figure4_noise_panels_export_their_paired_estimand(displays):
         means = dots.groupby('noise').value.mean().sort_index()
         np.testing.assert_allclose(means, summaries.set_index('noise')['mean'].sort_index(),
                                    rtol=0, atol=1e-12)
-        assert canvas.axes[panel].get_ylabel() == 'Interaction deficit'
+    assert canvas.axes['E'].get_ylabel() == 'Interaction deficit'
+    assert canvas.axes['E'].get_legend() is None
 
 
 def test_figure6_exports_all_drawn_epochs_and_stopping_markers(displays):

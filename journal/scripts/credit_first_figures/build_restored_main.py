@@ -908,16 +908,15 @@ FIG4_CAPTION = r"""\caption{\textbf{Input-spectrum-matched targets develop diffe
 \textbf{A}, Pairwise and quartic targets combine products of two or four inputs on compatible seven-unit scalar trees. Junction badges mark interactions; $y,\delta_0$ denote student output and error. Units are multi-affine, not conductance-based; both tasks use squared-error loss.
 \textbf{B}, Credit over six nonsomatic sites: exact path $\bm q(x)$, unit broadcast (amber) and calibrated broadcast (blue). Drop-dot radii show mean absolute calibrated weights, 0.133--0.386; signs are mixed. Other elements are schematic.
 \textbf{C,D}, Held-out normalized mean squared error (NMSE) against updates for pairwise and quartic targets at rule-specific rates; \textbf{D} includes all twenty exact trajectories. Dashed lines indicate label-noise floors and the 1,024-update primary checkpoint.
-\textbf{E}, New noise sensitivity: quartic-minus-pairwise difference in calibrated-minus-exact clean-domain NMSE at 16,384 updates. Fixed-absolute noise, no noise and variance-matched relative noise share initialization, inputs and standardized noise within seeds; rates are inherited from original development.
+\textbf{E}, New noise sensitivity: quartic-minus-pairwise difference in calibrated-minus-exact clean-domain NMSE at 16,384 updates for fixed-absolute noise, no noise and variance-matched relative noise, which share initialization, inputs and standardized noise within seeds. Diamonds, inherited selected rates; circles, inherited common Adam rate 0.003; dots, paired seed differences; whiskers, 95\% bootstrap intervals. This is a sensitivity under inherited rates, not noise-specific retuning.
 \textbf{F}, Quartic-minus-pairwise difference in calibrated-broadcast-minus-exact NMSE across training budgets. Dots, paired seeds; filled diamonds, endpoints; open diamonds, validation-selected states.
 \textbf{G}, Exact-trained path-field energy captured by the best $k$ oracle directions; uniform broadcast is a separate unfitted category. Grey dashed line, shared pairwise/quartic initialization spectrum; horizontal dashed line, 95\% capture. The nested mean is dashed; series are offset horizontally for visibility. States are from 1,024 updates.
-\textbf{H}, Same new noise cohort at common Adam rate 0.003. In \textbf{E,H}, dots are paired seed differences; diamonds/whiskers are means and 95\% bootstrap intervals. This is a sensitivity under inherited rates, not noise-specific retuning.
-Each cohort has twenty paired seeds. \textbf{C,D,F,G} reuse the original cohort; \textbf{E,H} share twenty new seeds. Bands/whiskers are 95\% seed-bootstrap intervals, paired for differences. Curves use fixed checkpoints; \textbf{F} adds validation selection. Nested and leaf-shuffle displays remain in Supplementary Figs.~S17A and S13C.
+Each cohort has twenty paired seeds. \textbf{C,D,F,G} reuse the original cohort; \textbf{E} uses twenty new seeds. Bands/whiskers are 95\% seed-bootstrap intervals, paired for differences. Curves use fixed checkpoints; \textbf{F} adds validation selection. Nested and leaf-shuffle displays remain in Supplementary Figs.~S17A and S13C.
 Source Data: \texttt{source\_data/curated\_publication/figure\_04\_plotted.csv}.}"""
 
 
 def figure4():
-    """Main Figure 4, fig:prospective — eight panels A-H on one native canvas.
+    """Main Figure 4, fig:prospective — seven panels A-G on one native canvas.
 
     CF-1 canvas 518.4 x 490.0 pt, aspect 1.058, height on the 340/415/490
     ladder.  CF-10 schematic_fraction = 25.3 % on the AMENDMENTS B12 formula
@@ -925,9 +924,10 @@ def figure4():
     463.4 x 430 pt); schematic waiver: none.  The left margin is 40 pt, not
     the plan's 58 pt: at 58 pt the strict audit fails `fill-width` (content
     fills 90.7 % of the canvas, gate 92 %).  The fraction is unchanged to a
-    tenth of a point by that substitution (25.2 % at 58 pt).  waiver D3: row 2 (F seed strip / G energy curve /
-    H shuffle forest) is three 4-module panels that share no axis; each is a
-    different estimand and the row is column-locked.  CF-5: zero legend
+    tenth of a point by that substitution (25.2 % at 58 pt).  waiver D3: row 2 (F seed strip / G energy curve)
+    is two 6-module panels that share no axis (2026-09-21: the former H, the
+    common-rate noise panel, merged into E); each is a different estimand
+    and the row is column-locked.  CF-5: zero legend
     artists -- the only sanctioned key in the nine-figure set is the frameless
     rule key inside Fig 5C, and B's rule-key strip is a schematic panel's
     footer, not an in-axes key.  CF-4 DELTA0_EXEMPTIONS: one, panel E's
@@ -1083,13 +1083,11 @@ def figure4():
     e = c.panel('E', 1, 8, 4, title=None, grid='none')
     noise_panel(e, 'E', rows)
 
-    f_ax = c.panel('F', 2, 0, 4, title=None, grid='none')
+    f_ax = c.panel('F', 2, 0, 6, title=None, grid='none')
     f4_deficit(f_ax, contrast, seedfan, rows)
-    g_ax = c.panel('G', 2, 4, 4, title=None, grid='none')
+    g_ax = c.panel('G', 2, 6, 6, title=None, grid='none')
     f4_energy(g_ax, eigen, diag, rows, ramp)
     f4_badge(g_ax, .965, .975, 'oracle')
-    h_ax = c.panel('H', 2, 8, 4, title=None, grid='none')
-    noise_panel(h_ax, 'H', rows, common=True)
     # One 25 pt reserve per 4-module panel so the six data panels share one
     # axes width, split per module column so the two gaps of each row come
     # out equal and the row ends flush with B's ink: column 0 takes it all
@@ -1109,11 +1107,17 @@ def figure4():
     # the lock pass pads column 0's right edge by whatever F's x tick labels
     # hang past its axes (2.2 pt here); the other two columns take the same
     # amount on their right so the six axes widths stay equal
-    pad_right = c.lock_reserves()['C'][1]
-    for name in ('D', 'G'):
-        c.declare_reserve(name, left=20.0, right=5.0 + pad_right)
-    for name in ('E', 'H'):
-        c.declare_reserve(name, left=15.0, right=10.0 + pad_right)
+    locks = c.lock_reserves()
+    # One right pad for every data panel: the larger of C's and F's measured
+    # right overhang, so the three 4-module panels (25 + pad each) and the
+    # two 6-module panels of row 2 (2026-09-21: F 25 + pad, G 15 + 10 + pad)
+    # all keep equal axes widths.
+    pad_right = max(locks['C'][1], locks['F'][1])
+    c.declare_reserve('C', right=pad_right)
+    c.declare_reserve('D', left=20.0, right=5.0 + pad_right)
+    c.declare_reserve('E', left=15.0, right=10.0 + pad_right)
+    c.declare_reserve('F', right=pad_right)
+    c.declare_reserve('G', left=15.0, right=10.0 + pad_right)
 
     sources = ['credit_rule_bridge/protocol_freeze.json',
                'credit_rule_bridge/figures/initial_profile_source.csv',
@@ -1157,8 +1161,7 @@ def figure4():
              'capture from credit_rule_extension/summaries/all_diagnostics.csv '
              'at 1,024 and 16,384 updates; rank95 means (1.00/4.60/5.05) from '
              'matched_bridge_spectra.csv.',
-        'E': 'New twenty-seed noise sensitivity at inherited selected rates; clean full-domain interaction deficit at 16384 updates.',
-        'H': 'Same new seed blocks at inherited common Adam rate 0.003; fixed-absolute, noise-free and matched relative noise.'}
+        'E': 'New twenty-seed noise sensitivity, clean full-domain interaction deficit at 16384 updates, at inherited selected rates (diamonds) and inherited common Adam rate 0.003 (circles); fixed-absolute, noise-free and matched relative noise.'}
     sources += ['curated_publication/noise_controls_curves.csv',
                 'curated_publication/noise_controls_contrasts.csv',
                 'curated_publication/noise_controls_provenance.json']
@@ -1167,7 +1170,7 @@ def figure4():
     frac = sum(w * h for _, _, w, h in (c.slot_pt(0, 0, 5), c.slot_pt(0, 5, 7))) \
         / (live_w * live_h)
     contract = {'revision': '2026-09-20 review completion',
-        'noise_panels': 'E and H replace duplicated nested and shuffled-leaf displays, retained in Supplementary Figs S17A and S13C.',
+        'noise_panels': 'E replaces the duplicated nested and shuffled-leaf displays (Supplementary Figs S17A and S13C) and shows both inherited rate policies; the former H merged into it.',
         'noise_scope': 'New paired seeds, inherited rates, clean full-domain outcomes; common-rate panel reuses seeds.',
         'rank95_at_1024': {k: round(float(v), 2) for k, v in rank95.items()}}
     for row in rows:
