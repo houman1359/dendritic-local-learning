@@ -87,8 +87,12 @@ def test_isolated_paper_requires_explicit_real_implementation_root(tmp_path: Pat
     assert release.discover_implementation_root(paper, production) == production
 
 
-def test_portability_manifest_records_original_and_release_bytes(tmp_path: Path) -> None:
-    original, replacement, _ = release.PORTABILITY_REPLACEMENTS[0]
+def test_portability_manifest_records_original_and_release_bytes(tmp_path: Path, monkeypatch) -> None:
+    # Released defaults may already be portable; exercise a real substitution
+    # independently of whichever machine-specific defaults were distributed.
+    original, replacement = "/fixture/source", "${FIXTURE_ROOT}"
+    monkeypatch.setattr(release, "PORTABILITY_REPLACEMENTS",
+                        ((original, replacement, "fixture relocation"),))
     path = tmp_path / "config.txt"
     path.write_text(original + "/artifact\n")
     old_hash = release.sha256(path)
