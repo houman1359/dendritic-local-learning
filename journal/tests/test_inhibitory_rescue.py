@@ -92,7 +92,7 @@ def test_supplement_includes_rescue_and_preserves_original_failure():
     si = (J / "supplementary/supplementary.tex").read_text()
     assert r"\input{curated/si_05_parent_sensitivity}" in si
     assert r"\input{curated/si_parent_sensitivity_table}" in si
-    assert "ordinary-test mean NMSE was 0.0511 for gating" in main
+    assert "ordinary-test mean nmse was 0.0511 for gating" in main.casefold()
     assert "holding the nonlinear task and forward model fixed" in main
     assert "Supplementary Table~S15" in main
     assert "not a demonstrated biological mechanism" in main

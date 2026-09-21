@@ -51,3 +51,17 @@ records any declared release substitutions and relocates the protocol's paths.
 The frozen numerical runner is unchanged. Repeat for the twenty original seeds
 2026092100–2026092119. `--smoke` retains the paired task/noise/rate construction
 but stops after one update and explicitly excludes its outputs from evidence.
+
+## Verified full trajectory replay
+
+On 21 September 2026, a predetermined existing seed (2026100200) was replayed
+for exact, resistance, derivative and shuffled-derivative delivery, each for
+4,096 Adam updates at its original selected rate. The isolated Python 3.10.13
+CPU environment used Torch 2.9.1+cpu and NumPy 1.26.4; original CPU execution
+used Torch 2.9.1+cu128 and NumPy 2.2.6. All four selected checkpoint steps
+agreed, as did all 132 validation-history points and every ordinary/stress
+outcome under the frozen tolerances (relative 1e-6, absolute 1e-10). The maximum
+absolute numerical discrepancy was 7.76e-14. This checks one existing seed and
+task; it is not independent scientific replication or a claim of full-paper
+reproduction. The four-rule job completed in 47 seconds on four allocated
+HPC CPUs; this is an environment-specific observation, not a desktop estimate.

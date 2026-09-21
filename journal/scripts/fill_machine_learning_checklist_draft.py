@@ -31,9 +31,9 @@ TEXT = {
     156: "Analytic gradients, explicit route dictionaries and controlled ablations; SI S1-S5.",
     160: "Methods and SI: accuracy, loss/NMSE, capture, update match, costed regret, selectivity.",
     166: "MNIST, Fashion-MNIST and CIFAR-10; Methods and SI Section S2.",
-    170: "Figs. 1-9; SI S2-S6/S9-S10: broadcast, rank, decoder-only, point/ridge and target-informed oracles.",
+    170: "Figs. 1-10; SI S2-S6/S9-S10: broadcast, rank, decoder-only, point/ridge and target-informed oracles.",
     175: "No state-of-the-art accuracy or deployment claim; comparisons isolate mechanisms, information, optimization and resource constraints.",
-    178: "Feedback/topology/optimizer/shunt; input grouping, exact/broadcast credit; cue and mapping controls.",
+    178: "Feedback/topology/optimizer/shunt; parent sensitivity and shuffle; target/noise, cue and mapping controls.",
 }
 
 # Checkboxes on page1 and exactly one button of each resolved yes/no group.
