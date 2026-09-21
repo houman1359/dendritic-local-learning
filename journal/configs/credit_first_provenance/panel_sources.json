@@ -33,7 +33,7 @@
       "path": "figures/main/figure_04.pdf",
       "component": "figures/components/restored_main_04.pdf",
       "generator": "scripts/credit_first_figures/build_restored_main.py",
-      "panel": "a-h",
+      "panel": "a-g",
       "notes": "Native rendering from existing scientific sources. Per-panel definitions and hashes: figures/provenance/structure_restoration_20260908/figure_04.json"
     },
     {
@@ -42,7 +42,7 @@
       "generator": "scripts/conductance_local_gate/figure.py",
       "component": "source_data/conductance_local_gate/figures/local_gate_primary.pdf",
       "panel": "a-g",
-      "notes": "Mechanism display; population and rescue appear in continuation H-M."
+      "notes": "Seven-panel conductance mechanism display; the independent population and rescue experiments are Figure 6."
     },
     {
       "figure": "fig7",
@@ -74,7 +74,7 @@
       "component": "figures/components/credit_first_figure_08.pdf",
       "generator": "scripts/credit_first_figures/build_measured.py",
       "panel": "a-f",
-      "notes": "Native rebuild of main Fig. 9 on the shared canvas/glyph library; per-panel definitions and immutable input hashes: source_data/credit_first_figures/figure_08_sources.json"
+      "notes": "Native rebuild of main Fig. 10 on the shared canvas/glyph library; per-panel definitions and immutable input hashes: source_data/credit_first_figures/figure_08_sources.json"
     },
     {
       "figure": "figS1",
@@ -87169,6 +87169,15 @@
       "generator": "scripts/review_completion/optional_extension_analysis.py",
       "replication_unit": "Two separate 20-seed cohorts; rate policies reuse seeds",
       "notes": "All 153 development and 460 fresh fits retained; 84 superseded pilot fits separately identified; temporal study deferred without training."
+    },
+    {
+      "figure": "fig2",
+      "panel": "c-h",
+      "path": "source_data/curated_publication/figure_02_plotted.csv",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/build_main_figure_04.py",
+      "replication_unit": "Panel-specific paired seeds; synthetic forgetting and image-selection cohorts remain separate",
+      "notes": "Current Figure 2 display values; panel and record columns preserve the measured, analytic, seed-level and summary distinctions. Complete study inputs remain separately archived."
     }
   ],
   "supporting_groups": [

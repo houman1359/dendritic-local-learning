@@ -48,6 +48,12 @@ def test_source_data_inventory_matches_final_display_numbering() -> None:
         if (match := re.fullmatch(r"Supplementary Figure (\d+)", figure))
     }
     assert main_numbers == set(builder.MAIN_FIGURE_NUMBERS)
+    # A complete display export must be discoverable under its current figure,
+    # even when all of its underlying studies are already archived separately.
+    for number in builder.MAIN_FIGURE_NUMBERS:
+        source = f"source_data/curated_publication/figure_{number:02d}_plotted.csv"
+        assert any(item.figure == f"Figure {number}" and item.source == source
+                   for item in files), source
     assert supplementary_numbers == set(range(1, len(builder.SUPPLEMENTARY_FIGURES) + 1))
     selector = next(a for a in curated_assets() if a["id"] == "original_selector")
     assert selector["figure"] == "S33"

@@ -317,6 +317,10 @@ JOURNAL_SCRIPTS += (
 # Release builders, manuscript auditors and local dependencies of released tests.
 JOURNAL_SCRIPTS += (
     'audit_citations.py',
+    'audit_panel_letter_geometry.py',
+    'audit_row_separation.py',
+    'audit_panel_gaps.py',
+    'audit_letter_alignment.py',
     'audit_latex_layout.py',
     'audit_neurips_text_overlap.py',
     'build_overleaf_bundle.py',
@@ -577,6 +581,7 @@ def repository_file_allowed(relative: Path, scope: str | None) -> bool:
         "journal/pytest.ini", "journal/RELEASE_WORKFLOW.md",
         "journal/README.md", "journal/OVERLEAF_README.md",
         "journal/figures/README.md",
+        "journal/figures/provenance/structure_restoration_20260908/figure_06_caption.md",
                 "journal/source_data/README.md", "journal/source_data/provenance_manifest.tsv",
     }:
         return True
