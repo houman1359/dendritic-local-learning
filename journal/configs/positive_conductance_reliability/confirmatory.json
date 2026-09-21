@@ -1,0 +1,57 @@
+{
+  "study": "state_matched_positive_conductance_branch_reliability",
+  "status": "frozen_before_canary_outcomes",
+  "frozen_date": "2026-08-11",
+  "canary_seeds": [7098, 7099],
+  "confirmatory_seeds": [
+    7100, 7101, 7102, 7103, 7104, 7105, 7106, 7107, 7108, 7109,
+    7110, 7111, 7112, 7113, 7114, 7115, 7116, 7117, 7118, 7119,
+    7120, 7121, 7122, 7123, 7124, 7125, 7126, 7127, 7128, 7129,
+    7130, 7131, 7132, 7133, 7134, 7135, 7136, 7137, 7138, 7139,
+    7140, 7141, 7142, 7143, 7144, 7145, 7146, 7147, 7148, 7149
+  ],
+  "task": {
+    "branches": 8,
+    "features_per_branch": 4,
+    "train_examples": 512,
+    "test_examples": 2048,
+    "input_baseline": 1.4,
+    "label_signal": 0.55,
+    "input_noise_sd": 0.55,
+    "leak_conductance": 1.0,
+    "excitatory_reversal": 1.0,
+    "inhibitory_reversal": 0.0,
+    "initial_excitatory_conductance": 0.10,
+    "output_gain": 8.0
+  },
+  "training": {
+    "iterations": 40,
+    "smoothness_safety_factor": 0.5,
+    "finite_difference_step": 1e-5,
+    "minimum_reliability_gain": 0.03
+  },
+  "reliability_heterogeneity": [0.0, 0.5, 1.0, 1.5, 2.0],
+  "methods": [
+    "exact_clean_bp",
+    "noisy_no_shunt",
+    "state_matched_additive",
+    "best_global_shunt",
+    "reliability_aligned_shunt",
+    "shuffled_shunt",
+    "anti_aligned_shunt",
+    "explicit_point_gate",
+    "aligned_clean_credit"
+  ],
+  "analysis": {
+    "bootstrap_draws": 20000,
+    "paired_unit": "independent simulation seed"
+  },
+  "gates": {
+    "minimum_input": 0.0,
+    "maximum_state_match_error": 1e-12,
+    "maximum_point_gate_update_error": 1e-12,
+    "maximum_additive_control_difference": 1e-12,
+    "maximum_relative_finite_difference_error": 1e-5
+  },
+  "scope_boundary": "This experiment trains a nonnegative-input positive-conductance branch model under an oracle state-matching current clamp to isolate backward reliability attenuation. It does not show autonomous learning of shunt placement, dendrite-exclusive computation, or superiority to exact clean backpropagation."
+}

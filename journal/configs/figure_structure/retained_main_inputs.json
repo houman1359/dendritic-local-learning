@@ -1,0 +1,5 @@
+{
+ "source_commit": "7ee9157565bf346d5fdc5d5337484e136841b3e6",
+ "assets": [],
+ "note": "2026-09-10 (v2 overhaul): no main figure is a retained input any more. Figure 2 was the last one; it is now rebuilt from source by scripts/build_main_figure_04.py like the other eight."
+}

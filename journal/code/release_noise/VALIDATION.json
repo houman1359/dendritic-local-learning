@@ -1,0 +1,84 @@
+{
+  "status": "passed",
+  "scope": "Draft staging and clean installed-package smoke; final committed release is a separate required build.",
+  "cleanroom": {
+    "status": "passed",
+    "isolated_venv": true,
+    "package_source": "installed wheel in venv",
+    "versions": {
+      "numpy": "1.26.4",
+      "torch": "2.9.1+cpu",
+      "torchvision": "0.24.1+cpu",
+      "wandb": "0.23.1",
+      "protobuf": "6.33.5",
+      "scipy": "1.15.3",
+      "pytest": "9.1.1"
+    },
+    "checks": [
+      "core branch dynamics import",
+      "training entrypoint import",
+      "installed core to released dataset hook",
+      "ambiguous task rejection",
+      "legacy flattened shape",
+      "projected corruption bounds and unchanged labels"
+    ],
+    "scope": "Tiny synthetic image tensors; no MNIST download, retraining or raw biological data"
+  },
+  "pip_check": "No broken requirements found.",
+  "focused_tests": {
+    "passed": 11,
+    "duration_seconds": 3.56
+  },
+  "completed_cpu_job": 44805806,
+  "environment_manifest": "validated_environment.txt",
+  "historical_data_scope": "Smoke uses tiny tensor fixtures and does not verify absent historical generator bytes or retrain original cohorts.",
+  "draft_archive_previous_clean_install": {
+    "status": "passed",
+    "draft_only": true,
+    "archive_bytes": 10246492,
+    "archive_sha256": "7d23814504bac9b4955c55c7d795d3af711439abb7804e95371626ad6406b4b9",
+    "zip_members": 1754,
+    "policy_findings": 0,
+    "implementation_files": 534,
+    "paper_files": 679
+  },
+  "draft_archive": {
+    "status": "passed",
+    "draft_only": true,
+    "archive_bytes": 12025692,
+    "archive_sha256": "ccd97c37a3f690297dd24b70983d38d4525d9980eb967479415cfa41e117b6df",
+    "zip_members": 2261,
+    "policy_findings": 0,
+    "implementation_files": 534,
+    "paper_files": 694,
+    "label": "v7 preview including historical runtime; subsequent final committed build remains required"
+  },
+  "historical_runtime": {
+    "commit": "a99c3a777f99913e13dfe673a3f3a28bfe3566af",
+    "verified_selected_files": 476,
+    "smoke_conditions": [
+      30,
+      40
+    ],
+    "arms": [
+      "exact_autograd_bp_recipe",
+      "path_transport"
+    ],
+    "epochs_each": 1,
+    "status": "passed",
+    "scope": "Explicitly excluded synthetic-task smoke, no new scientific observations",
+    "completed_cpu_job": 44814781,
+    "elapsed_seconds": 48
+  },
+  "copied_layout": {
+    "status": "passed",
+    "copied_software_files": 684,
+    "transformed_files": 22,
+    "failures": []
+  },
+  "restoration_and_packaging_tests": {
+    "passed": 11,
+    "duration_seconds": 0.69,
+    "scope": "Restoration selection, copied software/source-data provenance merging, tampered relocation rejection, repository and allowlist checks"
+  }
+}

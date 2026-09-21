@@ -1,0 +1,44 @@
+{
+  "study": "reconstructed_tree_task_learning_all_eligible_scans",
+  "status": "frozen_before_confirmatory_outcomes",
+  "frozen_date": "2026-08-10",
+  "runner_sha256": "87d908dcb84e1dfc333ccb8758d55ea324e7675fc4949fde7724e719091850f7",
+  "eligible_rule": "Every automatic_conservative target-session-scan cohort with at least five unique directly connected imaged presynaptic roots; no analyst choice among scans.",
+  "expected_target_scan_observations": 13,
+  "expected_target_cells": 7,
+  "scan_inference": "First average ten split replicates within scan, then average eligible scans within target; target cell is the inferential unit.",
+  "parameters": {
+    "seed": 20260731,
+    "replicates_per_scan": 10,
+    "channels": 4,
+    "test_fraction_complete_stimulus_identities": 0.2,
+    "steps": 600,
+    "learning_rate": 0.02,
+    "weight_decay": 0.001,
+    "readout_decay": 0.000001,
+    "initial_conductance": 0.2,
+    "background_e_scale": 0.35,
+    "background_i_scale": 0.35,
+    "excitatory_reversal": 1.0,
+    "inhibitory_reversal": -0.2,
+    "input_lower_quantile": 0.1,
+    "input_upper_quantile": 0.9,
+    "input_maximum": 3.0
+  },
+  "methods": [
+    "exact compartment error",
+    "topology-matched routes",
+    "site-shuffled routes",
+    "random anatomical routes"
+  ],
+  "matching": "Restricted route dictionaries have identical effective rank within each target-scan-split run; site shuffling preserves each selected column's values and nonzero count.",
+  "canary": {
+    "target_scan_observations": 1,
+    "replicates": 1,
+    "steps": 5,
+    "finite_difference_relative_error": 9.159731680320027e-10,
+    "rank_matching_passed": true,
+    "completed_without_exclusion": true
+  },
+  "scope_boundary": "A full passive conductance solve on each complete compressed reconstructed tree, using measured trial-aligned responses as a modeled prediction task. It tests task-independent anatomy-calibrated feedback sufficiency, not biological learning in vivo."
+}

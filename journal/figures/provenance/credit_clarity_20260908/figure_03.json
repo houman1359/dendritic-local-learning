@@ -1,0 +1,47 @@
+{
+  "figure": "Figure 3",
+  "output": "figures/components/credit_first_figure_03.pdf",
+  "output_sha256": "d8a1fea7d3c1d8afef22f37ae8b7b2e1f5f4986551ea6ddfe236e47119503b0e",
+  "plotted_table": "source_data/curated_publication/figure_03_plotted.csv",
+  "plotted_table_sha256": "5da940fa16b99f32db31209b65ee58bccac52e7146be95c2dea9fe7cf258a5ee",
+  "panel_sources": {
+    "A": "Schematic, no data: the frozen task configuration (configs/trained_subtree_address/full_factorial_confirmatory.json) drawn on the shared balanced feedback tree; selected +1.00 and sibling / same-half / opposite-half distractor coefficients.",
+    "B": "Schematic, no data: ancestry dictionaries A (8 x K) from grouped_routes(correct_ancestry_subtrees) with the card footers the raw group sums of figure_03_coefficient_prediction.csv, and the delivered support of b3's credit under the four matched controls at K = 4 (figure_03_control_supports.csv, rng seed 0). The control heatmap shows signed delivered fields \u03a6[c, b] divided by the maximum absolute value within each row; the source table retains the signed, unit-norm field values.",
+    "C": "condition_summary.csv means with 95% seed-bootstrap intervals (dendritic_tree under correct ancestry and under derangement) and the per-seed post-training maximum over the four matched controls from seed_outcomes.csv.",
+    "D": "condition_summary.csv means with 95% intervals for dendritic_tree versus degree_depth_matched_rewired_tree under ancestry feedback; paired differences and 20,000-draw seed bootstrap (seed 70000) from seed_outcomes.csv.",
+    "E": "review_evidence_reanalysis/ancestry_k4_control_contrasts.csv means, 95% intervals, positive-seed counts and Holm-adjusted P for five controls (the deranged row off scale, printed as its value); the seed fan is ancestry_control_paired_differences.csv at K = 4.",
+    "F": "review_coefficient_encoder and review_coefficient_hard_readout condition_summary.csv over the calibration x cue-noise grid at cue delay 0, with render-time 95% seed-bootstrap bands from trajectories.csv at epoch 80 (soft and hard facets); the right facet draws the paired_contrasts.csv learned-minus-oracle means and 95% intervals over the per-seed differences recomputed from trajectories.csv (the hard readout is exploratory)."
+  },
+  "source_sha256": {
+    "configs/trained_subtree_address/full_factorial_confirmatory.json": "8684f7c30886e7aede7eaa71550033ad84605fcfb45220d32a2d91d2627f23b2",
+    "configs/review_completion/coefficient_encoder.json": "dd3042208dda2e8b656be4c59b71914a9588d7d61f35a85ffc06a49f6da0b252",
+    "source_data/trained_subtree_address_full_factorial/seed_outcomes.csv": "2f2cc0d6a21fd7bd46a5437e031e69ae31626ef6650c6cced0be1d2a0861303c",
+    "source_data/trained_subtree_address_full_factorial/condition_summary.csv": "97358de3f0bfb7a91ba2aa6f164705d1a6e6d5c1b4e35b266c5e5a9fc03afb20",
+    "source_data/trained_subtree_address_full_factorial/paired_contrasts.csv": "442cf50ee7019ab0ccb8126fff2d0378dc3c88ff323ff863c045caa607793755",
+    "source_data/review_evidence_reanalysis/ancestry_k4_control_contrasts.csv": "aed995858ac591ddea7f8f0314d018e4ad4b51a810a032e99f3f1dff2b131e2a",
+    "source_data/review_evidence_reanalysis/ancestry_control_paired_differences.csv": "3746a2e477c9e6c734ffb8247745b7027288cfed33367cd04887b86457d11b22",
+    "source_data/review_coefficient_encoder/condition_summary.csv": "2a1f9a8d771e1dedd3eed0879b1baae3ae0504d7d9742fa12c587dfdd425fda3",
+    "source_data/review_coefficient_encoder/trajectories.csv": "2c3cb8e8ab35d60f07ca8351741d6f8cabd35c3f96716db52f7a9a10b1a6772f",
+    "source_data/review_coefficient_encoder/paired_contrasts.csv": "b4b7e009e271d9d7a812f9d318f9b20dd5187404bbf388dc5887ffe07904be1f",
+    "source_data/review_coefficient_hard_readout/condition_summary.csv": "6cdc699bbf1faafeb719e45d0b75ecfa0b2fc897c49747a22a5370d5eaf37b36",
+    "source_data/review_coefficient_hard_readout/trajectories.csv": "74e4818f4d8bab92ab7c1e9d6e4fb2817cb432f164c5d0d7f6163ea643219781",
+    "source_data/review_coefficient_hard_readout/paired_contrasts.csv": "46b214de8efef2e8640cce199a1cbb032477ec0e9ec62fdbc727e471705751e1"
+  },
+  "builders_sha256": {
+    "scripts/credit_first_figures/build_ancestry.py": "e8a749b6d5c331c9b3e3ff904f02343ad2adf138c58e5b1f2b1579eff4c41d77",
+    "scripts/routing_figure_panels.py": "b6a38d2f1329add30c30e3e98317f3d5a3946a2133a75303d458723b32faf521",
+    "scripts/run_trained_subtree_address_full_factorial.py": "c5d75b8ea9bc29d7fd24ca53c360c4bbdf825d7fa31f84727af4b7dd47e875dd",
+    "scripts/figure_canvas.py": "7f2983ff0c52a30dd5ba9bdeccc6fda940b4366ad872cbf0755fec5daa1dd7aa",
+    "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a",
+    "scripts/native_schematics.py": "68530ec60f85e496b9b0ba7a7ad53510dce2fae91cc38231046c1175e1cb7aeb",
+    "scripts/credit_first_figures/focused_provenance.py": "b7ade95b88e7d10a43bab01716dee6211bc2f09735b605d489c0012a147ecea7"
+  },
+  "source_data_immutable": true,
+  "new_experiments": 0,
+  "layout_findings": [
+    "TEXT-ON-DATA '+1.27 pp'",
+    "TEXT-ON-DATA '256'",
+    "TEXT-ON-DATA '16'"
+  ],
+  "scope": "Overhaul rebuild of main Fig 3 (v2 plan, 2026-09-09). No new training, fit, endpoint selection or reseeding; every value is re-read from the frozen Source Data."
+}

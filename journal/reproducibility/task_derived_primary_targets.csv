@@ -1,0 +1,8 @@
+target_nucleus_id,target_root_id,cell_type,session,scan_idx,dandi_asset_id,dandi_path,n_trials,n_unique_stimuli,n_repeated_stimuli,n_connected_sites,n_major_branches,n_manual_matches,n_partner_pairs,median_repeat_reliability,response_finite_fraction
+256456,864691135810666525,L2IT,6,6,06c05eec-2d18-49f7-9cdf-103ca0bc5531,sub-17797/sub-17797_ses-6-scan-6_behavior+image+ophys.nwb,464,280,136,10,5,4,45,0.17657315967749626,1.0
+256550,864691135060651419,L2IT,9,4,ad27b3c6-baaa-4e60-99b3-bb5463a33ccf,sub-17797/sub-17797_ses-9-scan-4_behavior+image+ophys.nwb,464,280,136,13,5,5,78,0.19328753399169887,1.0
+258209,864691135277186789,L3IT,8,5,436f762f-924a-4a30-9a92-156532a03d21,sub-17797/sub-17797_ses-8-scan-5_behavior+image+ophys.nwb,464,280,136,17,8,7,136,0.29102142073374354,1.0
+264871,864691135739661169,L5IT,7,3,67384ebb-72c1-4fd5-8908-612eac6d6e6a,sub-17797/sub-17797_ses-7-scan-3_behavior+image+ophys.nwb,464,280,136,6,4,1,15,0.3272673059491436,1.0
+264888,864691135196576298,L5IT,7,3,67384ebb-72c1-4fd5-8908-612eac6d6e6a,sub-17797/sub-17797_ses-7-scan-3_behavior+image+ophys.nwb,464,280,136,9,5,3,36,0.22718381756595582,1.0
+264889,864691135324623260,L4IT,6,6,06c05eec-2d18-49f7-9cdf-103ca0bc5531,sub-17797/sub-17797_ses-6-scan-6_behavior+image+ophys.nwb,464,280,136,5,3,2,10,0.32935451552883926,1.0
+291111,864691135409937097,L2IT,6,4,dc68c26d-54de-433a-9310-ee95ae4daddd,sub-17797/sub-17797_ses-6-scan-4_behavior+image+ophys.nwb,464,280,136,9,6,5,36,0.24530795286484422,1.0

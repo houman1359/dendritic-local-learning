@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+"""Generate concise integration text and a compact table from audited results."""
+from pathlib import Path
+import json
+import numpy as np
+import pandas as pd
+import run
+
+
+def main():
+ p=run.OUT/'summaries';d=pd.read_csv(p/'all_budget_outcomes.csv',float_precision='round_trip');c=pd.read_csv(p/'paired_contrasts.csv',float_precision='round_trip');diag=pd.read_csv(p/'all_diagnostics.csv',float_precision='round_trip')
+ assert json.loads((p/'independent_validation.json').read_text())['status']=='passed'
+ rows=[]
+ for budget in [1024,4096,8192,16384]:
+  for task in ['matching','quartet','nested']:
+   record={'budget':budget,'task':task}
+   for rule,name in [('exact','exact'),('calibrated_broadcast','calibrated')]:
+    a=d[(d.budget==budget)&(d.endpoint=='terminal')&d.selected_rate&(d.optimizer=='adam')&(d.task==task)&(d.rule==rule)]
+    record.update({name+'_mean_nmse':float(a.test_nmse.mean()),name+'_median_nmse':float(a.test_nmse.median()),name+'_clean_nmse_below_0_02':int((a.population_nmse<.02).sum()),name+'_parameter_bound_contact_count':int((a.parameter_projected_steps>0).sum())})
+   rows.append(record)
+ summary=pd.DataFrame(rows);summary.to_csv(p/'compact_terminal_table.csv',index=False)
+ geometry=diag[(diag.optimizer=='adam')&diag.selected_rate&(diag.rule=='exact')&diag.step.isin([1024,4096,8192,16384])].groupby(['step','task'])[['path_best_rank_one_capture','path_effective_rank','credit_best_rank_one_capture']].mean().reset_index();geometry.to_csv(p/'extended_exact_credit_geometry.csv',index=False)
+ tex=[r'\begin{table}[tbp]',r'\centering',r'\small',r'\caption{Terminal outcomes in the balanced longer-budget follow-up. Rates are the original development-selected Adam rates. NMSE values are mean (median) across the same twenty previously examined seed blocks. The final column counts exact/profile fits with clean full-domain population NMSE below 0.02; this descriptive threshold was not used for stopping, selection or inference. Complete seedwise outcomes, validation-selected states, common-rate and SGD controls remain in Source Data.}',r'\label{tab:credit_rule_extension_endpoints}',r'\begin{tabular}{rlccc}',r'\toprule',r'Updates & Task & Exact NMSE & Initial-profile NMSE & Clean error $<0.02$ \\',r' & & mean (median) & mean (median) & exact/profile counts \\',r'\midrule']
+ for r in rows:
+  task={'matching':'Pairwise','quartet':'Quartic','nested':'Nested'}[r['task']]
+  row_text = f"{r['budget']:,} & {task} & {r['exact_mean_nmse']:.4f} ({r['exact_median_nmse']:.4f}) & {r['calibrated_mean_nmse']:.4f} ({r['calibrated_median_nmse']:.4f}) & {r['exact_clean_nmse_below_0_02']}/20; {r['calibrated_clean_nmse_below_0_02']}/20"
+  tex.append(row_text + " " + chr(92) * 2)
+ tex.extend([r'\bottomrule',r'\end{tabular}',r'\end{table}'])
+ (run.OUT/'endpoint_table.tex').write_text('\n'.join(tex)+'\n')
+ main=r'''The three slow exact-credit quartic fits reached the noise floor by 4,096 updates in a balanced extension of all 720 algebraic trajectories. At 16,384 updates, the quartic-minus-pairwise calibrated-credit deficit remained positive in every seed at both historical rate choices and under validation-based checkpoint selection (Supplementary Fig.~\ref{fig:supp_credit_rule_extension}; Supplementary Table~\ref{tab:credit_rule_extension_endpoints}). The pairwise mean lag had disappeared by 4,096 updates. This follow-up retains the original bounded parameterization and does not establish an asymptotic winner.'''
+ (run.OUT/'MAIN_TEXT_SUGGESTION.tex').write_text(main+'\n')
+ si=r'''\subsection{Balanced extension of the matched credit-rule comparison}
+\label{sec:credit_rule_extension}
+
+After examining the released 1,024-update outcomes, we froze and committed a longer-budget protocol before running any extended trajectories. This is a protocol-led extension of previously observed seed blocks, not a fresh confirmatory cohort. All 720 algebraic trajectories were retained: twenty seed blocks, three task families, four delivery rules, Adam and SGD, and the union of the original development-selected and common rates. Matching and quartic targets retain the same balanced tree, initialization and example streams; nested targets retain their separately compatible trees. No rates were retuned.
+
+Every trajectory was replayed from initialization and run for exactly 16,384 updates, preserving examples, minibatches, local rules, gradient clipping and coefficient bounds $[-2,2]$. All original checkpoint arrays, numerical curves and diagnostics through 1,024 updates reproduced. Additional observations occurred every 256 updates after 1,024. Terminal outcomes at 1,024, 4,096, 8,192 and 16,384 updates preserve the original endpoint definition. Secondary states minimized validation NMSE over the declared observations within each budget, with ties assigned to the earlier checkpoint. Test and full-domain population errors were used only for reporting. Independent recomputation of all 5,760 budget-outcome rows from saved weights reproduced test, validation and population NMSE exactly; all 2,880 validation-only selections were checked.
+
+All twenty selected-rate Adam exact quartic fits reached test NMSE 0.0443--0.0484 by 4,096 updates, resolving the three slow outcomes at 1,024. At 16,384, the exact quartic mean was 0.0464 and its median 0.0461, compared with 0.9994 and 1.0769 for the initial profile (Supplementary Table~\ref{tab:credit_rule_extension_endpoints}). The original pairwise mean ordering was driven by slow exact seeds despite exact credit winning in fifteen of twenty selected-rate pairs. By 4,096, exact pairwise mean NMSE was 0.0232 versus 0.0240 for the initial profile, with eighteen of twenty exact wins. Common-rate pairwise differences remained small.
+
+The calibrated-minus-exact quartet-minus-pairwise interaction at 16,384 was 0.9516 (95\% paired interval, 0.8829--1.0123) at terminal selected-rate states and 0.9028 (0.8371--0.9579) at terminal common-rate states. Validation-selected states gave smaller but still positive interactions: 0.7903 (0.6915--0.8797) and 0.7952 (0.7018--0.8775), respectively. All four contrasts were positive in every seed. The intervals use 10,000 paired whole-seed bootstrap draws and are descriptive; the seeds and their original outcomes had already been examined.
+
+The comparisons remain constrained by time, parameter bounds and historical rates. Every selected-rate Adam initial-profile trajectory had contacted a coefficient bound by 16,384, whereas none of the corresponding exact trajectories had. Validation-selected initial-profile states still had substantial quartic and nested error, and the full record retains clipping and bound events. Extended exact-trained path fields remained almost one-dimensional for pairwise targets but multidirectional for quartic and nested targets; the original main-figure capture analysis is retained unchanged. These results strengthen the fixed-budget contrast and explain the slow exact runs, without proving that a bounded fixed profile fails under every optimizer or that full compartment resolution is uniquely necessary.
+'''
+ (run.OUT/'SI_TEXT.tex').write_text(si)
+ print(run.OUT/'MAIN_TEXT_SUGGESTION.tex');print(run.OUT/'SI_TEXT.tex');print(run.OUT/'endpoint_table.tex')
+
+if __name__=='__main__':main()

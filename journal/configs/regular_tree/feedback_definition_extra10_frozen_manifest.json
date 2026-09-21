@@ -1,0 +1,273 @@
+{
+  "created_utc": "2026-07-24T19:27:02.399736+00:00",
+  "expected_config_count": 40,
+  "generated_configs": [
+    {
+      "index": 0,
+      "path": "configs/unified_config_0.yaml",
+      "sha256": "aa6a559eea20fdf45ab8677333ac0d0ca23a11baf63a0f09c279c7b72f760c01"
+    },
+    {
+      "index": 1,
+      "path": "configs/unified_config_1.yaml",
+      "sha256": "f02954fd7383990dcc308b698ef1076b57d7aa87aed96b3c1f9bb73eb9ce0dad"
+    },
+    {
+      "index": 2,
+      "path": "configs/unified_config_2.yaml",
+      "sha256": "4207c823e0c4ff14b669f803edd5393490465f9fbaf81e414b4a042d47107967"
+    },
+    {
+      "index": 3,
+      "path": "configs/unified_config_3.yaml",
+      "sha256": "6e41ad00931b045986bb574f3f4b30422695ef34ad360d43d0365595404c7df0"
+    },
+    {
+      "index": 4,
+      "path": "configs/unified_config_4.yaml",
+      "sha256": "6baaf84d4cd67f25eb40e654ee450bbc48c04d1d72bd2398035982e2a3c95acb"
+    },
+    {
+      "index": 5,
+      "path": "configs/unified_config_5.yaml",
+      "sha256": "7d4a0dac539edc63bb671a7b605ab4f1a3b2b4d238cb81056290485518e60b0a"
+    },
+    {
+      "index": 6,
+      "path": "configs/unified_config_6.yaml",
+      "sha256": "ce06f0110c0adbfd1bbb7cbc91759df9903c5cb8bd1b16cd7d4baa1d2d1a9762"
+    },
+    {
+      "index": 7,
+      "path": "configs/unified_config_7.yaml",
+      "sha256": "ce25765bbeac92ac7e4078dd740a3dc8af03472698e8785ffa54298accafe3dd"
+    },
+    {
+      "index": 8,
+      "path": "configs/unified_config_8.yaml",
+      "sha256": "02be5d4a81b1ee7e462541f92e71e0e6ae65ec30e8c73bd428ed2c6ac755e700"
+    },
+    {
+      "index": 9,
+      "path": "configs/unified_config_9.yaml",
+      "sha256": "6d1eebaa646a2446f4701e430f187964034a14fe1f289586e45f961db875b3d9"
+    },
+    {
+      "index": 10,
+      "path": "configs/unified_config_10.yaml",
+      "sha256": "741aede0fd5e2861983335b08435c9427ed9ac8b4b12365f79e48e09342af23c"
+    },
+    {
+      "index": 11,
+      "path": "configs/unified_config_11.yaml",
+      "sha256": "e19a035535ed25269d65189db7ddb0ae2d16e7b2fc651f217d723920b80ac059"
+    },
+    {
+      "index": 12,
+      "path": "configs/unified_config_12.yaml",
+      "sha256": "6afcea2cb7b7eb93c0a5b13b5786b67a543b1d2973526cdb3097dfaa93fe7ddb"
+    },
+    {
+      "index": 13,
+      "path": "configs/unified_config_13.yaml",
+      "sha256": "c5d118fe769fc87c10ba7468105073829ebb5890e9c2cfbd3d1326cc8080bd5c"
+    },
+    {
+      "index": 14,
+      "path": "configs/unified_config_14.yaml",
+      "sha256": "5a6ad210e6ed9ca42a5c0ab2d384d1d555e2c3911e22c788c88041bbc3d174db"
+    },
+    {
+      "index": 15,
+      "path": "configs/unified_config_15.yaml",
+      "sha256": "7f38f67918385344c62d759b3d84ba8bd926a97b99ad90e851be74d0423597aa"
+    },
+    {
+      "index": 16,
+      "path": "configs/unified_config_16.yaml",
+      "sha256": "15cd8c88a47766a43e4fb22ccd353c2f282f709cf05e1f8520b09b8235252333"
+    },
+    {
+      "index": 17,
+      "path": "configs/unified_config_17.yaml",
+      "sha256": "a6fb07b93e215dcf6b7d3f025a3b4c11721cc2d8fc55cae031f04dd77111ba27"
+    },
+    {
+      "index": 18,
+      "path": "configs/unified_config_18.yaml",
+      "sha256": "a8290ec07399bfff52033ddb4795cf4db65ef5cf0a65b07cfb2e55388be5c63a"
+    },
+    {
+      "index": 19,
+      "path": "configs/unified_config_19.yaml",
+      "sha256": "ef9fc30245c42b6beb0a8cb879ce885eff5e366770e7cda10a5c0f19c539f326"
+    },
+    {
+      "index": 20,
+      "path": "configs/unified_config_20.yaml",
+      "sha256": "32259fd6e78823aaf2fb578d7beff5efc2fb14e78157dc19995b72ccdec4fad3"
+    },
+    {
+      "index": 21,
+      "path": "configs/unified_config_21.yaml",
+      "sha256": "228d060cb10c8344b66500cb04a0903bf6cd18099f56f1de3143c8e9d0efca97"
+    },
+    {
+      "index": 22,
+      "path": "configs/unified_config_22.yaml",
+      "sha256": "222cececbfcf0a0a9e58bade5c38608c4c5807f7368083a31f41dd3304ecc90d"
+    },
+    {
+      "index": 23,
+      "path": "configs/unified_config_23.yaml",
+      "sha256": "5e8097c05561f0c7aa94d09cab67271c3559005dcdba83a0617dd8a724084708"
+    },
+    {
+      "index": 24,
+      "path": "configs/unified_config_24.yaml",
+      "sha256": "bc48ee8986204e12892c5abb3d4ee59d7f777a47de5f2d8da9158483a4a3fd5b"
+    },
+    {
+      "index": 25,
+      "path": "configs/unified_config_25.yaml",
+      "sha256": "a189885c1b9f632c26dc5b3723ff388a931a25395da94e958ded67ee72d55da1"
+    },
+    {
+      "index": 26,
+      "path": "configs/unified_config_26.yaml",
+      "sha256": "f8013206aeab886c2d9f322605bdbb69de06571b7472e77b6ae44e599a653409"
+    },
+    {
+      "index": 27,
+      "path": "configs/unified_config_27.yaml",
+      "sha256": "bdc9996900e2f1eb331df2940d6edaa85720ccea7167097756c3ff21413edd2b"
+    },
+    {
+      "index": 28,
+      "path": "configs/unified_config_28.yaml",
+      "sha256": "6ad3eed05f07203985a1d4720838b2ed5eb60d09abd0f451f9e366c08ddb9123"
+    },
+    {
+      "index": 29,
+      "path": "configs/unified_config_29.yaml",
+      "sha256": "45749bd9677bdaefaba13a86e6bc6a52209d7f7ab03ae7cf477860277d058e8b"
+    },
+    {
+      "index": 30,
+      "path": "configs/unified_config_30.yaml",
+      "sha256": "64eb42002b75d51cbb9444288c1fe2faafdcc4ca038d2b825751b537c7ac829e"
+    },
+    {
+      "index": 31,
+      "path": "configs/unified_config_31.yaml",
+      "sha256": "f9f4b61526c83e71ce7ae6e819990f849c58b9c3a7fa7e7ad902fd23e76ad915"
+    },
+    {
+      "index": 32,
+      "path": "configs/unified_config_32.yaml",
+      "sha256": "5676faf393c8e269249185c83c1cd0e0c7646bd4e7a372c4117f79fcb2606a24"
+    },
+    {
+      "index": 33,
+      "path": "configs/unified_config_33.yaml",
+      "sha256": "a307e19a8f43a3a243f1d4fbbd7627460b6989a861f5a8ae8c97eed55185f6d5"
+    },
+    {
+      "index": 34,
+      "path": "configs/unified_config_34.yaml",
+      "sha256": "9b875febf5243302360cac10b48dd1fe4e16924d151ee05765cefdfa7eba41bc"
+    },
+    {
+      "index": 35,
+      "path": "configs/unified_config_35.yaml",
+      "sha256": "9b9455ac63473f207f2b63a926282b6b30387ae60e524eb3daea2697f1910111"
+    },
+    {
+      "index": 36,
+      "path": "configs/unified_config_36.yaml",
+      "sha256": "58dec268e5a37b60f9ab68210e100bd3401730afd9cba679211ab58a97663de2"
+    },
+    {
+      "index": 37,
+      "path": "configs/unified_config_37.yaml",
+      "sha256": "72372e4a608966e8a55f5ea20b7df4b29a8577ebc82789a8bf16ace44a040133"
+    },
+    {
+      "index": 38,
+      "path": "configs/unified_config_38.yaml",
+      "sha256": "9c6cd775a936e0747a1bd51a2e2fe8d47ef8019124c2681cccfc03b319b25e4e"
+    },
+    {
+      "index": 39,
+      "path": "configs/unified_config_39.yaml",
+      "sha256": "c88ce11659e9c896bfd69edfb08e5556d1a2c56a43eda57a574bb5b0ebddde4f"
+    }
+  ],
+  "generation_mode": "submission",
+  "generator": "dendritic_modeling.scripts.sweeps.unified.sweep_types.unified_sweep.UnifiedSweepGenerator",
+  "manifest_type": "dendritic_modeling.frozen_sweep",
+  "original_yaml": {
+    "path": "repo:drafts/dendritic-local-learning/configs/sweeps/sweep_rebuttal_feedback_definition_3f_mnist_extra10seed.yaml",
+    "sha256": "f0941d5c34a80a5f2d43a6e1583db1dbe198041038ac037540cffae7cb7a9f29"
+  },
+  "resolved_original_yaml": {
+    "path": "original_config.yaml",
+    "sha256": "bfb82fc5ac640b6e62685633665f0f468287424bc0f8893d4d64bf75dcec4618"
+  },
+  "scheduler_profile": {
+    "account": "kempner_dev",
+    "partition": "kempner_requeue",
+    "placeholder": false,
+    "profile_id": "kempner_dev_requeue",
+    "validated": true
+  },
+  "schema_version": 1,
+  "source_identity": {
+    "files": [
+      {
+        "path": "repo:src/dendritic_modeling/config/reactivation.py",
+        "sha256": "fc733b56cac9edc34539f06f9213284aa5fb01d46eddef3a48576a2b099a2fd3"
+      },
+      {
+        "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/branch_layer.py",
+        "sha256": "4f2b7db5229160d77fa283c6b9bdd31ea6401592587041cd0f4e5a2724e22065"
+      },
+      {
+        "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/initialize_methods.py",
+        "sha256": "5fb6065994841024cad2fa71357601995084d8ec04d10a8a7beb63a38fa4b488"
+      },
+      {
+        "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/initialize_reactivation.py",
+        "sha256": "d68a83c98b76f3dd23ded3c2dd2487e1e78fb1ba95d954ad28c73a5bab5ba5da"
+      },
+      {
+        "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/synapse_config.py",
+        "sha256": "235bb79bb8cee3c743eb0fb8154e93c158046cca36ba119d51297db1669ebae6"
+      },
+      {
+        "path": "repo:src/dendritic_modeling/scripts/sweeps/control_plane.py",
+        "sha256": "1231fcc8ee8f20b7fe631c3980eebb590fa2c3093d1211e85218cf1eb3261800"
+      },
+      {
+        "path": "repo:src/dendritic_modeling/scripts/sweeps/sweep_manager.py",
+        "sha256": "23612f63806c58ebd620e966bfdb37b1f148e21f7cf3e7ede6a7ae5d179c0908"
+      },
+      {
+        "path": "repo:src/dendritic_modeling/scripts/sweeps/unified/sweep_types/unified_sweep.py",
+        "sha256": "b1ac9ffa21d029fc4487e06b7dea644a6fd7d345ced9432fca7215526510bfca"
+      },
+      {
+        "path": "repo:src/dendritic_modeling/scripts/training/train_experiments.py",
+        "sha256": "41454ea87a0914fa3fde4a9978f37faa2cb57c53651c96da7973781bfb36d49e"
+      }
+    ],
+    "git": {
+      "available": true,
+      "branch": "iss373_hs",
+      "commit": "c39fa57987e5f5f702274482bdd9a7a6c9e3382b",
+      "tracked_worktree_dirty": true
+    },
+    "python_version": "3.10.13",
+    "repository_name": "dendritic-modeling"
+  }
+}

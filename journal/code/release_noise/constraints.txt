@@ -1,0 +1,7 @@
+# Validated compatibility pair: wandb 0.23.1 lacks a protobuf-major-7 branch.
+wandb==0.23.1
+protobuf==6.33.5
+# Match the installable package's declared NumPy API range.
+numpy==1.26.4
+# Figure assembly used this resolved version in the isolated CPU validation.
+PyMuPDF==1.28.2

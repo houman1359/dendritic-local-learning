@@ -1,0 +1,123 @@
+{
+  "status": "qualified_mapping; two_distinct_generator_versions_confirmed",
+  "legacy_nested_commit": "4f3612a52756c3691e5bd269c6465c02f240c1e8",
+  "legacy_source_sha256": "6a20a2beed0fa0e7b4019e2c32ee1cbbd66ca147b6e1b4ce86c38094eacc9c25",
+  "current_nested_head": "4f3612a52756c3691e5bd269c6465c02f240c1e8",
+  "current_working_source_sha256": "6ef17bc41739409eb599230d608bba2e19eb3cb94763f568ac9fd439645eafdb",
+  "current_source_differs_from_cited_commit": true,
+  "evidence_source_sha256": {
+    "source_data/clean_exact_bp/summary.json": "04898c0d623cff3b685a52b60d3c2e73e7ed374d331cfc7f41d10141740f2aad",
+    "source_data/clean_exact_bp/run_outcomes.csv": "a50a63fd1ce4f403c2669d7001a8d4d161d1362c24f2aacd5dc74ab189d2e76f",
+    "source_data/prospective_learning/seed_outcomes.csv": "1cf2ab3392f35fe4b2a5e8359a457fc39adfbf6d6823fbfcd1a0ee5f989b5166",
+    "source_data/prospective_followup/seed_outcomes.csv": "dca463eda505031d0ab54778bdbf77def9c34cd7a1730abd90ae5f0c15112183",
+    "source_data/review_curve_lineage/curve_lineage.csv": "f9e246462a66f16796464ca8e86dbb2a91f10da7fdf47c3b5048ab05e53ff925",
+    "source_data/review_curve_lineage/s8_fixed_budget_run_lineage.csv": "122a342bb0cb5857aabd539d00e4a2f5ecf5bdbde44fc750ca8c8324723cecb7",
+    "scripts/collect_clean_exact_bp_rerun.py": "14a0624a0535b0b59d1dfa930024551a9188fefeea8f281447511f5957110029",
+    "source_data/prospective_input_validity/historical_run_validity.csv": "69adda5ab12cd898cc3cf6a3cb3356bd3d49f742a967f5edce23074a1868985e"
+  },
+  "cohorts": [
+    {
+      "cohort": "clean exact-path/backpropagation rerun",
+      "source_folder": "clean_exact_bp",
+      "figures": "Supplementary Table S18 and exact/BP source tables",
+      "n_noise_runs": 160,
+      "identity": "three-class noisy-line images",
+      "status": "resolved_by_frozen_clean_nested_commit",
+      "source_commit": "4f3612a52756c3691e5bd269c6465c02f240c1e8",
+      "source_sha256": "6a20a2beed0fa0e7b4019e2c32ee1cbbd66ca147b6e1b4ce86c38094eacc9c25",
+      "classes": 3,
+      "input_shape": [
+        784,
+        784
+      ],
+      "flattened_inputs": 614656,
+      "generator": "NoisyLineDataset; blank, one horizontal line or one vertical line; iid Gaussian pixel noise SD0.2",
+      "sample_sizes": [
+        8000,
+        1000,
+        1000
+      ],
+      "split": "torch random_split of combined generated dataset; run seed controls RNG",
+      "evidence": [
+        "summary records root74792ca and nested4f3612a5",
+        "collector checks both clean checkouts and frozen source identity",
+        "committed dispatcher maps noise_resilience to NoisyLineDataset with default image_size784",
+        "saved noise checkpoint sizes ~1.259GB and three-class log likelihood support this identity"
+      ],
+      "caveat": "The newer projected-MNIST parameters in a launch YAML are not interpreted by this older dispatcher.",
+      "input_dimension_check": "clean_noise_input_dimension_check.csv: all 20 additive depth-1 records give ((checkpoint_bytes - 7458)/4 - 2314)/(128*2*2) = 614656 = 784^2"
+    },
+    {
+      "cohort": "prospective depth-by-feedback",
+      "source_folder": "prospective_learning",
+      "figures": "depth-by-feedback source tables and SI",
+      "n_noise_runs": 320,
+      "identity": "projected-noise MNIST intended; consistent with retained model dimensions and outcomes",
+      "status": "intended_generator_and_structural_evidence; exact_runtime_nested_source_not_pinned",
+      "classes": 10,
+      "flattened_inputs": 784,
+      "intended_noise_sd": 1.5,
+      "intended_latent_dimension": 50,
+      "intended_projection_seed": 0,
+      "intended_split_noise_seeds": [
+        1,
+        2,
+        3
+      ],
+      "intended_clamp": [
+        0,
+        1
+      ],
+      "evidence": [
+        "retained frozen YAML specifies projected-noise parameters",
+        "same-depth total parameters match MNIST, ruling out784x784 NoisyLine for these runs",
+        "noise accuracy exceeds90%, unlike the clean three-class control"
+      ],
+      "caveat": "A live current nested source is not proof of historical executed bytes; do not label the runtime source fully recovered."
+    },
+    {
+      "cohort": "prospective routing, inhibition-dose and fixed-budget follow-ups",
+      "source_folder": "prospective_followup",
+      "figures": "S8 fixed-budget depth; other prospective follow-up tables",
+      "n_noise_runs": 960,
+      "family_counts": {
+        "inhibition": 400,
+        "fixed_budget": 320,
+        "spatial": 160,
+        "routing": 80
+      },
+      "identity": "projected-noise MNIST intended; exact runtime generator remains qualified",
+      "status": "intended_generator_and_retained_run_audit; raw_configs_not_all_available",
+      "evidence": [
+        "retained fixed-budget YAMLs specify sigma1.5, latent50 and seeds0/1/2/3",
+        "S8 run lineage joins320 fixed-budget outcomes to retained validity audit",
+        "resolved_config_available_for_recheck is false in retained S8 lineage; validity is not complete dataset lineage"
+      ],
+      "caveat": "Do not infer executed task identity solely from the noise_resilience name or from signed-transfer validity."
+    },
+    {
+      "cohort": "inherited synthetic feedback and gradient cohorts",
+      "source_folder": "inherited_neurips",
+      "figures": "S1D,E; archived S3D and associated noise diagnostics",
+      "identity": "unresolved historical noise task",
+      "status": "aggregate_only_no_complete_executed_run_join",
+      "evidence": [
+        "curve_lineage.csv marks execution_lineage_status unresolved for inherited S1/S3 records",
+        "available intended configs and related diagnostic run IDs do not identify all plotted executed runs"
+      ],
+      "caveat": "Do not retrospectively assign either projected-MNIST or frozen NoisyLine to these plotted aggregates."
+    },
+    {
+      "cohort": "forward-depth and interference screens inherited from original figures",
+      "source_folder": "inherited_neurips",
+      "figures": "any other legacy panel labeled Noise or noise_resilience",
+      "identity": "requires panel-specific runtime/config join",
+      "status": "unresolved_unless_separately_linked",
+      "evidence": [
+        "the same dataset key has two demonstrably different implementations"
+      ],
+      "caveat": "No global dataset-key-to-generator mapping is scientifically justified."
+    }
+  ],
+  "release_policy": "Ship separate explicit projected_noise_mnist and legacy_noisy_lines entries; never silently reinterpret noise_resilience without a cohort recipe."
+}

@@ -1,0 +1,72 @@
+{
+  "study": "adaptive_local_positive_conductance_branch_reliability",
+  "status": "frozen_before_canary_outcomes",
+  "frozen_date": "2026-08-19",
+  "canary_seeds": [8198, 8199],
+  "confirmatory_seeds": [
+    8200, 8201, 8202, 8203, 8204, 8205, 8206, 8207, 8208, 8209,
+    8210, 8211, 8212, 8213, 8214, 8215, 8216, 8217, 8218, 8219,
+    8220, 8221, 8222, 8223, 8224, 8225, 8226, 8227, 8228, 8229,
+    8230, 8231, 8232, 8233, 8234, 8235, 8236, 8237, 8238, 8239,
+    8240, 8241, 8242, 8243, 8244, 8245, 8246, 8247, 8248, 8249
+  ],
+  "task": {
+    "branches": 8,
+    "features_per_branch": 4,
+    "train_examples": 512,
+    "test_examples": 2048,
+    "input_baseline": 1.4,
+    "label_signal": 0.55,
+    "input_noise_sd": 0.55,
+    "leak_conductance": 1.0,
+    "excitatory_reversal": 1.0,
+    "inhibitory_reversal": 0.0,
+    "initial_excitatory_conductance": 0.10,
+    "output_gain": 8.0
+  },
+  "training": {
+    "iterations": 40,
+    "smoothness_safety_factor": 0.5,
+    "finite_difference_step": 1e-5,
+    "minimum_reliability_gain": 0.03
+  },
+  "estimator": {
+    "calibration_pairs": 8,
+    "ema_decay": 0.9,
+    "minimum_moment": 1e-12,
+    "observation": "two independent noisy local branch-gradient samples at the current state"
+  },
+  "reliability_heterogeneity": [0.0, 1.0, 2.0],
+  "methods": [
+    "exact_clean_bp",
+    "noisy_no_shunt",
+    "initial_oracle_shunt",
+    "adaptive_local_shunt",
+    "adaptive_global_shunt",
+    "adaptive_shuffled_shunt",
+    "adaptive_point_gate"
+  ],
+  "analysis": {
+    "bootstrap_draws": 20000,
+    "paired_unit": "independent simulation seed",
+    "primary_heterogeneity": 2.0,
+    "primary_contrasts": [
+      "adaptive_local_shunt_minus_adaptive_global_shunt_final_loss",
+      "adaptive_local_shunt_minus_adaptive_shuffled_shunt_final_loss"
+    ],
+    "boundary_contrasts": [
+      "adaptive_local_shunt_minus_noisy_no_shunt_final_loss",
+      "adaptive_local_shunt_minus_initial_oracle_shunt_final_loss"
+    ]
+  },
+  "gates": {
+    "minimum_input": 0.0,
+    "maximum_state_match_error": 1e-12,
+    "maximum_adaptive_point_gate_trajectory_error": 1e-12,
+    "maximum_relative_finite_difference_error": 1e-5,
+    "maximum_physical_shunt_finite_difference_error": 1e-5,
+    "minimum_estimated_gain": 0.03,
+    "maximum_estimated_gain": 1.0
+  },
+  "scope_boundary": "The adaptive rule estimates branch signal and noise moments from paired noisy local gradient observations and maps them to nonnegative shunts under an exact state clamp. It removes oracle access to signal/noise energies but still grants paired teaching samples, the fixed step fraction and a local conductance-to-shunt map. It is not a kinetic inhibitory-plasticity model, a dendrite-exclusive operation or a natural-task test."
+}

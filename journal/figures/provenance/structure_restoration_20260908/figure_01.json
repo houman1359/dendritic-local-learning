@@ -1,0 +1,37 @@
+{
+  "figure": "Figure 1",
+  "output": "figures/components/restored_main_01.pdf",
+  "output_sha256": "e88e727a5bf188200340e0e1526c1fd8e905957d24a27a2e77f073804b9f2340",
+  "panel_sources": {
+    "A": "Conceptual factorization, not experimental data. Exact readout errors in the image cohort; alternative source is tested separately.",
+    "B": "Actual three-proximal/nine-distal projection dictionaries from build_framework.dictionaries; K1/K3 oracle projection.",
+    "C": "Illustrative isotropic-noise projection bound q\u00b2/(q+K\u03c3\u00b2), equal smoothness L, fixed orthogonal projections; q=.8,K=1 versus q=1,K=2. Plotted value is 2L times the optimized lower bound. No endpoint-selection prediction.",
+    "D": "Six-arm fresh MNIST selected-rate cohort; 10 paired seeds per architecture,180 epochs; existing confidence intervals.",
+    "E": "Same-cohort paired K3\u2212projectedK1 and exact\u2212K3 test-accuracy differences.",
+    "F": "Fresh10seed/architecture exact-rule selected-rate checkpoints, initial and validation-selected trained states; activation-space mean captured-energy ratio over2048images\u00d7128neurons withinseed, excluding only zero fields. Same cohort/coordinates as D/E. K1/K3 oracle projection; archived whole-seed intervals unchanged.",
+    "G": "Separate existing MNIST DFA and flattened CIFAR10 exact\u2212neuron-specific contrasts."
+  },
+  "source_sha256": {
+    "source_data/image_ladder_controls/summaries/condition_summary_six_rules.csv": "0259f1306809a5d93eac4a753dcef63712b553b0a639ea4e91d2667eac588bd5",
+    "source_data/image_ladder_controls/summaries/fresh_analysis_rows_six_rules.csv": "1d7ea193b17aec9486e89625d71a4078a2ad9b2255d59b5052b618307f61b44c",
+    "source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv": "ea0566a7a73d05f0bb76e9a0fae3e2399bb7f1852064a37e9d73f7d5215c350a",
+    "source_data/mnist_between_within_factorial/paired_contrasts.csv": "6416c2a755041d1f1c29cdc01aef76b265cf177268933e1eaa9ee040852b3c94",
+    "source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv": "cc19f7467e39e25c2f708ed7ff99b63c0f02a76ca0c6a85c940827b1a813186d",
+    "source_data/image_ladder_controls/summaries/delivery_coordinate_capture_summary.csv": "6c8edbf855ccbec16dceefd7271d8c5b8b7b7d5ede04f74e645db4f9bbaab050",
+    "source_data/image_ladder_controls/summaries/delivery_coordinate_capture.csv": "e0fbcb494a8187265f2fd98610a589c1fbf8857e3aec8efb28250f8eeff868eb",
+    "source_data/image_ladder_controls/summaries/capture_audit.json": "346e14ceaab41bef98f75cec49460a3c7aa6d464f1a1e7f87947ec2be636d23f"
+  },
+  "builder_sha256": {
+    "scripts/credit_first_figures/build_restored_main.py": "730af258411e2b15e6070e00497f93f05bc16580d7e029498515879a36e73edc",
+    "scripts/credit_first_figures/focused_main_evidence.py": "e045f0fc26ce8554af19f7d2b1ee9683ec852899f19e02e76e78163b0d74e773",
+    "scripts/figure_canvas.py": "498dec86dcac34c9841538fa7b5bf7b7311d468db8fbe0c7a648fbb9508c5e1f",
+    "scripts/journal_style.py": "32a3272cebb949784b694bc6dbb495cf74f6ba4ddf97d18d44f3ef54e082844e"
+  },
+  "source_data_immutable": true,
+  "new_experiments": 0,
+  "layout_findings": [],
+  "rendering_scope": "Existing outcomes only; no scientific endpoint or rate selection. Any redraw bootstrap uses whole existing seeds/cells, not independent pairs.",
+  "helper_sha256": {
+    "scripts/credit_first_figures/build_framework.py": "48b54aec56029cad502a987df28a56b583d11275ddfb18857b82ab897a3ab883"
+  }
+}

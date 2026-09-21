@@ -1,0 +1,97 @@
+{
+  "figure": "Figure 6",
+  "output": "figures/main/figure_06.pdf",
+  "output_sha256": "b98feb423727a1f8a3c90ae34a2624cf7cd94b26bb394090366d48329472faba",
+  "plotted_table": "source_data/curated_publication/figure_06_plotted.csv",
+  "plotted_table_sha256": "418ffec8f012016adecc3e98039eb613a62df8462ad69d8f4b559dd43c48583a",
+  "panel_sources": {
+    "main_6B": {
+      "sources": [
+        "source_data/curated_publication/inhibitory_selection_endpoints.csv",
+        "source_data/curated_publication/inhibitory_selection_summary.csv",
+        "source_data/curated_publication/inhibitory_selection_rate_sensitivity.csv",
+        "source_data/curated_publication/inhibitory_rescue_endpoints.csv",
+        "source_data/curated_publication/inhibitory_rescue_common_endpoints.csv",
+        "source_data/curated_publication/nonlinear_separable_endpoints.csv"
+      ],
+      "scope": "Separable target, shunting forward: all five spatial-assignment rules under distractor stress; original paired seed cohort."
+    },
+    "main_6C": {
+      "sources": [
+        "source_data/curated_publication/inhibitory_selection_endpoints.csv",
+        "source_data/curated_publication/inhibitory_selection_summary.csv",
+        "source_data/curated_publication/inhibitory_selection_rate_sensitivity.csv",
+        "source_data/curated_publication/inhibitory_rescue_endpoints.csv",
+        "source_data/curated_publication/inhibitory_rescue_common_endpoints.csv",
+        "source_data/curated_publication/nonlinear_separable_endpoints.csv"
+      ],
+      "scope": "Separable target at severity three: shunting, tonic and current forward controls, three credit rules."
+    },
+    "main_6D": {
+      "sources": [
+        "source_data/curated_publication/inhibitory_selection_endpoints.csv",
+        "source_data/curated_publication/inhibitory_selection_summary.csv",
+        "source_data/curated_publication/inhibitory_selection_rate_sensitivity.csv",
+        "source_data/curated_publication/inhibitory_rescue_endpoints.csv",
+        "source_data/curated_publication/inhibitory_rescue_common_endpoints.csv",
+        "source_data/curated_publication/nonlinear_separable_endpoints.csv"
+      ],
+      "scope": "Broadcast and resistance at ordinary test and severity three; rate-selected and common-rate 0.1 sensitivity, same seed blocks."
+    },
+    "main_6E": {
+      "sources": [
+        "source_data/curated_publication/inhibitory_selection_endpoints.csv",
+        "source_data/curated_publication/inhibitory_selection_summary.csv",
+        "source_data/curated_publication/inhibitory_selection_rate_sensitivity.csv",
+        "source_data/curated_publication/inhibitory_rescue_endpoints.csv",
+        "source_data/curated_publication/inhibitory_rescue_common_endpoints.csv",
+        "source_data/curated_publication/nonlinear_separable_endpoints.csv"
+      ],
+      "scope": "Nonlinear-parent interaction target: original-bound Adam rescue at separately selected rates; twenty new paired seed blocks."
+    },
+    "main_6F": {
+      "sources": [
+        "source_data/curated_publication/inhibitory_selection_endpoints.csv",
+        "source_data/curated_publication/inhibitory_selection_summary.csv",
+        "source_data/curated_publication/inhibitory_selection_rate_sensitivity.csv",
+        "source_data/curated_publication/inhibitory_rescue_endpoints.csv",
+        "source_data/curated_publication/inhibitory_rescue_common_endpoints.csv",
+        "source_data/curated_publication/nonlinear_separable_endpoints.csv"
+      ],
+      "scope": "Same rescue seed blocks at common Adam rate 0.03; a sensitivity, not independent replication."
+    },
+    "main_6G": {
+      "sources": [
+        "source_data/curated_publication/inhibitory_selection_endpoints.csv",
+        "source_data/curated_publication/inhibitory_selection_summary.csv",
+        "source_data/curated_publication/inhibitory_selection_rate_sensitivity.csv",
+        "source_data/curated_publication/inhibitory_rescue_endpoints.csv",
+        "source_data/curated_publication/inhibitory_rescue_common_endpoints.csv",
+        "source_data/curated_publication/nonlinear_separable_endpoints.csv"
+      ],
+      "scope": "Nonlinear parents with separable target at common Adam rate .03; same rescue seed blocks, only the target interaction removed."
+    },
+    "main_6A": {
+      "sources": [],
+      "scope": "Schematic of the supplied cue, four two-feature streams,16 [4,2] DendriNet neurons and linear readout; no measured series."
+    }
+  },
+  "source_sha256": {
+    "source_data/curated_publication/inhibitory_selection_endpoints.csv": "0563587108aad93a2e819ac4d40c2a6d43205e81a7d3035ef8d6897f1af952bc",
+    "source_data/curated_publication/inhibitory_selection_summary.csv": "f320b15d3c354e349d9aac340c2d068ae7878a9d4faa3a4ef22be80ec2e1693c",
+    "source_data/curated_publication/inhibitory_selection_rate_sensitivity.csv": "6913095603e681ed70cbdeae2a78afb30d01ad582950b3b57c7c0685797aef22",
+    "source_data/curated_publication/inhibitory_rescue_endpoints.csv": "a172ebed83cd40f1f962fd5bd2a98db317955c4c63f435988a99888317b92b55",
+    "source_data/curated_publication/inhibitory_rescue_common_endpoints.csv": "53e6394e2b24002321ef3739396a77ed3dfe9256cf0dc5593a7a0df08997c7cb",
+    "source_data/curated_publication/nonlinear_separable_endpoints.csv": "c00b3518494410e18af97f28a642173dc47972331653d24bd8a77e769574dd7a"
+  },
+  "builders_sha256": {
+    "scripts/review_completion/population_figure.py": "d6ea650300ba6465f5caac220f43680553b80609e687c618e7143bb429aac1dc",
+    "scripts/conductance_local_gate/figure.py": "29a77a4e519bc375e66649545731ed4b803fd67180839beb258d0f13365dd8a4",
+    "scripts/figure_canvas.py": "7f2983ff0c52a30dd5ba9bdeccc6fda940b4366ad872cbf0755fec5daa1dd7aa",
+    "scripts/credit_first_figures/focused_provenance.py": "b7ade95b88e7d10a43bab01716dee6211bc2f09735b605d489c0012a147ecea7"
+  },
+  "source_data_immutable": true,
+  "new_experiments": 0,
+  "layout_findings": [],
+  "scope": "Original and rescue cohorts are distinct; common-rate and separable-task sensitivities reuse rescue seeds. Rendering only."
+}

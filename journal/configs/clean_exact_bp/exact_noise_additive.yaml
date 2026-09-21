@@ -1,0 +1,14 @@
+extends: ../prospective_learning_benefits/confirmatory_noise_additive_local3f.yaml
+output_dir: drafts/dendritic-local-learning/journal/analysis/clean_exact_bp/generated
+execution_results_dir: drafts/dendritic-local-learning/journal/analysis/clean_exact_bp/results/exact_noise_additive
+slurm_config:
+  max_concurrent_jobs: 8
+  mem: 80GB
+sweep_contract:
+  expected_config_count: 40
+sweep_config:
+  model.core.architecture.excitatory_branch_factors: [[2], [2, 2], [2, 2, 2], [2, 2, 2, 2]]
+  training.main.learning_strategy_config.error_broadcast_mode: [path_transport]
+base_config:
+  outputs:
+    run_name: clean_exact_noise_additive

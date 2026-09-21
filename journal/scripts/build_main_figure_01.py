@@ -1,0 +1,874 @@
+#!/usr/bin/env python3
+"""Merged opening framework and quantitative dictionary atlas.
+
+A identifies the task readout that supplies distinct neuronal coordinates.
+B shows eligibility times delivered error for a directed conductance tree.
+C works through A c numerically on the same [3,3] compartment ordering used
+by D's route dictionaries. E shows retained 15-seed MNIST field-capture data
+with the existing 95% intervals. Both older results roadmaps are omitted.
+The anatomy preview remains with the main reconstruction figure.
+
+Legacy helper functions remain import-compatible: Figure 3 uses mini_tree.
+The build() entry point draws only the current five-panel composition.
+"""
+
+from __future__ import annotations
+
+import os
+import sys
+from pathlib import Path
+
+import matplotlib
+
+matplotlib.use("Agg")
+
+import numpy as np
+import pandas as pd
+from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.patches import Arc, Circle, FancyArrowPatch
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+import credit_tree_schematics as CT  # noqa: E402
+from credit_tree_schematics import GHOST, RIM, draw_credit_tree, mix  # noqa: E402
+from figure_canvas import (  # noqa: E402
+    COLORS,
+    LW_DATA,
+    LW_EDGE,
+    LW_HAIR,
+    LW_REF,
+    PT_ANNOT,
+    PT_LABEL,
+    PT_SMALL,
+    PT_TITLE,
+    Margins,
+    NativeCanvas,
+)
+from native_schematics import Frame, _wrap_to_width  # noqa: E402
+
+ROOT = Path(__file__).resolve().parents[1]
+COMPONENTS = ROOT / "figures" / "components"
+OUT = COMPONENTS / "main_figure_01_native.pdf"
+
+INK = COLORS["ink"]
+MUTE = COLORS["mute"]
+BLUE = COLORS["additive"]
+GREEN = COLORS["shunting"]
+DEND = COLORS["dend"]
+SOMA = COLORS["soma"]
+EXC = COLORS["exc"]
+INH = COLORS["inh"]
+EDGE = COLORS["edge"]
+
+# ── canvas geometry, in points (one module grid, one h- and one v-gutter) ──
+CANVAS_H_PT = 453.0            # 518.4 / 453.0 = 1.14 aspect
+MARGINS = Margins(left=32.0, right=8.0, top=26.0, bottom=9.0)
+HGUTTER = 22.0
+VGUTTER = 26.0
+# Two 122 pt rows of half-width panels and one 130 pt closing band.  With six
+# roadmap cards across 478.4 pt each card is ~71 pt wide, so its width-limited
+# tree glyph stands ~55 pt tall; 130 pt is that glyph plus the card's two text
+# bands and paddings, which keeps the closing band free of dead vertical space
+# while its row-mates stay identical.
+ROW_PT = [122.0, 122.0, 130.0]
+LETTER_DX = 20.0
+LETTER_DY = 5.0
+TITLE_PAD = 4.0
+LW_ERR_ARROW = 0.95        # LW_ERR: the coordinate arrow weight
+
+# Credit-tree frames: the library's own limits, quoted so a tree inset can be
+# given a rectangle of exactly the right aspect instead of floating in one.
+TREE_XL = (-2.55, 2.55)
+# The frame clears the K=4 address capsules, whose fat round caps stand ~0.33
+# data units above the terminal tips; the library's own 3.32 top clipped them.
+TREE_YL = (-0.72, 3.60)
+TREE_ASPECT = (TREE_XL[1] - TREE_XL[0]) / (TREE_YL[1] - TREE_YL[0])
+# Panel C stacks three trees, so its insets use a frame cropped to the ink the
+# tree actually carries: with the library's own 0.53-unit dead strip under the
+# soma the three stages would be separated by a 17 pt blank strip, i.e. a
+# third internal spacing value on a page that declares only 22 and 20 pt.
+TREE_YL_TIGHT = (-0.32, 3.45)
+
+SUBSCRIPT_DIGITS = "₀₁₂₃₄₅₆₇₈₉"
+
+
+# ── shared helpers ────────────────────────────────────────────────────────
+def tree_inset(frame, rect, *, mode, K=4, shunted=True, labels=False,
+               scale=1.0, arrow_scale=None, hide_arrows=False,
+               xlim=TREE_XL, ylim=TREE_YL):
+    """Credit tree filling ``rect`` (frame fractions) at library proportions."""
+    aspect = (xlim[1] - xlim[0]) / (ylim[1] - ylim[0])
+    x0, y0, w, h = rect
+    w_pt, h_pt = w * frame.w_pt, h * frame.h_pt
+    if w_pt / h_pt > aspect:                    # height-limited
+        fit_h, fit_w = h_pt, h_pt * aspect
+    else:                                        # width-limited
+        fit_w, fit_h = w_pt, w_pt / aspect
+    box = (x0 + (w - frame.fx(fit_w)) / 2.0,
+           y0 + (h - frame.fy(fit_h)) / 2.0,
+           frame.fx(fit_w), frame.fy(fit_h))
+    sub = frame.ax.inset_axes(box, transform=frame.ax.transData, zorder=3)
+    sub.set_facecolor("none")
+    draw_credit_tree(sub, mode=mode, K=K, shunted=shunted, scale=scale,
+                     labels=labels, xlim=xlim, ylim=ylim)
+    if hide_arrows or arrow_scale is not None:
+        for patch in sub.patches:
+            if isinstance(patch, FancyArrowPatch):
+                if hide_arrows:
+                    patch.set_visible(False)
+                else:
+                    patch.set_mutation_scale(arrow_scale)
+    return sub, box
+
+
+def label_tone(color, *, max_luma=0.30):
+    """Darken a palette hue with ink until label text is print-legible.
+
+    Every stream name uses the same rule, so the ribbon keeps one typographic
+    convention while the pale hues (rose, salmon) stop reading as gray.
+    """
+    from matplotlib.colors import to_rgb
+
+    for pct in range(100, 39, -4):
+        rgb = mix(color, pct, "ink")
+        luma = 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]
+        if luma <= max_luma:
+            return rgb
+    return to_rgb(mix(color, 40, "ink"))
+
+
+def mini_tree(frame, cx, cy, half_h, *, color=DEND):
+    """Four-tip -> two-junction -> soma icon in the anatomy vocabulary.
+
+    The same object as the full credit tree, drawn small: tips taper to
+    ``LW_HAIR``, the two junctions are open circles and the soma is the
+    filled ``COLORS['soma']`` disc, so a unit here and the tree in A read as
+    the same cell.
+    """
+    dy = half_h / 1.5
+    tip_x = cx - frame.fx(18.0)
+    mid_x = cx - frame.fx(9.5)
+    tip_ys = [cy + 1.55 * dy, cy + 0.50 * dy, cy - 0.50 * dy, cy - 1.55 * dy]
+    mid_ys = [cy + 0.98 * dy, cy - 0.98 * dy]
+    for i, my in enumerate(mid_ys):
+        for ly in tip_ys[2 * i:2 * i + 2]:
+            frame.ax.plot([tip_x, mid_x], [ly, my], color=color,
+                          lw=LW_HAIR, solid_capstyle="round", zorder=3)
+    for my in mid_ys:
+        frame.ax.plot([mid_x, cx], [my, cy], color=color, lw=LW_EDGE,
+                      solid_capstyle="round", zorder=3)
+    for my in mid_ys:
+        frame.disc((mid_x, my), 0.9, fill="white", edge=color, lw=LW_HAIR,
+                   zorder=4)
+    frame.disc((cx, cy), 2.6, fill=SOMA, edge=RIM, lw=LW_HAIR, zorder=5)
+    return tip_x, cx
+
+
+# ── A: point unit -> dendritic tree ───────────────────────────────────────
+def panel_a(ax):
+    f = Frame(ax)
+    label_y = f.fy(11.0)
+
+    soma = (0.235, 0.585)
+    fan_x = 0.020
+    for y in (0.930, 0.770, 0.455, 0.295):
+        ax.plot([fan_x, soma[0] - f.fx(6.6)], [y, soma[1]], color=MUTE,
+                lw=LW_EDGE, solid_capstyle="round", zorder=2)
+        ax.plot([fan_x], [y], marker="o", ms=3.0, mfc="white", mec=MUTE,
+                mew=LW_EDGE, ls="none", zorder=3)
+    ax.text(fan_x + f.fx(5.2), 0.968, "xᵢ", ha="left", va="center",
+            fontsize=PT_SMALL, color=INK)
+    f.disc(soma, 5.8, fill=SOMA, edge=RIM, lw=LW_EDGE, zorder=4)
+    # This is the title's "point unit -> dendritic tree" mapping arrow, so it
+    # takes the mute feedforward ink.  In blue it read as the neuron EMITTING
+    # a coordinate, since a blue arrow means delivered error everywhere else.
+    f.arrow((soma[0] + f.fx(7.2), soma[1]), (0.430, soma[1]), color=MUTE,
+            lw=LW_ERR_ARROW, head=3.6, zorder=5)
+    # The delivered coordinate itself: a short blue arrow rising into the
+    # soma from below, the same delivery idiom as panel B's per-unit return
+    # and C's coordinate rung, so the blue label names a drawn blue glyph.
+    f.arrow((soma[0], soma[1] - f.fy(19.0)), (soma[0], soma[1] - f.fy(7.6)),
+            color=BLUE, lw=LW_ERR_ARROW, head=3.2, zorder=5)
+    ax.text(0.215, label_y, "one neuronal coordinate  δᵤ", ha="center",
+            va="center", fontsize=PT_ANNOT, color=BLUE)
+
+    # The tree fills its sub-cell edge to edge and starts exactly one
+    # h-gutter (22 pt) right of the point unit, so the page carries no third
+    # internal spacing value.
+    gap = f.fx(HGUTTER)
+    tree_x0 = 0.430 + gap
+    tree_ax, tree_box = tree_inset(
+        f, (tree_x0, f.fy(13.0), 1.0 - tree_x0, 1.0 - f.fy(13.0)),
+        mode="address", K=4, scale=0.95, arrow_scale=0.65)
+    ax.text(tree_box[0] + tree_box[2] / 2.0, label_y, "route signals  cᵤ,ₖ",
+            ha="center", va="center", fontsize=PT_ANNOT, color=INK)
+
+
+
+# ── B: network layer ──────────────────────────────────────────────────────
+def panel_b(ax):
+    f = Frame(ax)
+    unit_ys = (0.910, 0.692, 0.474, 0.256)
+    bus_e, bus_i = 0.215, 0.245
+    unit_x = 0.435
+    out_x = 0.615
+    out_bus = 0.700
+    box_x0, box_x1 = 0.735, 0.905
+    delta_x = 0.975
+
+    for y0, y1, key, text in ((0.850, 0.980, "exc", "E pool"),
+                              (0.135, 0.265, "inh", "I pool")):
+        f.group((0.0, y0, 0.150, y1 - y0), tint=mix(key, 10),
+                edge=COLORS[key], lw=LW_EDGE, radius_pt=2.5, zorder=1.0)
+        ax.text(0.075, (y0 + y1) / 2.0, text, ha="center", va="center",
+                fontsize=PT_SMALL, color=COLORS[key])
+
+    # The two rails stop short of each other's feed height, so the pool
+    # arrows reach their own rail without ever crossing the other one.
+    f.arrow((0.155, 0.915), (bus_e, 0.915), color=EXC, lw=LW_EDGE, head=3.4)
+    f.arrow((0.155, 0.200), (bus_i, 0.200), color=INH, lw=LW_EDGE, head=3.4)
+    # The E rail runs to its topmost take-off (row 1 leaves at y + 5 pt), so
+    # no feed arrow starts above the rail's own end.
+    ax.plot([bus_e, bus_e], [0.236, unit_ys[0] + f.fy(5.0)], color=EXC,
+            lw=LW_EDGE, alpha=0.80, solid_capstyle="round", zorder=2)
+    ax.plot([bus_i, bus_i], [0.200, 0.880], color=INH, lw=LW_EDGE,
+            alpha=0.80, solid_capstyle="round", zorder=2)
+
+    half_h = 0.078
+    for index, y in enumerate(unit_ys, start=1):
+        f.arrow((bus_e, y + f.fy(5.0)), (unit_x - f.fx(19.0), y + f.fy(2.4)),
+                color=EXC, lw=LW_HAIR, head=3.4)
+        f.arrow((bus_i, y - f.fy(5.0)), (unit_x - f.fx(19.0), y - f.fy(2.4)),
+                color=INH, lw=LW_HAIR, head=3.4)
+        mini_tree(f, unit_x, y, half_h)
+        f.arrow((unit_x + f.fx(4.6), y), (out_x - f.fx(5.6), y), color=MUTE,
+                lw=LW_HAIR, head=3.6)
+        f.disc((out_x, y), 4.4, fill="white", edge=EDGE, lw=LW_EDGE, zorder=6)
+        ax.text(out_x, y, f"y{SUBSCRIPT_DIGITS[index]}", ha="center",
+                va="center", fontsize=PT_SMALL, color=INK, zorder=7)
+        ax.plot([out_x + f.fx(4.6), out_bus], [y, y], color=MUTE,
+                lw=LW_HAIR, zorder=2)
+    ax.plot([out_bus, out_bus], [unit_ys[-1], unit_ys[0]], color=MUTE,
+            lw=LW_HAIR, zorder=2)
+
+    f.group((box_x0, 0.480, box_x1 - box_x0, 0.250), tint=COLORS["panel_bg"],
+            edge=EDGE, lw=LW_EDGE, radius_pt=2.5, zorder=1.0)
+    ax.text((box_x0 + box_x1) / 2.0, 0.605, "task\nreadout", ha="center",
+            va="center", fontsize=PT_SMALL, color=INK, linespacing=1.2)
+    f.arrow((out_bus, 0.605), (box_x0, 0.605), color=MUTE, lw=LW_HAIR,
+            head=3.6)
+    # The loss supplies delta_out INTO the readout (caption B), so the red
+    # arrow enters from the panel edge; the old outward arrow dead-ended in
+    # an unexplained terminator disc.
+    f.arrow((delta_x, 0.605), (box_x1 + f.fx(1.2), 0.605), color=COLORS["bp"],
+            lw=LW_EDGE, head=3.6)
+    ax.text((box_x1 + delta_x) / 2.0, 0.605 + f.fy(6.5), "δₒᵤₜ", ha="center",
+            va="bottom", fontsize=PT_ANNOT, color=COLORS["bp"])
+    ax.text(unit_x, 0.075, "N dendritic E/I units", ha="center",
+            va="center", fontsize=PT_SMALL, color=MUTE)
+
+    # -- feedback return: the loss assigns one error coordinate per neuron,
+    #    so a thin additive-blue bus leaves the readout, runs under the
+    #    output column and rises on one spine; a short arrow then delivers
+    #    δᵤ to each soma from below, echoing panel A's coordinate arrow.
+    fb_x = 0.664
+    fb_y = 0.150
+    # Dashed strokes separate the backward pathway from the solid blue E-pool
+    # feeds at a glance (same additive blue, so blue = error stays true);
+    # only the short delivery arrows into each soma remain solid.
+    fb_dash = dict(ls=(0, (2.2, 1.6)), dash_capstyle="butt")
+    rd_cx = (box_x0 + box_x1) / 2.0
+    ax.plot([rd_cx, rd_cx], [0.480, fb_y], color=BLUE, lw=LW_HAIR,
+            zorder=2, **fb_dash)
+    ax.plot([rd_cx, fb_x], [fb_y, fb_y], color=BLUE, lw=LW_HAIR,
+            zorder=2, **fb_dash)
+    ax.plot([fb_x, fb_x], [fb_y, unit_ys[0] - f.fy(9.4)], color=BLUE,
+            lw=LW_HAIR, zorder=2, **fb_dash)
+    # Orthogonal delivery, not an arc.  A curved arrow takes its head angle
+    # from the tangent where the arc happens to end, so these heads pointed
+    # off in directions that named nothing; and running beside the forward
+    # stroke, the pair read as one two-headed connector.  The return now
+    # drops to its own line, runs back under the output column and turns UP
+    # into the soma, so the head is vertical and aimed at what it delivers to.
+    drop = f.fy(9.4)
+    # Each delivery is named delta_1..delta_4, matching y_1..y_4: with one
+    # label on the shared bus the return read as a broadcast scalar, i.e.
+    # the strict-scalar control of Fig. 3 rather than the neuron-specific
+    # feedback the panel is meant to show.  The label sits right of its
+    # arrow, under the forward stroke and above the dashed return line.
+    for index, y in enumerate(unit_ys, start=1):
+        ax.plot([fb_x, unit_x], [y - drop, y - drop], color=BLUE,
+                lw=LW_HAIR, zorder=2.4, **fb_dash)
+        f.arrow((unit_x, y - drop), (unit_x, y - f.fy(3.4)), color=BLUE,
+                lw=LW_HAIR, head=3.2, zorder=2.4)
+        ax.text(unit_x + f.fx(3.0), y - f.fy(6.0),
+                f"δ{SUBSCRIPT_DIGITS[index]}", ha="left", va="center",
+                fontsize=PT_SMALL, color=BLUE, zorder=7)
+    # The bus keeps its generic name over its return run under the output
+    # column, where it no longer competes with a per-unit label.
+    ax.text((rd_cx + fb_x) / 2.0, fb_y + f.fy(4.0), "δᵤ", ha="center",
+            va="bottom", fontsize=PT_ANNOT, color=BLUE)
+
+
+# ── C: coordinate -> address -> gain (the headline ladder) ────────────────
+# Each rung carries its tree, its name, its symbol and the one question the
+# stage answers.  The sentence that used to sit under every rung ("one error
+# value per neuron...", "K coordinates per neuron...", "path conductance
+# sets...") is prose, not graphic content, and has moved to the caption.
+STAGES = (("coordinate", "coordinate", "which neuron"),
+          ("address", "address", "which subtree"),
+          ("gain", "gain", "how strongly"))
+
+TREE_COL = 0.30                   # the rung's tree column, in frame fractions
+TEXT_COL = 0.345
+
+# The address rung's ONE selected subtree, and the route that reaches it.
+# The K=4 library mode drew all four subtree capsules over one tree, and at
+# rung size the overlapping tints read as noise while nothing was actually
+# selected; "which subtree" needs exactly one answer on display.  The gain
+# rung then re-uses panel D's idiom -- the transported route drawn edge by
+# edge in additive blue -- so "which" (a lit subtree) and "how strongly" (the
+# blue delivery with its gain) stop being the same picture with a ring on it.
+_ADDR_SUBTREE_C = [("JL", "JLL")]
+_ADDR_SUBTREE_D = [("JLL", "T1"), ("JLL", "T2")]
+_ADDR_CAPSULE = [(CT._lerp("JL", "JLL", 0.3), "JLL", "T1"), ("JLL", "T2")]
+# Panel D's route strokes, refitted: at a third of D's tree height its head
+# geometry renders as blobs that swallow the edges they decorate.
+_GAIN_ROUTE = ((CT.ROOT_PT, CT.P["J1"]),
+               (CT.P["J1"], CT.P["JL"]),
+               (CT.P["JL"], CT.P["JLL"]))
+
+
+RUNG_XL = (-3.05, 2.55)          # room for the halo left of T1; no dead right
+
+
+def _rung_tree(f, rect, rung):
+    """One rung glyph, drawn natively in panel D's vocabulary."""
+    if rung == "coordinate":
+        sub, _ = tree_inset(f, rect, scale=1.0, arrow_scale=0.75,
+                            xlim=RUNG_XL, ylim=TREE_YL_TIGHT,
+                            mode="coordinate")
+        sub.text(1.42, 0.72, "δᵤ", ha="left", va="center",
+                 fontsize=PT_SMALL, color=BLUE)
+        return
+    aspect = (RUNG_XL[1] - RUNG_XL[0]) / (TREE_YL_TIGHT[1] - TREE_YL_TIGHT[0])
+    x0, y0, w, h = rect
+    w_pt, h_pt = w * f.w_pt, h * f.h_pt
+    if w_pt / h_pt > aspect:
+        fit_h, fit_w = h_pt, h_pt * aspect
+    else:
+        fit_w, fit_h = w_pt, w_pt / aspect
+    box = (x0 + (w - f.fx(fit_w)) / 2.0, y0 + (h - f.fy(fit_h)) / 2.0,
+           f.fx(fit_w), f.fy(fit_h))
+    sub = f.ax.inset_axes(box, transform=f.ax.transData, zorder=3)
+    sub.set_facecolor("none")
+    CT._setup_axes(sub, RUNG_XL, TREE_YL_TIGHT)
+    t = CT._Tree(sub, 1.0, False)
+    t.capsule(mix("shunting", 18), 11, _ADDR_CAPSULE)
+    t.tree(GHOST)
+    t.edges(_ADDR_SUBTREE_C, DEND, CT._TAPER_PT["C"], zorder=2.2)
+    t.edges(_ADDR_SUBTREE_D, DEND, CT._TAPER_PT["D"], zorder=2.2)
+    t.junctions(edge=GHOST)
+    t.soma(SOMA, RIM)
+    if rung == "address":
+        # One digit inside each quarter's fork -- the address is an index
+        # into K discrete subtrees, and the selected index is the one the
+        # halo answers.  Set above the canopy the digits crowded the divider
+        # to the row above; here each digit sits at the clear centre of its
+        # own fork wedge (no stroke within a glyph width), so no white
+        # backing is needed and no tip stroke is amputated behind a bbox.
+        for k, (tx, ty) in enumerate(((-1.95, 2.55), (-0.58, 2.95),
+                                      (0.60, 2.90), (1.89, 2.50)), 1):
+            selected = k == 1
+            sub.text(tx, ty, str(k), ha="center", va="center",
+                     fontsize=PT_SMALL, color=INK if selected else MUTE,
+                     fontweight="bold" if selected else "normal",
+                     zorder=5)
+        sub.text(-1.62, 1.10, "cᵤ,ₖ₌₁", ha="center", va="center",
+                 fontsize=PT_SMALL, color=INK)
+        return
+    for a, b in _GAIN_ROUTE:
+        sub.plot([a[0], b[0]], [a[1], b[1]], color=BLUE, lw=LW_HAIR,
+                 solid_capstyle="round", zorder=2.6)
+        sub.add_patch(FancyArrowPatch(
+            CT._lerp(a, b, 0.30), CT._lerp(a, b, 0.62),
+            arrowstyle="-|>,head_length=1.7,head_width=1.1",
+            mutation_scale=1.0, color=BLUE, lw=LW_HAIR, capstyle="round",
+            zorder=4.5))
+    # The ring names the compartment n that alpha~_n is the gain OF: the
+    # route's terminal node JLL, in panel D's black-ring idiom scaled to the
+    # rung (D's 8 pt ring on a 9 pt segment would swallow the fork).
+    sub.plot([CT.P["JLL"][0]], [CT.P["JLL"][1]], marker="o", ms=6.4,
+             mfc="none", mec=INK, mew=LW_EDGE, ls="none", zorder=4.4)
+    sub.text(-0.52, 0.55, "α̃ₙ", ha="right", va="center",
+             fontsize=PT_SMALL, color=BLUE)
+
+
+def panel_c(ax):
+    f = Frame(ax)
+    band = 1.0 / 3.0
+    for index, (rung, name, question) in enumerate(STAGES):
+        top = 1.0 - index * band
+        core = (0.0, top - band * 0.96, TREE_COL, band * 0.92)
+        _rung_tree(f, core, rung)
+        ax.text(TEXT_COL, top - band * 0.36, name, ha="left", va="center",
+                fontsize=PT_LABEL, color=INK)
+        ax.text(TEXT_COL, top - band * 0.68, question, ha="left",
+                va="center", fontsize=PT_ANNOT, color=MUTE)
+        if index:
+            y = top - band * 0.005
+            ax.plot([0.0, 1.0], [y, y], color=COLORS["grid"], lw=LW_HAIR,
+                    zorder=1.0)
+            ax.plot([TREE_COL / 2.0], [y], marker="v", ms=3.0, mfc=MUTE,
+                    mec="none", ls="none", zorder=2)
+
+
+# ── D: local eligibility x transported error ──────────────────────────────
+# The tagged synapse sits on the JR -> JRL segment, just proximal to the
+# ring at JRL: on the JRL -> T6 branch (distal to the ring, the library's
+# eligibility-mode placement) the compartment hosting synapse i was
+# ambiguous.  The segment is ~19 pt long and must hold the JR junction, the
+# alpha_3 route arrow, the 4.6 pt synapse and the 8 pt ring in a line, so the
+# arrow is set proximally (lerp .15-.43) and the synapse at .605: ~0.8 pt of
+# clear span on each side of the dot.
+SYN_F = 0.605                    # tagged synapse along the JR -> JRL segment
+_ROUTE_ARROW = (0.32, 0.60)      # lerp span of the route arrow on a segment
+_ROUTE_ARROW_LAST = (0.15, 0.43)  # the synapse-bearing JR -> JRL segment
+
+
+def panel_d(ax):
+    f = Frame(ax)
+    eq_band = f.fy(28.0)
+    band_h = 1.0 - eq_band
+
+    # -- the tree: the eligibility decoration (ghost arbor, one lit branch,
+    #    one tagged synapse) with the transported-error path overlaid, exactly
+    #    as ``build_journal_figures._panel_general_adjoint`` composes it; the
+    #    library's zoom bubble becomes the keyed column at the right, so the
+    #    two factors of the theorem sit side by side.
+    core = (0.0, eq_band, 0.545, band_h)
+    w_pt, h_pt = core[2] * f.w_pt, core[3] * f.h_pt
+    if w_pt / h_pt > TREE_ASPECT:
+        fit_h, fit_w = h_pt, h_pt * TREE_ASPECT
+    else:
+        fit_w, fit_h = w_pt, w_pt / TREE_ASPECT
+    # The tree is height-limited in this cell, so it is set against the cell's
+    # left edge rather than centred in it: centring would leave a dead strip
+    # on the left of the panel while the key column already holds the right.
+    box = (core[0],
+           core[1] + (core[3] - f.fy(fit_h)) / 2.0,
+           f.fx(fit_w), f.fy(fit_h))
+    sub = ax.inset_axes(box, transform=ax.transData, zorder=3)
+    sub.set_facecolor("none")
+    CT._setup_axes(sub, TREE_XL, TREE_YL)
+    t = CT._Tree(sub, 1.0, False)
+    t.tree(GHOST)
+    t.seg("JR", "JRL", DEND, CT._TAPER_PT["C"], zorder=2.2)
+    t.seg("JRL", "T6", DEND, CT._TAPER_PT["D"], zorder=2.2)
+    t.junctions(edge=GHOST)
+    t.junctions(names=("JRL",))
+    t.soma(SOMA, RIM)
+    syn = CT._lerp("JR", "JRL", SYN_F)
+
+    path = [(CT.ROOT_PT, CT.P["J1"], LW_DATA, _ROUTE_ARROW),
+            (CT.P["J1"], CT.P["JR"], LW_ERR_ARROW, _ROUTE_ARROW),
+            (CT.P["JR"], CT.P["JRL"], LW_EDGE, _ROUTE_ARROW_LAST)]
+    for a, b, lw, (f0, f1) in path:
+        sub.plot([a[0], b[0]], [a[1], b[1]], color=BLUE, lw=lw,
+                 solid_capstyle="round", zorder=2.6)
+        sub.add_patch(FancyArrowPatch(
+            CT._lerp(a, b, f0), CT._lerp(a, b, f1),
+            arrowstyle="-|>,head_length=3.2,head_width=2.0",
+            mutation_scale=1.0, color=BLUE, lw=lw, capstyle="round",
+            zorder=4.5))
+    # The synapse is drawn after the route so it sits ON the branch rather
+    # than under the blue stroke that now runs beneath it.
+    t.dot(syn, 4.6, EXC, RIM, LW_HAIR, zorder=4.6)
+    sub.plot([CT.P["JRL"][0]], [CT.P["JRL"][1]], marker="o", ms=8.0,
+             mfc="none", mec=INK, mew=LW_EDGE, ls="none", zorder=4.4)
+    # The soma carries delta_0 = f_0'(V_0) delta_u (the library's own
+    # transport-mode label), so the drawn bracket [a3 a2 a1 delta_0] IS
+    # Eq. pathgain and not its identity-nonlinearity special case.
+    sub.text(-0.30, -0.02, "δ₀", ha="right", va="center",
+             fontsize=PT_SMALL, color=BLUE)
+    sub.text(0.24, 0.44, "α₁", ha="left", va="center",
+             fontsize=PT_SMALL, color=BLUE)
+    sub.text(0.74, 0.92, "α₂", ha="left", va="center",
+             fontsize=PT_SMALL, color=BLUE)
+    sub.text(0.40, 1.72, "α₃", ha="right", va="center",
+             fontsize=PT_SMALL, color=BLUE)
+    sub.text(0.16, 2.66, "qₙ", ha="right", va="center",
+             fontsize=PT_SMALL, color=INK)
+
+    # -- the local-factor key: three factors, direct-labelled beside their
+    #    own glyphs (S6), with no box and no leader crossing the canopy.
+    key_h = f.fy(63.0)
+    key = (0.600, eq_band + (band_h - key_h) / 2.0, 0.400, key_h)
+    kx = key[0] + f.fx(4.0)
+    lx = key[0] + f.fx(11.0)
+    head_y = key[1] + key[3] - f.fy(8.0)
+    # No symbol in the heading: e_i is the POINT-neuron eligibility of
+    # Eq. pointneuron, and the dendritic factor carries no symbol in the text.
+    ax.text(key[0], head_y, "directed-tree eligibility", ha="left", va="center",
+            fontsize=PT_SMALL, color=MUTE, zorder=6)
+    # mute scaffolding rule instead of a box: it groups the three rows and
+    # carries the column out to the cell edge without a second key convention
+    ax.plot([key[0], 1.0], [head_y - f.fy(6.5)] * 2, color=MUTE, lw=LW_HAIR,
+            solid_capstyle="butt", zorder=1.4)
+    rows = [key[1] + key[3] - f.fy(v) for v in (23.5, 38.5, 53.5)]
+    ax.plot([kx], [rows[0]], marker="o", ms=3.4, mfc=EXC, mec="none",
+            ls="none", zorder=6)
+    ax.text(lx, rows[0], "xᵢ", ha="left", va="center", fontsize=PT_SMALL,
+            color=INK, zorder=6)
+    ax.text(lx + f.fx(11.5), rows[0], "presyn.", ha="left", va="center",
+            fontsize=PT_SMALL, color=MUTE, zorder=6)
+    ax.add_patch(Arc((kx, rows[1]), 2 * f.fx(3.6), 2 * f.fy(3.6),
+                     theta1=-20, theta2=200, color=MUTE, lw=LW_HAIR,
+                     zorder=6))
+    ang = np.deg2rad(52.0)
+    ax.plot([kx, kx + f.fx(3.6) * np.cos(ang)],
+            [rows[1], rows[1] + f.fy(3.6) * np.sin(ang)], color=INK,
+            lw=LW_HAIR, solid_capstyle="round", zorder=6)
+    ax.text(lx, rows[1], "Eᵢ − Vₙ", ha="left", va="center",
+            fontsize=PT_SMALL, color=INK, zorder=6)
+    zx, zy = kx - f.fx(4.6), rows[2]
+    xs, ys = [zx], [zy]
+    for dx, dy in ((1.4, 1.6), (2.2, -3.2), (2.2, 3.2), (2.2, -3.2),
+                   (1.4, 1.6)):
+        xs.append(xs[-1] + f.fx(dx))
+        ys.append(ys[-1] + f.fy(dy))
+    ax.plot(xs, ys, color=INK, lw=LW_HAIR, solid_joinstyle="round", zorder=6)
+    ax.text(lx, rows[2], "Rₙᵗᵒᵗ", ha="left", va="center",
+            fontsize=PT_SMALL, color=INK, zorder=6)
+
+    # The transported factor is spelled as the drawn path product, so the
+    # equation's second bracket names the alpha glyphs on the tree above
+    # (soma error delta_u times the per-branch gains, in route order).
+    ax.text(0.5, f.fy(23.0), "directed tree:  ∂ℒ / ∂gᵢ = [xᵢ Rₙᵗᵒᵗ (Eᵢ − Vₙ)] [α₃α₂α₁ δ₀]",
+            ha="center", va="center", fontsize=PT_ANNOT, color=INK)
+    ax.text(0.5, f.fy(5.0), "general adjoint:  Jᵥᵀ q = ∇ᵥℒ,   ∂ℒ / ∂gᵢ = xᵢ (Eᵢ − Vₙ) qₙ",
+            ha="center", va="center", fontsize=PT_SMALL, color=MUTE)
+
+
+# ── E: roadmap of the Results (full-width ribbon) ─────────────────────────
+# Six cards, one per stage of the Results, in the order the subsections run:
+# exact factorization; neuron selection; the credit-operator boundary;
+# controlled branch-address tests; task-aligned physical depth; and the
+# anatomical, conductance and measured-response boundary. Every glyph is drawn from the shared
+# credit-tree vocabulary so the roadmap previews the figures that follow.
+
+
+def _glyph_factorization(f, rect):
+    """Transported error over the ghost arbor: the blue path product."""
+    tree_inset(f, rect, mode="transport", scale=0.85, arrow_scale=0.7)
+
+
+def _glyph_coordinate(f, rect):
+    """A neuron-specific signal delivered to one soma."""
+    sub, _ = tree_inset(f, rect, mode="plain", scale=0.85,
+                        hide_arrows=True)
+    sub.add_patch(FancyArrowPatch(
+        (1.30, 0.60), (0.27, 0.09),
+        arrowstyle="-|>,head_length=3.2,head_width=2.0", mutation_scale=1.0,
+        connectionstyle="arc3,rad=0.12", color=BLUE, lw=LW_EDGE,
+        capstyle="round", zorder=4.5))
+
+
+def _glyph_coord_address(f, rect):
+    """Subtree-address capsules after the neuron has been selected."""
+    sub, _ = tree_inset(f, rect, mode="address", K=4, scale=0.85)
+    sub.add_patch(FancyArrowPatch(
+        (1.30, 0.60), (0.27, 0.09),
+        arrowstyle="-|>,head_length=3.2,head_width=2.0", mutation_scale=1.0,
+        connectionstyle="arc3,rad=0.12", color=BLUE, lw=LW_EDGE,
+        capstyle="round", zorder=4.5))
+
+
+def _glyph_operator(f, rect):
+    """Stochastic credit ĝ through the route operator M: kept directions.
+
+    The compact form of ``native_schematics.draw_credit_operator``: the
+    operator box in the route green, the exiting dot row in the kept /
+    admitted-noise / discarded tones (green / amber / gray).
+    """
+    x0, y0, w, h = rect
+    cx = x0 + w / 2.0
+    cy = y0 + h / 2.0
+    f.text((cx, cy + f.fy(25.0)), "ĝ", size=PT_ANNOT, color=INK)
+    f.arrow((cx, cy + f.fy(19.5)), (cx, cy + f.fy(10.5)), color=MUTE,
+            lw=LW_EDGE, head=3.4)
+    box = (cx - f.fx(11.0), cy - f.fy(5.0), f.fx(22.0), f.fy(14.0))
+    f.group(box, tint=mix("shunting", 10), edge=mix("shunting", 45),
+            lw=LW_EDGE, radius_pt=2.0, zorder=2)
+    f.text((cx, cy + f.fy(2.0)), "M", size=PT_ANNOT, color=GREEN, zorder=6)
+    f.arrow((cx, cy - f.fy(6.5)), (cx, cy - f.fy(15.5)), color=MUTE,
+            lw=LW_EDGE, head=3.4)
+    tones = (GREEN, GREEN, GREEN, COLORS["local"], MUTE)
+    for i, tone in enumerate(tones):
+        f.disc((cx + f.fx(5.2 * (i - 2)), cy - f.fy(21.0)), 1.9, fill=tone,
+               zorder=5)
+
+
+def _glyph_depth(f, rect):
+    """Two-to-three physical stages of increasing depth (Fig. 5 geometry)."""
+    x0, y0, w, h = rect
+    base = y0 + h / 2.0 - f.fy(18.0)   # soma line of the tree-glyph cards
+    height = f.fy(22.0)
+    for dx, depth in zip((-22.0, 0.0, 22.0), (1, 2, 3)):
+        f.stage_tree((x0 + w / 2.0 + f.fx(dx), base), height, depth)
+
+
+def _glyph_anatomy_gain(f, rect):
+    """Reconstructed arbor with contacts, plus the route-gain ring."""
+    sub, _ = tree_inset(f, rect, mode="plain", scale=0.85, hide_arrows=True)
+    sub.plot([CT.P["JL"][0]], [CT.P["JL"][1]], marker="o", ms=8.0,
+             mfc="none", mec=INK, mew=LW_EDGE, ls="none", zorder=4.4)
+
+
+def _glyph_boundary(f, rect):
+    """The de-emphasised (shunted) arbor of the measured-response test."""
+    tree_inset(f, rect, mode="shunt", shunted=True, scale=0.85)
+
+
+STREAMS = (
+    (_glyph_factorization, "Exact factorization",
+     "eligibility × error"),
+    (_glyph_coordinate, "Neuron identity",
+     "one signal per neuron"),
+    (_glyph_operator, "Credit operator",
+     "when restricted routes help"),
+    (_glyph_coord_address, "Branch addresses",
+     "conflict + hierarchy"),
+    (_glyph_depth, "Physical depth",
+     "shared signal loses alignment (S31)"),
+    (_glyph_anatomy_gain, "Biological boundary",
+     "capacity, gain, alignment"),
+)
+
+
+# Each stage is a card filling the band's full height: the glyph above one
+# name line (wrapping to two on the narrow six-across cards) and a mute-free
+# one-line gloss that follows the name down, so mixed name depths never
+# overprint their glosses.
+CARD_PAD_PT = 3.5
+GLYPH_BOT_PT = 52.0
+NAME_TOP_PT = 48.5
+NAME_LINE_PT = 9.6
+NAME_GLOSS_GAP_PT = 2.4
+
+
+def panel_e(ax):
+    f = Frame(ax)
+    n = len(STREAMS)
+    gap = f.fx(10.0)
+    cell_w = (1.0 - (n - 1) * gap) / n
+    pad = f.fx(CARD_PAD_PT)
+    glyph_bot = f.fy(GLYPH_BOT_PT)
+    text_w_pt = (cell_w - 2 * pad) * f.w_pt
+    for index, (glyph, name, phrase) in enumerate(STREAMS):
+        x0 = index * (cell_w + gap)
+        cx = x0 + cell_w / 2.0
+        f.group((x0, 0.0, cell_w, 1.0), tint=None, edge=COLORS["grid"],
+                lw=LW_HAIR, radius_pt=3.0, zorder=0.5)
+        glyph(f, (x0 + pad, glyph_bot, cell_w - 2 * pad,
+                  1.0 - glyph_bot - f.fy(CARD_PAD_PT)))
+        wrapped_name = _wrap_to_width(ax, name, PT_ANNOT, text_w_pt,
+                                      max_lines=2) or name
+        name_lines = wrapped_name.count("\n") + 1
+        ax.text(cx, f.fy(NAME_TOP_PT), wrapped_name, ha="center", va="top",
+                fontsize=PT_ANNOT, color=INK, linespacing=1.25)
+        gloss_top = (NAME_TOP_PT - NAME_LINE_PT * name_lines
+                     - NAME_GLOSS_GAP_PT)
+        wrapped = _wrap_to_width(ax, phrase, PT_SMALL, text_w_pt,
+                                 max_lines=4 - name_lines) or phrase
+        ax.text(cx, f.fy(gloss_top), wrapped, ha="center", va="top",
+                fontsize=PT_SMALL, color=MUTE, linespacing=1.35)
+        if index + 1 < n:
+            mid = x0 + cell_w + gap / 2.0
+            y = (1.0 + glyph_bot) / 2.0
+            f.arrow((mid - f.fx(4.5), y), (mid + f.fx(4.5), y), color=MUTE,
+                    lw=LW_HAIR, head=4.6, zorder=2)
+
+
+# ── build ─────────────────────────────────────────────────────────────────
+def panel_coordinate_source(ax):
+    """Show the neuronal coordinate supplied by the task readout."""
+    f = Frame(ax)
+    for i, y in enumerate((0.80, 0.51, 0.22), start=1):
+        mini_tree(f, 0.26, y, 0.10)
+        f.arrow((0.29, y), (0.60, y), color=MUTE, lw=LW_EDGE, head=3.4)
+        ax.text(0.46, y + 0.06, f"y{SUBSCRIPT_DIGITS[i]}", ha="center",
+                fontsize=PT_LABEL, color=INK)
+        ax.plot([0.60, 0.60], [y, 0.51], color=MUTE, lw=LW_HAIR)
+        ax.plot([0.68, 0.31], [y - 0.095] * 2, color=BLUE,
+                lw=LW_EDGE, ls=(0, (2, 2)))
+        f.arrow((0.31, y - 0.095), (0.265, y - 0.03),
+                color=BLUE, lw=LW_EDGE, head=3.4)
+        ax.text(0.45, y - 0.14, f"δ{SUBSCRIPT_DIGITS[i]}",
+                ha="center", fontsize=PT_LABEL, color=BLUE)
+    ax.plot([0.68, 0.68], [0.125, 0.80], color=BLUE, lw=LW_EDGE,
+            ls=(0, (2, 2)))
+    f.group((0.72, 0.35, 0.27, 0.31), tint=COLORS["panel_bg"],
+            edge=EDGE, lw=LW_EDGE, radius_pt=2)
+    ax.text(0.855, 0.505, "task\nreadout", ha="center", va="center",
+            fontsize=PT_LABEL, color=INK)
+    f.arrow((0.60, 0.54), (0.72, 0.54), color=MUTE, lw=LW_EDGE, head=3.4)
+    f.arrow((0.72, 0.42), (0.68, 0.42), color=BLUE, lw=LW_EDGE, head=3.4)
+    ax.text(0.855, 0.85, "loss", ha="center", fontsize=PT_LABEL,
+            color=COLORS["bp"])
+    f.arrow((0.855, 0.80), (0.855, 0.67), color=COLORS["bp"],
+            lw=LW_EDGE, head=3.4)
+    ax.text(0.03, 0.015, "coordinate: which neuron?", fontsize=PT_LABEL,
+            color=BLUE, ha="left")
+
+
+def panel_factorization_readable(ax):
+    f = Frame(ax)
+    sub, _ = tree_inset(f, (0.00, 0.26, 0.40, 0.69), mode="transport",
+                        labels=False, scale=0.85)
+    ax.text(0.62, 0.92, "directed conductance tree", ha="center",
+            fontsize=PT_ANNOT, color=MUTE)
+    ax.text(0.62, 0.74, "Δgᵢ = −η eᵢ εₙ", ha="center", fontsize=PT_TITLE,
+            color=INK)
+    ax.text(0.43, 0.56, "eᵢ = xᵢ Rₙ (Eᵢ − Vₙ)", fontsize=PT_LABEL,
+            color=DEND)
+    ax.text(0.43, 0.43, "local eligibility", fontsize=PT_ANNOT, color=DEND)
+    ax.text(0.43, 0.25, "εₙ = α₃α₂α₁ δ₀", fontsize=PT_LABEL, color=BLUE)
+    ax.text(0.43, 0.12, "delivered error", fontsize=PT_ANNOT, color=BLUE)
+    ax.text(0.02, 0.015, "gain: how strongly along the route?",
+            fontsize=PT_LABEL, color=INK, ha="left")
+
+
+def panel_worked_dictionary(ax):
+    """An explicit A c example using the same [3,3] arbor as the atlas."""
+    from build_main_figure_10 import dictionary_matrices, SUBTREES
+    f = Frame(ax)
+    colors = [BLUE, COLORS["bp"], MUTE]
+    root = (0.018, 0.50)
+    for k, yc in enumerate((0.82, 0.50, 0.18)):
+        prox = (0.11, yc)
+        ax.plot([root[0], prox[0]], [root[1], prox[1]], color=colors[k], lw=LW_DATA)
+        ax.plot(*prox, marker="o", ms=4.0, color=colors[k])
+        ax.text(prox[0] - .013, prox[1] + .085, str(k), ha="center", fontsize=PT_ANNOT)
+        for j in range(3):
+            leaf = (.22, yc + (1 - j) * .087)
+            ax.plot([prox[0], leaf[0]], [prox[1], leaf[1]], color=colors[k], lw=LW_EDGE)
+            ax.plot(*leaf, marker="o", ms=3.3, color=colors[k])
+            ax.text(.24, leaf[1], str(3 + 3*k + j), va="center", fontsize=PT_ANNOT)
+    f.disc(root, 4, fill=SOMA, edge=RIM, lw=LW_EDGE)
+    ax.text(.12, -.015, "one [3,3] arbor", ha="center", fontsize=PT_LABEL)
+    A = dictionary_matrices()[1][2]
+    c = np.array([1., -1., 0.])
+    delivered = A @ c
+    cmap = LinearSegmentedColormap.from_list("worked_credit", [COLORS["bp"], "white", BLUE])
+
+    def matrix(box, data, *, signed=False, numbers=False):
+        inner = ax.inset_axes(box)
+        inner.imshow(data, aspect="auto", interpolation="nearest", vmin=-1 if signed else 0,
+                     vmax=1, cmap=cmap if signed else LinearSegmentedColormap.from_list("address", ["white", DEND]))
+        inner.set_xticks([]); inner.set_yticks([])
+        for spine in inner.spines.values():
+            spine.set_color(EDGE); spine.set_linewidth(LW_HAIR)
+        if numbers:
+            for i in range(data.shape[0]):
+                for j in range(data.shape[1]):
+                    value = data[i, j]
+                    inner.text(j, i, f"{value:+.0f}" if value else "0", ha="center", va="center",
+                               color="white" if value else INK, fontsize=PT_ANNOT)
+        return inner
+
+    ma = matrix([.35, .035, .12, .88], A)
+    ma.set_yticks(range(12)); ma.set_yticklabels(range(12), fontsize=PT_SMALL)
+    ma.tick_params(axis="y", length=0, pad=2)
+    matrix([.535, .365, .06, .34], c.reshape(-1,1), signed=True, numbers=True)
+    matrix([.685, .035, .06, .88], delivered.reshape(-1,1), signed=True, numbers=True)
+    for x, label in [(.41,"A: addresses"), (.565,"c: coordinates"), (.715,"A c: field")]:
+        ax.text(x, .945, label, ha="center", fontsize=PT_LABEL)
+    ax.text(.50, .52, "×", ha="center", fontsize=PT_TITLE)
+    ax.text(.64, .52, "=", ha="center", fontsize=PT_TITLE)
+    ax.text(.79, .74, "12 compartments\n3 route coefficients", fontsize=PT_LABEL,
+            va="center", linespacing=1.5)
+    ax.text(.79, .36, "positive / negative / zero\ncredit can reach\ndifferent subtrees", fontsize=PT_ANNOT,
+            va="center", linespacing=1.4)
+    ax.text(.79, .07, "a dictionary need not\nbe orthonormal", fontsize=PT_ANNOT, color=MUTE)
+
+
+def panel_compact_atlas(ax):
+    from build_main_figure_10 import dictionary_matrices
+    field = pd.read_csv(ROOT / "source_data/route_dictionary_atlas/example_field.csv")
+    seq = LinearSegmentedColormap.from_list("atlasgreen", ["white", DEND])
+    for x, dynamics in [(.035, "additive"), (.105, "shunting")]:
+        values = field[field.dynamics.eq(dynamics)].sort_values("compartment_index").mean_abs_error.to_numpy()[:,None]
+        ia = ax.inset_axes([x,.19,.045,.65]); ia.imshow(values,aspect="auto",cmap=seq,vmin=0,vmax=1)
+        ia.set_xticks([]);ia.set_yticks([])
+        ax.text(x+.0225,.15,"add." if dynamics == "additive" else "shunt.",
+                ha="center",va="top",fontsize=PT_SMALL)
+    ax.text(.09,.955,"normalized",ha="center",fontsize=PT_ANNOT)
+    ax.text(.09,.86,"|∂ℒ / ∂V|",ha="center",fontsize=PT_ANNOT)
+    for (key, label, A), (x,w) in zip(dictionary_matrices(),[(.235,.05),(.395,.12),(.655,.28)]):
+        ia=ax.inset_axes([x,.19,w,.65]);ia.imshow(A,aspect="auto",cmap=seq,vmin=0,vmax=1)
+        ia.set_xticks([]);ia.set_yticks([])
+        for sp in ia.spines.values():sp.set_linewidth(LW_HAIR);sp.set_color(EDGE)
+        ax.text(x+w/2,.90,{1:"K=1",3:"K=3",12:"K=12"}[A.shape[1]],ha="center",fontsize=PT_LABEL)
+        ax.text(x+w/2,.12,{1:"one per\nneuron",3:"subtrees",12:"exact field"}[A.shape[1]],
+                ha="center",va="top",fontsize=PT_ANNOT)
+
+
+def panel_atlas_capture(ax):
+    p = ROOT / "source_data/route_dictionary_atlas"
+    summary = pd.read_csv(p / "capture_summary.csv")
+    seeds = pd.read_csv(p / "capture_by_seed.csv")
+    for dynamics, offset, color, marker in [("additive",-.13,BLUE,"s"),("shunting",.13,GREEN,"o")]:
+        for i,key in enumerate(["broadcast_k1","subtrees_k3","exact_k12"]):
+            row=summary[(summary.dynamics.eq(dynamics))&(summary.basis.eq(key))].iloc[0]
+            vals=100*seeds[seeds.dynamics.eq(dynamics)][f"capture_{key}"].to_numpy()
+            ax.scatter(i+offset+np.linspace(-.045,.045,len(vals)),vals,s=6,color=color,alpha=.28,zorder=2)
+            mean=100*row.mean_capture
+            ax.errorbar(i+offset,mean,yerr=[[mean-100*row.ci95_low_capture],[100*row.ci95_high_capture-mean]],
+                        marker=marker,color=color,ms=3.2,lw=LW_EDGE,capsize=2,zorder=3)
+    ax.set_xticks(range(3),["K=1","K=3","K=12"])
+    ax.set_ylim(0,106);ax.set_yticks([0,50,100]);ax.set_xlim(-.5,2.5)
+    ax.set_ylabel("voltage-error energy (%)",fontsize=PT_LABEL)
+    ax.text(.03,.17,"additive",color=BLUE,fontsize=PT_ANNOT,transform=ax.transAxes)
+    ax.text(.03,.07,"shunting",color=GREEN,fontsize=PT_ANNOT,transform=ax.transAxes)
+    ax.text(.98,.03,"15 seeds / core",ha="right",fontsize=PT_SMALL,color=MUTE,transform=ax.transAxes)
+
+
+def build():
+    canvas = NativeCanvas(
+        468.0 / 72.0, nrows=3, row_weights=[128,140,130],
+        hgutter_pt=30.0, vgutter_pt=30.0,
+        margins=Margins(left=26.0,right=9.0,top=24.0,bottom=30.0),
+        letters=False,
+    )
+    spec = [
+        ("A",0,0,6,1,"Neuronal credit comes from the task",panel_coordinate_source),
+        ("B",0,6,6,1,"Eligibility × delivered error",panel_factorization_readable),
+        ("C",1,0,12,1,"Address: where does each credit coordinate act?",panel_worked_dictionary),
+        ("D",2,0,8,1,"One morphology, different dictionaries",panel_compact_atlas),
+        ("E",2,8,4,1,"Field capture (MNIST)",panel_atlas_capture),
+    ]
+    for letter, row, col, span, rowspan, title, draw in spec:
+        ax = canvas.panel(letter, row, col, span, rowspan=rowspan,
+                          schematic=letter != "E")
+        # Centre panel titles as every other main sheet does; Figure 1 was
+        # the only builder still left-aligning them.
+        ax.set_title(title, fontsize=PT_TITLE, color=INK, pad=TITLE_PAD,
+                     loc="center", fontweight="normal")
+        canvas.add_letter(letter, ax, dx_pt=LETTER_DX, dy_pt=LETTER_DY)
+        draw(ax)
+    from journal_style import style_direct_color_labels
+    style_direct_color_labels(canvas.fig)
+    problems = canvas.save(OUT, name="main_figure_01_native")
+    return problems
+
+
+def main():
+    problems = build()
+    if problems:
+        print(f"  {len(problems)} layout problems reported")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

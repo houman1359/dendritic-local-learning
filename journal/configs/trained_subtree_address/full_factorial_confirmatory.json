@@ -1,0 +1,93 @@
+{
+  "study": "trained_subtree_address_full_factorial",
+  "status": "frozen_before_canary_outcomes",
+  "frozen_date": "2026-08-10",
+  "task": {
+    "family": "eight_context_hierarchical_credit_reversal",
+    "contexts": 8,
+    "labels": 2,
+    "features_per_stream": 8,
+    "selected_signal": 1.0,
+    "distractor_signal_by_tree_distance": {
+      "sibling": 0.15,
+      "same_half": 0.45,
+      "opposite_half": 0.75
+    },
+    "feature_noise_sd": 1.1,
+    "train_examples": 2048,
+    "test_examples": 2048,
+    "switch_examples": 1024,
+    "switch_contexts": [4, 5, 6, 7],
+    "retained_contexts": [0, 1, 2, 3]
+  },
+  "training": {
+    "optimizer": "paired_full_batch_gradient_descent",
+    "learning_rate": 0.3,
+    "epochs": 80,
+    "switch_epochs": 20,
+    "initialization_sd": 0.03,
+    "gradient_context_rescaling": 8.0
+  },
+  "architectures": [
+    "dendritic_tree",
+    "point_neuron_explicit_gating",
+    "flat_compartment",
+    "grouped_point_subunits",
+    "degree_depth_matched_rewired_tree"
+  ],
+  "feedback_budgets": [1, 2, 4, 8],
+  "feedback_families": [
+    "correct_ancestry_subtrees",
+    "within_neuron_route_derangement",
+    "depth_interleaved_bins",
+    "random_sparse_matched",
+    "random_rank_k",
+    "learned_rank_k_upper_bound"
+  ],
+  "reference_conditions": [
+    "neuron_indexed_shared",
+    "exact_compartment_transport",
+    "backpropagation"
+  ],
+  "confirmatory_seeds": [
+    4200, 4201, 4202, 4203, 4204, 4205, 4206, 4207, 4208, 4209,
+    4210, 4211, 4212, 4213, 4214, 4215, 4216, 4217, 4218, 4219
+  ],
+  "canary_seed": 4199,
+  "random_route_replicates_per_seed": 1,
+  "matching": {
+    "forward_parameters": 64,
+    "active_input_contacts": 64,
+    "forward_nonlinearities": 1,
+    "decoder_dimension": 1,
+    "route_fields_are_unit_norm_per_example": true,
+    "paired_initialization_data_and_optimizer": true,
+    "implementation_equivalent_controls_are_declared": true
+  },
+  "gates": {
+    "balanced_context_label_cells": true,
+    "maximum_context_label_correlation": 1e-12,
+    "maximum_neuron_shared_capture": 0.2,
+    "minimum_exact_capture": 0.999999999,
+    "maximum_exact_bp_endpoint_difference": 1e-12,
+    "maximum_implementation_equivalence_endpoint_difference": 1e-12,
+    "maximum_fallback_count": 0
+  },
+  "analysis": {
+    "bootstrap_draws": 20000,
+    "paired_unit": "seed",
+    "primary_endpoint": "heldout_accuracy",
+    "secondary_endpoints": [
+      "heldout_loss",
+      "retained_context_forgetting",
+      "initial_gradient_capture",
+      "initial_gradient_cosine",
+      "norm_matched_one_step_progress"
+    ],
+    "primary_contrasts": [
+      "correct_minus_within_neuron_derangement",
+      "correct_minus_best_matched_nonanatomical_control"
+    ]
+  },
+  "scope_boundary": "This frozen factorial tests bandwidth K={1,2,4,8} across five parameter-matched representations on one eight-context synthetic hierarchy. The point, flat and grouped controls pay explicitly for the same routed coefficient fields; equality therefore rules out a uniquely dendritic advantage rather than weakening the address-resource result."
+}

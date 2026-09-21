@@ -1,0 +1,20 @@
+{
+  "study": "conservative_adaptive_positive_conductance_pilot",
+  "status": "exploratory_frozen_before_new_seed_outcomes",
+  "frozen_date": "2026-08-27",
+  "canary_seeds": [8298, 8299],
+  "pilot_seeds": [
+    8300, 8301, 8302, 8303, 8304,
+    8305, 8306, 8307, 8308, 8309,
+    8310, 8311, 8312, 8313, 8314,
+    8315, 8316, 8317, 8318, 8319
+  ],
+  "attenuation_doses": [0.0, 0.1, 0.25, 0.5, 0.75, 1.0],
+  "primary_heterogeneity": 2.0,
+  "minimum_mean_loss_improvement": 0.001,
+  "minimum_improved_pairs": 15,
+  "bootstrap_draws": 20000,
+  "base_configuration": "adaptive_local_confirmatory.json",
+  "scope_boundary": "Exploratory dose selection around the completed paired-probe adaptive shunt. The task, estimator, exact state clamp, step fraction and supplied point-gate equivalence are unchanged. A selected dose requires a separately frozen fresh-seed confirmation before manuscript use."
+}
+

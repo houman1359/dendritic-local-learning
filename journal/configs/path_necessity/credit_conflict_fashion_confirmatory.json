@@ -1,0 +1,94 @@
+{
+  "study": "fashion_path_necessity_credit_conflict",
+  "status": "frozen_after_exploratory_design_screen_before_canary_and_confirmatory_outcomes",
+  "frozen_date": "2026-08-28",
+  "scope": "controlled task-family crossover for within-neuron path-resolved credit",
+  "dataset": {
+    "name": "FashionMNIST",
+    "root": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260828/data/fashion_mnist",
+    "classes": [0, 6],
+    "class_names": ["T-shirt/top", "shirt"],
+    "average_pool_side": 4,
+    "append_bias": true,
+    "train_examples": 8192,
+    "test_examples": 2000
+  },
+  "task": {
+    "branches": [2, 4, 8],
+    "conflict_probability": [0.0, 0.25, 0.5, 0.5714285714285714, 0.6, 0.6666666666666666, 0.75, 1.0],
+    "selected_view_defines_label": true,
+    "compatible_inactive_view": "copy_of_selected_image",
+    "conflicting_inactive_view": "independent_image_from_opposite_class",
+    "balanced_context_label_cells": true,
+    "nested_conflict_masks_across_doses": true
+  },
+  "training": {
+    "optimizer": "paired_full_batch_gradient_descent",
+    "learning_rate": 0.04,
+    "epochs": 250,
+    "initialization_sd": 0.01,
+    "dtype": "float32"
+  },
+  "conditions": [
+    "neuron_shared_k1",
+    "correct_path",
+    "within_neuron_deranged",
+    "backpropagation",
+    "gated_point_emulation"
+  ],
+  "route_normalization": {
+    "neuron_shared_k1": "orthogonal rank-one projection, coefficient 1/B on every branch",
+    "correct_path": "one-hot selected path",
+    "within_neuron_deranged": "one-hot cyclically shifted path",
+    "backpropagation": "one-hot selected path",
+    "gated_point_emulation": "one-hot selected point subunit"
+  },
+  "exploratory_design_screen": {
+    "seeds": [100, 101, 102],
+    "outcomes_seen_before_freeze": true,
+    "purpose": "choose a stable fixed optimizer and verify that the task spans compatible and conflicting regimes",
+    "excluded_from_inference": true
+  },
+  "canary_seed": 10999,
+  "confirmatory_seeds": [
+    11000, 11001, 11002, 11003, 11004, 11005, 11006, 11007, 11008, 11009,
+    11010, 11011, 11012, 11013, 11014, 11015, 11016, 11017, 11018, 11019
+  ],
+  "output_root": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260828/path_necessity_fashion",
+  "analysis": {
+    "paired_unit": "seed",
+    "bootstrap_draws": 20000,
+    "primary_endpoint": "test_accuracy",
+    "secondary_endpoints": [
+      "test_loss",
+      "initial_gradient_cosine",
+      "initial_gradient_capture",
+      "initial_signed_utility"
+    ],
+    "primary_contrast": "correct_path_minus_neuron_shared_k1_by_conflict_probability",
+    "primary_interaction": "seedwise slope of correct-minus-shared accuracy on conflict probability",
+    "equivalence_margin_accuracy_at_zero_conflict": 0.02,
+    "predicted_shared_mode_zero_by_branches": {
+      "2": 1.0,
+      "4": 0.6666666666666666,
+      "8": 0.5714285714285714
+    }
+  },
+  "canary_gates": {
+    "maximum_context_label_count_range": 0,
+    "maximum_selected_label_mismatch_rate": 0.0,
+    "maximum_conflict_rate_absolute_error": 0.025,
+    "require_nested_conflict_masks": true,
+    "maximum_exact_autograd_gradient_abs_difference": 1e-5,
+    "maximum_exact_equivalent_endpoint_difference": 1e-7,
+    "require_all_finite": true
+  },
+  "interpretation_gates": {
+    "minimum_positive_seedwise_interaction_fraction": 0.8,
+    "minimum_correct_minus_shared_accuracy_at_full_conflict": 0.1,
+    "maximum_absolute_correct_minus_shared_accuracy_at_zero_conflict": 0.02,
+    "require_correct_over_deranged_at_full_conflict": true,
+    "require_exact_equivalence_checks": true
+  },
+  "scope_boundary": "This controlled experiment tests when a shared somatic teaching coordinate ceases to be sufficient as simultaneously active branches require incompatible updates, including the predicted dependence of that boundary on branch number. It does not show that ordinary Fashion-MNIST requires dendritic routing, that biological dendrites use the imposed gate, or that dendritic material is the only implementation of path-resolved credit."
+}
