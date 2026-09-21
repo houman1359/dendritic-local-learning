@@ -54,6 +54,8 @@ IMAGE_RUNTIME_DIRECTORY = "historical_runtimes/image_ladder_6c1aaa2"
 # PORTABILITY_PATCHES.tsv.  Tokens are intentionally conspicuous so that a
 # reviewer cannot mistake them for working paths.
 PORTABILITY_REPLACEMENTS: tuple[tuple[str, str, str], ...] = (
+    ("/n/home13/hsafaai/.cache/torch", "${TORCH_HOME}",
+     "replace optional pretrained-feature cache root in historical runtime"),
     (
         "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/"
         "journal_extension_20260828",
