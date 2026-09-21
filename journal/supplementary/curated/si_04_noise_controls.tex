@@ -1,0 +1,53 @@
+\subsection{Noise sensitivity with inherited learning rates}
+\label{sec:noise_sensitivity}
+
+For a homogeneous multilinear polynomial $f=\sum_{|U|=d}c_U\chi_U$
+under independent symmetric binary inputs, orthogonality gives
+$\operatorname{Var}(f)=\sum_Uc_U^2$ and
+$\E\|\nabla_xf\|^2=\sum_U|U|c_U^2=d\operatorname{Var}(f)$.
+Matching pairwise and quartic derivative spectra therefore forces unequal
+target variances, one and one-half. Identical absolute label noise is not
+identical relative noise. We tested this alternative explanation directly.
+
+An internally specified post-review protocol used twenty additional paired
+seed blocks, disjoint from the original bridge cohort. Both targets retained
+the same seven-unit tree, leaf permutation, initial coefficients, input
+matrices, standardized noise, calibration examples and minibatch indices
+within each seed. The three label-noise conditions were SD 0.15,
+SD zero, and SD $0.15\sqrt{\operatorname{Var}(f)}$. The last condition gives
+relative noise variance 0.0225 for both targets. Fixed and relative noise
+are consequently identical for the pairwise target, providing an exact
+implementation check rather than independent observations.
+
+We retained the original Adam rates selected on the earlier development
+split: 0.003 for exact and unit broadcast, 0.01 for calibrated and sign-only
+broadcast, plus common rate 0.003 for every rule. Rates were not selected
+again for any noise condition. Each task/noise combination therefore had
+six unique rule--rate trajectories. Twenty seeds, two tasks and three noise
+conditions gave 720 trajectories, all run to 16,384 updates with the original
+batch size 64, parameter bounds $[-2,2]$ and norm-ten clipping. Training,
+validation and test sets contained 2,048, 1,024 and 4,096 examples;
+calibration used 256 unlabeled examples. Every condition used the same Adam
+moment coefficients and numerical stabilization as the original bridge.
+
+The primary endpoint was the quartic-minus-pairwise difference in the
+calibrated-minus-exact error gap, evaluated without noise over all 256 input
+patterns. This removes finite test-sample and test-noise variation while
+retaining the effect of training noise. All fixed checkpoints, noisy-test
+outcomes, unit/sign-only controls, clipping and bound contacts are retained.
+Whole-seed bootstrap intervals use 10,000 resamples; other checkpoints and
+common rates are descriptive sensitivities. No test outcome selects a
+checkpoint or learning rate.
+
+At 16,384 updates the primary difference was 0.963 with fixed absolute noise,
+1.030 without noise and 1.007 with matched relative noise. Each was positive
+in all twenty seeds; the common-rate differences were 0.911, 0.916 and
+0.911, also positive in all seeds (Table~\ref{tab:noise_sensitivity}).
+Thus the tested fixed-profile deficit persists when the noise imbalance is
+removed. This does not establish noise-optimal settings, unconstrained
+convergence or a requirement for all six exact channels. The seed-level
+tables include every outcome. Independent forward replay of the 1,024- and
+16,384-update checkpoints agreed within $10^{-10}$ with clean-domain
+outcomes. Code and protocol identities are in
+\texttt{noise\_controls\_provenance.json}; complete curves and contrasts are
+under the same prefix in \texttt{source\_data/curated\_publication/}.

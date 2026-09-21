@@ -13,7 +13,7 @@ Symbol & Meaning \\
 \midrule
 $V_n$, $a_n=f_n(V_n)$ & Compartment voltage and transmitted activity. \\
 $g_i,x_i,g_ix_i$; $E_i^{\rm rev}$ & Maximal conductance, presynaptic activity, open conductance and reversal potential. Excitation and inhibition differ through driving forces, not signed conductances. \\
-$g_n^{\rm tot},R_n^{\rm tot}$ & Total open conductance and its reciprocal input resistance. \\
+$g_n^{\rm tot},R_n^{\rm tot}$ & Total open conductance and reciprocal local resistance, holding incoming child outputs fixed in a directed tree; not the driving-point resistance of a reciprocal cable. \\
 $\delta^V_n$, $\delta^a_n$; $q_n$ & Loss derivatives in voltage/activity coordinates. In interaction-task diagnostics, $q_n=\partial u_0/\partial u_n$; in the implicit/cable analysis, the adjoint satisfies $J_V^{\mathsf T}\bm q=\nabla_{\bm V}\mathcal L$. \\
 $A_u$, $A_T$ & Compartmental delivery matrix and anatomical support lifted to synaptic coordinates, respectively (Eqs.~\ref{eq:s_routed_field}, \ref{eq:s_dictionary}). \\
 $\Phi_{T,K}$ & Synaptic-update dictionary after eligibility or anatomical weighting, route gains and channel selection: $D_eA_T\operatorname{diag}(\bm\beta)S_K$. Distinct from the compartmental matrix $A_u$. \\
@@ -42,7 +42,7 @@ the paired training problem, not one neuron, trial or checkpoint.
 
 Morphology $[b_1,\ldots,b_D]$ lists daughter counts from soma to tips, with
 $\sum_{d=1}^D\prod_{r=1}^db_r$ nonsomatic compartments. D1--D4 label physical
-stage counts, but not a universal compartment inventory: main Fig.~6 fixes
+stage counts, but not a universal compartment inventory: main Fig.~7 fixes
 eight modules, whereas Supplementary Fig.~S9 fixes sixteen terminals.
 Feedback budget $K$ counts delivery profiles and is not physical depth.
 Lower-case $k$ in a fitted spectrum counts its leading singular directions.
@@ -62,7 +62,12 @@ $a_b^{\rm I}=4(1-c_b)$ is inhibitory activity, and $s$ is distractor severity.
 $D_p^0$ denotes a proximal compartment's leak-plus-coupling conductance;
 $h_p=D_p^0/(D_p^0+g_p^{\rm I}a_b^{\rm I})$ is its relative-resistance gate. These task cues are
 distinct from the delivery coefficients $\bm c_u$ in $A_u\bm c_u$.
-In main Fig.~8B only, $B$ is the ancestry-block indicator matrix,
+In the population transport factorization, $\kappa_{ui}$ collects coupling
+ratios from terminal $i$ through parent $p$ to soma $u$; it is constant across
+examples at fixed weights but changes during learning. The parent sensitivity
+$f'_p(V_p)=1-\tanh^2(V_p)$ is input-dependent. This $\kappa_{ui}$ is distinct
+from the focal shunt dose $\kappa_k$ in reciprocal cables.
+In main Fig.~9B only, $B$ is the ancestry-block indicator matrix,
 $\bm h$ the baseline cable transfer, and $\bm\eta$ the block-gain vector;
 this $\bm\eta$ is not the scalar learning rate $\eta$.
 

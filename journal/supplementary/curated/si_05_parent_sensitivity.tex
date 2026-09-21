@@ -1,0 +1,127 @@
+\subsection{Testing the missing parent sensitivity}
+\label{sec:parent_sensitivity}
+
+The resistance gate omits the input-dependent derivative of a nonlinear
+parent. To test this explanation without changing representability, we kept
+the nonlinear-parent interaction task of Section~\ref{sec:dendrinet_selection}
+unchanged: sixteen production DendriNet neurons, each with a $[4,2]$ tree,
+shunting forward integration, proximal $\tanh$ outputs and target interaction
+coefficient $\beta=0.25$. Every condition trained the same conductances and
+affine readout from paired initial states and examples.
+
+The augmented rule delivered
+\[
+\widehat\delta^V_{ui}=\delta_u^V h_{up}f'_p(V_p)
+\]
+at terminals, while retaining ungated somatic error at proximal compartments.
+It uses the current parent's voltage sensitivity, not an exact-gradient
+projection. Access to this parent quantity at descendant synapses is an
+assumption of the rule, not a demonstrated biological transmission mechanism.
+A shuffled control permuted $f'_p(V_p)$ across examples separately within
+each parent and context in every minibatch. This preserves conditional
+marginals and branch assignment while disrupting the derivative's joint
+dependence on the current input. Its random stream was independent of
+minibatch sampling. Unit broadcast, resistance alone and exact BP were
+retained. A full-factor diagnostic additionally supplied $\kappa_{ui}$ at
+terminals and the parent-to-soma coupling ratio at proximal compartments.
+This is algebraically exact BP, verified for all parameters; it is not an
+independent learning mechanism or replication.
+
+\paragraph{Why the interaction term is informative.}
+For a terminal driven by $z_{b1}$, its local eligibility
+$e_i(z_{b1},\bm c)$ does not depend on its sibling feature $z_{b2}$.
+At fixed weights, a cue-only gate therefore gives
+\[
+\E\!\left[h_{up}(\bm c)e_i(z_{b1},\bm c)
+          \tanh z_{b1}\tanh z_{b2}\mid\bm c\right]=0,
+\]
+because the features are independent and $\E[\tanh z_{b2}]=0$.
+This removes the target-interaction contribution to the expected terminal
+update, not the entire gradient: prediction-dependent terms, proximal
+plasticity and readout updates remain. A parent derivative depending on both
+features breaks this factorization. An exact symmetric-grid calculation
+verified the cancellation for broadcast and resistance-only delivery and
+nonzero target-interaction gradients for exact and augmented delivery.
+
+\paragraph{Development, confirmation and diagnostics.}
+Three development seeds compared Adam rates 0.01, 0.03 and 0.1 and SGD
+rates 0.01, 0.1 and 1 over 2,048 updates. All six rules used the original
+log-conductance bounds $[-9,9]$ under both optimizers. A predefined Adam
+sensitivity with bounds $[-12,12]$ retained exact BP, resistance,
+augmentation and shuffled augmentation, giving 144 development fits.
+Mean validation NMSE selected rates separately for each rule, optimizer and
+bound. Development did not evaluate test outcomes. Twenty disjoint fresh
+paired seeds then ran all sixteen conditions for 4,096 updates (320 fits).
+Training, validation and test sizes were 2,048, 1,024 and 4,096; minibatches
+contained 128 examples. Validation selection included initialization and
+every 128 updates. All arms used norm-ten clipping and exponential
+conductance parameterization. Selected and final states, first bound-contact
+step, contact counts, clipping counts and selected-state bound fractions
+were retained. The protocol was internally specified after the earlier
+failure, not externally preregistered.
+
+The two primary contrasts were resistance-minus-augmented and
+shuffled-minus-augmented ordinary-test NMSE under Adam with the original
+bounds. Paired inference used twenty seeds, 10,000 seed-bootstrap resamples
+and exact two-sided sign-flip tests with Holm correction across these two
+contrasts. Other comparisons were descriptive. A common-rate addendum,
+specified during fresh execution before inspecting fresh outcomes, used
+the augmented rule's development-selected Adam rate of 0.03. Sixty fits
+supplied the missing broadcast, resistance and shuffled conditions on the
+same twenty seeds; the three other rules reused their primary trajectories.
+This is a sensitivity analysis, not a second independent cohort.
+
+At initial and selected states, terminal-gradient diagnostics used a common
+512-example diagnostic set and the same variance normalization. Subtracting
+gradients for the separable target from gradients for the complete target
+at identical predictions isolated the target-interaction component.
+Projection onto, and cosine with, its exact counterpart assessed the missing
+signal directly; whole-gradient cosine alone need not detect its absence.
+Shuffled comparisons reused the same permutation for this subtraction and
+restored their random-generator state afterward. These exact-gradient
+diagnostics neither supplied training updates nor selected settings.
+
+\paragraph{Results and scope of the rescue.}
+Table~\ref{tab:parent_sensitivity} reports every fresh condition, including
+the common-rate sensitivity. Under Adam with the original bounds, the
+resistance-minus-augmented difference in ordinary-test NMSE was 0.05033
+(95\% paired bootstrap interval, 0.04993--0.05074), and the
+shuffled-minus-augmented difference was 0.04353 (0.04178--0.04526).
+Both were positive in all twenty seeds, with exact two-sided sign-flip
+$P=1.91\times10^{-6}$ and Holm-adjusted $P=3.81\times10^{-6}$.
+The augmented rule remained slightly less accurate than exact BP on
+ordinary inputs: augmented-minus-exact NMSE was $1.53\times10^{-5}$
+(descriptive paired interval, $4.34\times10^{-6}$--$2.76\times10^{-5}$).
+At the common Adam rate 0.03, resistance and shuffled NMSE were 0.05088
+and 0.04769, against $6.02\times10^{-5}$ for augmentation; both advantages
+again occurred in every seed. These comparisons reuse the same twenty
+seed blocks and do not constitute independent replication.
+
+The resistance-only and augmented primary fits never contacted a bound;
+widening the bounds left both trajectories unchanged. The shuffled
+control contacted a bound in 20/20 original-bound and 19/20 wider-bound
+fits and remained poor. Thus the resistance-only failure is not explained
+by bound contact, while saturation remains a feature of the shuffled
+arm. Under SGD, resistance-minus-augmented NMSE was only 0.00118
+(0.00111--0.00125), despite being positive in all seeds. Exact BP and
+full-factor delivery agreed numerically under both optimizers, but SGD
+at its validation-selected rate did not reach the low-error Adam regime
+within 4,096 updates. These results do not establish optimizer-invariant
+equivalence between augmentation and exact transport.
+
+The new resistance-only rate was 0.01, compared with 0.1 in the previous
+nonlinear cohort. Its lack of bound contact therefore does not contradict
+the earlier 18/20 contacts. At the new common rate 0.03, resistance-only
+fits contacted a bound in 18/20 seeds while retaining high error.
+
+Finite-sample gradient diagnostics are retained as characterization, not
+as a second test of the population cancellation identity. On the
+512-example initial diagnostic sets, the mean interaction-component
+cosines with exact transport were 0.959 for resistance, 0.962 for
+augmentation and 0.959 for shuffled augmentation. Sampling fluctuations
+therefore obscure the analytically missing expected component in this
+small diagnostic set. The controlled training comparison and the
+symmetric-grid identity, rather than these similar cosines, support
+the stated interpretation. Selected and endpoint checkpoints were
+re-executed for all 380 new fresh fits; test, validation and distractor
+outcomes reproduced with zero discrepancy at the stored precision.

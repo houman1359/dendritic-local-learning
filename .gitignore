@@ -33,6 +33,7 @@
 !/journal/figures/supplementary/
 /journal/figures/main/*
 !/journal/figures/main/figure_0[1-9].pdf
+!/journal/figures/main/figure_10.pdf
 /journal/figures/supplementary/*
 !/journal/figures/supplementary/curated/
 /journal/figures/supplementary/curated/*

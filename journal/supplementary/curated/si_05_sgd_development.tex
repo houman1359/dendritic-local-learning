@@ -1,0 +1,31 @@
+\subsection{A bounded development check of plain SGD}
+\label{sec:sgd_development}
+
+The earlier SGD comparison did not isolate a derivative-specific failure:
+exact BP also remained inaccurate. We therefore specified a bounded
+optimization check before evaluating further outcomes. The unchanged
+nonlinear-parent interaction model used exact BP, the original three
+development seeds, rates 0.003, 0.01, 0.03, 0.1, 0.3 and 1, and 32,768
+updates: eight times the original fresh budget. SGD had no momentum.
+Initialization, training/validation samples, batch size 128, log bounds
+$[-9,9]$, norm-ten clipping and validation checks every 128 updates were
+unchanged. The protocol required validation-selected NMSE at most 0.001
+in all three seeds at some rate before launching a fresh four-rule cohort.
+Rate selection and the success criterion used validation only; test data
+were never evaluated.
+
+All eighteen fits completed. No rate passed. The best mean validation NMSE
+was 0.03206 at rate 0.3, with seed values between 0.02500 and 0.04114
+(Table~\ref{tab:sgd_development}). We therefore stopped under the specified
+rule and did not launch fresh comparisons. These are reused development
+seeds, not additional confirmatory evidence. Independent validation replay
+of selected and endpoint states reproduced all stored values within
+$10^{-12}$. Complete curves, outcomes and source identities use the
+\texttt{sgd\_development} prefix in
+\texttt{source\_data/curated\_publication/}.
+
+The check supports describing the original SGD arm as an optimization-
+limited, finite-budget sensitivity. It does not show that the augmented
+rule lacks useful information under SGD, nor exclude other rates,
+momentum, parameterizations or longer budgets. No such extensions were
+selected after inspecting these outcomes.

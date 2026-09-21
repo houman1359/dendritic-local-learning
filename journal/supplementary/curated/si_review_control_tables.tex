@@ -1,0 +1,67 @@
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Noise controls retain the interaction-dependent fixed-profile deficit. The endpoint is quartic-minus-pairwise calibrated-minus-exact clean-domain NMSE at 16,384 updates. Twenty new paired seeds use inherited selected rates or common Adam rate 0.003; the two policies reuse the same seed blocks. Intervals are descriptive 95\% whole-seed bootstrap intervals.}
+\label{tab:noise_sensitivity}
+\begin{tabular}{llrcc}
+\toprule
+Noise & Rate & Difference & 95\% interval & Positive seeds \\
+\midrule
+Fixed absolute & Selected & 0.9628 & [0.8979, 1.0201] & 20/20 \\
+Noise free & Selected & 1.0302 & [0.9350, 1.1199] & 20/20 \\
+Relative matched & Selected & 1.0072 & [0.9302, 1.0838] & 20/20 \\
+Fixed absolute & Common & 0.9109 & [0.8462, 0.9646] & 20/20 \\
+Noise free & Common & 0.9161 & [0.8393, 0.9709] & 20/20 \\
+Relative matched & Common & 0.9114 & [0.8430, 0.9659] & 20/20 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Nonlinear parents with a separable target. Test NMSE is reported in units of $10^{-5}$ at validation-selected states within 4,096 updates. All rules use Adam rate 0.03 and log bounds $[-9,9]$. Twenty seed blocks are reused from the rescue; these are a paired task sensitivity, not new independent replication. Bounds count any contact during training. Intervals are descriptive 95\% seed-bootstrap intervals.}
+\label{tab:nonlinear_separable}
+\begin{tabular}{lrcc}
+\toprule
+Rule & NMSE $\times10^5$ & 95\% interval & Bound contacts \\
+\midrule
+Exact BP & 5.097 & [4.691, 5.502] & 12/20 \\
+Broadcast & 15.873 & [14.508, 17.366] & 0/20 \\
+Resistance & 9.321 & [8.486, 10.195] & 0/20 \\
+Resistance $\times f'$ & 7.523 & [6.731, 8.345] & 1/20 \\
+Shuffled $f'$ & 8.956 & [8.205, 9.764] & 0/20 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Context/update alignment at the original exact-trained separable-shunting checkpoints. Values are mean cosines with descriptive 95\% seed-bootstrap intervals. Within and cross average four diagonal or twelve off-diagonal context pairs within each seed before inference ($n=20$). Each delivered rule is evaluated at the same weights. Positive values indicate a first-order decrease of the recipient-context loss, not the effect of an Adam step. All 400 trained states and 128,000 entries remain in Source Data.}
+\label{tab:context_alignment}
+\begin{tabular}{llcc}
+\toprule
+Block & Delivery & Within context & Cross context \\
+\midrule
+Terminal & Exact & 1.0000 [1.0000, 1.0000] & 0.0007 [0.0001, 0.0014] \\
+Terminal & Broadcast & 0.3020 [0.2892, 0.3152] & 0.0415 [0.0053, 0.0809] \\
+Terminal & Resistance & 0.5412 [0.5179, 0.5653] & 0.0008 [0.0002, 0.0016] \\
+Terminal & Wrong branch & 0.0108 [0.0089, 0.0128] & 0.0329 [0.0085, 0.0597] \\
+Terminal & Uniform RMS & 0.3020 [0.2890, 0.3149] & 0.0415 [0.0059, 0.0807] \\
+Proximal & Exact & 1.0000 [1.0000, 1.0000] & 0.0027 [-0.0002, 0.0062] \\
+Proximal & Broadcast & 0.6600 [0.6420, 0.6777] & 0.0026 [0.0000, 0.0061] \\
+Proximal & Resistance & 0.6600 [0.6417, 0.6777] & 0.0026 [0.0000, 0.0061] \\
+Proximal & Wrong branch & 0.6600 [0.6416, 0.6777] & 0.0026 [-0.0000, 0.0061] \\
+Proximal & Uniform RMS & 0.6600 [0.6413, 0.6778] & 0.0026 [0.0000, 0.0061] \\
+Soma & Exact & 1.0000 [1.0000, 1.0000] & -0.0511 [-0.1073, -0.0022] \\
+Soma & Broadcast & 1.0000 [1.0000, 1.0000] & -0.0511 [-0.1069, -0.0018] \\
+Soma & Resistance & 1.0000 [1.0000, 1.0000] & -0.0511 [-0.1090, -0.0002] \\
+Soma & Wrong branch & 1.0000 [1.0000, 1.0000] & -0.0511 [-0.1068, -0.0016] \\
+Soma & Uniform RMS & 1.0000 [1.0000, 1.0000] & -0.0511 [-0.1070, 0.0000] \\
+Readout & Exact & 1.0000 [1.0000, 1.0000] & 0.1979 [0.0271, 0.3873] \\
+Readout & Broadcast & 1.0000 [1.0000, 1.0000] & 0.1979 [0.0244, 0.3875] \\
+Readout & Resistance & 1.0000 [1.0000, 1.0000] & 0.1979 [0.0247, 0.3876] \\
+Readout & Wrong branch & 1.0000 [1.0000, 1.0000] & 0.1979 [0.0273, 0.3853] \\
+Readout & Uniform RMS & 1.0000 [1.0000, 1.0000] & 0.1979 [0.0250, 0.3836] \\
+\bottomrule
+\end{tabular}
+\end{table}

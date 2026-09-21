@@ -184,6 +184,19 @@ six-input trees on four random cost tables. At a zero threshold, the theorem
 makes the minimum-depth solution the shallowest exact tree in this class;
 for a positive threshold only the cut score, not fitted error, is optimized.
 
+\paragraph{Interaction degree, derivative energy and relative noise.}
+For independent symmetric binary inputs, write the multilinear target as
+$f(\bm x)=\sum_S a_S\prod_{i\in S}x_i$. Orthogonality of the product basis gives
+$\operatorname{Var}(f)=\sum_{S\ne\varnothing}a_S^2$ and
+$\E\|\nabla_x f\|^2=\sum_{S\ne\varnothing}|S|a_S^2$.
+If every nonconstant term has degree $d$, the latter is
+$d\,\operatorname{Var}(f)$. Thus the primary pairwise and quartic families,
+whose derivative second moments both have trace two, necessarily have clean
+variances one and one-half. This difference is required by the spectrum match;
+it is not an independent variance manipulation. Equal absolute label-noise
+variance gives different NMSE floors. The present noisy comparison therefore
+does not hold relative noise fixed.
+
 Dominant left singular vectors of the centered cut matrices define local
 scalar features, and four-feature least squares recovers each node's
 coefficients. All 105 matching and 35 quartic targets reconstruct at minimum

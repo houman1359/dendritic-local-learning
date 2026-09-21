@@ -1,0 +1,54 @@
+\begin{table}[!htbp]
+\centering
+\caption{Parent-sensitivity rescue in the nonlinear DendriNet population.
+Mean NMSE across twenty fresh paired seeds, at validation-selected states
+within 4,096 updates. The fixed forward model contains sixteen $[4,2]$ trees
+with nonlinear proximal outputs. Strong distractors multiply irrelevant
+latent features by three without changing the label. Rates are selected
+separately from development validation, except in the common-rate block.
+Bound contacts count runs with any contact during training, not selected
+states at a bound. The full-factor diagnostic implements exact BP
+algebraically and is not an independent method. Wider-bound and common-rate
+blocks reuse seed identities; common-rate exact, augmented and full-factor
+rows reuse their primary fits. Section~\ref{sec:parent_sensitivity} defines
+the rules, paired inference, sampling and numerical replay.
+Source Data: \texttt{inhibitory\_rescue\_endpoints.csv} and
+\texttt{inhibitory\_rescue\_common\_endpoints.csv}.}
+\label{tab:parent_sensitivity}
+\footnotesize
+\begin{tabular}{lrrrr}
+\toprule
+Rule & Rate & Ordinary test & Strong distractors & Bound contacts \\
+\midrule
+\multicolumn{5}{l}{Adam; log-conductance bounds $[-9,9]$} \\
+Exact BP & 0.03 & $4.49\times10^{-5}$ & 0.00262 & 0/20 \\
+Unit broadcast & 0.1 & 0.04949 & 0.05327 & 20/20 \\
+Resistance $h$ & 0.01 & 0.05039 & 0.05522 & 0/20 \\
+Augmented $h f'_p$ & 0.03 & $6.02\times10^{-5}$ & 0.00169 & 0/20 \\
+Shuffled $h f'_p$ & 0.1 & 0.04359 & 0.04488 & 20/20 \\
+Full-factor diagnostic & 0.03 & $4.49\times10^{-5}$ & 0.00262 & 0/20 \\
+\addlinespace
+\multicolumn{5}{l}{Adam; wider bounds $[-12,12]$} \\
+Exact BP & 0.03 & $4.49\times10^{-5}$ & 0.00262 & 0/20 \\
+Resistance $h$ & 0.01 & 0.05039 & 0.05522 & 0/20 \\
+Augmented $h f'_p$ & 0.03 & $6.02\times10^{-5}$ & 0.00169 & 0/20 \\
+Shuffled $h f'_p$ & 0.1 & 0.04360 & 0.04481 & 19/20 \\
+\addlinespace
+\multicolumn{5}{l}{SGD; bounds $[-9,9]$} \\
+Exact BP & 0.1 & 0.15035 & 0.21148 & 0/20 \\
+Unit broadcast & 0.1 & 0.10310 & 0.13306 & 0/20 \\
+Resistance $h$ & 0.1 & 0.07668 & 0.09061 & 0/20 \\
+Augmented $h f'_p$ & 0.1 & 0.07550 & 0.08979 & 0/20 \\
+Shuffled $h f'_p$ & 0.1 & 0.07689 & 0.09110 & 0/20 \\
+Full-factor diagnostic & 0.1 & 0.15035 & 0.21148 & 0/20 \\
+\addlinespace
+\multicolumn{5}{l}{Adam; common rate; bounds $[-9,9]$} \\
+Exact BP & 0.03 & $4.49\times10^{-5}$ & 0.00262 & 0/20 \\
+Unit broadcast & 0.03 & 0.04946 & 0.07785 & 0/20 \\
+Resistance $h$ & 0.03 & 0.05088 & 0.05408 & 18/20 \\
+Augmented $h f'_p$ & 0.03 & $6.02\times10^{-5}$ & 0.00169 & 0/20 \\
+Shuffled $h f'_p$ & 0.03 & 0.04769 & 0.05263 & 18/20 \\
+Full-factor diagnostic & 0.03 & $4.49\times10^{-5}$ & 0.00262 & 0/20 \\
+\bottomrule
+\end{tabular}
+\end{table}

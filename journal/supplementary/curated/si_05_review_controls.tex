@@ -1,0 +1,74 @@
+\subsection{Separating nonlinear parents from target interactions}
+\label{sec:nonlinear_separable}
+
+The original comparison changed both parent nonlinearity and the target.
+As an additional post-review sensitivity, we retained the nonlinear rescue
+network and removed only the target's interaction coefficient, setting
+$\beta=0$. The twenty rescue seed blocks, initial states, input samples,
+minibatches, $\tanh$ parents, log bounds $[-9,9]$ and 4,096-update budget
+were reused. All five rules used common Adam rate 0.03, inherited from the
+previous common-rate sensitivity without retuning on the new task. These
+100 trajectories are a paired task control, not an independent replication.
+Validation on the separable target selected checkpoints every 128 updates,
+including initialization. The frozen rescue trainer was unedited; only its
+target adapter changed. Target-interaction diagnostics were omitted because
+that target component is absent.
+
+Mean ordinary-test NMSE was $1.587\times10^{-4}$ for broadcast,
+$9.321\times10^{-5}$ for resistance, $7.523\times10^{-5}$ for augmentation,
+$8.956\times10^{-5}$ for shuffled augmentation and $5.097\times10^{-5}$ for
+exact BP. The paired resistance-minus-augmented difference was
+$1.797\times10^{-5}$ (descriptive 95\% bootstrap interval,
+$1.432\times10^{-5}$--$2.161\times10^{-5}$), positive in all twenty seeds.
+The shuffled-minus-augmented difference was $1.432\times10^{-5}$, positive
+in eighteen seeds (Table~\ref{tab:nonlinear_separable}). Thus resistance alone
+reached low error with nonlinear parents when target interactions were
+removed. This restricts the large rescue to the tested conjunction of
+nonlinear computation and target demand, rather than parent nonlinearity
+alone. Re-evaluation of every selected checkpoint reproduced stored test
+outcomes. Complete records use the \texttt{nonlinear\_separable} prefix in
+\texttt{source\_data/curated\_publication/}.
+
+\subsection{Context alignment at archived selected states}
+\label{sec:context_alignment}
+
+We characterized all 400 selected checkpoints of the original population
+study without further training. At each state, every delivered rule was
+evaluated on the same deterministic diagnostic set of 2,048 examples,
+stratified by its four realized contexts. For parameter block $b$, define
+\[
+M_{cc'}^{(b,r)}=
+\frac{\langle\widehat{\bm g}_{c}^{(b,r)},\bm g_{c'}^{(b,\mathrm{exact})}\rangle}
+{\|\widehat{\bm g}_{c}^{(b,r)}\|\,\|\bm g_{c'}^{(b,\mathrm{exact})}\|}.
+\]
+Here $\widehat{\bm g}_{c}^{(b,r)}$ is the mean delivered gradient from
+context $c$ under rule $r$, and the reference is the exact loss gradient
+from recipient context $c'$ at the same weights. Positive entries predict
+an infinitesimal loss decrease under the negative delivered-gradient
+direction; they do not describe the stored Adam update. We used a common
+diagnostic target-variance normalization. Norms, dot products, sample counts
+and all matrix entries are retained. No evaluated norm fell below the
+$10^{-14}$ threshold for an undefined cosine.
+
+Terminal, proximal, somatic and readout blocks were analyzed separately.
+Four diagonal and twelve off-diagonal entries were averaged within each
+seed before whole-seed bootstrap inference, giving twenty independent
+units per trained condition. All five rules, four forward/task conditions
+and five trained-rule states are retained: 128,000 matrix entries in total.
+For current-injection checkpoints, the stored calibration anchor was
+restored without recalibration. Checkpoint and original execution-source
+hashes were verified before evaluation.
+
+At exact-trained states of the separable shunting model, mean terminal
+within-context alignment was 0.541 for resistance versus 0.302 for
+broadcast, 0.302 for uniform RMS and 0.0108 for wrong-branch delivery.
+Off-diagonal means were 0.00078, 0.0415, 0.0415 and 0.0329, respectively
+(Table~\ref{tab:context_alignment}). These results support correct recipient
+assignment and stronger matching-context alignment. They do not show a
+general negative cross-context effect: the terminal off-diagonal means
+are positive or near zero. Exact self-alignment equals one by construction.
+Soma and readout delivery are shared across rules at a fixed state; the
+block tables retain this implementation check. Selected checkpoints do not
+reconstruct a training trajectory or establish continual-learning
+performance. Complete matrices, per-seed averages, summaries and source
+identities use the \texttt{context\_alignment} prefix.

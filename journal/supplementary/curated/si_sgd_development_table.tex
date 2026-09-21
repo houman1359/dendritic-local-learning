@@ -1,0 +1,17 @@
+\begin{table}[p]
+\centering
+\caption{Bounded plain-SGD development check. Exact BP uses the unchanged nonlinear-parent interaction task, three original development seeds and 32,768 updates. Values are validation-selected NMSE, with ranges across three seeds rather than inferential confidence intervals. The prespecified success criterion required all three values at one rate to be at most 0.001. No rate passed; no fresh cohort was launched and no test data were evaluated.}
+\label{tab:sgd_development}
+\begin{tabular}{rrrrr}
+\toprule
+Rate & Mean & Minimum & Maximum & Successful seeds \\
+\midrule
+0.003 & 0.88853 & 0.85190 & 0.90988 & 0/3 \\
+0.01 & 0.22587 & 0.22020 & 0.23667 & 0/3 \\
+0.03 & 0.08044 & 0.07698 & 0.08270 & 0/3 \\
+0.1 & 0.05827 & 0.05534 & 0.06088 & 0/3 \\
+0.3 & 0.03206 & 0.02500 & 0.04114 & 0/3 \\
+1 & 1.08411 & 1.00910 & 1.14985 & 0/3 \\
+\bottomrule
+\end{tabular}
+\end{table}
