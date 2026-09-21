@@ -18,6 +18,7 @@
 /journal/*
 !/journal/main.tex
 !/journal/references.bib
+!/journal/naturemag.bst
 !/journal/supplementary/
 !/journal/figures/
 /journal/supplementary/*

@@ -1,0 +1,17 @@
+\begin{table}[p]
+\centering
+\caption{Local differentiation and supplied signals in the nonlinear DendriNet population. Here $\delta_u^V=\partial\mathcal L/\partial V_u$, $D_u$ and $\kappa_{ui}$ are defined in main Eq.~8, and $a_p=\tanh V_p$. Incoming child outputs and supplied signals are detached. Log-conductance eligibilities include $\partial g/\partial\theta=g$. The parent derivative in proximal eligibility is distinct from the ancestor derivative added to terminal credit.}
+\label{tab:population_coordinates}
+\small
+\begin{tabular}{p{0.23\textwidth}p{0.20\textwidth}p{0.23\textwidth}p{0.20\textwidth}}
+\toprule
+Parameter block & Differentiated quantity & Supplied signal & Omitted transport \\
+\midrule
+Terminal input log-conductances & $V_i=a_i$ (identity output) & $\delta_u^V$, $\delta_u^Vh$, or $\delta_u^Vhf'_p$ & $\kappa_{ui}$; $f'_p$ without augmentation; $h$ under broadcast \\
+Terminal-to-parent log-couplings & $a_p$, including $f'_p$ once & $\delta_u^V$ & $g_{p\to u}^{\rm den}/D_u$ \\
+Proximal inhibitory log-conductances & $a_p$, including $f'_p$ once & $\delta_u^V$ & $g_{p\to u}^{\rm den}/D_u$ \\
+Parent-to-soma log-couplings & $V_u$ & Exact $\delta_u^V$ & None \\
+Readout weights and bias & Prediction & Exact loss derivative & None \\
+\bottomrule
+\end{tabular}
+\end{table}
