@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Supplementary sheet S31 (ident ``measured_transfer_geometry``) -- the
+"""Current presentation: The September 21 revision removes the repeated support matrix and absolute prediction errors; A-D retain the unique geometry and calibration checks.
+
+Historical construction notes follow.
+
+Supplementary sheet S31 (ident ``measured_transfer_geometry``) -- the
 measured-response learning comparison is limited by mapped coverage and
 transfer geometry -- rebuilt as ONE native full-width
 :class:`figure_canvas.NativeCanvas`.
@@ -394,24 +398,6 @@ def panel_support(ax_m, ax_s, support, matrix):
     hang into the gutter), the 13-scan occupancy strip on the right (its row
     labels hang into the gutter on the other side), so no text of either
     satellite lies inside the host box."""
-    n, k = matrix.shape
-    # the matrix as vector cells: route colour on the panel ground
-    for i in range(n):
-        for j in range(k):
-            face = ROUTE if matrix[i, j] else COLORS["panel_bg"]
-            ax_m.add_patch(Rectangle((j, i), 1, 1, facecolor=face, edgecolor="none",
-                                     linewidth=0.0, zorder=2 if matrix[i, j] else 1))
-    ax_m.set_xlim(0, k)
-    ax_m.set_ylim(n, 0)
-    ax_m.set_xticks(np.arange(k) + 0.5, [str(j + 1) for j in range(k)])
-    ax_m.set_yticks(np.arange(n) + 0.5, [str(i + 1) for i in range(n)])
-    ax_m.tick_params(axis="both", length=0.0, pad=2.0)
-    for name, spine in ax_m.spines.items():
-        spine.set_visible(True)
-        spine.set_linewidth(LW_HAIR)
-        spine.set_color(EDGE)
-    ax_m.set_xlabel("route")
-    ax_m.set_ylabel("mapped input")
     # the 13 scans: input coordinates per route, rows ordered by mapped inputs
     ys = np.arange(N_SCANS)
     spr = support.sites_per_route.to_numpy(float)
@@ -423,7 +409,7 @@ def panel_support(ax_m, ax_s, support, matrix):
               zorder=4, label="scan")
     ax_s.plot([spr[rep_i]], [rep_i], linestyle="none", marker="o", markersize=MARKER_MS * 1.6,
               markerfacecolor="none", markeredgecolor=ROUTE, markeredgewidth=LW_ERR,
-              zorder=3.5, label="matrix scan")
+              zorder=3.5, label="main Fig. 10E scan")
     ax_s.set_ylim(N_SCANS - 0.4, -2.4)     # headroom for the two-entry key
     ax_s.set_yticks(ys, [str(int(v)) for v in support.n_sites])
     ax_s.yaxis.tick_right()
@@ -650,9 +636,9 @@ def calibration_headroom(ax, key, lim, *, clearance_pt=4.0):
 # ── the canvas ───────────────────────────────────────────────────────────
 CANVAS_H_PT = 403.0
 ROW_PT = [140.0, 165.0]
-HGUTTER_PT = 24.0
+HGUTTER_PT = 16.0
 VGUTTER_PT = 52.0
-MARGINS = Margins(left=6.0, right=8.0, top=16.0, bottom=30.0)
+MARGINS = Margins(left=14.0, right=8.0, top=16.0, bottom=30.0)
 TITLE_PAD = 11.0
 
 
@@ -667,22 +653,18 @@ def build(path: Path = OUT):
 
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 2, row_weights=ROW_PT, hgutter_pt=HGUTTER_PT,
                       vgutter_pt=VGUTTER_PT, margins=MARGINS)
-    ax_a = cv.panel("A", 0, 0, 5, title="Measured cohort")
-    ax_b = cv.panel("B", 0, 5, 3, title="Four-route support\ntarget 1, session 4, scan 10")
-    ax_c = cv.panel("C", 0, 8, 4, title="Response prediction")
-    ax_d = cv.panel("D", 1, 0, 6, title="Fixed-profile fidelity: update reconstruction")
-    ax_e = cv.panel("E", 1, 6, 6, title="Reliability calibration: simulated − target")
+    ax_a = cv.panel("A", 0, 0, 6, title="Measured cohort")
+    ax_b = cv.panel("B", 0, 6, 6, title="Inputs reached per route")
+    ax_d = cv.panel("C", 1, 0, 6, title="Fixed-profile fidelity: update reconstruction")
+    ax_e = cv.panel("D", 1, 6, 6, title="Reliability calibration: simulated − target")
     for ax in (ax_a, ax_b, ax_d, ax_e):
         ax.set_title(ax.get_title(), fontsize=PT_EMPH, color=INK, pad=TITLE_PAD, fontweight="normal")
-    ax_c.set_title(ax_c.get_title(), fontsize=PT_EMPH, color=INK, pad=TITLE_PAD + 9.0, fontweight="normal")
 
     # A: two sub-axes on one target axis (counts | reliability records)
     ax_a1, ax_a2 = sub_axes(cv, ax_a, [(0.0, 0.47), (0.55, 0.45)])
     panel_cohort(ax_a1, ax_a2, functional, records)
     # B: the 9 x 4 matrix | the 13-scan occupancy strip
-    ax_bm, ax_bs = sub_axes(cv, ax_b, [(0.0, 0.40), (0.54, 0.46)])
-    panel_support(ax_bm, ax_bs, support, matrix)
-    labels = panel_prediction(ax_c)
+    panel_support(None, ax_b, support, matrix)
     labels_d = panel_reconstruction(ax_d)
     stats = panel_calibration(ax_e, audit)
     head_e = calibration_headroom(ax_e, stats.pop("key"), stats.pop("lim"))
@@ -692,19 +674,16 @@ def build(path: Path = OUT):
     # forests' label gutters (row labels are annotations, not tick labels)
     cv.fig.canvas.draw()
     renderer = cv.fig.canvas.get_renderer()
-    gutter_c = max(_text_width_pt(t, renderer) for t in labels) + 9.5 + 4.0
     gutter_d = max(_text_width_pt(t, renderer) for t in labels_d) + 9.5 + 4.0
     ticks_a = max(_text_width_pt(t, renderer) for t in ax_a1.get_yticklabels()) + 4.6 + 6.0
-    cv.declare_reserve("A", left=ticks_a, right=4.0)
-    cv.declare_reserve("B", left=8.0, right=8.0)      # emphasis parity with A and C
-    cv.declare_reserve("C", left=gutter_c, right=4.0)
-    cv.declare_reserve("D", left=gutter_d, right=12.0)
-    cv.declare_reserve("E", left=gutter_d, right=12.0)   # one width for the D/E pair
-    print(f"[reserves] A {ticks_a:.1f}, C {gutter_c:.1f}, D {gutter_d:.1f} pt")
+    cv.declare_reserve("A", left=ticks_a, right=30.0)
+    cv.declare_reserve("B", left=ticks_a, right=30.0)
+    cv.declare_reserve("C", left=gutter_d, right=30.0)
+    cv.declare_reserve("D", left=gutter_d, right=30.0)
     problems = cv.save(path, name="figure_measured_transfer_geometry_native", png=False)
     for problem in problems:
         print(f"    {problem}")
-    box = {n: cv.axes[n].get_position() for n in "ABCDE"}
+    box = {n: cv.axes[n].get_position() for n in "ABCD"}
     print("[boxes] " + "; ".join(
         f"{n} {b.width * cv.width_pt:.1f}x{b.height * cv.height_pt:.1f}" for n, b in box.items()))
     print(f"[E] tag {stats}")

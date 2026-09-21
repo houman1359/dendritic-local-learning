@@ -50,8 +50,8 @@ def test_source_data_inventory_matches_final_display_numbering() -> None:
     assert main_numbers == set(builder.MAIN_FIGURE_NUMBERS)
     assert supplementary_numbers == set(range(1, len(builder.SUPPLEMENTARY_FIGURES) + 1))
     selector = next(a for a in curated_assets() if a["id"] == "original_selector")
-    assert selector["figure"] == "S34"
-    prospective = [item for item in files if item.figure == "Supplementary Figure 34"]
+    assert selector["figure"] == "S33"
+    prospective = [item for item in files if item.figure == "Supplementary Figure 33"]
     assert prospective
     assert all(item.source.startswith("source_data/prospective_morphology_selection/") for item in prospective)
     assert any(item.source.endswith("/sealed_confirmatory_selections.csv") for item in prospective)
@@ -80,14 +80,14 @@ def test_source_data_destinations_are_unique_and_sources_exist() -> None:
 def test_every_curated_panel_releases_its_declared_numerical_sources() -> None:
     files = list(builder.FILES)
     assets = curated_assets()
-    # The original 36 compositions are joined by two directly rendered
+    # The 35 curated compositions are joined by two directly rendered
     # figures with their own registries and numerical inputs.
-    assert len(assets) == 36
-    assert len(builder.SUPPLEMENTARY_FIGURES) == 38
+    assert len(assets) == 35
+    assert len(builder.SUPPLEMENTARY_FIGURES) == 37
     assert 'supplementary/curated/checkpoint_computation.pdf' in builder.SUPPLEMENTARY_FIGURES
     for filename in ('branch_tuning.csv', 'population_surfaces.csv',
-                     'component_errors.csv', 'figure_S37_plotted.csv'):
-        assert any(item.figure == 'Supplementary Figure 37' and
+                     'component_errors.csv', 'checkpoint_plotted.csv'):
+        assert any(item.figure == 'Supplementary Figure 36' and
                    item.source == 'source_data/checkpoint_computation/' + filename
                    for item in files), filename
     seen = set()

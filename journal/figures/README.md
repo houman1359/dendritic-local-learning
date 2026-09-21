@@ -58,7 +58,7 @@ Inspect final compiled figures at manuscript scale, including lettering, type si
 ## Production specification
 
 The ten main assets are `main/figure_01.pdf` through `main/figure_10.pdf`. The complete allowlist, including all
-36 supplementary sheets, is `MAIN_FIGURES` / `SUPPLEMENTARY_FIGURES` in
+37 supplementary sheets, is `MAIN_FIGURES` / `SUPPLEMENTARY_FIGURES` in
 `scripts/build_submission_bundle.py`. Other vector files are rendering inputs.
 
 Current canvases have a common 518.4 pt authoring width and variable heights.

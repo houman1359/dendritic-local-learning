@@ -341,7 +341,8 @@ def main():
   print(f'S{number:<3d} {ident:<30s} height {output[0].rect.height:7.1f}  scale {scale:.3f}  panels {len(panelmap)}')
  for key in mapping:
   if not mapping[key]:
-   fallback={'S9':('fig:si_utility_signal_noise','Old S9A and S9C are re-rendered on one dimensionless axis as panel E of the merged utility figure; the remaining panels are recorded in omitted_panel_status.'),
+   fallback={'S17':('tab:animal_credit','Animal-level estimates and inference are retained in the external signed-credit table and Section S9; the redundant descriptive figure remains archived.'),
+             'S9':('fig:si_utility_signal_noise','Old S9A and S9C are re-rendered on one dimensionless axis as panel E of the merged utility figure; the remaining panels are recorded in omitted_panel_status.'),
              'S6':('note:conflict_ancestry','Static quadratic interference remains in the derivation; the original numerical illustration is archived.'),
              'S16':('note:interior_optimum','Designed and retrospective optimum comparisons remain numerically in the operator-theory note; the full diagnostic is archived.'),
              'S26':('tab:physical_reproducibility','Same-seed rerun outcomes and outliers remain in the physical-depth reproducibility table.'),
@@ -362,9 +363,9 @@ def main():
              'S51':('fig:si_conductance_optimization','Replaced by the native render N20, drawn from the same source tables and pasted whole as Supplementary Fig. S20.'),
              'S52':('fig:si_conductance_optimization','Replaced by the native render N20, drawn from the same source tables and pasted whole as Supplementary Fig. S20.'),
              'S53':('fig:si_local_gate_controls','Replaced by the native render N21, drawn from the same source tables and pasted whole as Supplementary Fig. S21.'),
-             'S38':('fig:si_finite_horizon','Replaced by the native render N35, drawn from the same source tables and pasted whole as Supplementary Fig. S35.'),
-             'S39':('fig:si_finite_horizon','Replaced by the native render N35, drawn from the same source tables and pasted whole as Supplementary Fig. S35.'),
-             'S41':('fig:si_morphology_estimation','Replaced by the native render N36, drawn from the same source tables and pasted whole as Supplementary Fig. S36.'),
+             'S38':('fig:si_finite_horizon','Replaced by the native render N35, drawn from the same source tables and pasted whole as Supplementary Fig. S34.'),
+             'S39':('fig:si_finite_horizon','Replaced by the native render N35, drawn from the same source tables and pasted whole as Supplementary Fig. S34.'),
+             'S41':('fig:si_morphology_estimation','Replaced by the native render N36, drawn from the same source tables and pasted whole as Supplementary Fig. S35.'),
              # 2026-09-13: the last four sheets that pasted crops of frozen or training-script renders are pasted whole from native renders; the retired keys keep their provenance entries.
              'S46':('fig:si_utility_signal_noise','Replaced by the native render N3, drawn from the same source tables and pasted whole as Supplementary Fig. S3.'),
              'S5':('fig:si_utility_signal_noise','Panel E is redrawn in the native render N3 from the same alignment-controlled tables and pasted whole as Supplementary Fig. S3F; the training builder is never run.'),
@@ -378,7 +379,7 @@ def main():
              'S11':('fig:si_shunt_sensitivity','Replaced by the native render N29, which ports the legacy panels to the canvas from the same source tables and is pasted whole as Supplementary Fig. S29.'),
              'S21':('fig:si_shunt_sensitivity','Replaced by the native render N29, drawn from the same source tables and pasted whole as Supplementary Fig. S29.')}.get(key)
    if not fallback:raise ValueError('No destination: '+key)
-   mapping[key]=[{'kind':'table' if key in ['S26'] else 'section','label':fallback[0],'note':fallback[1]}]
+   mapping[key]=[{'kind':'table' if key in ['S17','S26'] else 'section','label':fallback[0],'note':fallback[1]}]
  manifest={'schema':'supplement-consolidation/1','selection_is_editorial':True,'numerical_results_changed':False,'builder':'scripts/supplement_consolidation/build.py','specification':'scripts/supplement_consolidation/specification.py','source_registry':'scripts/supplement_consolidation/original_assets.json','frozen_input_hashes':{str(p.relative_to(J)):sha(p) for p in [HERE/'original_assets.json',HERE/'original_captions.json',HERE/'original_provenance.json']},'paste_scale_target':PASTE_SCALE,'height_cap_pt':HEIGHT_CAP,'assets':assets,'old_to_new':mapping}
  (CFG/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
  (CFG/'captions.json').write_text(json.dumps(captions,indent=2)+'\n')

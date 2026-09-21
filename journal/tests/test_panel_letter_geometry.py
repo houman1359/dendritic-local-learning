@@ -42,7 +42,7 @@ def test_native_composition_keeps_source_ownership():
 
 def test_publication_inventory_includes_every_supplement():
     assert len(publication_paths(main_only=True))==10
-    assert len(publication_paths())==46
+    assert len(publication_paths())==47
 
 
 def test_all_publication_panel_letters():

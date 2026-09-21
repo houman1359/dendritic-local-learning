@@ -18,7 +18,7 @@ REVIEWED = (
     "mechanistic_chain", "utility_signal_noise", "input_coverage_depth",
     "ancestry_coefficients", "physical_architecture", "physical_optimizer",
     "anatomy_preprocessing", "shunt_replication", "measured_transfer_geometry",
-    "animal_credit_reanalysis", "morphology_estimation",
+    "morphology_estimation",
 )
 
 
@@ -134,7 +134,8 @@ def test_calibration_residual_and_labels_use_clipped_target(captions, monkeypatc
 def test_si_prose_does_not_publish_production_notes(captions, specification):
     assert "lies near the zero rule" in captions["shunt_replication"]
     assert "animal_credit_reanalysis" not in specification.CAPTION_APPEND
-    assert "restored as a figure" not in captions["animal_credit_reanalysis"]
+    assert "animal_credit_reanalysis" not in captions
+    assert r"\label{tab:animal_credit}" in (J / "supplementary/curated/si_tables_retained.tex").read_text()
     source = (SCRIPTS / "build_supplementary_figure_morphology_estimation_native.py").read_text()
     assert "pt here, not drawn" not in source
     assert "lower confidence bounds" in captions["morphology_estimation"]

@@ -1,7 +1,7 @@
 {
   "figure": "Figure 4",
   "output": "figures/components/restored_main_04.pdf",
-  "output_sha256": "1e2d5bbc2d0733451efc9f4096edf6fe9028f2d1bf3645df31bef03d2cb50ab1",
+  "output_sha256": "efb52f3d9c14f07628a76551dec7276b74f128886213e89ff1076a1cc230497a",
   "panel_sources": {
     "A": "Schematic. credit_rule_bridge/protocol_freeze.json (protocol.algebraic, protocol.fresh_seeds): the two targets, the shared balanced tree and the twenty fresh paired seeds. No measured series.",
     "B": "Schematic. credit_rule_bridge/figures/initial_profile_source.csv (site, junction, mean_profile, mean_abs_profile, n_seeds) sets the six drop-dot radii; figures/figure_provenance.json and protocol_freeze.json fix the calibration protocol (256 unlabeled examples at step 0).",
@@ -33,7 +33,7 @@
     "source_data/curated_publication/noise_controls_provenance.json": "4f7b1d7a4a610247123f8ec2187b92cc516351a7787f360cf62fcb01065ba7b3"
   },
   "builder_sha256": {
-    "scripts/credit_first_figures/build_restored_main.py": "5968a79690ac40d86f8a4cdd1dafc0c67ace61fc9e428dc8b0d0b45f9274b795",
+    "scripts/credit_first_figures/build_restored_main.py": "c1011dff7da993b8041401dc8ef921a6e8705db1f1b4a4a66e7c69761fc65a0c",
     "scripts/credit_first_figures/focused_main_evidence.py": "e045f0fc26ce8554af19f7d2b1ee9683ec852899f19e02e76e78163b0d74e773",
     "scripts/figure_canvas.py": "7f2983ff0c52a30dd5ba9bdeccc6fda940b4366ad872cbf0755fec5daa1dd7aa",
     "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a",

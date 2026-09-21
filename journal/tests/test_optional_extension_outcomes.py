@@ -69,7 +69,7 @@ def test_reported_means_paired_intervals_and_multiplicity():
 
 
 def test_saved_figure_rows_match_all_seeds_and_routing_maps():
-    ep=read('endpoints');plot=read('figure_S38_plotted');routes=read('routing')
+    ep=read('endpoints');plot=read('optional_extension_plotted');routes=read('routing')
     assert set(plot.panel)==set('ABCD')
     for key,g in plot[plot.seed.notna()].groupby(['panel','study','arm','policy']):
         _,study,arm,policy=key
@@ -87,7 +87,7 @@ def test_saved_figure_rows_match_all_seeds_and_routing_maps():
     np.testing.assert_allclose(matrices,1.,atol=1e-12)
     assert set(plot.arm)==set(protocol()['studies']['proxy'])|set(protocol()['studies']['routing'])
     for name in ['endpoints.csv','summary.csv','routing.csv']:
-        expected=json.loads((D/'figure_S38_provenance.json').read_text())['sources'][name]
+        expected=json.loads((D/'optional_extension_provenance.json').read_text())['sources'][name]
         assert hashlib.sha256((D/name).read_bytes()).hexdigest()==expected
 
 
@@ -99,7 +99,7 @@ def test_new_figure_and_complete_records_are_in_release_inventory():
     records=json.loads((J/'configs/credit_first_provenance/panel_sources.json').read_text())['records']
     for path in D.iterdir():
         if path.is_file():
-            assert any(r['figure']=='figS38' and r['path']==str(path.relative_to(J)) for r in records),path.name
+            assert any(r['figure']=='figS37' and r['path']==str(path.relative_to(J)) for r in records),path.name
     scope=json.loads((D/'scope_amendment.json').read_text())
     assert scope['deferred_studies']==['temporal']
     assert all(j['study']!='temporal' for j in protocol()['jobs'])

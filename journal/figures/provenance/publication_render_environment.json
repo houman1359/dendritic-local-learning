@@ -1,11 +1,11 @@
 {
   "python": "3.10.13 | packaged by conda-forge | (main, Oct 26 2023, 18:07:37) [GCC 12.3.0]",
   "packages": {
-    "numpy": "2.2.6",
+    "numpy": "1.26.4",
     "pandas": "2.3.3",
     "scipy": "1.15.3",
-    "matplotlib": "3.10.6",
-    "PyMuPDF": "1.28.0"
+    "matplotlib": "3.10.9",
+    "PyMuPDF": "1.28.2"
   },
   "fonts": {
     "NimbusSans-Regular.otf": {

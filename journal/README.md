@@ -44,7 +44,7 @@ make combined
 make audit
 ```
 
-`rebuild_final_publication_figures.py` renders the current ten numbered main figures and 36 supplementary figures from retained evidence. Historical builder numbers can differ from publication numbers; running an old compositor directly can restore an obsolete layout. Figure generation uses Python, NumPy, pandas, SciPy, Matplotlib and PyMuPDF. Manuscripts require pdfLaTeX/BibTeX. Biological reanalysis additionally requires the upstream data/cache access documented by each pipeline.
+`rebuild_final_publication_figures.py` renders the current ten numbered main figures and 37 supplementary figures from retained evidence. Historical builder numbers can differ from publication numbers; running an old compositor directly can restore an obsolete layout. Figure generation uses Python, NumPy, pandas, SciPy, Matplotlib and PyMuPDF. Manuscripts require pdfLaTeX/BibTeX. Biological reanalysis additionally requires the upstream data/cache access documented by each pipeline.
 
 A fresh checkout of `main` can compile the Article and Supplementary Information
 using their tracked PDF figures. Rebuilding figures, running the complete

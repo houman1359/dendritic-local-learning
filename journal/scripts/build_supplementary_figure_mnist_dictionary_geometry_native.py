@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Supplementary sheet S7 (ident ``mnist_dictionary_geometry``) -- the six-rule
+"""Current presentation: The September 21 revision retains A-C and shows capture once in main Figure 1G.
+
+Historical construction notes follow.
+
+Supplementary sheet S7 (ident ``mnist_dictionary_geometry``) -- the six-rule
 MNIST ladder, its within-tree paired contrasts and the dictionary capture of
 the same ten-seed cohort -- rebuilt as ONE native full-width
 :class:`figure_canvas.NativeCanvas`.
@@ -321,9 +325,8 @@ def build(path: Path = OUT):
                       margins=MARGINS, letter_clearance=True)
     ax_a = cv.panel("A", 0, 0, 6, grid="y", title="Shunting: ten fresh paired seeds")
     ax_b = cv.panel("B", 0, 6, 6, grid="y", title="Raw additive: ten fresh paired seeds")
-    ax_c = cv.panel("C", 1, 0, 8, grid="y", title="Added within-tree resolution")
-    ax_d = cv.panel("D", 1, 8, 4, grid="y", title="Dictionary capture")
-    for name in "ABCD":
+    ax_c = cv.panel("C", 1, 0, 12, grid="y", title="Added within-tree resolution")
+    for name in "ABC":
         cv.declare_reserve(name, left=15.0, right=8.0)
 
     lo_a, hi_a = panel_ladder(ax_a, rows, summary, "shunting", COLORS["shunting"])
@@ -334,7 +337,6 @@ def build(path: Path = OUT):
         ax.set_ylim(73.6, 98.6)
         ax.set_yticks([75, 80, 85, 90, 95], ["75", "80", "85", "90", "95"])
     panel_contrasts(ax_c, contrasts, seed_contrasts, rows)
-    panel_capture(ax_d, capture, capture_summary)
 
     # one shared key: glyphs (rate policy, seed), colour (architecture), line style (profile)
     glyph = dict(linestyle="none", ms=MARKER_MS, markeredgewidth=LW_ERR, color=INK)
@@ -346,11 +348,9 @@ def build(path: Path = OUT):
                markeredgecolor="none", alpha=SEED_ALPHA, label="one seed"),
         Patch(facecolor=COLORS["shunting"], edgecolor="none", label="shunting"),
         Patch(facecolor=COLORS["additive"], edgecolor="none", label="raw additive"),
-        Line2D([], [], color=INK, lw=LW_DATA, ls="-", label="K = 1, one profile (D)"),
-        Line2D([], [], color=INK, lw=LW_DATA, ls=DASHED, label="K = 3, three profiles (D)"),
     ]
     leg = cv.fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.53, 0.0),
-                        ncol=4, frameon=False, fontsize=PT_BASE, handlelength=2.2,
+                        ncol=3, frameon=False, fontsize=PT_BASE, handlelength=2.2,
                         columnspacing=1.5, handletextpad=0.6, borderaxespad=0.5,
                         labelspacing=0.45)
     # the ringed glyph: a second, larger open circle drawn in the same legend

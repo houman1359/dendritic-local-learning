@@ -34,7 +34,6 @@
     "shunt_replication": 1.0,
     "measured_transfer_geometry": 1.0,
     "measured_predictor_controls": 1.0,
-    "animal_credit_reanalysis": 1.0,
     "original_selector": 1.0,
     "finite_horizon": 1.0,
     "morphology_estimation": 1.0
@@ -309,17 +308,8 @@
       },
       "text_floor_examples": []
     },
-    "animal_credit_reanalysis": {
-      "figure": "S33",
-      "violations": 2,
-      "by_kind": {
-        "canvas-aspect": 1,
-        "manifest-missing": 1
-      },
-      "text_floor_examples": []
-    },
     "original_selector": {
-      "figure": "S34",
+      "figure": "S33",
       "violations": 1,
       "by_kind": {
         "manifest-missing": 1
@@ -327,7 +317,7 @@
       "text_floor_examples": []
     },
     "finite_horizon": {
-      "figure": "S35",
+      "figure": "S34",
       "violations": 1,
       "by_kind": {
         "manifest-missing": 1
@@ -335,7 +325,7 @@
       "text_floor_examples": []
     },
     "morphology_estimation": {
-      "figure": "S36",
+      "figure": "S35",
       "violations": 1,
       "by_kind": {
         "manifest-missing": 1

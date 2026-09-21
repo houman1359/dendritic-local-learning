@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Supplementary sheet S22 (ident ``physical_architecture``) -- task-matched
+"""Current presentation: The September 21 revision removes the duplicated three-tier plot, retains the distinct LocalCA control, and relabels A-G.
+
+Historical construction notes follow.
+
+Supplementary sheet S22 (ident ``physical_architecture``) -- task-matched
 serial computation versus grouped and flexible point controls -- rebuilt as
 ONE native full-width :class:`figure_canvas.NativeCanvas`.
 
@@ -868,27 +872,23 @@ def build(path: Path = OUT):
 
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 3, row_weights=ROW_PT, hgutter_pt=HGUTTER_PT,
                       vgutter_pt=VGUTTER_PT, margins=MARGINS)
-    ax_a = cv.panel("A", 0, 0, 4, schematic=True, title="Architectures compared")
-    ax_b = cv.panel("B", 0, 4, 4, grid="y", title="Three-tier task")
-    ax_c = cv.panel("C", 0, 8, 4, title="Four-tier task")
-    ax_d = cv.panel("D", 1, 0, 4, grid="y", title="Exact path at D3")
-    ax_e = cv.panel("E", 1, 4, 4, title="Serial vs star, BP")
-    ax_f = cv.panel("F", 1, 8, 4, title="Flexible point controls")
-    ax_g = cv.panel("G", 2, 0, 6, grid="y", title="Alignment dose, serial BP")
-    ax_h = cv.panel("H", 2, 6, 6, title="Depth benefit versus alignment")
-    for name in "ABCDEFGH":
+    ax_a = cv.panel("A", 0, 0, 6, schematic=True, title="Architectures compared")
+    ax_b = cv.panel("B", 0, 6, 6, title="Four-tier task")
+    ax_c = cv.panel("C", 1, 0, 4, grid="y", title="Exact path at D3")
+    ax_d = cv.panel("D", 1, 4, 4, title="Serial vs star, BP")
+    ax_e = cv.panel("E", 1, 8, 4, title="Flexible point controls")
+    ax_f = cv.panel("F", 2, 0, 6, grid="y", title="Alignment dose, serial BP")
+    ax_g = cv.panel("G", 2, 6, 6, title="Depth benefit versus alignment")
+    for name in "ABCDEFG":
         cv.declare_reserve(name, **RESERVE)
-
-    leg_b = panel_ladder(ax_b, series, ceiling)
-    image = panel_h4(ax_c, cv, blocks)
-    panel_families(ax_d)
-    panel_star(ax_e, cv)
-    panel_point_controls(ax_f)
-    panel_dose(ax_g, dose, wide)
-    panel_depth_benefit(ax_h, cv, wide, dc)
+    image = panel_h4(ax_b, cv, blocks)
+    panel_families(ax_c)
+    panel_star(ax_d, cv)
+    panel_point_controls(ax_e)
+    panel_dose(ax_f, dose, wide)
+    panel_depth_benefit(ax_g, cv, wide, dc)
     cv.lock_reserves()
-    check_ladder_key(ax_b, cv, leg_b, series, ceiling)
-    colour_rail(cv, ax_c, image)
+    colour_rail(cv, ax_b, image)
     panel_architectures(ax_a)
 
     # one key for the estimate glyphs used on every data panel
@@ -903,7 +903,7 @@ def build(path: Path = OUT):
                                label="mean and 95 % seed-bootstrap interval")
     open_h = Line2D([], [], linestyle="none", marker="o", markersize=MARKER_MS,
                     markerfacecolor="white", markeredgecolor=INK, markeredgewidth=LW_ERR,
-                    label="derived difference of two rows (E)")
+                    label="derived difference of two rows (D)")
     cv.fig.legend(handles=[seed_h, mean_h, open_h], loc="lower center",
                   bbox_to_anchor=(0.53, 0.0), ncol=3, frameon=False, fontsize=PT_BASE,
                   handlelength=2.2, columnspacing=1.8, handletextpad=0.6, borderaxespad=0.5)

@@ -99,11 +99,11 @@ RULES = (
     ("exact", "Exact path", "bp"),
     ("ancestry_three_oracle", "Three-pattern\noracle", "oracle"),
     ("ancestry_two_leaf_oracle_unit_proximal", "Two-profile\noracle", "oracle"),
-    ("hard_distal_unit_proximal", "Local distal gate", "shunting"),
-    ("shunt_proportional_unit_proximal", "Shunt-proportional\ngate", "shunting"),
+    ("hard_distal_unit_proximal", "Hard distal gate", "shunting"),
+    ("shunt_proportional_unit_proximal", "Continuous distal\ngate", "shunting"),
     ("unit_broadcast", "Unit broadcast\n(≈ calibrated)", "scalar"),
     ("hard_distal_and_proximal", "Gate also\nproximal", "highlight"),
-    ("swapped_distal_unit_proximal", "Swapped gate", "point_mlp"),
+    ("swapped_distal_unit_proximal", "Wrong branch", "point_mlp"),
 )
 N_ACCURATE = 5
 CALIBRATED = "calibrated_broadcast"          # collapsed into the unit row

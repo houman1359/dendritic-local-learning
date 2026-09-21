@@ -186,7 +186,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 420.0,
-      "sha256": "4c66fe0d5e41ca5de1e1eca3f75d0c59bb65c6673e2ad05b40122e2c789164a5",
+      "sha256": "c28158f63bcc6c1f00dffc1e4f77a5cb6583d988d333a96532ed8e94b05130e3",
       "source_data_directories": [
         "source_data/inherited_neurips",
         "source_data/theory"
@@ -304,7 +304,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 365.1500244140625,
-      "sha256": "82c58d5619982b020451ae097c6f832e30b358469531a1995b0679ad59967467",
+      "sha256": "37726e5a1662c1a4d5900e57b9aa583406e08f49b170422269f523c3eae2598a",
       "source_data_directories": [
         "source_data/figure2"
       ]
@@ -504,7 +504,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 490.0,
-      "sha256": "37f09863b91c34ee33ea252afa80e60f555d75f2da96fcaf0296fc254e098a91",
+      "sha256": "12d27f43793bf960b3c99c54597d93c7a5f7309f31e508653eb7c7c8d53047a6",
       "source_data_directories": [
         "source_data/credit_phase_theory",
         "source_data/review_evidence_reanalysis",
@@ -661,7 +661,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 316.4000244140625,
-      "sha256": "9f5a69824cc7051025a3f97cbf5f2acc1a27c399e178efb7aa96edb6b9e266c5",
+      "sha256": "baf000d601ac1a991e2b978691ca264783441437642a36818e033943522d1e20",
       "source_data_directories": [
         "source_data/positive_conductance_reliability_step_consistent"
       ]
@@ -835,7 +835,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 364.9000244140625,
-      "sha256": "044ff15e33019eeb49da41a1adba8a0ad7cca4bf219ba92c2f66aab4fa9899ee",
+      "sha256": "66c99a486e0ccc3d5fb05e0f28ee47732f3f5c828b74bd65ef49508b8d0f4fef",
       "source_data_directories": [
         "source_data/same_span_coefficient_learning"
       ]
@@ -1132,7 +1132,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 336.4000244140625,
-      "sha256": "43f4a147fc339b23d8c5eb292701cebafe95264f697a30857b6f8498f621d841",
+      "sha256": "c6b2a7f63c7a16e03d07ee6f3e598d52bf93459f117b1aed99d6bd25d9351017",
       "source_data_directories": [
         "source_data/cifar10_additive_feedback_ladder_confirmatory",
         "source_data/fashion_feedback_ladder",
@@ -1167,11 +1167,13 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_mnist_dictionary_geometry_native.pdf",
-          "source_sha256": "726cd37b4c5212b773f950b83f964bc57f6cabec3ecab54e80f77cb1553343a9",
+          "source_sha256": "9e39f04cfd1ddc09bbea24e416a280789ff378e75cab5f1bbc6449216987667a",
           "old_provenance_figure": "figN7",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {},
+          "record_type": "native supplement panel",
+          "builder": "scripts/build_supplementary_figure_mnist_dictionary_geometry_native.py"
         },
         {
           "source": "N7",
@@ -1193,11 +1195,13 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_mnist_dictionary_geometry_native.pdf",
-          "source_sha256": "726cd37b4c5212b773f950b83f964bc57f6cabec3ecab54e80f77cb1553343a9",
+          "source_sha256": "9e39f04cfd1ddc09bbea24e416a280789ff378e75cab5f1bbc6449216987667a",
           "old_provenance_figure": "figN7",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {},
+          "record_type": "native supplement panel",
+          "builder": "scripts/build_supplementary_figure_mnist_dictionary_geometry_native.py"
         },
         {
           "source": "N7",
@@ -1205,51 +1209,27 @@
           "bbox": [
             13.779999732971191,
             182.75900268554688,
-            345.4682312011719,
-            388.7501220703125
+            490.42437744140625,
+            388.7657470703125
           ],
-          "width": 331.6882314682007,
-          "height": 205.99111938476562,
+          "width": 476.64437770843506,
+          "height": 206.00674438476562,
           "panel": "C",
           "target_rect": [
             13.779999732971191,
             182.75900268554688,
-            345.4682312011719,
-            388.7501220703125
-          ],
-          "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_mnist_dictionary_geometry_native.pdf",
-          "source_sha256": "726cd37b4c5212b773f950b83f964bc57f6cabec3ecab54e80f77cb1553343a9",
-          "old_provenance_figure": "figN7",
-          "old_provenance_entry_ids": [],
-          "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "N7",
-          "source_panel": "D",
-          "bbox": [
-            341.32666015625,
-            182.75900268554688,
-            490.0673828125,
-            388.7657470703125
-          ],
-          "width": 148.74072265625,
-          "height": 206.00674438476562,
-          "panel": "D",
-          "target_rect": [
-            341.32666015625,
-            182.75900268554688,
-            490.0673828125,
+            490.42437744140625,
             388.7657470703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_mnist_dictionary_geometry_native.pdf",
-          "source_sha256": "726cd37b4c5212b773f950b83f964bc57f6cabec3ecab54e80f77cb1553343a9",
+          "source_sha256": "9e39f04cfd1ddc09bbea24e416a280789ff378e75cab5f1bbc6449216987667a",
           "old_provenance_figure": "figN7",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {},
+          "record_type": "native supplement panel",
+          "builder": "scripts/build_supplementary_figure_mnist_dictionary_geometry_native.py"
         }
       ],
       "ancillary_elements": [],
@@ -1257,7 +1237,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 392.0,
-      "sha256": "cc0030a507324b0d33c3996115060bcc626a94155c605f2e1d77d9f94cd76410",
+      "sha256": "5361d6f96d67b109573e807ef63de552445e6923139e9f0741f0a0ada8c6ccf7",
       "source_data_directories": [
         "source_data/image_ladder_controls",
         "source_data/mnist_feedback_ladder"
@@ -1354,7 +1334,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 364.0,
-      "sha256": "76298e9e5610dbe3c9622cbe3c1f47833d7d7147f8c2054fa3bd09eff1df3dff",
+      "sha256": "b926f7c6a71f112bfc1ae53aa48be86fa4454d848a04bf1031ae933e4c099da9",
       "source_data_directories": [
         "source_data/figure2",
         "source_data/prospective_input_validity"
@@ -1577,7 +1557,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 311.4000244140625,
-      "sha256": "1ce5278ca396f6d64dc382e68c891145c610462eb2fd680a77ae15a3d5cb6979",
+      "sha256": "1d465b8984a63c9c16cf59bf8680cc69e23cd512dc16cb402d19a2cbda2a0ddf",
       "source_data_directories": [
         "source_data/spatial_topology_audit",
         "source_data/prospective_input_validity"
@@ -2203,7 +2183,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 432.1499938964844,
-      "sha256": "c81f26f3590c0d30e69f12e1294754a69da142ce95dc8bb446d19511919597d1",
+      "sha256": "46f9ceb82d5dbcc1c2ea3dfeaa5e13e71127b87a686f847ffce38d7446ad108a",
       "source_data_directories": [
         "source_data/path_necessity_fashion",
         "source_data/review_branch_trajectories",
@@ -2706,7 +2686,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 376.6500244140625,
-      "sha256": "c01bf2db236a75bf79ac3fddac7eb1a9f55af89489f5fb8f5b93dab961f142c4",
+      "sha256": "0678203f896d475c87ed34ead7c8f97437542b4ca15abdc1343830019fa94717",
       "source_data_directories": [
         "source_data/review_coefficient_encoder",
         "source_data/review_coefficient_hard_readout",
@@ -2883,7 +2863,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 492.0,
-      "sha256": "f74c994664fae8fe3a7761d360466381576d866c20c0f50916c46f4984cd9822",
+      "sha256": "2deb92d828e2b56f53bd829516fd1445bbf812352bc0d8b0e49acfce200c9951",
       "source_data_directories": [
         "source_data/morphology_structure"
       ]
@@ -3057,7 +3037,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 490.0,
-      "sha256": "5ba29e69af3947535d541aee821d40aed287cc6ab9567ffd560e8b1b81ee0765",
+      "sha256": "0875044e6debb3ace37e14c0a4448888e66ba61edbf9851b0b4d4f61091a8ee9",
       "source_data_directories": [
         "source_data/morphology_credit"
       ]
@@ -3231,7 +3211,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 493.0,
-      "sha256": "3812e02b9ba9ebd669c1c01993281e799740519aabefa45b0aa7251a6160134c",
+      "sha256": "4a4ae3d65bbce3691b6b19123856ab1de62c6f5e152bd4794e3916877f3b8390",
       "source_data_directories": [
         "source_data/boolean_theory"
       ]
@@ -3457,7 +3437,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 493.0,
-      "sha256": "36ee03593293d0fd5c4b84ac6d83a414588404bf296ed048bb23fc3283554d50",
+      "sha256": "88d057ca58623f3b6ee1a1d69353932e8599196409339f69852a32314ed4daa1",
       "source_data_directories": [
         "source_data/boolean_morphology"
       ]
@@ -3631,7 +3611,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 493.0,
-      "sha256": "1f2efd9737604c1d487bfc8ec46f684469eda59c11ca38792084ff36b17f692b",
+      "sha256": "952c39f4bba87de9ca4e181391a38212fc3274f25f58773f6a82548f1518b0fd",
       "source_data_directories": [
         "source_data/credit_rule_extension"
       ]
@@ -3753,7 +3733,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 470.0,
-      "sha256": "0880c1b79d61d37affafc1911c897db996b717a0ee855a648e5d9940e99f0b8c",
+      "sha256": "b7276b1e0589c055494ef93be503ec7658eeec925fbfda0f25d13127dc60365e",
       "source_data_directories": [
         "source_data/credit_rule_extension"
       ]
@@ -3927,7 +3907,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 484.0,
-      "sha256": "423fecdaa5e8967c7bb794cd0c2e79135d3202d825a7c0bc16348f9f90df0c29",
+      "sha256": "c576922839a8be8213f0c3953a28cc4905036f3076d92cde5512a03c234b6e77",
       "source_data_directories": [
         "source_data/morphology_conductance"
       ]
@@ -4049,7 +4029,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 370.0,
-      "sha256": "d8bf2359ec5d1dfa0ee5e32d317bee6a1259cec168169aee709a135fa2dbf229",
+      "sha256": "0d18caf15c491cd99275fa0caec132c5342f853300f16c576047a51b0aca2860",
       "source_data_directories": [
         "source_data/conductance_credit_demand"
       ]
@@ -4197,7 +4177,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 492.0,
-      "sha256": "b57f37c3f6d1f19c69a39cdb84303014e15ef22367255dfa0b67a4933fcd8fb1",
+      "sha256": "f6193925cf6d0498d78d54b8737ff771f80075521db985b3caa3b24e9fed7cc0",
       "source_data_directories": [
         "source_data/conductance_credit_demand"
       ]
@@ -4229,11 +4209,13 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_local_gate_controls_native.pdf",
-          "source_sha256": "72d2e71acd6490f09eeb24d9cc9570c5a730c05167051b8e8740b33559fa6b5a",
+          "source_sha256": "31d1d07812deef3fd15bb75fd676a1dc152dfa44cb38bf019d69d91657eee21e",
           "old_provenance_figure": "figN21",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {},
+          "record_type": "native supplement panel",
+          "builder": "scripts/build_supplementary_figure_local_gate_controls_native.py"
         },
         {
           "source": "N21",
@@ -4255,11 +4237,13 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_local_gate_controls_native.pdf",
-          "source_sha256": "72d2e71acd6490f09eeb24d9cc9570c5a730c05167051b8e8740b33559fa6b5a",
+          "source_sha256": "31d1d07812deef3fd15bb75fd676a1dc152dfa44cb38bf019d69d91657eee21e",
           "old_provenance_figure": "figN21",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {},
+          "record_type": "native supplement panel",
+          "builder": "scripts/build_supplementary_figure_local_gate_controls_native.py"
         },
         {
           "source": "N21",
@@ -4281,11 +4265,13 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_local_gate_controls_native.pdf",
-          "source_sha256": "72d2e71acd6490f09eeb24d9cc9570c5a730c05167051b8e8740b33559fa6b5a",
+          "source_sha256": "31d1d07812deef3fd15bb75fd676a1dc152dfa44cb38bf019d69d91657eee21e",
           "old_provenance_figure": "figN21",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {},
+          "record_type": "native supplement panel",
+          "builder": "scripts/build_supplementary_figure_local_gate_controls_native.py"
         },
         {
           "source": "N21",
@@ -4307,11 +4293,13 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_local_gate_controls_native.pdf",
-          "source_sha256": "72d2e71acd6490f09eeb24d9cc9570c5a730c05167051b8e8740b33559fa6b5a",
+          "source_sha256": "31d1d07812deef3fd15bb75fd676a1dc152dfa44cb38bf019d69d91657eee21e",
           "old_provenance_figure": "figN21",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {},
+          "record_type": "native supplement panel",
+          "builder": "scripts/build_supplementary_figure_local_gate_controls_native.py"
         }
       ],
       "ancillary_elements": [],
@@ -4319,7 +4307,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 492.0,
-      "sha256": "17bdbfb41b77f4fff58d8a25406cd2d603eb2f1f4d0b1cccc5f234864615d732",
+      "sha256": "918097d9f5ba84a970b5b0473e4379ee2b0f97d84add841708877ce9852c6541",
       "source_data_directories": [
         "source_data/conductance_local_gate"
       ]
@@ -4337,81 +4325,59 @@
           "bbox": [
             8.0,
             4.759007453918457,
-            154.30311584472656,
+            232.57400512695312,
             157.68606567382812
           ],
-          "width": 146.30311584472656,
+          "width": 224.57400512695312,
           "height": 152.92705821990967,
           "panel": "A",
           "target_rect": [
             8.0,
             4.759007453918457,
-            154.30311584472656,
+            232.57400512695312,
             157.68606567382812
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-          "source_sha256": "e7b8f866b11964781b1babb0d6b624cfebe2eec31469e6bf937d21e35487ffdc",
+          "source_sha256": "cd4e1f0183cebd004218cd6e12591845ceebf424a8ecbc12c3dc1c1c90239844",
           "old_provenance_figure": "figN22",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {},
+          "record_type": "native supplement panel",
+          "builder": "scripts/build_supplementary_figure_physical_architecture_native.py"
         },
         {
           "source": "N22",
           "source_panel": "B",
           "bbox": [
-            161.0,
+            242.36000061035156,
             4.759007453918457,
-            324.0987548828125,
+            509.88763427734375,
             182.97219848632812
           ],
-          "width": 163.0987548828125,
+          "width": 267.5276336669922,
           "height": 178.21319103240967,
           "panel": "B",
           "target_rect": [
-            161.0,
+            242.36000061035156,
             4.759007453918457,
-            324.0987548828125,
+            509.88763427734375,
             182.97219848632812
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-          "source_sha256": "e7b8f866b11964781b1babb0d6b624cfebe2eec31469e6bf937d21e35487ffdc",
+          "source_sha256": "cd4e1f0183cebd004218cd6e12591845ceebf424a8ecbc12c3dc1c1c90239844",
           "old_provenance_figure": "figN22",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {},
+          "record_type": "native supplement panel",
+          "builder": "scripts/build_supplementary_figure_physical_architecture_native.py"
         },
         {
           "source": "N22",
           "source_panel": "C",
-          "bbox": [
-            323.6400146484375,
-            4.759007453918457,
-            509.88763427734375,
-            182.97219848632812
-          ],
-          "width": 186.24761962890625,
-          "height": 178.21319103240967,
-          "panel": "C",
-          "target_rect": [
-            323.6400146484375,
-            4.759007453918457,
-            509.88763427734375,
-            182.97219848632812
-          ],
-          "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-          "source_sha256": "e7b8f866b11964781b1babb0d6b624cfebe2eec31469e6bf937d21e35487ffdc",
-          "old_provenance_figure": "figN22",
-          "old_provenance_entry_ids": [],
-          "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "N22",
-          "source_panel": "D",
           "bbox": [
             8.0,
             181.75900268554688,
@@ -4420,7 +4386,7 @@
           ],
           "width": 145.7069549560547,
           "height": 137.677734375,
-          "panel": "D",
+          "panel": "C",
           "target_rect": [
             8.0,
             181.75900268554688,
@@ -4429,67 +4395,73 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-          "source_sha256": "e7b8f866b11964781b1babb0d6b624cfebe2eec31469e6bf937d21e35487ffdc",
+          "source_sha256": "cd4e1f0183cebd004218cd6e12591845ceebf424a8ecbc12c3dc1c1c90239844",
           "old_provenance_figure": "figN22",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {},
+          "record_type": "native supplement panel",
+          "builder": "scripts/build_supplementary_figure_physical_architecture_native.py"
+        },
+        {
+          "source": "N22",
+          "source_panel": "D",
+          "bbox": [
+            160.4600067138672,
+            181.75900268554688,
+            315.0625,
+            325.59613037109375
+          ],
+          "width": 154.6024932861328,
+          "height": 143.83712768554688,
+          "panel": "D",
+          "target_rect": [
+            160.4600067138672,
+            181.75900268554688,
+            315.0625,
+            325.59613037109375
+          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
+          "source_sha256": "cd4e1f0183cebd004218cd6e12591845ceebf424a8ecbc12c3dc1c1c90239844",
+          "old_provenance_figure": "figN22",
+          "old_provenance_entry_ids": [],
+          "numerical_source_paths": [],
+          "explicit_numerical_source_hashes": {},
+          "record_type": "native supplement panel",
+          "builder": "scripts/build_supplementary_figure_physical_architecture_native.py"
         },
         {
           "source": "N22",
           "source_panel": "E",
           "bbox": [
-            161.0,
+            333.6000061035156,
             181.75900268554688,
-            315.0625,
-            325.59613037109375
+            470.6490783691406,
+            317.4688720703125
           ],
-          "width": 154.0625,
-          "height": 143.83712768554688,
+          "width": 137.049072265625,
+          "height": 135.70986938476562,
           "panel": "E",
           "target_rect": [
-            161.0,
+            333.6000061035156,
             181.75900268554688,
-            315.0625,
-            325.59613037109375
+            470.6490783691406,
+            317.4688720703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-          "source_sha256": "e7b8f866b11964781b1babb0d6b624cfebe2eec31469e6bf937d21e35487ffdc",
+          "source_sha256": "cd4e1f0183cebd004218cd6e12591845ceebf424a8ecbc12c3dc1c1c90239844",
           "old_provenance_figure": "figN22",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {},
+          "record_type": "native supplement panel",
+          "builder": "scripts/build_supplementary_figure_physical_architecture_native.py"
         },
         {
           "source": "N22",
           "source_panel": "F",
-          "bbox": [
-            323.6400146484375,
-            181.75900268554688,
-            470.6490783691406,
-            317.4688720703125
-          ],
-          "width": 147.00906372070312,
-          "height": 135.70986938476562,
-          "panel": "F",
-          "target_rect": [
-            323.6400146484375,
-            181.75900268554688,
-            470.6490783691406,
-            317.4688720703125
-          ],
-          "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-          "source_sha256": "e7b8f866b11964781b1babb0d6b624cfebe2eec31469e6bf937d21e35487ffdc",
-          "old_provenance_figure": "figN22",
-          "old_provenance_entry_ids": [],
-          "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "N22",
-          "source_panel": "G",
           "bbox": [
             8.0,
             328.03900146484375,
@@ -4498,7 +4470,7 @@
           ],
           "width": 223.38258361816406,
           "height": 152.72674560546875,
-          "panel": "G",
+          "panel": "F",
           "target_rect": [
             8.0,
             328.03900146484375,
@@ -4507,37 +4479,41 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-          "source_sha256": "e7b8f866b11964781b1babb0d6b624cfebe2eec31469e6bf937d21e35487ffdc",
+          "source_sha256": "cd4e1f0183cebd004218cd6e12591845ceebf424a8ecbc12c3dc1c1c90239844",
           "old_provenance_figure": "figN22",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {},
+          "record_type": "native supplement panel",
+          "builder": "scripts/build_supplementary_figure_physical_architecture_native.py"
         },
         {
           "source": "N22",
-          "source_panel": "H",
+          "source_panel": "G",
           "bbox": [
-            249.1999969482422,
+            239.36000061035156,
             328.03900146484375,
-            474.564697265625,
+            474.75439453125,
             480.7657470703125
           ],
-          "width": 225.3647003173828,
+          "width": 235.39439392089844,
           "height": 152.72674560546875,
-          "panel": "H",
+          "panel": "G",
           "target_rect": [
-            249.1999969482422,
+            239.36000061035156,
             328.03900146484375,
-            474.564697265625,
+            474.75439453125,
             480.7657470703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-          "source_sha256": "e7b8f866b11964781b1babb0d6b624cfebe2eec31469e6bf937d21e35487ffdc",
+          "source_sha256": "cd4e1f0183cebd004218cd6e12591845ceebf424a8ecbc12c3dc1c1c90239844",
           "old_provenance_figure": "figN22",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {},
+          "record_type": "native supplement panel",
+          "builder": "scripts/build_supplementary_figure_physical_architecture_native.py"
         }
       ],
       "ancillary_elements": [],
@@ -4545,7 +4521,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 484.0,
-      "sha256": "48256e15445f0781a9c46c410be3e9a0da200c2049e9ad55f7040293a3c08caa",
+      "sha256": "4fe3904ba5685f7f0b0b616105b571a39140f149450977cb7495f256864f834e",
       "source_data_directories": [
         "source_data/physical_alignment_dose",
         "source_data/remaining_physical_experiments",
@@ -4724,7 +4700,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 360.0,
-      "sha256": "ab60855734a6379378f4ceca49ad8b0516391231e151299f4a059edcbc407a61",
+      "sha256": "756ac515a1b2601df01ea52d5dd6803d5a9c88943cb3ba19204de56b7c2cf103",
       "source_data_directories": [
         "source_data/nonlinear_physical_depth_accessibility",
         "source_data/nonlinear_physical_depth_boundary",
@@ -4866,7 +4842,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 359.4000244140625,
-      "sha256": "22311eaa975467b5e46e0f8c5d9bf4610e221f491eea7bd1eaf89cb3514a4c46",
+      "sha256": "401221e39a1f1a68fc5ff2b63d64c0dcd41dd67d96edeaaebf3dca94a48aeff0",
       "source_data_directories": [
         "source_data/remaining_physical_experiments",
         "source_data/point_dendrite_credit_controls"
@@ -5047,7 +5023,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 435.5,
-      "sha256": "105ddb39d791dd4cccf8680631c9c06693a93008de65bb4f57c70405117fdd3c",
+      "sha256": "b35163af6405850786b891f3cdded513ef7fe5d2083fe4b5314fa69a2995f499",
       "source_data_directories": [
         "source_data/figure3",
         "source_data/microns_v661_replication",
@@ -5314,7 +5290,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 462.0500183105469,
-      "sha256": "d4cf2037061b2429aebac692901dd0ce81c0516844c7873354cb8feca50894cf",
+      "sha256": "7c1fbccb3cde06dd779bbfa01ccb17e5a40928914069892315a70bb3e904a6f3",
       "source_data_directories": [
         "source_data/microns_inhibitory_routes"
       ]
@@ -5458,7 +5434,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 320.3999938964844,
-      "sha256": "933c8fe23d782218daeb0122bd61bf3612b52c9a7af055706fb2daddd84f6c2c",
+      "sha256": "a20a02fd74bded43e4990403ed749036b5aaa876903a1bf365ebd27ded1ff744",
       "source_data_directories": [
         "source_data/irregular_tree_wavelets"
       ]
@@ -5746,7 +5722,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 504.0,
-      "sha256": "f74c489986b7dfb72166d11ef6997b1ec87042bcd54f283d10be4da33770209a",
+      "sha256": "3cac8f8b4e7f6dd85a08ab92c7dc10ac0efdc7b2411867fc433b06e81009cf2c",
       "source_data_directories": [
         "source_data/review_morphology_uncertainty"
       ]
@@ -5920,7 +5896,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 489.0,
-      "sha256": "6f1d4f8eec259b058cb04a0a4f27c09d4f1bacb2be1c43750fdf87d2525f114a",
+      "sha256": "2c54a6fa913fd1f4da9dcaa69934f9a67f9bd02ba31b513ca75370eb146c41c7",
       "source_data_directories": [
         "source_data/figure4",
         "source_data/focal_selectivity_phase1",
@@ -6070,7 +6046,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 414.0,
-      "sha256": "41b6281ea8fa455409aab8879243f80f524aff73cf235794d37ec88486857b6c",
+      "sha256": "e39d96ca96ac6844842547053135e680a459ae775bc3d4d761beaf6a2d2bdc17",
       "source_data_directories": [
         "source_data/focal_selectivity_active_ensemble",
         "source_data/focal_selectivity_phase1",
@@ -6088,131 +6064,113 @@
           "source": "N31",
           "source_panel": "A",
           "bbox": [
-            0.5,
+            5.059999942779541,
             0.518986701965332,
-            202.22012329101562,
+            227.81753540039062,
             179.46800231933594
           ],
-          "width": 201.72012329101562,
+          "width": 222.75753545761108,
           "height": 178.9490156173706,
           "panel": "A",
           "target_rect": [
-            0.5,
+            5.059999942779541,
             0.518986701965332,
-            202.22012329101562,
+            227.81753540039062,
             179.46800231933594
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_measured_transfer_geometry_native.pdf",
-          "source_sha256": "4094348b14a7096257e7937d0081318fdc2f86a1e287d2c49b29b3762b072fe3",
+          "source_sha256": "13c9a4f277ee888ca55f9cdab3a87a33c5d40545cb46901360788905cab14c85",
           "old_provenance_figure": "figN31",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {},
+          "record_type": "native supplement panel",
+          "builder": "scripts/build_supplementary_figure_measured_transfer_geometry_native.py"
         },
         {
           "source": "N31",
           "source_panel": "B",
           "bbox": [
-            205.56666564941406,
+            262.20001220703125,
             0.518986701965332,
-            347.0517883300781,
-            179.43675231933594
+            501.18511962890625,
+            188.1804962158203
           ],
-          "width": 141.48512268066406,
-          "height": 178.9177656173706,
+          "width": 238.985107421875,
+          "height": 187.66150951385498,
           "panel": "B",
           "target_rect": [
-            205.56666564941406,
+            262.20001220703125,
             0.518986701965332,
-            347.0517883300781,
-            179.43675231933594
+            501.18511962890625,
+            188.1804962158203
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_measured_transfer_geometry_native.pdf",
-          "source_sha256": "4094348b14a7096257e7937d0081318fdc2f86a1e287d2c49b29b3762b072fe3",
+          "source_sha256": "13c9a4f277ee888ca55f9cdab3a87a33c5d40545cb46901360788905cab14c85",
           "old_provenance_figure": "figN31",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {},
+          "record_type": "native supplement panel",
+          "builder": "scripts/build_supplementary_figure_measured_transfer_geometry_native.py"
         },
         {
           "source": "N31",
           "source_panel": "C",
           "bbox": [
-            344.26666259765625,
-            0.518986701965332,
-            500.3999938964844,
-            179.43675231933594
+            5.059999942779541,
+            186.55099487304688,
+            257.1806335449219,
+            396.4367370605469
           ],
-          "width": 156.13333129882812,
-          "height": 178.9177656173706,
+          "width": 252.12063360214233,
+          "height": 209.8857421875,
           "panel": "C",
           "target_rect": [
-            344.26666259765625,
-            0.518986701965332,
-            500.3999938964844,
-            179.43675231933594
+            5.059999942779541,
+            186.55099487304688,
+            257.1806335449219,
+            396.4367370605469
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_measured_transfer_geometry_native.pdf",
-          "source_sha256": "4094348b14a7096257e7937d0081318fdc2f86a1e287d2c49b29b3762b072fe3",
+          "source_sha256": "13c9a4f277ee888ca55f9cdab3a87a33c5d40545cb46901360788905cab14c85",
           "old_provenance_figure": "figN31",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {},
+          "record_type": "native supplement panel",
+          "builder": "scripts/build_supplementary_figure_measured_transfer_geometry_native.py"
         },
         {
           "source": "N31",
           "source_panel": "D",
           "bbox": [
-            0.5,
-            183.75900268554688,
-            252.62063598632812,
-            396.4367370605469
+            262.20001220703125,
+            186.55099487304688,
+            487.2628173828125,
+            396.4679870605469
           ],
-          "width": 252.12063598632812,
-          "height": 212.677734375,
+          "width": 225.06280517578125,
+          "height": 209.9169921875,
           "panel": "D",
           "target_rect": [
-            0.5,
-            183.75900268554688,
-            252.62063598632812,
-            396.4367370605469
-          ],
-          "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_measured_transfer_geometry_native.pdf",
-          "source_sha256": "4094348b14a7096257e7937d0081318fdc2f86a1e287d2c49b29b3762b072fe3",
-          "old_provenance_figure": "figN31",
-          "old_provenance_entry_ids": [],
-          "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "N31",
-          "source_panel": "E",
-          "bbox": [
-            256.20001220703125,
-            176.1804962158203,
-            505.2628173828125,
-            396.4679870605469
-          ],
-          "width": 249.06280517578125,
-          "height": 220.28749084472656,
-          "panel": "E",
-          "target_rect": [
-            256.20001220703125,
-            176.1804962158203,
-            505.2628173828125,
+            262.20001220703125,
+            186.55099487304688,
+            487.2628173828125,
             396.4679870605469
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_measured_transfer_geometry_native.pdf",
-          "source_sha256": "4094348b14a7096257e7937d0081318fdc2f86a1e287d2c49b29b3762b072fe3",
+          "source_sha256": "13c9a4f277ee888ca55f9cdab3a87a33c5d40545cb46901360788905cab14c85",
           "old_provenance_figure": "figN31",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {},
+          "record_type": "native supplement panel",
+          "builder": "scripts/build_supplementary_figure_measured_transfer_geometry_native.py"
         }
       ],
       "ancillary_elements": [],
@@ -6220,7 +6178,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 403.0,
-      "sha256": "bfdff7b179687933276fcc5614811f40206981bde6362462f44eba36930fd4cc",
+      "sha256": "513ee90dc49951a3473a8a1a39a474eafafb83c17187a5af4787a90dd9478a8a",
       "source_data_directories": [
         "source_data/figure5",
         "source_data/measured_alignment_power",
@@ -6471,142 +6429,13 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 475.20001220703125,
-      "sha256": "e58bf68f4f14b764980b586d1608d8a3b3c5c388813ecdffbf33d4e0775707e4",
+      "sha256": "9a57a879e8a3da96b325765b6d795ad9b31e2f6657fc3b07e804d64951de4547",
       "source_data_directories": [
         "source_data/review_response_baselines"
       ]
     },
     {
       "figure": "S33",
-      "id": "animal_credit_reanalysis",
-      "module": "si_09_measured",
-      "path": "figures/supplementary/curated/animal_credit_reanalysis.pdf",
-      "label": "fig:si_animal_credit_reanalysis",
-      "panels": [
-        {
-          "source": "S17",
-          "source_panel": "A",
-          "bbox": [
-            0.5,
-            7.759007453918457,
-            104.59709930419922,
-            152.30392456054688
-          ],
-          "width": 104.09709930419922,
-          "height": 144.54491710662842,
-          "panel": "A",
-          "target_rect": [
-            0.5,
-            7.759007453918457,
-            104.59709930419922,
-            152.30392456054688
-          ],
-          "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_S17_panels_A-B.pdf",
-          "source_sha256": "f4ae3ae180ebebb6e9a5e89d01dfd481b57d2a8545354c7b7312af1d27dea413",
-          "old_provenance_figure": "figS17",
-          "old_provenance_entry_ids": [
-            "animalcredit.asset",
-            "animalcredit.contrasts",
-            "animalcredit.modes",
-            "animalcredit.neurons",
-            "animalcredit.schematic",
-            "fig8.animal.schematic"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/animal_learning_francioni/animal_common_signed_modes.csv",
-            "drafts/dendritic-local-learning/journal/source_data/animal_learning_francioni/animal_signed_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/animal_learning_francioni/neuron_sd_residual_distributions.csv"
-          ],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "S17",
-          "source_panel": "B",
-          "bbox": [
-            109.02999877929688,
-            0.0,
-            337.8138122558594,
-            200.0
-          ],
-          "width": 228.7838134765625,
-          "height": 200.0,
-          "panel": "B",
-          "target_rect": [
-            109.02999877929688,
-            0.0,
-            337.8138122558594,
-            200.0
-          ],
-          "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_S17_panels_A-B.pdf",
-          "source_sha256": "f4ae3ae180ebebb6e9a5e89d01dfd481b57d2a8545354c7b7312af1d27dea413",
-          "old_provenance_figure": "figS17",
-          "old_provenance_entry_ids": [
-            "animalcredit.asset",
-            "animalcredit.contrasts",
-            "animalcredit.modes",
-            "animalcredit.neurons",
-            "animalcredit.schematic",
-            "fig8.animal.schematic"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/animal_learning_francioni/animal_common_signed_modes.csv",
-            "drafts/dendritic-local-learning/journal/source_data/animal_learning_francioni/animal_signed_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/animal_learning_francioni/neuron_sd_residual_distributions.csv"
-          ],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "S17",
-          "source_panel": "C",
-          "bbox": [
-            325.32666015625,
-            7.759007453918457,
-            486.0718994140625,
-            175.2688751220703
-          ],
-          "width": 160.7452392578125,
-          "height": 167.50986766815186,
-          "panel": "C",
-          "target_rect": [
-            325.32666015625,
-            7.759007453918457,
-            486.0718994140625,
-            175.2688751220703
-          ],
-          "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_S17_panels_A-B.pdf",
-          "source_sha256": "f4ae3ae180ebebb6e9a5e89d01dfd481b57d2a8545354c7b7312af1d27dea413",
-          "old_provenance_figure": "figS17",
-          "old_provenance_entry_ids": [
-            "animalcredit.asset",
-            "animalcredit.contrasts",
-            "animalcredit.modes",
-            "animalcredit.neurons",
-            "animalcredit.schematic",
-            "fig8.animal.schematic"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/animal_learning_francioni/animal_common_signed_modes.csv",
-            "drafts/dendritic-local-learning/journal/source_data/animal_learning_francioni/animal_signed_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/animal_learning_francioni/neuron_sd_residual_distributions.csv"
-          ],
-          "explicit_numerical_source_hashes": {}
-        }
-      ],
-      "ancillary_elements": [],
-      "whole_source_sheet": true,
-      "paste_scale": 1.0,
-      "width_pt": 518.4000244140625,
-      "height_pt": 200.0,
-      "sha256": "87fe94c916ae929711cf2a2356146a2cc4826627949953a2a4da7a8df008afe4",
-      "source_data_directories": [
-        "source_data/alignment_controlled"
-      ]
-    },
-    {
-      "figure": "S34",
       "id": "original_selector",
       "module": "si_10_selection_statistics",
       "path": "figures/supplementary/curated/original_selector.pdf",
@@ -8273,13 +8102,13 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 490.0,
-      "sha256": "bc8bf6daf81543bedf9142abef3e588b30bbde0affd456e16bebc386bb4dbfcf",
+      "sha256": "b2fe3677c91949a6ac4bb3458f6d394488fd162a85974465939a26bb073ba644",
       "source_data_directories": [
         "source_data/prospective_morphology_selection"
       ]
     },
     {
-      "figure": "S35",
+      "figure": "S34",
       "id": "finite_horizon",
       "module": "si_10_selection_statistics",
       "path": "figures/supplementary/curated/finite_horizon.pdf",
@@ -8447,14 +8276,14 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 476.0,
-      "sha256": "beceacfe99b7b00838c366c8125fd13f1aa0eeabe565fcc4b902ae5b40d771f6",
+      "sha256": "7c5d85736f41eb78f776f402b0f7127ad70590feb4877592801263b968dc5597",
       "source_data_directories": [
         "source_data/morphology_finite_horizon",
         "source_data/prospective_morphology_selection"
       ]
     },
     {
-      "figure": "S36",
+      "figure": "S35",
       "id": "morphology_estimation",
       "module": "si_10_selection_statistics",
       "path": "figures/supplementary/curated/morphology_estimation.pdf",
@@ -8674,7 +8503,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 493.0,
-      "sha256": "044fe7e3b9fa734e080d7b8aedb0c34b5a4bafbaad822307993e6918ea38908e",
+      "sha256": "d488138a418428afa47ee09ff2bd7c581f68e6ddec2c408314bbe1fac19bd5f2",
       "source_data_directories": [
         "source_data/morphology_calibration"
       ]
@@ -8978,25 +8807,9 @@
     ],
     "S17": [
       {
-        "figure": "S33",
-        "label": "fig:si_animal_credit_reanalysis",
-        "panel": "A",
-        "source_panel": "A",
-        "path": "figures/supplementary/curated/animal_credit_reanalysis.pdf"
-      },
-      {
-        "figure": "S33",
-        "label": "fig:si_animal_credit_reanalysis",
-        "panel": "B",
-        "source_panel": "B",
-        "path": "figures/supplementary/curated/animal_credit_reanalysis.pdf"
-      },
-      {
-        "figure": "S33",
-        "label": "fig:si_animal_credit_reanalysis",
-        "panel": "C",
-        "source_panel": "C",
-        "path": "figures/supplementary/curated/animal_credit_reanalysis.pdf"
+        "kind": "table",
+        "label": "tab:animal_credit",
+        "note": "Animal-level estimates and inference are retained in the external signed-credit table and Section S9; the redundant descriptive figure remains archived."
       }
     ],
     "S18": [
@@ -9272,35 +9085,35 @@
     ],
     "S35": [
       {
-        "figure": "S34",
+        "figure": "S33",
         "label": "fig:si_original_selector",
         "panel": "A",
         "source_panel": "A",
         "path": "figures/supplementary/curated/original_selector.pdf"
       },
       {
-        "figure": "S34",
+        "figure": "S33",
         "label": "fig:si_original_selector",
         "panel": "B",
         "source_panel": "B",
         "path": "figures/supplementary/curated/original_selector.pdf"
       },
       {
-        "figure": "S34",
+        "figure": "S33",
         "label": "fig:si_original_selector",
         "panel": "C",
         "source_panel": "C",
         "path": "figures/supplementary/curated/original_selector.pdf"
       },
       {
-        "figure": "S34",
+        "figure": "S33",
         "label": "fig:si_original_selector",
         "panel": "D",
         "source_panel": "D",
         "path": "figures/supplementary/curated/original_selector.pdf"
       },
       {
-        "figure": "S34",
+        "figure": "S33",
         "label": "fig:si_original_selector",
         "panel": "E",
         "source_panel": "E",
@@ -9325,14 +9138,14 @@
       {
         "kind": "section",
         "label": "fig:si_finite_horizon",
-        "note": "Replaced by the native render N35, drawn from the same source tables and pasted whole as Supplementary Fig. S35."
+        "note": "Replaced by the native render N35, drawn from the same source tables and pasted whole as Supplementary Fig. S34."
       }
     ],
     "S39": [
       {
         "kind": "section",
         "label": "fig:si_finite_horizon",
-        "note": "Replaced by the native render N35, drawn from the same source tables and pasted whole as Supplementary Fig. S35."
+        "note": "Replaced by the native render N35, drawn from the same source tables and pasted whole as Supplementary Fig. S34."
       }
     ],
     "S40": [
@@ -9346,7 +9159,7 @@
       {
         "kind": "section",
         "label": "fig:si_morphology_estimation",
-        "note": "Replaced by the native render N36, drawn from the same source tables and pasted whole as Supplementary Fig. S36."
+        "note": "Replaced by the native render N36, drawn from the same source tables and pasted whole as Supplementary Fig. S35."
       }
     ],
     "S42": [
@@ -9627,13 +9440,6 @@
         "label": "fig:si_mnist_dictionary_geometry",
         "panel": "C",
         "source_panel": "C",
-        "path": "figures/supplementary/curated/mnist_dictionary_geometry.pdf"
-      },
-      {
-        "figure": "S7",
-        "label": "fig:si_mnist_dictionary_geometry",
-        "panel": "D",
-        "source_panel": "D",
         "path": "figures/supplementary/curated/mnist_dictionary_geometry.pdf"
       }
     ],
@@ -9921,42 +9727,42 @@
     ],
     "N35": [
       {
-        "figure": "S35",
+        "figure": "S34",
         "label": "fig:si_finite_horizon",
         "panel": "A",
         "source_panel": "A",
         "path": "figures/supplementary/curated/finite_horizon.pdf"
       },
       {
-        "figure": "S35",
+        "figure": "S34",
         "label": "fig:si_finite_horizon",
         "panel": "B",
         "source_panel": "B",
         "path": "figures/supplementary/curated/finite_horizon.pdf"
       },
       {
-        "figure": "S35",
+        "figure": "S34",
         "label": "fig:si_finite_horizon",
         "panel": "C",
         "source_panel": "C",
         "path": "figures/supplementary/curated/finite_horizon.pdf"
       },
       {
-        "figure": "S35",
+        "figure": "S34",
         "label": "fig:si_finite_horizon",
         "panel": "D",
         "source_panel": "D",
         "path": "figures/supplementary/curated/finite_horizon.pdf"
       },
       {
-        "figure": "S35",
+        "figure": "S34",
         "label": "fig:si_finite_horizon",
         "panel": "E",
         "source_panel": "E",
         "path": "figures/supplementary/curated/finite_horizon.pdf"
       },
       {
-        "figure": "S35",
+        "figure": "S34",
         "label": "fig:si_finite_horizon",
         "panel": "F",
         "source_panel": "F",
@@ -9965,56 +9771,56 @@
     ],
     "N36": [
       {
-        "figure": "S36",
+        "figure": "S35",
         "label": "fig:si_morphology_estimation",
         "panel": "A",
         "source_panel": "A",
         "path": "figures/supplementary/curated/morphology_estimation.pdf"
       },
       {
-        "figure": "S36",
+        "figure": "S35",
         "label": "fig:si_morphology_estimation",
         "panel": "B",
         "source_panel": "B",
         "path": "figures/supplementary/curated/morphology_estimation.pdf"
       },
       {
-        "figure": "S36",
+        "figure": "S35",
         "label": "fig:si_morphology_estimation",
         "panel": "C",
         "source_panel": "C",
         "path": "figures/supplementary/curated/morphology_estimation.pdf"
       },
       {
-        "figure": "S36",
+        "figure": "S35",
         "label": "fig:si_morphology_estimation",
         "panel": "D",
         "source_panel": "D",
         "path": "figures/supplementary/curated/morphology_estimation.pdf"
       },
       {
-        "figure": "S36",
+        "figure": "S35",
         "label": "fig:si_morphology_estimation",
         "panel": "E",
         "source_panel": "E",
         "path": "figures/supplementary/curated/morphology_estimation.pdf"
       },
       {
-        "figure": "S36",
+        "figure": "S35",
         "label": "fig:si_morphology_estimation",
         "panel": "F",
         "source_panel": "F",
         "path": "figures/supplementary/curated/morphology_estimation.pdf"
       },
       {
-        "figure": "S36",
+        "figure": "S35",
         "label": "fig:si_morphology_estimation",
         "panel": "G",
         "source_panel": "G",
         "path": "figures/supplementary/curated/morphology_estimation.pdf"
       },
       {
-        "figure": "S36",
+        "figure": "S35",
         "label": "fig:si_morphology_estimation",
         "panel": "H",
         "source_panel": "H",
@@ -10121,13 +9927,6 @@
         "panel": "G",
         "source_panel": "G",
         "path": "figures/supplementary/curated/physical_architecture.pdf"
-      },
-      {
-        "figure": "S22",
-        "label": "fig:si_physical_architecture",
-        "panel": "H",
-        "source_panel": "H",
-        "path": "figures/supplementary/curated/physical_architecture.pdf"
       }
     ],
     "N30": [
@@ -10194,13 +9993,6 @@
         "label": "fig:si_measured_transfer_geometry",
         "panel": "D",
         "source_panel": "D",
-        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
-      },
-      {
-        "figure": "S31",
-        "label": "fig:si_measured_transfer_geometry",
-        "panel": "E",
-        "source_panel": "E",
         "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
       }
     ],

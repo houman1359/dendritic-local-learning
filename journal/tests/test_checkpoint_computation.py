@@ -43,7 +43,7 @@ def test_exported_component_errors_recombine_without_redefining_nmse():
     np.testing.assert_allclose(wide['full'],wide['additive']+wide['interaction'],rtol=2e-12,atol=2e-16)
     np.testing.assert_allclose(metrics.relative_mse,metrics.mse/metrics.target_energy,rtol=2e-12,atol=2e-16)
     # The published images summarize all seed/context surfaces, not a selected fit.
-    source=pd.read_csv(D/'population_surfaces.csv');plotted=pd.read_csv(D/'figure_S37_plotted.csv')
+    source=pd.read_csv(D/'population_surfaces.csv');plotted=pd.read_csv(D/'checkpoint_plotted.csv')
     means=source.groupby(['rule','z1','z2']).prediction.mean().rename('expected').reset_index()
     image=plotted[plotted.quantity.eq('response')&~plotted.rule.eq('target')]
     joined=image.merge(means,on=['rule','z1','z2'],validate='one_to_one')

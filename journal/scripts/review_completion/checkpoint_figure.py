@@ -1,4 +1,4 @@
-"""Supplementary Figure S37: learned tuning and interaction surfaces."""
+"""Supplementary Figure S36: learned tuning and interaction surfaces."""
 from pathlib import Path
 import sys,json,hashlib
 import numpy as np
@@ -64,8 +64,8 @@ def main():
         cb.ax.set_ylabel(label,fontsize=8,labelpad=3)
     output=J/'figures/supplementary/curated/checkpoint_computation.pdf'
     findings=c.save(output,name='checkpoint_computation',dpi=180)
-    pd.DataFrame(rows).to_csv(D/'figure_S37_plotted.csv',index=False)
-    report=dict(figure='figS37',source_files={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in D.glob('*.csv')},
+    pd.DataFrame(rows).to_csv(D/'checkpoint_plotted.csv',index=False)
+    report=dict(figure='figS36',source_files={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in D.glob('*.csv')},
                 generator_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),cohorts='All twenty seeds from each original primary cohort; checkpoint-only',findings=[str(x) for x in findings])
-    (D/'figure_S37_provenance.json').write_text(json.dumps(report,indent=2)+'\n')
+    (D/'checkpoint_provenance.json').write_text(json.dumps(report,indent=2)+'\n')
 if __name__=='__main__':main()

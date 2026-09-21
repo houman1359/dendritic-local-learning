@@ -109,12 +109,12 @@ def _supplement_figure_numbers() -> set[int]:
         if numbers:
             return numbers
     # Fall back on the registry the supplement is built from.
-    tree = ast.parse(SUPPLEMENT_SPEC.read_text(encoding="utf-8"))
+    tree = ast.parse((JOURNAL / "scripts/build_submission_bundle.py").read_text(encoding="utf-8"))
     assignment = next(node for node in tree.body if isinstance(node, ast.Assign)
-                      and any(isinstance(target, ast.Name) and target.id == "FIGURES"
+                      and any(isinstance(target, ast.Name) and target.id == "SUPPLEMENTARY_FIGURES"
                               for target in node.targets))
     figures = ast.literal_eval(assignment.value)
-    assert len({figure[0] for figure in figures}) == len(figures)
+    assert len(set(figures)) == len(figures)
     count = len(figures)
     assert count, "cannot determine the supplement's figure inventory"
     return set(range(1, count + 1))
@@ -126,7 +126,7 @@ def test_supplement_inventory_without_compiled_aux(monkeypatch, tmp_path) -> Non
     empty_aux = tmp_path / "supplementary.aux"
     empty_aux.touch()
     monkeypatch.setitem(globals(), "SUPPLEMENT_AUX", empty_aux)
-    assert _supplement_figure_numbers() == set(range(1, 37))
+    assert _supplement_figure_numbers() == set(range(1, 38))
 
 
 def _cited_supplementary_figures(text: str) -> set[int]:

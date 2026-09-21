@@ -63,7 +63,6 @@ SUPPLEMENTARY_FIGURES = (
     'supplementary/curated/shunt_replication.pdf',
     'supplementary/curated/measured_transfer_geometry.pdf',
     'supplementary/curated/measured_predictor_controls.pdf',
-    'supplementary/curated/animal_credit_reanalysis.pdf',
     'supplementary/curated/original_selector.pdf',
     'supplementary/curated/finite_horizon.pdf',
     'supplementary/curated/morphology_estimation.pdf',

@@ -77,8 +77,8 @@ def test_documented_composition_inventory_matches_manifest():
     assets = manifest["assets"]
     whole = [asset for asset in assets if asset.get("whole_source_sheet", False)]
     composed = [asset for asset in assets if not asset.get("whole_source_sheet", False)]
-    assert len(assets) == 36
-    assert len(whole) == 26
+    assert len(assets) == 35
+    assert len(whole) == 25
     assert len(composed) == 10
     single_source_reflows = {
         asset["figure"]

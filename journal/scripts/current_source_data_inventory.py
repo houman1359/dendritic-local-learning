@@ -21,9 +21,9 @@ COMPRESSED_TABLE_SUFFIXES = ('.csv.gz', '.tsv.gz')
 FOLLOWUP_ASSIGNMENTS = {
     'conductance_local_gate': ('Figure 5', 'supporting local-gate evidence', '20 paired fresh seed blocks; canaries and historical replay separate'),
     'credit_rule_extension': ('Figure 4', 'supporting balanced-extension evidence', '20 previously observed paired seed blocks; 720 continued trajectories'),
-    'measured_alignment_power': ('Figure 9', 'supporting conditional-sensitivity evidence', '4000 global simulated datasets; original 13 scans within 7 target cells'),
-    'passive_field_diagnostics': ('Figure 7', 'supporting passive-field decomposition', 'reconstructed cell; post-review diagnostic without new learning fits'),
-    'physical_depth_followup': ('Figure 6', 'supporting budget-indexed trajectory evidence', '10 paired training seeds; original 60 fits without new training'),
+    'measured_alignment_power': ('Figure 10', 'supporting conditional-sensitivity evidence', '4000 global simulated datasets; original 13 scans within 7 target cells'),
+    'passive_field_diagnostics': ('Figure 8', 'supporting passive-field decomposition', 'reconstructed cell; post-review diagnostic without new learning fits'),
+    'physical_depth_followup': ('Figure 7', 'supporting budget-indexed trajectory evidence', '10 paired training seeds; original 60 fits without new training'),
 }
 FOLLOWUP_EXCLUDED_COMPONENTS = {'__pycache__', '.pytest_cache', 'slurm_logs', 'logs'}
 FOLLOWUP_EXCLUDED_NAMES = {

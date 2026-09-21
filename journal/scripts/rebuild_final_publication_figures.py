@@ -152,6 +152,10 @@ def main() -> None:
                 print(f"Emitted figure_{number:02d}.pdf from {component}", flush=True)
         export_display_tables()
     if not args.main_only:
+        for name in ("mnist_dictionary_geometry", "local_gate_controls",
+                     "physical_architecture", "measured_transfer_geometry"):
+            run_script(f"build_supplementary_figure_{name}_native.py")
+        run_script("supplement_consolidation/refresh_native_assets.py")
         run_script("supplement_consolidation/build.py")
         run_script("review_completion/checkpoint_figure.py")
         run_script("review_completion/optional_extension_paper_figure.py")
