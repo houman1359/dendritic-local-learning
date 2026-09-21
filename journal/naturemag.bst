@@ -11,7 +11,7 @@
 %% merlin.mbs  (with options: `tail,seq-no,nm-rev,ed-rev,jnrlst,nmlm,x5,m1,yr-par,xmth,vol-bf,vnum-x,volp-com,num-xser,jnm-x,bkpg-x,pub-date,edparxc,ppx,ed,abr,xedn,jabr,amper,and-xcom,etal-it,eprint,url,url-blk,bibinfo,nfss,{}')
 %% ----------------------------------------
 %% *** Style for the journal Nature (created by Peter Czoschke) ***
-%% 
+%%
 %% Copyright 1994-2002 Patrick W Daly
  % ===============================================================
  % IMPORTANT NOTICE:
