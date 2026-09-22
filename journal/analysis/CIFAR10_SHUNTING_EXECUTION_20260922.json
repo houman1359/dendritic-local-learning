@@ -1,0 +1,50 @@
+{
+  "frozen_paths": {
+    "sweep_root": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_confirmatory/journal_cifar10_shunting_feedback_ladder_confirmatory_20260922120215",
+    "analyzer_sha256": "15d0e3dceb422872ae027e421e67db0af9a3a226ea5b2511c12ca3ea6c8eba65",
+    "protocol_sha256": "ff5527bbf04d0ef4c67c5e2a8b4186601b6389710cbf67ff0d7a1bae89f72176"
+  },
+  "submission": {
+    "job_id": "47767554",
+    "submitted_utc": "2026-09-22T16:03:35.306544+00:00",
+    "n_runs": 80,
+    "max_concurrent": 8,
+    "analysis_job_id": "47768791"
+  },
+  "preflight": {
+    "execution": {
+      "valid": true,
+      "errors": [],
+      "source_worktree": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260827/runtime/dendritic-modeling-cifar-e516c7",
+      "source_commit": "e516c7fec3169253ff8c14bc5f4ab1325469e4f5",
+      "source_tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_confirmatory/journal_cifar10_shunting_feedback_ladder_confirmatory_20260922120215",
+      "launcher_sha256": "f5e51176899ed75a16a2b4b399cd6e8ea04d6c7669fb5bfe2d87548354af6623",
+      "manifest_path": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_confirmatory/journal_cifar10_shunting_feedback_ladder_confirmatory_20260922120215/frozen_sweep_manifest.json",
+      "manifest_sha256": "26b2339cb1059769c696971eb0ce0329c3043d18898a705a8e1f0d710e7b1170"
+    },
+    "selected_recipe": {
+      "summary_path": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260828/analysis/cifar10_bp_recipe_init_screen_20260828_v2_postcalibration/summary.json",
+      "selected_bp_config_path": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260828/sweep_runs/cifar10_bp_recipe_init_screen/journal_cifar10_bp_recipe_init_screen_20260828101020/results/config_39/config.json",
+      "valid": true,
+      "errors": [],
+      "summary_sha256": "f65ef6c62867f5e1664e538c5d27e0fba4b5d6bbdc807050ac57a95b6fe6b3bb",
+      "selected_bp_config_sha256": "ac4b5e8c354c6a8b2f6ef1101ebb4ad0579a5278ad87f2501921a71d2f39fd4d",
+      "selected_cell": "shunting_empirical_local_matched",
+      "source_commit": "e516c7fec3169253ff8c14bc5f4ab1325469e4f5",
+      "analyzer_correction_version": 2,
+      "analyzer_sha256": "e938929556831cdf51323750cdf2e45588c2eaa36a1073552c47deafa27bb255"
+    }
+  },
+  "focused_tests": {
+    "analyzer": 12,
+    "pending_integration": 5
+  },
+  "status": "training_in_progress; no new cohort outcome inspected; publication integration pending",
+  "files": {
+    "configs/cifar10_shunting_feedback_ladder_confirmatory.yaml": "4001180cb2a4f46799954c22feaa32a16e1c0c8034ec3eaacf2f1547ee0f2980",
+    "scripts/analyze_cifar10_shunting_feedback_ladder_confirmatory.py": "15d0e3dceb422872ae027e421e67db0af9a3a226ea5b2511c12ca3ea6c8eba65",
+    "tests/test_analyze_cifar10_shunting_feedback_ladder_confirmatory.py": "27ba5bd46b9449e7746d9fc9add0086ff625664307fc67a638aa4b6c2708b178",
+    "analysis/CIFAR10_SHUNTING_FEEDBACK_LADDER_CONFIRMATORY_20260922.md": "ff5527bbf04d0ef4c67c5e2a8b4186601b6389710cbf67ff0d7a1bae89f72176"
+  }
+}
