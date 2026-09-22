@@ -1,90 +1,68 @@
 {
   "figure": "Figure 6",
   "output": "figures/main/figure_06.pdf",
-  "output_sha256": "7dd5eabc3bbea4963a19933173bdf98573527a23b29ae79c7fd2c4cd041cd1c0",
+  "output_sha256": "ea73a6d39018e9a16d192f49faab13a58e35bcf6cf5789bdc7bda1ba59c94e6c",
   "plotted_table": "source_data/curated_publication/figure_06_plotted.csv",
-  "plotted_table_sha256": "a6b93186da1b7cf7e469bf7eb926039a04815deb96cd7d919ac910223b466d83",
+  "plotted_table_sha256": "935ab1a5c22f51b9a4c956c9f896f361941fc369dd7db7845c9c2a41b0fea7a3",
   "panel_sources": {
     "main_6A": {
       "sources": [],
-      "scope": "Schematic of the supplied cue, four two-feature streams, one [4,2] DendriNet tree of the sixteen-neuron population, the linear readout and the terminal learning-signal delivery key; no measured series."
+      "scope": "Sixteen-neuron [4,2] model and terminal signal factors; schematic."
     },
     "main_6B": {
       "sources": [
-        "source_data/curated_publication/inhibitory_selection_endpoints.csv",
-        "source_data/curated_publication/inhibitory_selection_summary.csv",
-        "source_data/curated_publication/inhibitory_selection_rate_sensitivity.csv",
-        "source_data/curated_publication/inhibitory_rescue_endpoints.csv",
-        "source_data/curated_publication/inhibitory_rescue_common_endpoints.csv",
-        "source_data/curated_publication/inhibitory_rescue_contrasts.csv",
-        "source_data/curated_publication/nonlinear_separable_endpoints.csv",
-        "source_data/curated_publication/context_alignment_seeds.csv",
-        "source_data/curated_publication/context_alignment_summary.csv"
+        "source_data/curated_publication/inhibitory_selection_summary.csv"
       ],
-      "scope": "Separable target, shunting forward: all five spatial-assignment rules under distractor stress; original paired seed cohort, development-selected rates."
+      "scope": "Original separable-target cohort: all five assignment rules under distractor stress, selected rates."
     },
     "main_6C": {
       "sources": [
-        "source_data/curated_publication/inhibitory_selection_endpoints.csv",
-        "source_data/curated_publication/inhibitory_selection_summary.csv",
-        "source_data/curated_publication/inhibitory_selection_rate_sensitivity.csv",
         "source_data/curated_publication/inhibitory_rescue_endpoints.csv",
-        "source_data/curated_publication/inhibitory_rescue_common_endpoints.csv",
-        "source_data/curated_publication/inhibitory_rescue_contrasts.csv",
-        "source_data/curated_publication/nonlinear_separable_endpoints.csv",
-        "source_data/curated_publication/context_alignment_seeds.csv",
-        "source_data/curated_publication/context_alignment_summary.csv"
+        "source_data/curated_publication/inhibitory_rescue_contrasts.csv"
       ],
-      "scope": "Broadcast and resistance at ordinary test, severity three and common rate 0.1 (same seed blocks), then exact, broadcast and resistance at severity three under tonic and current forward controls."
+      "scope": "Twenty new paired rescue seeds: original-bound nonlinear interaction task, separately selected Adam rates, two predefined primary contrasts."
     },
     "main_6D": {
       "sources": [
-        "source_data/curated_publication/inhibitory_selection_endpoints.csv",
-        "source_data/curated_publication/inhibitory_selection_summary.csv",
-        "source_data/curated_publication/inhibitory_selection_rate_sensitivity.csv",
-        "source_data/curated_publication/inhibitory_rescue_endpoints.csv",
-        "source_data/curated_publication/inhibitory_rescue_common_endpoints.csv",
-        "source_data/curated_publication/inhibitory_rescue_contrasts.csv",
-        "source_data/curated_publication/nonlinear_separable_endpoints.csv",
-        "source_data/curated_publication/context_alignment_seeds.csv",
-        "source_data/curated_publication/context_alignment_summary.csv"
+        "source_data/checkpoint_computation/population_surfaces.csv",
+        "source_data/checkpoint_computation/protocol.json"
       ],
-      "scope": "Terminal within- and cross-context alignment of each delivered rule with the exact gradient at the 20 archived exact-trained separable-shunting checkpoints; checkpoint-only diagnostic, no training."
+      "scope": "Same twenty rescue seeds and their original selected states: interaction components of target and mean resistance/augmented predictions, averaging sign-aligned contexts and irrelevant inputs."
     },
     "main_6E": {
       "sources": [
-        "source_data/curated_publication/inhibitory_selection_endpoints.csv",
-        "source_data/curated_publication/inhibitory_selection_summary.csv",
-        "source_data/curated_publication/inhibitory_selection_rate_sensitivity.csv",
-        "source_data/curated_publication/inhibitory_rescue_endpoints.csv",
-        "source_data/curated_publication/inhibitory_rescue_common_endpoints.csv",
-        "source_data/curated_publication/inhibitory_rescue_contrasts.csv",
-        "source_data/curated_publication/nonlinear_separable_endpoints.csv",
-        "source_data/curated_publication/context_alignment_seeds.csv",
-        "source_data/curated_publication/context_alignment_summary.csv"
+        "source_data/optional_extensions/endpoints.csv",
+        "source_data/optional_extensions/summary.csv"
       ],
-      "scope": "Nonlinear-parent interaction target: original-bound Adam rescue at separately selected rates (twenty new paired seeds), the same seeds at common Adam rate 0.03, and the same seeds with the target interaction removed."
+      "scope": "Separate twenty-seed approximate-sensitivity cohort, common Adam rate 0.03; exact parent slope, two/four bins, noisy voltage SD 0.5 and matched shuffled controls."
+    },
+    "main_6F": {
+      "sources": [
+        "source_data/optional_extensions/endpoints.csv",
+        "source_data/optional_extensions/summary.csv"
+      ],
+      "scope": "Separate twenty-seed routing cohort, selected Adam rates; supplied, locally learned and uniform routes, with terminal cue contacts removed in every condition."
     }
   },
   "source_sha256": {
-    "source_data/curated_publication/inhibitory_selection_endpoints.csv": "0563587108aad93a2e819ac4d40c2a6d43205e81a7d3035ef8d6897f1af952bc",
-    "source_data/curated_publication/inhibitory_selection_summary.csv": "f320b15d3c354e349d9aac340c2d068ae7878a9d4faa3a4ef22be80ec2e1693c",
-    "source_data/curated_publication/inhibitory_selection_rate_sensitivity.csv": "6913095603e681ed70cbdeae2a78afb30d01ad582950b3b57c7c0685797aef22",
-    "source_data/curated_publication/inhibitory_rescue_endpoints.csv": "a172ebed83cd40f1f962fd5bd2a98db317955c4c63f435988a99888317b92b55",
-    "source_data/curated_publication/inhibitory_rescue_common_endpoints.csv": "53e6394e2b24002321ef3739396a77ed3dfe9256cf0dc5593a7a0df08997c7cb",
+    "source_data/checkpoint_computation/population_surfaces.csv": "753a7e2aeac06beb570f0cb2df995c690c3208e9b1a5e864e27d075bf4cd3938",
+    "source_data/checkpoint_computation/protocol.json": "d7e0c5a4467381f4fa89095385ee5fdc1b32d53c1527d0251a7765795dec64e2",
     "source_data/curated_publication/inhibitory_rescue_contrasts.csv": "afba1c9b6ee7fcebe9fcc1a808e6455fbdba695342fa13cd0e10e9ae577cef1f",
-    "source_data/curated_publication/nonlinear_separable_endpoints.csv": "c00b3518494410e18af97f28a642173dc47972331653d24bd8a77e769574dd7a",
-    "source_data/curated_publication/context_alignment_seeds.csv": "c225de1554cd157caaf007b49474cf6a9e64f3239c276c26fb5c20f380bb5abe",
-    "source_data/curated_publication/context_alignment_summary.csv": "0ac0bba02b3e27031d1a558998bf09caa8e6ae18f0f70e7d995cabacdbe25373"
+    "source_data/curated_publication/inhibitory_rescue_endpoints.csv": "a172ebed83cd40f1f962fd5bd2a98db317955c4c63f435988a99888317b92b55",
+    "source_data/curated_publication/inhibitory_selection_summary.csv": "f320b15d3c354e349d9aac340c2d068ae7878a9d4faa3a4ef22be80ec2e1693c",
+    "source_data/optional_extensions/endpoints.csv": "82a46f0eb868538ea48ff0ff514d7e2541bcb9b877e6afc200658e650a0ab1f1",
+    "source_data/optional_extensions/summary.csv": "0c15c3534fda404c62b71f345d21b9d511d0d88e83ea6d16e2b9bad2e1fc9310"
   },
   "builders_sha256": {
-    "scripts/review_completion/population_figure.py": "c6e9d7def0e52cf9c4723143c0b70b3e21b1212828755425c1e435ebbf7d883a",
-    "scripts/conductance_local_gate/figure.py": "70a6446dc2643bff825fbb02391528e6868e88353f62b7a21cc24d740a256ef6",
+    "scripts/review_completion/population_figure.py": "84f0cc2c0276d0cf866bcd36ee066f0db26d00333df5b7ec0f4d1ea174ff81e3",
+    "scripts/review_completion/promoted_panels.py": "fb97c2a30b02bad9f589c47a004649dced9ce255106e9865e37476372937aa25",
+    "scripts/review_completion/checkpoint_computation.py": "ab82a5cf6cd94352fd9b2a10d9660c4059a8536fda4b0b3ab46c94f0f466094c",
+    "scripts/conductance_local_gate/figure.py": "f3e6f7e29cc90ef0d6326b05820757b26cc126b79c96d760334b33aee3751e63",
     "scripts/figure_canvas.py": "7f2983ff0c52a30dd5ba9bdeccc6fda940b4366ad872cbf0755fec5daa1dd7aa",
     "scripts/credit_first_figures/focused_provenance.py": "b7ade95b88e7d10a43bab01716dee6211bc2f09735b605d489c0012a147ecea7"
   },
   "source_data_immutable": true,
   "new_experiments": 0,
   "layout_findings": [],
-  "scope": "Original and rescue cohorts are distinct; the common-rate and separable-target blocks reuse rescue seeds; D is a checkpoint-only diagnostic of the original cohort. Rendering only."
+  "scope": "B original cohort; C/D original rescue cohort and its retained checkpoints; E and F separate prospective cohorts. All seeds retained. Rendering only."
 }

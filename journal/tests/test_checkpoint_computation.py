@@ -49,3 +49,62 @@ def test_exported_component_errors_recombine_without_redefining_nmse():
     joined=image.merge(means,on=['rule','z1','z2'],validate='one_to_one')
     assert len(joined)==3*625
     np.testing.assert_allclose(joined.value,joined.expected,rtol=0,atol=5e-15)
+
+
+def test_main_branch_tuning_uses_each_teachers_complete_cohort():
+    source=pd.read_csv(D/'branch_tuning.csv')
+    plotted=pd.read_csv(J/'source_data/curated_publication/figure_05_plotted.csv')
+    tuning=plotted[plotted.record.eq('tuning mean')]
+    assert len(tuning)==2*4*65 and set(tuning.panel)=={'F','G'}
+    ix=np.random.default_rng(2026092121).integers(20,size=(10000,20))
+    for (context,rule),g in tuning.groupby(['context','rule']):
+        expected=source[source.context.eq(context)&source.rule.eq(rule)].pivot(index='seed',columns='z1',values='branch_contribution').sort_index()
+        assert len(expected)==20
+        values=expected.to_numpy();lo,hi=np.quantile(values[ix].mean(1),[.025,.975],axis=0)
+        actual=g.sort_values('z1')
+        np.testing.assert_allclose(actual[['mean','ci_low','ci_high']].to_numpy(),np.array([values.mean(0),lo,hi]).T,atol=5e-15)
+        assert set(actual.panel)==({'F'} if context==0 else {'G'})
+
+
+def test_main_interaction_maps_use_all_rescue_seeds_without_reselection():
+    source=pd.read_csv(D/'population_surfaces.csv')
+    plot=pd.read_csv(J/'source_data/curated_publication/figure_06_plotted.csv')
+    primary=plot[plot.panel.eq('C') & plot.record.eq('seed outcome')]
+    source_endpoints=pd.read_csv(J/'source_data/curated_publication/inhibitory_rescue_endpoints.csv').query("optimizer == 'adam' and bound == 9")
+    assert len(primary)==100
+    for rule,g in primary.groupby('rule'):
+        expected=source_endpoints[source_endpoints.rule.eq(rule)].sort_values('seed')
+        assert set(g.seed)==set(expected.seed)
+        np.testing.assert_allclose(g.sort_values('seed').value,expected.test_nmse,rtol=1e-12)
+    maps=plot[plot.record.eq('interaction map')]
+    assert len(maps)==3*625 and set(maps.panel)=={'D'}
+    grid=np.sort(source.z1.unique());w=np.ones(25);w[[0,-1]]=.5;w/=w.sum()
+    for rule,g in maps.groupby('rule'):
+        if rule=='target':
+            x,y=np.meshgrid(grid,grid,indexing='ij');full=.5*(np.tanh(x)+np.tanh(y))+.25*np.tanh(x)*np.tanh(y)
+        else:
+            full=source[source.rule.eq(rule)].groupby(['z1','z2']).prediction.mean().unstack().loc[grid,grid].to_numpy()
+        expected=analysis.interaction_component(full,w)
+        np.testing.assert_allclose(g.pivot(index='z1',columns='z2',values='value').loc[grid,grid],expected,atol=5e-15)
+    for n in [5,6]:
+        name=f'figure_{n:02d}_plotted.csv'
+        assert (J/'source_data/curated_publication'/name).read_bytes()==(J/'figures/provenance/credit_clarity_20260908'/name).read_bytes()
+
+
+def test_relocated_population_controls_keep_separable_cohort_and_rate_policy():
+    plotted=pd.read_csv(D/'checkpoint_plotted.csv')
+    assert set(plotted.panel)==set('ABCDEFGH')
+    assert 'interaction' not in set(plotted.quantity.dropna())
+    original=pd.read_csv(J/'source_data/curated_publication/inhibitory_selection_endpoints.csv').query("variant == 'separable'")
+    common=pd.read_csv(J/'source_data/curated_publication/inhibitory_selection_rate_sensitivity.csv')
+    control=plotted[plotted.panel.eq('C') & plotted.record.eq('seed outcome')]
+    assert len(control)==13*20
+    for (condition,forward,rule,metric,policy),g in control.groupby(['condition','forward','rule','metric','rate_scope']):
+        expected=original[original.forward.eq(forward)&original.rule.eq(rule)]
+        if policy=='common 0.1' and rule=='broadcast':
+            expected=common[common.rule.eq(rule)&common.rate.eq(.1)].rename(columns={'ood_3':'ood_3.0'})
+        assert len(g)==len(expected)==20
+        assert set(g.seed)==set(expected.seed)
+        np.testing.assert_allclose(g.sort_values('seed').value,expected.sort_values('seed')[metric],rtol=1e-12)
+    ratios=plotted[plotted.record.eq('broadcast/gate ratio of means')].set_index('condition').value
+    np.testing.assert_allclose(ratios[['Ordinary','Stress 3','Stress 3 rate 0.1']],[1.7,87,6.6],rtol=.035)

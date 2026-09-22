@@ -86163,219 +86163,48 @@
       "notes": "E shows the independent-seed label-noise controls at both inherited rate policies (diamonds, selected rates; circles, common Adam rate 0.003), replacing the duplicated nested and shuffled-leaf displays retained in the SI; the former panel H (common rate) merged into E on 2026-09-21. All conditions and both rate policies are retained."
     },
     {
-      "figure": "fig5",
+      "figure": "figS22",
       "panel": "a",
-      "path": "scripts/conductance_local_gate/model.py",
-      "role": "Panel source or panel-indexed display table",
-      "generator": "scripts/conductance_local_gate/figure.py",
-      "replication_unit": "twenty paired seeds per cohort; H-J original population, K-M new rescue; sensitivities reuse their seed blocks",
-      "notes": "Seven-compartment circuit, E/I contacts, the context gate and the local distal gate\u2019s addressed subtree; inset: nominal unperturbed teacher terminal voltage against the latent feature. Schematic, no data."
-    },
-    {
-      "figure": "fig5",
-      "panel": "a",
-      "path": "source_data/conductance_local_gate/METHODS.md",
-      "role": "Panel source or panel-indexed display table",
-      "generator": "scripts/conductance_local_gate/figure.py",
-      "replication_unit": "twenty paired seeds per cohort; H-J original population, K-M new rescue; sensitivities reuse their seed blocks",
-      "notes": "Seven-compartment circuit, E/I contacts, the context gate and the local distal gate\u2019s addressed subtree; inset: nominal unperturbed teacher terminal voltage against the latent feature. Schematic, no data."
-    },
-    {
-      "figure": "fig5",
-      "panel": "a",
-      "path": "source_data/conductance_local_gate/figures/teacher_tuning_source.csv",
-      "role": "Panel source or panel-indexed display table",
-      "generator": "scripts/conductance_local_gate/figure.py",
-      "replication_unit": "twenty paired seeds per cohort; H-J original population, K-M new rescue; sensitivities reuse their seed blocks",
-      "notes": "Seven-compartment circuit, E/I contacts, the context gate and the local distal gate\u2019s addressed subtree; inset: nominal unperturbed teacher terminal voltage against the latent feature. Schematic, no data."
-    },
-    {
-      "figure": "fig5",
-      "panel": "a",
-      "path": "source_data/curated_publication/figure_05_plotted.csv",
-      "role": "Panel source or panel-indexed display table",
-      "generator": "scripts/conductance_local_gate/figure.py",
-      "replication_unit": "twenty paired seeds per cohort; H-J original population, K-M new rescue; sensitivities reuse their seed blocks",
-      "notes": "Seven-compartment circuit, E/I contacts, the context gate and the local distal gate\u2019s addressed subtree; inset: nominal unperturbed teacher terminal voltage against the latent feature. Schematic, no data."
-    },
-    {
-      "figure": "fig5",
-      "panel": "b",
-      "path": "scripts/conductance_local_gate/model.py",
-      "role": "Panel source or panel-indexed display table",
-      "generator": "scripts/conductance_local_gate/figure.py",
-      "replication_unit": "twenty paired seeds per cohort; H-J original population, K-M new rescue; sensitivities reuse their seed blocks",
-      "notes": "Local distal gating versus two-profile oracle delivery, with unit proximal/somatic multipliers in both. Exact path and unit broadcast remain data comparators, defined in preceding figures and the caption rather than redrawn here. Oracle terminal dots identify support sites, not weight magnitude. Schematic, no data."
-    },
-    {
-      "figure": "fig5",
-      "panel": "b",
-      "path": "source_data/conductance_local_gate/METHODS.md",
-      "role": "Panel source or panel-indexed display table",
-      "generator": "scripts/conductance_local_gate/figure.py",
-      "replication_unit": "twenty paired seeds per cohort; H-J original population, K-M new rescue; sensitivities reuse their seed blocks",
-      "notes": "Local distal gating versus two-profile oracle delivery, with unit proximal/somatic multipliers in both. Exact path and unit broadcast remain data comparators, defined in preceding figures and the caption rather than redrawn here. Oracle terminal dots identify support sites, not weight magnitude. Schematic, no data."
-    },
-    {
-      "figure": "fig5",
-      "panel": "b",
-      "path": "source_data/curated_publication/figure_05_plotted.csv",
-      "role": "Panel source or panel-indexed display table",
-      "generator": "scripts/conductance_local_gate/figure.py",
-      "replication_unit": "twenty paired seeds per cohort; H-J original population, K-M new rescue; sensitivities reuse their seed blocks",
-      "notes": "Local distal gating versus two-profile oracle delivery, with unit proximal/somatic multipliers in both. Exact path and unit broadcast remain data comparators, defined in preceding figures and the caption rather than redrawn here. Oracle terminal dots identify support sites, not weight magnitude. Schematic, no data."
-    },
-    {
-      "figure": "fig5",
-      "panel": "c",
-      "path": "source_data/conductance_local_gate/figures/curve_band_source.csv",
-      "role": "Panel source or panel-indexed display table",
-      "generator": "scripts/conductance_local_gate/figure.py",
-      "replication_unit": "twenty paired seeds per cohort; H-J original population, K-M new rescue; sensitivities reuse their seed blocks",
-      "notes": "Aligned targets, Adam 0.03, four prespecified rules, 20 paired simulation seeds; means with 95 % pointwise whole-seed bootstrap bands at 12 fixed checkpoints."
-    },
-    {
-      "figure": "fig5",
-      "panel": "c",
-      "path": "source_data/conductance_local_gate/summaries/all_curves.csv",
-      "role": "Panel source or panel-indexed display table",
-      "generator": "scripts/conductance_local_gate/figure.py",
-      "replication_unit": "twenty paired seeds per cohort; H-J original population, K-M new rescue; sensitivities reuse their seed blocks",
-      "notes": "Aligned targets, Adam 0.03, four prespecified rules, 20 paired simulation seeds; means with 95 % pointwise whole-seed bootstrap bands at 12 fixed checkpoints."
-    },
-    {
-      "figure": "fig5",
-      "panel": "c",
-      "path": "source_data/curated_publication/figure_05_plotted.csv",
-      "role": "Panel source or panel-indexed display table",
-      "generator": "scripts/conductance_local_gate/figure.py",
-      "replication_unit": "twenty paired seeds per cohort; H-J original population, K-M new rescue; sensitivities reuse their seed blocks",
-      "notes": "Aligned targets, Adam 0.03, four prespecified rules, 20 paired simulation seeds; means with 95 % pointwise whole-seed bootstrap bands at 12 fixed checkpoints."
-    },
-    {
-      "figure": "fig5",
-      "panel": "d",
-      "path": "source_data/conductance_local_gate/figures/curve_band_source.csv",
-      "role": "Panel source or panel-indexed display table",
-      "generator": "scripts/conductance_local_gate/figure.py",
-      "replication_unit": "twenty paired seeds per cohort; H-J original population, K-M new rescue; sensitivities reuse their seed blocks",
-      "notes": "Opposed targets, same cohort and readout as C; bound-contact mark from all_curves.first_bound_step; validation-selected broadcast mean from condition_means."
-    },
-    {
-      "figure": "fig5",
-      "panel": "d",
-      "path": "source_data/conductance_local_gate/summaries/all_curves.csv",
-      "role": "Panel source or panel-indexed display table",
-      "generator": "scripts/conductance_local_gate/figure.py",
-      "replication_unit": "twenty paired seeds per cohort; H-J original population, K-M new rescue; sensitivities reuse their seed blocks",
-      "notes": "Opposed targets, same cohort and readout as C; bound-contact mark from all_curves.first_bound_step; validation-selected broadcast mean from condition_means."
-    },
-    {
-      "figure": "fig5",
-      "panel": "d",
-      "path": "source_data/conductance_local_gate/summaries/condition_means.csv",
-      "role": "Panel source or panel-indexed display table",
-      "generator": "scripts/conductance_local_gate/figure.py",
-      "replication_unit": "twenty paired seeds per cohort; H-J original population, K-M new rescue; sensitivities reuse their seed blocks",
-      "notes": "Opposed targets, same cohort and readout as C; bound-contact mark from all_curves.first_bound_step; validation-selected broadcast mean from condition_means."
-    },
-    {
-      "figure": "fig5",
-      "panel": "d",
-      "path": "source_data/curated_publication/figure_05_plotted.csv",
-      "role": "Panel source or panel-indexed display table",
-      "generator": "scripts/conductance_local_gate/figure.py",
-      "replication_unit": "twenty paired seeds per cohort; H-J original population, K-M new rescue; sensitivities reuse their seed blocks",
-      "notes": "Opposed targets, same cohort and readout as C; bound-contact mark from all_curves.first_bound_step; validation-selected broadcast mean from condition_means."
-    },
-    {
-      "figure": "fig5",
-      "panel": "e",
       "path": "source_data/conductance_local_gate/summaries/paired_contrasts.csv",
       "role": "Panel source or panel-indexed display table",
-      "generator": "scripts/conductance_local_gate/figure.py",
-      "replication_unit": "twenty paired seeds per cohort; H-J original population, K-M new rescue; sensitivities reuse their seed blocks",
+      "generator": "scripts/review_completion/checkpoint_figure.py",
+      "replication_unit": "Twenty paired seeds within each distinct original cohort; checkpoint diagnostics add no new training",
       "notes": "Opposed-minus-aligned difference of broadcast-minus-gate NMSE at both windows, validation-selected states, 20 paired seeds joined across windows; prespecified sign-flip test, Holm-adjusted."
     },
     {
-      "figure": "fig5",
-      "panel": "e",
+      "figure": "figS22",
+      "panel": "a",
       "path": "source_data/conductance_local_gate/summaries/paired_seed_contrasts.csv",
       "role": "Panel source or panel-indexed display table",
-      "generator": "scripts/conductance_local_gate/figure.py",
-      "replication_unit": "twenty paired seeds per cohort; H-J original population, K-M new rescue; sensitivities reuse their seed blocks",
+      "generator": "scripts/review_completion/checkpoint_figure.py",
+      "replication_unit": "Twenty paired seeds within each distinct original cohort; checkpoint diagnostics add no new training",
       "notes": "Opposed-minus-aligned difference of broadcast-minus-gate NMSE at both windows, validation-selected states, 20 paired seeds joined across windows; prespecified sign-flip test, Holm-adjusted."
     },
     {
-      "figure": "fig5",
-      "panel": "e",
+      "figure": "figS22",
+      "panel": "a",
       "path": "source_data/conductance_local_gate/summaries/completeness_audit.json",
       "role": "Panel source or panel-indexed display table",
-      "generator": "scripts/conductance_local_gate/figure.py",
-      "replication_unit": "twenty paired seeds per cohort; H-J original population, K-M new rescue; sensitivities reuse their seed blocks",
+      "generator": "scripts/review_completion/checkpoint_figure.py",
+      "replication_unit": "Twenty paired seeds within each distinct original cohort; checkpoint diagnostics add no new training",
       "notes": "Opposed-minus-aligned difference of broadcast-minus-gate NMSE at both windows, validation-selected states, 20 paired seeds joined across windows; prespecified sign-flip test, Holm-adjusted."
     },
     {
-      "figure": "fig5",
-      "panel": "e",
-      "path": "source_data/curated_publication/figure_05_plotted.csv",
-      "role": "Panel source or panel-indexed display table",
-      "generator": "scripts/conductance_local_gate/figure.py",
-      "replication_unit": "twenty paired seeds per cohort; H-J original population, K-M new rescue; sensitivities reuse their seed blocks",
-      "notes": "Opposed-minus-aligned difference of broadcast-minus-gate NMSE at both windows, validation-selected states, 20 paired seeds joined across windows; prespecified sign-flip test, Holm-adjusted."
-    },
-    {
-      "figure": "fig5",
-      "panel": "f",
-      "path": "source_data/conductance_local_gate/summaries/all_endpoints.csv",
-      "role": "Panel source or panel-indexed display table",
-      "generator": "scripts/conductance_local_gate/figure.py",
-      "replication_unit": "twenty paired seeds per cohort; H-J original population, K-M new rescue; sensitivities reuse their seed blocks",
-      "notes": "Opposed NMSE at validation-selected states within the 4,096-update window: exact path, the local distal gate in its hard and continuous shapes, the swapped gate and the gate-also-proximal control, at all three Adam rates."
-    },
-    {
-      "figure": "fig5",
-      "panel": "f",
-      "path": "source_data/conductance_local_gate/summaries/condition_means.csv",
-      "role": "Panel source or panel-indexed display table",
-      "generator": "scripts/conductance_local_gate/figure.py",
-      "replication_unit": "twenty paired seeds per cohort; H-J original population, K-M new rescue; sensitivities reuse their seed blocks",
-      "notes": "Opposed NMSE at validation-selected states within the 4,096-update window: exact path, the local distal gate in its hard and continuous shapes, the swapped gate and the gate-also-proximal control, at all three Adam rates."
-    },
-    {
-      "figure": "fig5",
-      "panel": "f",
-      "path": "source_data/curated_publication/figure_05_plotted.csv",
-      "role": "Panel source or panel-indexed display table",
-      "generator": "scripts/conductance_local_gate/figure.py",
-      "replication_unit": "twenty paired seeds per cohort; H-J original population, K-M new rescue; sensitivities reuse their seed blocks",
-      "notes": "Opposed NMSE at validation-selected states within the 4,096-update window: exact path, the local distal gate in its hard and continuous shapes, the swapped gate and the gate-also-proximal control, at all three Adam rates."
-    },
-    {
-      "figure": "fig5",
-      "panel": "g",
+      "figure": "figS22",
+      "panel": "b",
       "path": "source_data/conductance_local_gate/figures/historical_cancellation_source.csv",
       "role": "Panel source or panel-indexed display table",
-      "generator": "scripts/conductance_local_gate/figure.py",
-      "replication_unit": "twenty paired seeds per cohort; H-J original population, K-M new rescue; sensitivities reuse their seed blocks",
+      "generator": "scripts/review_completion/checkpoint_figure.py",
+      "replication_unit": "Twenty paired seeds within each distinct original cohort; checkpoint diagnostics add no new training",
       "notes": "Earlier cohort seeds 2101\u20132120; fraction of the distal-parameter gradient retained after context averaging at matched initial and broadcast-trained weight states."
     },
     {
-      "figure": "fig5",
-      "panel": "g",
+      "figure": "figS22",
+      "panel": "b",
       "path": "source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv",
       "role": "Panel source or panel-indexed display table",
-      "generator": "scripts/conductance_local_gate/figure.py",
-      "replication_unit": "twenty paired seeds per cohort; H-J original population, K-M new rescue; sensitivities reuse their seed blocks",
-      "notes": "Earlier cohort seeds 2101\u20132120; fraction of the distal-parameter gradient retained after context averaging at matched initial and broadcast-trained weight states."
-    },
-    {
-      "figure": "fig5",
-      "panel": "g",
-      "path": "source_data/curated_publication/figure_05_plotted.csv",
-      "role": "Panel source or panel-indexed display table",
-      "generator": "scripts/conductance_local_gate/figure.py",
-      "replication_unit": "twenty paired seeds per cohort; H-J original population, K-M new rescue; sensitivities reuse their seed blocks",
+      "generator": "scripts/review_completion/checkpoint_figure.py",
+      "replication_unit": "Twenty paired seeds within each distinct original cohort; checkpoint diagnostics add no new training",
       "notes": "Earlier cohort seeds 2101\u20132120; fraction of the distal-parameter gradient retained after context averaging at matched initial and broadcast-trained weight states."
     },
     {
@@ -86478,390 +86307,111 @@
       "notes": "E shows the independent-seed label-noise controls at both inherited rate policies (diamonds, selected rates; circles, common Adam rate 0.003), replacing the duplicated nested and shuffled-leaf displays retained in the SI; the former panel H (common rate) merged into E on 2026-09-21. All conditions and both rate policies are retained."
     },
     {
-      "figure": "fig6",
-      "panel": "a",
-      "path": "source_data/curated_publication/figure_06_plotted.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "b",
-      "path": "source_data/curated_publication/figure_06_plotted.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "b",
-      "path": "source_data/curated_publication/inhibitory_selection_endpoints.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "b",
-      "path": "source_data/curated_publication/inhibitory_selection_summary.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "b",
-      "path": "source_data/curated_publication/inhibitory_selection_rate_sensitivity.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "b",
-      "path": "source_data/curated_publication/inhibitory_rescue_endpoints.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "b",
-      "path": "source_data/curated_publication/inhibitory_rescue_common_endpoints.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "b",
-      "path": "source_data/curated_publication/nonlinear_separable_endpoints.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "c",
-      "path": "source_data/curated_publication/figure_06_plotted.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
+      "figure": "figS22",
       "panel": "c",
       "path": "source_data/curated_publication/inhibitory_selection_endpoints.csv",
       "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
+      "generator": "scripts/review_completion/checkpoint_figure.py",
+      "replication_unit": "Twenty paired seeds within each distinct original cohort; checkpoint diagnostics add no new training",
       "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
     },
     {
-      "figure": "fig6",
+      "figure": "figS22",
       "panel": "c",
       "path": "source_data/curated_publication/inhibitory_selection_summary.csv",
       "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
+      "generator": "scripts/review_completion/checkpoint_figure.py",
+      "replication_unit": "Twenty paired seeds within each distinct original cohort; checkpoint diagnostics add no new training",
       "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
     },
     {
-      "figure": "fig6",
+      "figure": "figS22",
       "panel": "c",
       "path": "source_data/curated_publication/inhibitory_selection_rate_sensitivity.csv",
       "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
+      "generator": "scripts/review_completion/checkpoint_figure.py",
+      "replication_unit": "Twenty paired seeds within each distinct original cohort; checkpoint diagnostics add no new training",
       "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
     },
     {
-      "figure": "fig6",
+      "figure": "figS22",
       "panel": "c",
       "path": "source_data/curated_publication/inhibitory_rescue_endpoints.csv",
       "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
+      "generator": "scripts/review_completion/checkpoint_figure.py",
+      "replication_unit": "Twenty paired seeds within each distinct original cohort; checkpoint diagnostics add no new training",
       "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
     },
     {
-      "figure": "fig6",
+      "figure": "figS22",
       "panel": "c",
       "path": "source_data/curated_publication/inhibitory_rescue_common_endpoints.csv",
       "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
+      "generator": "scripts/review_completion/checkpoint_figure.py",
+      "replication_unit": "Twenty paired seeds within each distinct original cohort; checkpoint diagnostics add no new training",
       "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
     },
     {
-      "figure": "fig6",
+      "figure": "figS22",
       "panel": "c",
       "path": "source_data/curated_publication/nonlinear_separable_endpoints.csv",
       "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
+      "generator": "scripts/review_completion/checkpoint_figure.py",
+      "replication_unit": "Twenty paired seeds within each distinct original cohort; checkpoint diagnostics add no new training",
       "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
     },
     {
-      "figure": "fig6",
-      "panel": "d",
-      "path": "source_data/curated_publication/figure_06_plotted.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
+      "figure": "figS22",
       "panel": "d",
       "path": "source_data/curated_publication/inhibitory_selection_endpoints.csv",
       "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
+      "generator": "scripts/review_completion/checkpoint_figure.py",
+      "replication_unit": "Twenty paired seeds within each distinct original cohort; checkpoint diagnostics add no new training",
       "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
     },
     {
-      "figure": "fig6",
+      "figure": "figS22",
       "panel": "d",
       "path": "source_data/curated_publication/inhibitory_selection_summary.csv",
       "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
+      "generator": "scripts/review_completion/checkpoint_figure.py",
+      "replication_unit": "Twenty paired seeds within each distinct original cohort; checkpoint diagnostics add no new training",
       "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
     },
     {
-      "figure": "fig6",
+      "figure": "figS22",
       "panel": "d",
       "path": "source_data/curated_publication/inhibitory_selection_rate_sensitivity.csv",
       "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
+      "generator": "scripts/review_completion/checkpoint_figure.py",
+      "replication_unit": "Twenty paired seeds within each distinct original cohort; checkpoint diagnostics add no new training",
       "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
     },
     {
-      "figure": "fig6",
+      "figure": "figS22",
       "panel": "d",
       "path": "source_data/curated_publication/inhibitory_rescue_endpoints.csv",
       "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
+      "generator": "scripts/review_completion/checkpoint_figure.py",
+      "replication_unit": "Twenty paired seeds within each distinct original cohort; checkpoint diagnostics add no new training",
       "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
     },
     {
-      "figure": "fig6",
+      "figure": "figS22",
       "panel": "d",
       "path": "source_data/curated_publication/inhibitory_rescue_common_endpoints.csv",
       "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
+      "generator": "scripts/review_completion/checkpoint_figure.py",
+      "replication_unit": "Twenty paired seeds within each distinct original cohort; checkpoint diagnostics add no new training",
       "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
     },
     {
-      "figure": "fig6",
+      "figure": "figS22",
       "panel": "d",
       "path": "source_data/curated_publication/nonlinear_separable_endpoints.csv",
       "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "e",
-      "path": "source_data/curated_publication/figure_06_plotted.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "e",
-      "path": "source_data/curated_publication/inhibitory_selection_endpoints.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "e",
-      "path": "source_data/curated_publication/inhibitory_selection_summary.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "e",
-      "path": "source_data/curated_publication/inhibitory_selection_rate_sensitivity.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "e",
-      "path": "source_data/curated_publication/inhibitory_rescue_endpoints.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "e",
-      "path": "source_data/curated_publication/inhibitory_rescue_common_endpoints.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "e",
-      "path": "source_data/curated_publication/nonlinear_separable_endpoints.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "f",
-      "path": "source_data/curated_publication/figure_06_plotted.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "f",
-      "path": "source_data/curated_publication/inhibitory_selection_endpoints.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "f",
-      "path": "source_data/curated_publication/inhibitory_selection_summary.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "f",
-      "path": "source_data/curated_publication/inhibitory_selection_rate_sensitivity.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "f",
-      "path": "source_data/curated_publication/inhibitory_rescue_endpoints.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "f",
-      "path": "source_data/curated_publication/inhibitory_rescue_common_endpoints.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "f",
-      "path": "source_data/curated_publication/nonlinear_separable_endpoints.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "g",
-      "path": "source_data/curated_publication/figure_06_plotted.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "g",
-      "path": "source_data/curated_publication/inhibitory_selection_endpoints.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "g",
-      "path": "source_data/curated_publication/inhibitory_selection_summary.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "g",
-      "path": "source_data/curated_publication/inhibitory_selection_rate_sensitivity.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "g",
-      "path": "source_data/curated_publication/inhibitory_rescue_endpoints.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "g",
-      "path": "source_data/curated_publication/inhibitory_rescue_common_endpoints.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
-      "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
-    },
-    {
-      "figure": "fig6",
-      "panel": "g",
-      "path": "source_data/curated_publication/nonlinear_separable_endpoints.csv",
-      "role": "Current population task and learning result",
-      "generator": "scripts/review_completion/population_figure.py",
-      "replication_unit": "20 original selection seeds in B-D;20 separate rescue seeds in E-G, reused in F/G",
+      "generator": "scripts/review_completion/checkpoint_figure.py",
+      "replication_unit": "Twenty paired seeds within each distinct original cohort; checkpoint diagnostics add no new training",
       "notes": "A is a schematic. G holds nonlinear parents fixed and removes target interaction. Optimizer/bound sensitivities remain in SI."
     },
     {
@@ -86921,65 +86471,65 @@
     {
       "path": "source_data/checkpoint_computation/branch_tuning.csv",
       "figure": "figS22",
-      "panel": "a-j",
+      "panel": "supporting checkpoint analysis",
       "role": "Checkpoint-only learned computation and plotting source",
       "generator": "scripts/review_completion/checkpoint_computation.py",
       "replication_unit": "20 single-neuron seeds and a separate 20-seed rescue cohort; existing checkpoints only",
-      "notes": "Original validation-selected states; no new training or outcome-based seed selection."
+      "notes": "All original selected seeds; branch tuning is in main 5F,G and interaction maps in main 6D; full responses and diagnostic controls are in S22."
     },
     {
       "path": "source_data/checkpoint_computation/checkpoint_computation_provenance.json",
       "figure": "figS22",
-      "panel": "a-j",
+      "panel": "supporting checkpoint analysis",
       "role": "Checkpoint-only learned computation and plotting source",
       "generator": "scripts/review_completion/checkpoint_computation.py",
       "replication_unit": "20 single-neuron seeds and a separate 20-seed rescue cohort; existing checkpoints only",
-      "notes": "Original validation-selected states; no new training or outcome-based seed selection."
+      "notes": "All original selected seeds; branch tuning is in main 5F,G and interaction maps in main 6D; full responses and diagnostic controls are in S22."
     },
     {
       "path": "source_data/checkpoint_computation/component_errors.csv",
       "figure": "figS22",
-      "panel": "a-j",
+      "panel": "supporting checkpoint analysis",
       "role": "Checkpoint-only learned computation and plotting source",
       "generator": "scripts/review_completion/checkpoint_computation.py",
       "replication_unit": "20 single-neuron seeds and a separate 20-seed rescue cohort; existing checkpoints only",
-      "notes": "Original validation-selected states; no new training or outcome-based seed selection."
+      "notes": "All original selected seeds; branch tuning is in main 5F,G and interaction maps in main 6D; full responses and diagnostic controls are in S22."
     },
     {
       "path": "source_data/checkpoint_computation/checkpoint_plotted.csv",
       "figure": "figS22",
-      "panel": "a-j",
+      "panel": "a-h",
       "role": "Checkpoint-only learned computation and plotting source",
       "generator": "scripts/review_completion/checkpoint_figure.py",
       "replication_unit": "20 single-neuron seeds and a separate 20-seed rescue cohort; existing checkpoints only",
-      "notes": "Original validation-selected states; no new training or outcome-based seed selection."
+      "notes": "All original selected seeds; branch tuning is in main 5F,G and interaction maps in main 6D; full responses and diagnostic controls are in S22."
     },
     {
       "path": "source_data/checkpoint_computation/checkpoint_provenance.json",
       "figure": "figS22",
-      "panel": "a-j",
+      "panel": "a-h",
       "role": "Checkpoint-only learned computation and plotting source",
       "generator": "scripts/review_completion/checkpoint_figure.py",
       "replication_unit": "20 single-neuron seeds and a separate 20-seed rescue cohort; existing checkpoints only",
-      "notes": "Original validation-selected states; no new training or outcome-based seed selection."
+      "notes": "All original selected seeds; branch tuning is in main 5F,G and interaction maps in main 6D; full responses and diagnostic controls are in S22."
     },
     {
       "path": "source_data/checkpoint_computation/population_surfaces.csv",
       "figure": "figS22",
-      "panel": "a-j",
+      "panel": "e-h",
       "role": "Checkpoint-only learned computation and plotting source",
       "generator": "scripts/review_completion/checkpoint_computation.py",
       "replication_unit": "20 single-neuron seeds and a separate 20-seed rescue cohort; existing checkpoints only",
-      "notes": "Original validation-selected states; no new training or outcome-based seed selection."
+      "notes": "All original selected seeds; branch tuning is in main 5F,G and interaction maps in main 6D; full responses and diagnostic controls are in S22."
     },
     {
       "path": "source_data/checkpoint_computation/protocol.json",
       "figure": "figS22",
-      "panel": "a-j",
+      "panel": "supporting checkpoint analysis",
       "role": "Checkpoint-only learned computation and plotting source",
       "generator": "scripts/review_completion/checkpoint_computation.py",
       "replication_unit": "20 single-neuron seeds and a separate 20-seed rescue cohort; existing checkpoints only",
-      "notes": "Original validation-selected states; no new training or outcome-based seed selection."
+      "notes": "All original selected seeds; branch tuning is in main 5F,G and interaction maps in main 6D; full responses and diagnostic controls are in S22."
     },
     {
       "path": "source_data/optional_extensions/contrasts.csv",
@@ -87032,8 +86582,8 @@
       "panel": "a-d",
       "role": "Sensitivity-proxy and learned-routing complete cohorts, diagnostics and frozen protocols",
       "generator": "scripts/review_completion/optional_extension_paper_figure.py",
-      "replication_unit": "Two separate 20-seed cohorts; rate policies reuse seeds",
-      "notes": "All 153 development and 460 fresh fits retained; 84 superseded pilot fits separately identified; temporal study deferred without training."
+      "replication_unit": "Original rescue controls plus two separate twenty-seed extension cohorts",
+      "notes": "A: noise sweep; B: same-seed common-rate interaction/no-interaction rescue; C: common-rate routing; D: selected-rate route maps."
     },
     {
       "path": "source_data/optional_extensions/optional_extension_provenance.json",
@@ -87601,6 +87151,366 @@
       "generator": "",
       "replication_unit": "not applicable; archival status only",
       "notes": "Separates unresolved historical task/model identity from the retained verified cohorts; all original outcome records remain unchanged."
+    },
+    {
+      "figure": "fig5",
+      "panel": "a",
+      "path": "scripts/conductance_local_gate/model.py",
+      "role": "Current panel source or display table",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Seven-compartment circuit, E/I contacts, the context gate and the local distal gate\u2019s addressed subtree; inset: nominal unperturbed teacher terminal voltage against the latent feature. Schematic, no data."
+    },
+    {
+      "figure": "fig5",
+      "panel": "a",
+      "path": "source_data/conductance_local_gate/METHODS.md",
+      "role": "Current panel source or display table",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Seven-compartment circuit, E/I contacts, the context gate and the local distal gate\u2019s addressed subtree; inset: nominal unperturbed teacher terminal voltage against the latent feature. Schematic, no data."
+    },
+    {
+      "figure": "fig5",
+      "panel": "a",
+      "path": "source_data/conductance_local_gate/figures/teacher_tuning_source.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Seven-compartment circuit, E/I contacts, the context gate and the local distal gate\u2019s addressed subtree; inset: nominal unperturbed teacher terminal voltage against the latent feature. Schematic, no data."
+    },
+    {
+      "figure": "fig5",
+      "panel": "a",
+      "path": "source_data/curated_publication/figure_05_plotted.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Seven-compartment circuit, E/I contacts, the context gate and the local distal gate\u2019s addressed subtree; inset: nominal unperturbed teacher terminal voltage against the latent feature. Schematic, no data."
+    },
+    {
+      "figure": "fig5",
+      "panel": "b",
+      "path": "scripts/conductance_local_gate/model.py",
+      "role": "Current panel source or display table",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Local distal gating versus two-profile oracle delivery, with unit proximal/somatic multipliers in both. Exact path and unit broadcast remain data comparators, defined in preceding figures and the caption rather than redrawn here. Oracle terminal dots identify support sites, not weight magnitude. Schematic, no data."
+    },
+    {
+      "figure": "fig5",
+      "panel": "b",
+      "path": "source_data/conductance_local_gate/METHODS.md",
+      "role": "Current panel source or display table",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Local distal gating versus two-profile oracle delivery, with unit proximal/somatic multipliers in both. Exact path and unit broadcast remain data comparators, defined in preceding figures and the caption rather than redrawn here. Oracle terminal dots identify support sites, not weight magnitude. Schematic, no data."
+    },
+    {
+      "figure": "fig5",
+      "panel": "b",
+      "path": "source_data/curated_publication/figure_05_plotted.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Local distal gating versus two-profile oracle delivery, with unit proximal/somatic multipliers in both. Exact path and unit broadcast remain data comparators, defined in preceding figures and the caption rather than redrawn here. Oracle terminal dots identify support sites, not weight magnitude. Schematic, no data."
+    },
+    {
+      "figure": "fig5",
+      "panel": "c",
+      "path": "source_data/conductance_local_gate/figures/curve_band_source.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Aligned targets, Adam 0.03, four prespecified rules, 20 paired simulation seeds; means with 95 % pointwise whole-seed bootstrap bands at 12 fixed checkpoints."
+    },
+    {
+      "figure": "fig5",
+      "panel": "c",
+      "path": "source_data/conductance_local_gate/summaries/all_curves.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Aligned targets, Adam 0.03, four prespecified rules, 20 paired simulation seeds; means with 95 % pointwise whole-seed bootstrap bands at 12 fixed checkpoints."
+    },
+    {
+      "figure": "fig5",
+      "panel": "c",
+      "path": "source_data/curated_publication/figure_05_plotted.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Aligned targets, Adam 0.03, four prespecified rules, 20 paired simulation seeds; means with 95 % pointwise whole-seed bootstrap bands at 12 fixed checkpoints."
+    },
+    {
+      "figure": "fig5",
+      "panel": "d",
+      "path": "source_data/conductance_local_gate/figures/curve_band_source.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Opposed targets, same cohort and readout as C; bound-contact mark from all_curves.first_bound_step; validation-selected broadcast mean from condition_means."
+    },
+    {
+      "figure": "fig5",
+      "panel": "d",
+      "path": "source_data/conductance_local_gate/summaries/all_curves.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Opposed targets, same cohort and readout as C; bound-contact mark from all_curves.first_bound_step; validation-selected broadcast mean from condition_means."
+    },
+    {
+      "figure": "fig5",
+      "panel": "d",
+      "path": "source_data/conductance_local_gate/summaries/condition_means.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Opposed targets, same cohort and readout as C; bound-contact mark from all_curves.first_bound_step; validation-selected broadcast mean from condition_means."
+    },
+    {
+      "figure": "fig5",
+      "panel": "d",
+      "path": "source_data/curated_publication/figure_05_plotted.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Opposed targets, same cohort and readout as C; bound-contact mark from all_curves.first_bound_step; validation-selected broadcast mean from condition_means."
+    },
+    {
+      "figure": "fig5",
+      "panel": "e",
+      "path": "source_data/conductance_local_gate/summaries/all_endpoints.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Opposed NMSE at validation-selected states within the 4,096-update window: exact path, the local distal gate in its hard and continuous shapes, the swapped gate and the gate-also-proximal control, at all three Adam rates."
+    },
+    {
+      "figure": "fig5",
+      "panel": "e",
+      "path": "source_data/conductance_local_gate/summaries/condition_means.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Opposed NMSE at validation-selected states within the 4,096-update window: exact path, the local distal gate in its hard and continuous shapes, the swapped gate and the gate-also-proximal control, at all three Adam rates."
+    },
+    {
+      "figure": "fig5",
+      "panel": "e",
+      "path": "source_data/curated_publication/figure_05_plotted.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Opposed NMSE at validation-selected states within the 4,096-update window: exact path, the local distal gate in its hard and continuous shapes, the swapped gate and the gate-also-proximal control, at all three Adam rates."
+    },
+    {
+      "figure": "fig5",
+      "panel": "f",
+      "path": "source_data/checkpoint_computation/branch_tuning.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "All twenty primary opposed-target seeds at their original validation-selected states and Adam rate 0.03; selected left branch contribution to soma, integrating feature 2; pointwise whole-seed bootstrap intervals."
+    },
+    {
+      "figure": "fig5",
+      "panel": "f",
+      "path": "source_data/checkpoint_computation/protocol.json",
+      "role": "Current panel source or display table",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "All twenty primary opposed-target seeds at their original validation-selected states and Adam rate 0.03; selected left branch contribution to soma, integrating feature 2; pointwise whole-seed bootstrap intervals."
+    },
+    {
+      "figure": "fig5",
+      "panel": "f",
+      "path": "source_data/curated_publication/figure_05_plotted.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "All twenty primary opposed-target seeds at their original validation-selected states and Adam rate 0.03; selected left branch contribution to soma, integrating feature 2; pointwise whole-seed bootstrap intervals."
+    },
+    {
+      "figure": "fig5",
+      "panel": "g",
+      "path": "source_data/checkpoint_computation/branch_tuning.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "All twenty primary opposed-target seeds at their original validation-selected states and Adam rate 0.03; selected right branch contribution to soma, integrating feature 2; pointwise whole-seed bootstrap intervals."
+    },
+    {
+      "figure": "fig5",
+      "panel": "g",
+      "path": "source_data/checkpoint_computation/protocol.json",
+      "role": "Current panel source or display table",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "All twenty primary opposed-target seeds at their original validation-selected states and Adam rate 0.03; selected right branch contribution to soma, integrating feature 2; pointwise whole-seed bootstrap intervals."
+    },
+    {
+      "figure": "fig5",
+      "panel": "g",
+      "path": "source_data/curated_publication/figure_05_plotted.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "All twenty primary opposed-target seeds at their original validation-selected states and Adam rate 0.03; selected right branch contribution to soma, integrating feature 2; pointwise whole-seed bootstrap intervals."
+    },
+    {
+      "figure": "fig6",
+      "panel": "a",
+      "path": "source_data/curated_publication/figure_06_plotted.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/review_completion/population_figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Sixteen-neuron [4,2] model and terminal signal factors; schematic."
+    },
+    {
+      "figure": "fig6",
+      "panel": "b",
+      "path": "source_data/curated_publication/inhibitory_selection_summary.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/review_completion/population_figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Original separable-target cohort: all five assignment rules under distractor stress, selected rates."
+    },
+    {
+      "figure": "fig6",
+      "panel": "b",
+      "path": "source_data/curated_publication/figure_06_plotted.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/review_completion/population_figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Original separable-target cohort: all five assignment rules under distractor stress, selected rates."
+    },
+    {
+      "figure": "fig6",
+      "panel": "c",
+      "path": "source_data/curated_publication/inhibitory_rescue_endpoints.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/review_completion/population_figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Twenty new paired rescue seeds: original-bound nonlinear interaction task, separately selected Adam rates, two predefined primary contrasts."
+    },
+    {
+      "figure": "fig6",
+      "panel": "c",
+      "path": "source_data/curated_publication/inhibitory_rescue_contrasts.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/review_completion/population_figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Twenty new paired rescue seeds: original-bound nonlinear interaction task, separately selected Adam rates, two predefined primary contrasts."
+    },
+    {
+      "figure": "fig6",
+      "panel": "c",
+      "path": "source_data/curated_publication/figure_06_plotted.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/review_completion/population_figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Twenty new paired rescue seeds: original-bound nonlinear interaction task, separately selected Adam rates, two predefined primary contrasts."
+    },
+    {
+      "figure": "fig6",
+      "panel": "d",
+      "path": "source_data/checkpoint_computation/population_surfaces.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/review_completion/population_figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Same twenty rescue seeds and their original selected states: interaction components of target and mean resistance/augmented predictions, averaging sign-aligned contexts and irrelevant inputs."
+    },
+    {
+      "figure": "fig6",
+      "panel": "d",
+      "path": "source_data/checkpoint_computation/protocol.json",
+      "role": "Current panel source or display table",
+      "generator": "scripts/review_completion/population_figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Same twenty rescue seeds and their original selected states: interaction components of target and mean resistance/augmented predictions, averaging sign-aligned contexts and irrelevant inputs."
+    },
+    {
+      "figure": "fig6",
+      "panel": "d",
+      "path": "source_data/curated_publication/figure_06_plotted.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/review_completion/population_figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Same twenty rescue seeds and their original selected states: interaction components of target and mean resistance/augmented predictions, averaging sign-aligned contexts and irrelevant inputs."
+    },
+    {
+      "figure": "fig6",
+      "panel": "e",
+      "path": "source_data/optional_extensions/endpoints.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/review_completion/population_figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Separate twenty-seed approximate-sensitivity cohort, common Adam rate 0.03; exact parent slope, two/four bins, noisy voltage SD 0.5 and matched shuffled controls."
+    },
+    {
+      "figure": "fig6",
+      "panel": "e",
+      "path": "source_data/optional_extensions/summary.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/review_completion/population_figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Separate twenty-seed approximate-sensitivity cohort, common Adam rate 0.03; exact parent slope, two/four bins, noisy voltage SD 0.5 and matched shuffled controls."
+    },
+    {
+      "figure": "fig6",
+      "panel": "e",
+      "path": "source_data/curated_publication/figure_06_plotted.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/review_completion/population_figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Separate twenty-seed approximate-sensitivity cohort, common Adam rate 0.03; exact parent slope, two/four bins, noisy voltage SD 0.5 and matched shuffled controls."
+    },
+    {
+      "figure": "fig6",
+      "panel": "f",
+      "path": "source_data/optional_extensions/endpoints.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/review_completion/population_figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Separate twenty-seed routing cohort, selected Adam rates; supplied, locally learned and uniform routes, with terminal cue contacts removed in every condition."
+    },
+    {
+      "figure": "fig6",
+      "panel": "f",
+      "path": "source_data/optional_extensions/summary.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/review_completion/population_figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Separate twenty-seed routing cohort, selected Adam rates; supplied, locally learned and uniform routes, with terminal cue contacts removed in every condition."
+    },
+    {
+      "figure": "fig6",
+      "panel": "f",
+      "path": "source_data/curated_publication/figure_06_plotted.csv",
+      "role": "Current panel source or display table",
+      "generator": "scripts/review_completion/population_figure.py",
+      "replication_unit": "Twenty paired seeds per distinct cohort; all original selected checkpoints retained",
+      "notes": "Separate twenty-seed routing cohort, selected Adam rates; supplied, locally learned and uniform routes, with terminal cue contacts removed in every condition."
+    },
+    {
+      "figure": "figS23",
+      "panel": "b",
+      "path": "source_data/curated_publication/inhibitory_rescue_common_endpoints.csv",
+      "role": "Same-seed nonlinear rescue controls",
+      "generator": "scripts/review_completion/optional_extension_paper_figure.py",
+      "replication_unit": "Twenty original rescue seeds reused for common-rate and no-interaction controls",
+      "notes": "Same nonlinear parents and Adam rate 0.03; no independent cohort."
+    },
+    {
+      "figure": "figS23",
+      "panel": "b",
+      "path": "source_data/curated_publication/nonlinear_separable_endpoints.csv",
+      "role": "Same-seed nonlinear rescue controls",
+      "generator": "scripts/review_completion/optional_extension_paper_figure.py",
+      "replication_unit": "Twenty original rescue seeds reused for common-rate and no-interaction controls",
+      "notes": "Same nonlinear parents and Adam rate 0.03; no independent cohort."
     }
   ],
   "supporting_groups": [

@@ -21,33 +21,46 @@ def main(args):
         return group,row
     def colour(arm):
         if arm=='exact':return COLORS['bp']
-        if 'resistance' in arm:return COLORS['scalar']
-        if any(x in arm for x in ['shuffle','mean','uniform','wrong']):return COLORS['mute']
-        return COLORS['shunting']
+        if 'resistance' in arm:return COLORS['shunting']
+        if 'shuffle' in arm:return COLORS['highlight']
+        if any(x in arm for x in ['mean','uniform','wrong']):return COLORS['mute']
+        return COLORS['additive']
     def draw(ax,letter,study,arm,policy,x,jitter):
         g,s=extract(study,arm,policy);xx=x+rng.uniform(-jitter,jitter,20);col=colour(arm)
         ax.scatter(xx,g.test_nmse,s=6,color=col,alpha=.65,linewidths=0,zorder=4)
         ax.errorbar(x,s['mean'],yerr=[[s['mean']-s.ci95_low],[s.ci95_high-s['mean']]],fmt='D',mfc='white',mec=col,ecolor=col,ms=4,lw=.8,zorder=3)
         rows.extend(dict(panel=letter,study=study,arm=arm,policy=policy,seed=r.seed,x=xx[k],value=r.test_nmse,quantity='ordinary-test NMSE') for k,r in enumerate(g.itertuples()))
         return s['mean']
-    ax=c.panel('A',0,0,colspan=6);style_panel(ax);ax.set_yscale('log')
+    ax=c.panel('A',0,0,colspan=5);style_panel(ax);ax.set_yscale('log')
     xx=[0,.25,.5,1.];means=[draw(ax,'A','proxy',a,'common',x,.012) for a,x in zip(['derivative','noise025','noise05','noise1'],xx)]
-    ax.plot(xx,means,color=COLORS['shunting'],lw=LW_DATA,zorder=1)
+    ax.plot(xx,means,color=COLORS['additive'],lw=LW_DATA,zorder=1)
     for arm,ls,label in [('resistance','--','Resistance gate'),('shuffle_noise05',':','Shuffled noise 0.5')]:
         g,s=extract('proxy',arm,'common');ax.axhline(s['mean'],color=colour(arm),ls=ls,lw=LW_DATA,label=label)
         rows.append(dict(panel='A',study='proxy',arm=arm,policy='common',value=s['mean'],quantity='mean ordinary-test NMSE'))
     c.fig.legend(*ax.get_legend_handles_labels(),loc='upper center',bbox_to_anchor=(.5,1.002),frameon=False,ncol=2,fontsize=7)
     ax.set_xticks(xx);ax.set_xlim(-.06,1.06);ax.set_xlabel('Parent-voltage noise SD');ax.set_ylabel('Ordinary-test NMSE')
-    ax=c.panel('B',0,6,colspan=6);style_panel(ax);ax.set_yscale('log')
-    arms=['derivative','bins2','bins4','shuffle_bins4','mean_bins4','exact']
-    labels=['Exact\nslope','2 bins','4 bins','Shuffled\n4 bins','Mean\n4 bins','Exact\ncredit']
-    for k,a in enumerate(arms):draw(ax,'B','proxy',a,'common',k,.12)
-    ax.set_xticks(range(len(arms)),labels,fontsize=7);ax.set_xlim(-.55,len(arms)-.45)
-    ax.set_ylabel('Ordinary-test NMSE')
+    ax=c.panel('B',0,5,colspan=7);style_panel(ax);ax.set_yscale('log')
+    from review_completion import population_figure as pop
+    pop.ROWS.clear()
+    order=['exact','broadcast','resistance','derivative','shuffled_derivative']
+    for filename,policy,marker,offset in [('inhibitory_rescue_common_endpoints.csv','common interaction','o',-.16),
+                                         ('nonlinear_separable_endpoints.csv','no interaction','s',.16)]:
+        frame=pd.read_csv(J/'source_data/curated_publication'/filename)
+        for k,rule in enumerate(order):
+            group=frame[frame.rule.eq(rule)]
+            assert len(group)==20
+            pop.mark(ax,k+offset,group.assign(value=group.test_nmse),rule,'B',marker=marker,
+                     study='rescue',policy=policy,quantity='ordinary-test NMSE')
+    rows.extend(pop.ROWS);pop.ROWS.clear()
+    ax.set_xticks(range(5),['Exact','Broadcast','Resistance\nh','Augmented\nhf′','Shuffled\nf′'],fontsize=7)
+    ax.set_xlim(-.55,4.55);ax.set_ylabel('Ordinary-test NMSE')
+    from matplotlib.lines import Line2D
+    ax.legend([Line2D([],[],marker=m,ms=4,mfc='white',mec='black',lw=0) for m in 'os'],
+              ['Interaction','No interaction'],loc='lower left',bbox_to_anchor=(0,1.02),ncol=2,frameon=False,fontsize=7)
     ax=c.panel('C',1,0,colspan=7);style_panel(ax);ax.set_yscale('log')
     arms=['oracle_augmented','learned_local_augmented','learned_exact_router_augmented','learned_local_resistance','uniform_augmented','wrong_augmented']
     labels=['Supplied\nroute','Learned\nlocal','Exact\ncontroller','Learned\nresistance','Uniform\nroute','Wrong\nroute']
-    for k,a in enumerate(arms):draw(ax,'C','routing',a,'selected',k,.12)
+    for k,a in enumerate(arms):draw(ax,'C','routing',a,'common',k,.12)
     ax.set_xticks(range(len(arms)),labels,fontsize=7);ax.set_xlim(-.55,len(arms)-.45);ax.set_ylabel('Ordinary-test NMSE')
     ax=c.panel('D',1,7,colspan=5);style_panel(ax)
     matrices=[]
@@ -75,8 +88,10 @@ def main(args):
     findings=c.save(args.output,name='optional_extensions',dpi=180)
     pd.DataFrame(rows).to_csv(args.data/'optional_extension_plotted.csv',index=False)
     (args.data/'optional_extension_provenance.json').write_text(json.dumps(dict(figure='figS23',generator_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        rescue_sources={name:hashlib.sha256((J/'source_data/curated_publication'/name).read_bytes()).hexdigest() for name in ['inhibitory_rescue_common_endpoints.csv','nonlinear_separable_endpoints.csv']},
+        builders={str(Path(pop.__file__).relative_to(J)):hashlib.sha256(Path(pop.__file__).read_bytes()).hexdigest()},
         sources={name:hashlib.sha256((args.data/name).read_bytes()).hexdigest() for name in ['endpoints.csv','summary.csv','routing.csv']},
-        findings=[str(x) for x in findings],scope='Two separate twenty-seed prospective cohorts; recurrent study deferred before training'),indent=2)+'\n')
+        findings=[str(x) for x in findings],scope='Original rescue controls plus separate twenty-seed proxy and routing cohorts; panel C uses common rate 0.03; recurrent study deferred before training'),indent=2)+'\n')
 
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--data',type=Path,default=J/'source_data/optional_extensions')

@@ -103,6 +103,13 @@ example-dependent transport. This predicts a limitation of the particular
 gate, not an inability of local signals in general to support nonlinear
 dendritic learning.
 
+For the interaction target, a cue-only terminal signal omits another useful dependence. At fixed parameters, a terminal eligibility $e(z_1,c)$ depends on its own feature and context. Independence and symmetry give
+\[
+\mathbb E[e(z_1,c)\tanh z_1\tanh z_2\mid c]
+=\mathbb E[e(z_1,c)\tanh z_1\mid c]\mathbb E[\tanh z_2]=0.
+\]
+The same argument applies with the feature indices exchanged and with a cue-only gain multiplying the eligibility. It concerns the target-interaction contribution to the expected terminal update; prediction-dependent terms and other parameter blocks need not vanish. The parent slope depends jointly on the two features and can break the factorization. This motivates the rescue but does not prove convergence.
+
 \paragraph{Distractor stress test and development.}
 The held-out stress test replaced only irrelevant latent inputs by
 $z_{bj}^{(s)}=[1+(s-1)(1-c_b)]z_{bj}$, with

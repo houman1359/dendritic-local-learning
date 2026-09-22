@@ -1,9 +1,9 @@
 {
   "figure": "Figure 5",
   "output": "source_data/conductance_local_gate/figures/local_gate_primary.pdf",
-  "output_sha256": "4b3c6cd74c6bfb135bbac9fb9f110df601e9043be1997f710fdb3deaaf704109",
+  "output_sha256": "4dcaa1825b86adda1f0728d4ed3a0fd8c3c05228c4329e6e6b795ee1bcd4715b",
   "plotted_table": "source_data/curated_publication/figure_05_plotted.csv",
-  "plotted_table_sha256": "ee809a422b69844b8c385b320755523b780448820203479b4c3ee7955071042d",
+  "plotted_table_sha256": "4b713a93098075e05d7ae5a3fab18619ccf1e00130c6bdb9c8d742a56d8d21db",
   "panel_sources": {
     "main_5A": {
       "sources": [
@@ -37,53 +37,50 @@
     },
     "main_5E": {
       "sources": [
-        "source_data/conductance_local_gate/summaries/paired_contrasts.csv",
-        "source_data/conductance_local_gate/summaries/paired_seed_contrasts.csv",
-        "source_data/conductance_local_gate/summaries/completeness_audit.json"
-      ],
-      "scope": "Opposed-minus-aligned difference of broadcast-minus-gate NMSE at both windows, validation-selected states, 20 paired seeds joined across windows; prespecified sign-flip test, Holm-adjusted."
-    },
-    "main_5F": {
-      "sources": [
         "source_data/conductance_local_gate/summaries/all_endpoints.csv",
         "source_data/conductance_local_gate/summaries/condition_means.csv"
       ],
       "scope": "Opposed NMSE at validation-selected states within the 4,096-update window: exact path, the local distal gate in its hard and continuous shapes, the swapped gate and the gate-also-proximal control, at all three Adam rates."
     },
+    "main_5F": {
+      "sources": [
+        "source_data/checkpoint_computation/branch_tuning.csv",
+        "source_data/checkpoint_computation/protocol.json"
+      ],
+      "scope": "All twenty primary opposed-target seeds at their original validation-selected states and Adam rate 0.03; selected left branch contribution to soma, integrating feature 2; pointwise whole-seed bootstrap intervals."
+    },
     "main_5G": {
       "sources": [
-        "source_data/conductance_local_gate/figures/historical_cancellation_source.csv",
-        "source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv"
+        "source_data/checkpoint_computation/branch_tuning.csv",
+        "source_data/checkpoint_computation/protocol.json"
       ],
-      "scope": "Earlier cohort seeds 2101\u20132120; fraction of the distal-parameter gradient retained after context averaging at matched initial and broadcast-trained weight states."
+      "scope": "All twenty primary opposed-target seeds at their original validation-selected states and Adam rate 0.03; selected right branch contribution to soma, integrating feature 2; pointwise whole-seed bootstrap intervals."
     }
   },
   "source_sha256": {
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
-    "source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv": "a3bea23ba12a888eb7fb356b4ac3142bbf240518fa8b3d2a28278d91e1b40486",
+    "source_data/checkpoint_computation/branch_tuning.csv": "a487220c6e2ed3b4d58ecc6e71d6e2b5a3322311ae717d5bd39980865a1cbf29",
+    "source_data/checkpoint_computation/protocol.json": "d7e0c5a4467381f4fa89095385ee5fdc1b32d53c1527d0251a7765795dec64e2",
     "source_data/conductance_local_gate/METHODS.md": "62a713d2c9e60b46fdeaa1d65ce6c93688e30f9f0ce2e3f3251834ec1386f543",
     "source_data/conductance_local_gate/figures/curve_band_source.csv": "0dd58c44591943c6696bf0e27b0486af240c58acec1d801ef7234c0746b50e1c",
-    "source_data/conductance_local_gate/figures/historical_cancellation_source.csv": "15938898c44c07bbbc5721ee727e9d54199c90e90ab8a298bb7109682dc69814",
     "source_data/conductance_local_gate/figures/teacher_tuning_source.csv": "0b7c4842375f7e52cf93475b0fdce019717ed2f2078279eef8fb877b20c15863",
     "source_data/conductance_local_gate/summaries/all_curves.csv": "4a24ea4aa1046cb638cc47fabc72b71fb3dbc96bbcb9aea6ebef33e79f3ac456",
     "source_data/conductance_local_gate/summaries/all_endpoints.csv": "7d3f6df93795afe7b752b0b7a239f51dcafe246f851efe158a7b2c3ac30e4d1d",
-    "source_data/conductance_local_gate/summaries/completeness_audit.json": "dc979f55ba19458ea33e12faf7dc152d3b0ea72192835a8cb691bc3791101821",
-    "source_data/conductance_local_gate/summaries/condition_means.csv": "e3ed564e0fd24cb7fee0f1fa6fc337a30fc5481f7b29381419991281829e81a5",
-    "source_data/conductance_local_gate/summaries/paired_contrasts.csv": "5ae6c7a35fd84bd43f49f0eca1c8b7405165bc4e4a568d4c38509ec90ef62beb",
-    "source_data/conductance_local_gate/summaries/paired_seed_contrasts.csv": "07fa32c5b4cc10ea5f47f683662753d22c08f3b17e767d044af4a9e0e2554d22"
+    "source_data/conductance_local_gate/summaries/condition_means.csv": "e3ed564e0fd24cb7fee0f1fa6fc337a30fc5481f7b29381419991281829e81a5"
   },
   "builders_sha256": {
-    "scripts/conductance_local_gate/figure.py": "70a6446dc2643bff825fbb02391528e6868e88353f62b7a21cc24d740a256ef6",
+    "scripts/conductance_local_gate/figure.py": "f3e6f7e29cc90ef0d6326b05820757b26cc126b79c96d760334b33aee3751e63",
     "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
     "scripts/figure_canvas.py": "7f2983ff0c52a30dd5ba9bdeccc6fda940b4366ad872cbf0755fec5daa1dd7aa",
     "scripts/native_schematics.py": "68530ec60f85e496b9b0ba7a7ad53510dce2fae91cc38231046c1175e1cb7aeb",
-    "scripts/review_completion/population_figure.py": "c6e9d7def0e52cf9c4723143c0b70b3e21b1212828755425c1e435ebbf7d883a",
+    "scripts/review_completion/population_figure.py": "84f0cc2c0276d0cf866bcd36ee066f0db26d00333df5b7ec0f4d1ea174ff81e3",
+    "scripts/review_completion/promoted_panels.py": "fb97c2a30b02bad9f589c47a004649dced9ce255106e9865e37476372937aa25",
     "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a",
     "scripts/credit_first_figures/focused_provenance.py": "b7ade95b88e7d10a43bab01716dee6211bc2f09735b605d489c0012a147ecea7"
   },
   "source_data_immutable": true,
   "new_experiments": 0,
   "layout_findings": [],
-  "scope": "Main Figure 5 (fig:conductancecredit): A\u2013G retain the mechanism cohorts; Figure 6 shows population controls and rescue. Rendering only; no training is performed by this builder. DECISIONS G4 schematic-area waiver for Fig 5, restated at the AMENDMENTS B12 / CF-10 value 26.9 % (sum of schematic slot areas over the live canvas 452.4 x 402 pt). Recorded, not exercised: the figure is inside the 30 % cap and no relaxation of PANEL_ASPECT_MAX or of the cap is requested. CF-5: the frameless four-entry rule key inside panel C is the single sanctioned in-axes key in the nine-figure set; C and D share four series across two panels."
+  "scope": "Main Figure 5 (fig:conductancecredit): A\u2013G retain the mechanism cohorts; Figure 6 shows population controls and rescue. Rendering only; no training is performed by this builder. DECISIONS G4 schematic-area waiver for Fig 5, restated at the AMENDMENTS B12 / CF-10 value 26.2 % (sum of schematic slot areas over the live canvas 452.4 x 414 pt). Recorded, not exercised: the figure is inside the 30 % cap and no relaxation of PANEL_ASPECT_MAX or of the cap is requested. CF-5: the frameless four-entry rule key inside panel C is the single sanctioned in-axes key in the nine-figure set; C and D share four series across two panels."
 }

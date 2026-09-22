@@ -1,18 +1,8 @@
-"""Main Figure 6 (fig:conductancepopulation).
+"""Main Figure 6: selection, nonlinear rescue, recovered computation and extensions.
 
-Redesign 2026-09-21 (review completion): five panels on a three-row canvas.
-A, the task schematic with the terminal learning-signal delivery key;
-B, assignment under distractor stress with direct end labels (coincident
-curves keep their line patterns and are named in the caption);
-C, one shared-axis dot strip: ordinary, stress-3 and common-rate pairs for
-broadcast and the resistance gate, then the tonic and current forward
-controls at severity three;
-D, within- versus cross-context terminal alignment at the archived
-exact-trained checkpoints (a controlled diagnostic of recipient assignment,
-not a description of the Adam trajectory);
-E, the consolidated rescue: selected rates, common rate 0.03 and the
-separable-target control for the same five rules, with brackets on the two
-predefined primary contrasts only.
+All displays use frozen outcomes and all seeds of the stated cohort. Original
+population, rescue, approximate-signal and routing studies are kept separate.
+Displaced rate, forward-model and alignment diagnostics remain in S22–S23.
 """
 from pathlib import Path
 import sys
@@ -42,22 +32,21 @@ DASH = (0, (2.6, 1.6))
 DOT = (0, (0.9, 1.5))
 ROWS = []
 SCOPE = {
-    'main_6A': 'Schematic of the supplied cue, four two-feature streams, one [4,2] DendriNet '
-               'tree of the sixteen-neuron population, the linear readout and the terminal '
-               'learning-signal delivery key; no measured series.',
-    'main_6B': 'Separable target, shunting forward: all five spatial-assignment rules under '
-               'distractor stress; original paired seed cohort, development-selected rates.',
-    'main_6C': 'Broadcast and resistance at ordinary test, severity three and common rate 0.1 '
-               '(same seed blocks), then exact, broadcast and resistance at severity three '
-               'under tonic and current forward controls.',
-    'main_6D': 'Terminal within- and cross-context alignment of each delivered rule with the '
-               'exact gradient at the 20 archived exact-trained separable-shunting checkpoints; '
-               'checkpoint-only diagnostic, no training.',
-    'main_6E': 'Nonlinear-parent interaction target: original-bound Adam rescue at separately '
-               'selected rates (twenty new paired seeds), the same seeds at common Adam rate '
-               '0.03, and the same seeds with the target interaction removed.'}
-SOURCES = {'main_6A': [], **{k: ['source_data/curated_publication/' + n for n in INPUTS]
-                             for k in ('main_6B', 'main_6C', 'main_6D', 'main_6E')}}
+    'main_6A': 'Sixteen-neuron [4,2] model and terminal signal factors; schematic.',
+    'main_6B': 'Original separable-target cohort: all five assignment rules under distractor stress, selected rates.',
+    'main_6C': 'Twenty new paired rescue seeds: original-bound nonlinear interaction task, separately selected Adam rates, two predefined primary contrasts.',
+    'main_6D': 'Same twenty rescue seeds and their original selected states: interaction components of target and mean resistance/augmented predictions, averaging sign-aligned contexts and irrelevant inputs.',
+    'main_6E': 'Separate twenty-seed approximate-sensitivity cohort, common Adam rate 0.03; exact parent slope, two/four bins, noisy voltage SD 0.5 and matched shuffled controls.',
+    'main_6F': 'Separate twenty-seed routing cohort, selected Adam rates; supplied, locally learned and uniform routes, with terminal cue contacts removed in every condition.'}
+SOURCES = {
+    'main_6A': [],
+    'main_6B': ['source_data/curated_publication/inhibitory_selection_summary.csv'],
+    'main_6C': ['source_data/curated_publication/inhibitory_rescue_endpoints.csv',
+               'source_data/curated_publication/inhibitory_rescue_contrasts.csv'],
+    'main_6D': ['source_data/checkpoint_computation/population_surfaces.csv',
+               'source_data/checkpoint_computation/protocol.json'],
+    'main_6E': ['source_data/optional_extensions/endpoints.csv', 'source_data/optional_extensions/summary.csv'],
+    'main_6F': ['source_data/optional_extensions/endpoints.csv', 'source_data/optional_extensions/summary.csv']}
 
 
 def chain(ax, x, y, parts, *, color, size=PT, drop=1.6, ha='left', va='center', zorder=5):
@@ -146,7 +135,7 @@ def task_panel(ax):
             va='bottom')
     # delivery key
     x0 = 0.52
-    ax.text(x0, 0.975, 'Terminal learning-signal delivery', fontsize=PT, color=ink,
+    ax.text(x0, 0.975, 'Terminal signals', fontsize=PT, color=ink,
             ha='left', va='center')
     rows = [('broadcast', 'Broadcast', [('δ', 0), ('u', -1)]),
             ('resistance', 'Resistance gate h', [('δ', 0), ('u', -1), (' h', 0)]),
@@ -157,7 +146,7 @@ def task_panel(ax):
         ax.text(x0, y, name, fontsize=PT, color=C[rule], ha='left', va='center')
         chain(ax, 0.82, y, formula, color=ink)
     notes = [[('h: relative parent resistance', 0)], [('f′', 0), ('p', -1), (': parent output slope', 0)],
-             [('κ: fixed across examples at given', 0)], [('parameters; changes with learning', 0)]]
+             [('κ: fixed across examples;', 0)], [('changes during learning', 0)]]
     for k, note in enumerate(notes):
         chain(ax, x0, 0.335 - 0.095 * k, note, color=COLORS['mute'])
 
@@ -306,51 +295,62 @@ def rescue_panel(ax, rescue, common, separable, contrasts, log_ticks):
               columnspacing=1.2, borderaxespad=.2)
 
 
+def primary_rescue_panel(ax, rescue, contrasts, log_ticks):
+    order = ['exact', 'broadcast', 'resistance', 'derivative', 'shuffled_derivative']
+    frame = rescue[rescue.optimizer.eq('adam') & rescue.bound.eq(9)]
+    for k, rule in enumerate(order):
+        group = frame[frame.rule.eq(rule)]
+        assert len(group) == 20
+        mark(ax, k, group.assign(value=group.test_nmse), rule, 'C',
+             metric='test_nmse', condition='selected rates')
+    log_axis(ax, log_ticks, ylim=(1e-5, 2), label='Ordinary-test NMSE')
+    ax.set_xticks(range(5), ['Exact', 'Broadcast', 'Resistance\nh', 'Augmented\nhf′', 'Shuffled\nf′'])
+    ax.set_xlim(-.55, 4.55)
+    primary = contrasts[contrasts.primary.eq(True)]
+    assert len(primary) == 2
+    for row in primary.itertuples():
+        x1, x2 = order.index(row.left), order.index(row.right)
+        y = .17 if row.left == 'resistance' else .48
+        ax.plot([x1, x1, x2, x2], [y/1.3, y, y, y/1.3], color=COLORS['ink'], lw=LW_HAIR)
+        ROWS.append(dict(panel='C', record='primary contrast', rule=row.left,
+                         comparison=f'{row.left} minus {row.right}', mean=float(row.mean),
+                         ci_low=float(row.ci_low), ci_high=float(row.ci_high), n=int(row.n),
+                         positive=int(row.positive), holm_p=float(row.holm_p), condition='selected rates'))
+    assert primary.holm_p.nunique() == 1
+    value = f'{primary.holm_p.iloc[0]:.1e}'.split('e')
+    chain(ax, -.35, 1.05, [(f'Both: Holm P = {value[0]} × 10', 0),
+                          (f'−{abs(int(value[1]))}', 1)], color=COLORS['ink'])
+
+
 def build(log_ticks):
+    from review_completion.promoted_panels import interaction_maps, proxy_panel, routing_panel
     ROWS.clear()
-    ep = pd.read_csv(D / INPUTS[0])
-    summary = pd.read_csv(D / INPUTS[1])
-    rate = pd.read_csv(D / INPUTS[2])
-    rescue = pd.read_csv(D / INPUTS[3])
-    common = pd.read_csv(D / INPUTS[4])
-    contrasts = pd.read_csv(D / INPUTS[5])
-    separable = pd.read_csv(D / INPUTS[6])
-    align_seeds = pd.read_csv(D / INPUTS[7])
-    align_summary = pd.read_csv(D / INPUTS[8])
-    original = ep[ep.variant.eq('separable')]
-
-    c = NativeCanvas(478 / 72, 3, row_weights=[122, 104, 132], hgutter_pt=30, vgutter_pt=30,
-                     margins=Margins(left=40, right=6, top=24, bottom=36))
-    a = c.panel('A', 0, 0, 6, letter='A', schematic=True, lock=False)
-    task_panel(a)
-    b = c.panel('B', 0, 6, 6, letter='B', grid='none')
-    stress_panel(b, summary, log_ticks)
-    s = c.panel('C', 1, 0, 6, letter='C', grid='none')
-    strip_panel(s, original, rate, log_ticks)
-    d = c.panel('D', 1, 6, 6, letter='D', grid='none')
-    alignment_panel(d, align_seeds, align_summary)
-    e = c.panel('E', 2, 0, 12, letter='E', grid='none')
-    rescue_panel(e, rescue, common, separable, contrasts, log_ticks)
-
-    # One left reserve for every data panel (one x0 per grid column), equal
-    # right reserves within row 1 (one width per colspan), and B's right
-    # reserve holds its direct end labels.
+    summary = pd.read_csv(D/'inhibitory_selection_summary.csv')
+    rescue = pd.read_csv(D/'inhibitory_rescue_endpoints.csv')
+    contrasts = pd.read_csv(D/'inhibitory_rescue_contrasts.csv')
+    c = NativeCanvas(490/72, 3, row_weights=[128, 112, 118], hgutter_pt=30, vgutter_pt=36,
+                     margins=Margins(left=40, right=30, top=24, bottom=44))
+    task_panel(c.panel('A', 0, 0, 6, schematic=True, lock=False))
+    stress_panel(c.panel('B', 0, 6, 6, grid='none'), summary, log_ticks)
+    primary_rescue_panel(c.panel('C', 1, 0, 6, grid='none'), rescue, contrasts, log_ticks)
+    d = c.panel('D', 1, 6, 6, grid='none')
+    interaction_maps(d, 'D', ROWS)
+    proxy_panel(c.panel('E', 2, 0, 6, grid='none'), 'E', ROWS, log_ticks)
+    routing_panel(c.panel('F', 2, 6, 6, grid='none'), 'F', ROWS, log_ticks)
     locks = c.lock_reserves()
-    left = max(locks[p][0] for p in 'BCDE')
-    right = max(locks[p][1] for p in 'BCD')
-    for p in 'BCD':
-        c.declare_reserve(p, left=left, right=right)
-    c.declare_reserve('E', left=left, right=max(locks['E'][1], 4.0))
+    left = max(locks[p][0] for p in 'BCEF')
+    right = max(locks[p][1] for p in 'BCEF')
+    for panel in 'BCDEF': c.declare_reserve(panel, left=left, right=right)
     findings = list(c.save(OUTPUT, name='figure_06', dpi=180))
     from credit_first_figures.focused_provenance import publish
-    publish(6, OUTPUT, ROWS, [D / n for n in INPUTS],
-            [Path(__file__), J / 'scripts/conductance_local_gate/figure.py',
-             J / 'scripts/figure_canvas.py'],
+    publish(6, OUTPUT, ROWS, [J/n for n in sorted({n for paths in SOURCES.values() for n in paths})],
+            [Path(__file__), J/'scripts/review_completion/promoted_panels.py',
+             J/'scripts/review_completion/checkpoint_computation.py',
+             J/'scripts/conductance_local_gate/figure.py', J/'scripts/figure_canvas.py'],
             {k: dict(sources=SOURCES[k], scope=SCOPE[k]) for k in SCOPE},
             emit_main=False, layout_findings=findings,
-            notes='Original and rescue cohorts are distinct; the common-rate and '
-                  'separable-target blocks reuse rescue seeds; D is a checkpoint-only '
-                  'diagnostic of the original cohort. Rendering only.')
+            notes='B original cohort; C/D original rescue cohort and its retained checkpoints; '
+                  'E and F separate prospective cohorts. All seeds retained. Rendering only.')
     return findings
 
 

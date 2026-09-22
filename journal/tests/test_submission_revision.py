@@ -32,9 +32,9 @@ def test_sgd_validation_selection_and_stopping_decision():
 
 
 def test_population_separable_panel_reproduces_paired_seed_values():
-    table = pd.read_csv(D / 'figure_06_plotted.csv')
-    assert set(table.panel) == set('BCDE')
-    selected = table[table.panel.eq('E') & table.condition.eq('separable target') & table.seed.notna()]
+    table = pd.read_csv(D.parent / 'optional_extensions/optional_extension_plotted.csv')
+    assert set(table.panel) == set('ABCD')
+    selected = table[table.panel.eq('B') & table.policy.eq('no interaction') & table.seed.notna()]
     original = pd.read_csv(D / 'nonlinear_separable_endpoints.csv')
     assert len(selected) == len(original) == 100
     keys = ['seed', 'rule']

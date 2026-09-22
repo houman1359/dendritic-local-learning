@@ -73,12 +73,13 @@ def test_conductance_caption_defines_gate_and_population_keys():
     assert r"\label{fig:conductancepopulation}" in population
     assert "Terminal delivery" in population
     assert "fixed across examples at current parameters but changing during learning" in population
-    assert "context-averaged raw log-conductance gradients" in population
     assert "two predefined primary contrasts with Holm-adjusted" in population
-    assert r"\textbf{E} uses twenty new paired seeds" in population
-    for letter in "ABCDE":
+    assert "Each cohort has twenty paired seeds" in population
+    assert "share rescue seeds" in population
+    assert "Separate parent-sensitivity cohort" in population
+    assert "Separate routing cohort" in population
+    for letter in "ABCDEF":
         assert r"\textbf{" + letter in population
-    assert r"\textbf{F}" not in population
 
 
 def test_main_uses_full_supplementary_table_reference_form():

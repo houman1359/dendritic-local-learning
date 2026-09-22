@@ -71,7 +71,7 @@ def test_reported_means_paired_intervals_and_multiplicity():
 def test_saved_figure_rows_match_all_seeds_and_routing_maps():
     ep=read('endpoints');plot=read('optional_extension_plotted');routes=read('routing')
     assert set(plot.panel)==set('ABCD')
-    for key,g in plot[plot.seed.notna()].groupby(['panel','study','arm','policy']):
+    for key,g in plot[plot.seed.notna() & ~plot.study.eq('rescue')].groupby(['panel','study','arm','policy']):
         _,study,arm,policy=key
         expected=ep[ep.study.eq(study)&ep.arm.eq(arm)&ep.policy.eq(policy)].sort_values('seed')
         assert len(g)==20 and set(g.seed)==set(expected.seed)
@@ -85,7 +85,24 @@ def test_saved_figure_rows_match_all_seeds_and_routing_maps():
         np.testing.assert_allclose(row.value,g.probability.mean())
     matrices=routes.groupby(['arm','policy','seed','context']).probability.sum()
     np.testing.assert_allclose(matrices,1.,atol=1e-12)
-    assert set(plot.arm)==set(protocol()['studies']['proxy'])|set(protocol()['studies']['routing'])
+    assert set(plot[plot.panel.eq('C')].policy)=={'common'}
+    assert len(plot[plot.panel.eq('B') & plot.seed.notna()])==200
+    for policy,filename in [('common interaction','inhibitory_rescue_common_endpoints.csv'),('no interaction','nonlinear_separable_endpoints.csv')]:
+        source=pd.read_csv(J/'source_data/curated_publication'/filename)
+        for rule,g in plot[plot.panel.eq('B') & plot.policy.eq(policy) & plot.seed.notna()].groupby('rule'):
+            expected=source[source.rule.eq(rule)].sort_values('seed')
+            assert len(g)==20 and set(g.seed)==set(expected.seed)
+            np.testing.assert_allclose(g.sort_values('seed').value,expected.test_nmse,rtol=1e-12)
+    # Promoted panels retain all seeds from their own cohort and rate policy.
+    main=pd.read_csv(J/'source_data/curated_publication/figure_06_plotted.csv')
+    for (panel,study,arm,policy),g in main[main.record.eq('extension seed')].groupby(['panel','study','arm','policy']):
+        assert (panel,study,policy) in [('E','proxy','common'),('F','routing','selected')]
+        expected=ep[ep.study.eq(study)&ep.arm.eq(arm)&ep.policy.eq(policy)].sort_values('seed')
+        assert len(g)==20 and set(g.seed)==set(expected.seed)
+        np.testing.assert_allclose(g.sort_values('seed').value,expected.test_nmse,rtol=1e-12)
+    assert len(main[main.record.eq('extension seed')])==200
+    # The complete-record test above checks all eleven proxy and six routing
+    # arms, including controls described in SI rather than drawn twice.
     for name in ['endpoints.csv','summary.csv','routing.csv']:
         expected=json.loads((D/'optional_extension_provenance.json').read_text())['sources'][name]
         assert hashlib.sha256((D/name).read_bytes()).hexdigest()==expected

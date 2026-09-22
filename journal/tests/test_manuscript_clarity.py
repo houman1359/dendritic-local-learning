@@ -41,19 +41,22 @@ def test_figure_one_derivative_names_its_readout_coordinate():
 
 def test_tasks_are_defined_before_population_outcomes():
     source = (J / "main.tex").read_text()
-    target = source.index(r"y=\sum_{b=0}^3c_b(-1)^b")
-    severity = source.index(r"[1+(s-1)(1-c_b)]z_{bj}")
-    gate = source.index(r"h_{up}=D_{up}^0/(D_{up}^0+g_{up}^{\rm I}a_b^{\rm I})")
+    target = source.index(r"y_{\rm sep}=\sum_{b=0}^3c_b(-1)^b")
+    interaction = source.index(r"y_{\rm int}=y_{\rm sep}")
+    severity = source.index("Distractor stress amplified only the unselected streams")
+    gate = source.index("input resistance relative to its value without inhibition")
     result = source.index("Resistance gating helped most under strong distractors.")
-    assert target < severity < gate < result
+    assert target < interaction < severity < gate < result
     assert "parent nonlinearity and target changed together" in source
 
 
 def test_capture_and_context_cancellation_are_different_definitions():
     source = (J / "main.tex").read_text()
     assert r"\mathcal C(A;\bm\delta)=\frac{\|P_A\bm\delta\|^2}{\|\bm\delta\|^2}" in source
-    assert r"\|\sum_c p_c\bm v_c\|/\sum_c p_c\|\bm v_c\|" in source
-    assert "one indicating no cancellation" in source
+    supplement = (J / "supplementary/curated/si_11_checkpoint_computation.tex").read_text()
+    assert r"\|\sum_c p_c\bm v_c\|/\sum_c p_c\|\bm v_c\|" in supplement
+    assert "One indicates no cancellation" in supplement
+    assert "Supplementary Fig.~S22B" in source
 
 
 def test_supplement_explains_shared_path_and_nmse_normalizations():

@@ -92,7 +92,7 @@ def test_supplement_includes_rescue_and_preserves_original_failure():
     si = (J / "supplementary/supplementary.tex").read_text()
     assert r"\input{curated/si_05_parent_sensitivity}" in si
     assert r"\input{curated/si_parent_sensitivity_table}" in si
-    assert "mean ordinary-test nmse was slightly worse for the gate than for broadcast, 0.0511 versus 0.0471" in main.casefold()
+    assert "gate gave slightly higher mean ordinary-test error than broadcast" in main.casefold()
     assert "while fixing the nonlinear task and forward model" in main
     assert "Supplementary Table~S15" in main
     assert "not a biological mechanism for transmitting it" in main

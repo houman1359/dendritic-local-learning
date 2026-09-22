@@ -26,15 +26,17 @@ def test_figure4_saved_export_has_one_noise_panel_with_both_rate_policies():
     assert twin.read_bytes() == (CURATED / 'figure_04_plotted.csv').read_bytes()
 
 
-def test_figure6_saved_export_matches_the_five_panel_layout():
+def test_figure6_saved_export_matches_promotions_and_relocated_controls():
     saved = pd.read_csv(CURATED / 'figure_06_plotted.csv')
-    assert set(saved.panel) == set('BCDE'), sorted(set(saved.panel))
-    rescue = saved[saved.panel.eq('E') & saved.record.eq('seed outcome')]
-    assert set(rescue.condition) == {'selected rates', 'common rate 0.03', 'separable target'}
-    assert rescue.groupby('condition').size().eq(100).all()
-    primary = saved[saved.panel.eq('E') & saved.record.eq('primary contrast')]
+    assert set(saved.panel) == set('BCDEF'), sorted(set(saved.panel))
+    rescue = saved[saved.panel.eq('C') & saved.record.eq('seed outcome')]
+    assert set(rescue.condition) == {'selected rates'} and len(rescue)==100
+    primary = saved[saved.panel.eq('C') & saved.record.eq('primary contrast')]
     assert len(primary) == 2 and primary.positive.eq(20).all()
-    alignment = saved[saved.panel.eq('D') & saved.record.eq('seed outcome')]
+    controls=pd.read_csv(ROOT/'source_data/checkpoint_computation/checkpoint_plotted.csv')
+    alignment = controls[controls.panel.eq('D') & controls.record.eq('seed outcome')]
     assert set(alignment.relation) == {'within', 'cross'} and len(alignment) == 200
+    assert len(saved[saved.record.eq('interaction map')])==1875
+    assert len(saved[saved.record.eq('extension seed')])==200
     twin = PROVENANCE / 'credit_clarity_20260908/figure_06_plotted.csv'
     assert twin.read_bytes() == (CURATED / 'figure_06_plotted.csv').read_bytes()
