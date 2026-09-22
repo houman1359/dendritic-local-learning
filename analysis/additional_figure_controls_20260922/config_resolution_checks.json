@@ -1,0 +1,17 @@
+[
+  {
+    "commit": "e516c7fec3169253ff8c14bc5f4ab1325469e4f5",
+    "exit_code": 0,
+    "output": "Resolved 80 configs\n"
+  },
+  {
+    "commit": "a99c3a777f99913e13dfe673a3f3a28bfe3566af",
+    "exit_code": 0,
+    "output": "Resolved 120 configs\n"
+  },
+  {
+    "commit": "e90fb9896daa95df4aad4c0d92acc0cd65bcd750",
+    "exit_code": 0,
+    "output": "Resolved 20 configs\n"
+  }
+]

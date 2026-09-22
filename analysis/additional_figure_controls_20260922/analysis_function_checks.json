@@ -1,0 +1,10 @@
+{
+  "checked_utc": "2026-09-22T20:26:40.289776+00:00",
+  "tests": [
+    "zero contrast",
+    "constant positive exact P",
+    "balanced signs",
+    "sign symmetry of paired inference"
+  ],
+  "passed": 4
+}

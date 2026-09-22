@@ -1,0 +1,15 @@
+{
+  "checked_utc": "2026-09-22T20:30:43.274656+00:00",
+  "config_resolution": {
+    "e516c7fe": 80,
+    "a99c3a77": 120,
+    "e90fb989": 20
+  },
+  "scientific_config_pairing": "passed",
+  "statistical_sanity_checks": 4,
+  "cpu_initialization_job": "47814022",
+  "gpu_preflight_job": "47813573",
+  "training_array": "47813575",
+  "analysis_job": "47813579",
+  "status": "queued; runtime checks and results pending"
+}

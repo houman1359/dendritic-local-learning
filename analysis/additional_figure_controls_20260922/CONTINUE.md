@@ -41,3 +41,7 @@ Pending full integration:
 Source checkouts are clean and pinned; another session's staged root changes are untouched.
 Submission receipt and all inputs are copied to journal analysis/additional_figure_controls_20260922
 and the archive checkout. Durable raw outputs stay here. Do not add raw checkpoints to main.
+
+Additional CPU initialization-only check: Slurm47814022, four representative configs, no fitting or outcome-based decisions. See initialization_checks.json and logs/init_47814022.log. Protocol and submission commits832d4ca,c84cc5d are not pushed. Statistics sanity checks passed (analysis_function_checks.json).
+
+Important for S24 integration: current builder scripts/build_supplementary_figure_physical_architecture_native.py hard-codes the old four reversed rows, prints not run, and assumes the largest reversed-depth lead is0.8pp. Update these outcome-specific assumptions for the added raw-additive row; derive its markings and range from data without requiring a favorable result. All previous source records remain traceable.
