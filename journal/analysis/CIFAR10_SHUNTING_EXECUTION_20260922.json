@@ -120,7 +120,7 @@
     "hardware_audit_script_sha256": "45837a2e45bb15dd8e563a060feb4efd1409795339324ee67e751017b5de9c56"
   },
   "eng_scheduler_amendment": {
-    "protocol_sha256": "eddeda904cd46f5c2c9dc20af3c5b9dfc1e6ac6227d16f4af9a0d632a2958f04",
+    "protocol_sha256": "f8bfc7446c14386a7df269166d8ea69ee792ccc98d8a9ff0ecf841e77732b4c7",
     "submission": {
       "utc": "2026-09-22T19:16:13.228658+00:00",
       "job_id": "47787999",
@@ -182,5 +182,28 @@
     },
     "focused_tests_passed": 16,
     "first_running_allocation_sha256": "56cf89c78bfe11da8f340e9dc0a92b209c61d662a6ae4086d3df3a0d09117685"
+  },
+  "concurrency_amendment": {
+    "utc": "2026-09-22T19:23:03.210412+00:00",
+    "command": [
+      "scontrol",
+      "update",
+      "JobId=47787999",
+      "ArrayTaskThrottle=12"
+    ],
+    "cancelled_helper": "47804988",
+    "partition": "kempner_eng",
+    "constraint": "h200",
+    "scientific_settings_unchanged": true,
+    "outcomes_inspected": false,
+    "throttle": 12,
+    "first_run_check_job_id": "47806131",
+    "submission_command": [
+      "sbatch",
+      "--parsable",
+      "--dependency=afterany:47787999_0",
+      "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/check_eng_first_run_after_throttle12.sh"
+    ],
+    "check_script_sha256": "56c3dbf4e9e166e57441bcb91baaeb4a975154b5ed5e9b728ebf81604fb8ed7b"
   }
 }

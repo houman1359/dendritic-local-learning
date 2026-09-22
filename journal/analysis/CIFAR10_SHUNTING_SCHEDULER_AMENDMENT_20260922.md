@@ -97,3 +97,15 @@ training recipe and accelerator and do not isolate the forward operator.
 The move receipt, updated checker and dependent-job receipts are retained in
 `scheduler_migration_eng_20260922/` and `eng_submission.json` in the durable
 revision directory.
+
+
+## User-requested concurrency increase
+
+At 19:23 UTC on 22 September 2026, the user requested a concurrency limit of
+12. Array 47787999 was updated immediately to `ArrayTaskThrottle=12` on
+`kempner_eng`, retaining the H200 constraint and all scientific settings.
+The pending ramp job 47804988 was replaced by first-run check 47806131, which
+retains the runtime and allocation check but does not modify the throttle.
+Final completed-cohort audit and analysis job 47804995 is unchanged. The
+scheduler receipt is preserved as `throttle12_receipt.json`; no scientific
+outcomes were inspected for this scheduling decision.
