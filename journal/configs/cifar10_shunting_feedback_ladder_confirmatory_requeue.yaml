@@ -1,0 +1,221 @@
+# Complete same-hardware execution replaces the uninspected partial H100 attempt.
+base_config:
+  analysis:
+    correlation_analysis:
+      enabled: false
+    information_analysis:
+      enabled: false
+    performance_analysis:
+      enabled: true
+      params:
+        accuracy: true
+        auc: false
+        categorical_loglikelihood: true
+        cosine_similarity: false
+        mse: false
+      training: true
+  data:
+    base_dir: /n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/data
+    dataset_name: cifar10
+    processing:
+      flatten: true
+      normalize: false
+  experiment:
+    enable_amp: false
+    enable_hooks: true
+    enable_profiling: false
+    train_valid_split: 0.9
+  model:
+    core:
+      architecture:
+        excitatory_branch_factors:
+        - 3
+        - 3
+        - 3
+        - 3
+        excitatory_layer_sizes:
+        - 20
+        inhibitory_branch_factors:
+        - 1
+        inhibitory_layer_sizes:
+        - 20
+        inhibitory_network_type: dendritic
+      connectivity:
+        ee_synapses_per_branch_per_layer:
+        - 25
+        ei_synapses_per_branch_per_layer:
+        - 25
+        ie_synapses_per_branch_per_layer:
+        - 25
+        ii_synapses_per_branch_per_layer:
+        - 0
+      implementation:
+        adaptive_initialization: true
+        adaptive_initialization_policy: preserve_shunting_center
+        adaptive_target_conductance: 5.0
+        initial_child_conductance: 1.0
+      morphology:
+        additive_mode: raw
+        somatic_synapses: false
+        use_additive_normalization: false
+        use_shunting: true
+        weight_transform: softplus
+      reactivation:
+        calibration_max_m: 50.0
+        calibration_min_quantile_width: 0.001
+        calibration_revert_on_invalid: true
+        enabled: true
+        init_b: 0.5
+        init_m: 1.5
+        init_policy: empirical
+        type: param_tanh
+      transfer:
+        independent_pathways: false
+        inhibitory_mode: first
+        input_mode: 1
+        output_activation: relu
+      type: dendritic_shunting
+    decoder:
+      params:
+        activation: relu
+        hidden_dims:
+        - 32
+        - 16
+        output_dim: 10
+      type: MLP
+    encoder:
+      params:
+        input_dim: null
+      type: identity
+    task: classification
+  outputs:
+    run_name: cifar10_shunting_strict_scalar_confirmatory
+  training:
+    main:
+      common:
+        batch_size: 256
+        checkpoint_interval: 50
+        checkpointing: true
+        early_stopping: true
+        enable_adaptive_clipping: false
+        enable_nan_checking: false
+        epochs: 400
+        grad_clip_value: 5.0
+        load_best_state_dict: true
+        loss_function: cat_nll
+        lr_schedule: none
+        lr_warmup_epochs: 0
+        param_groups:
+          blocklinear_lr: 0.0001
+          decoder_input_lr: null
+          decoder_lr: 0.001
+          encoder_lr: null
+          lr: 0.001
+          reactivation_lr: 0.0001
+          split_params: true
+          topk_lr: 0.001
+        patience: 50
+        plot_losses: false
+        print_every: 10
+        reactivation_initialization_batch_size: 256
+        reactivation_initialization_max_iterations: null
+        reactivation_initialization_num_batches: 3
+        reactivation_recalibration_ema_alpha: 1.0
+        reactivation_recalibration_mode: from_init_policy
+        reactivation_recalibration_num_batches: 3
+        reactivation_recalibration_start_epoch: 1
+        reactivation_update_mode: backprop
+        recalibrate_reactivation_every: 0
+        shuffle: true
+        suppress_prints: false
+        use_amp: false
+        weight_boosting: false
+        weight_decay_rate: 0
+      learning_strategy_config:
+        clip_grad_value: 5.0
+        decoder_update_mode: backprop
+        error_broadcast_mode: scalar
+        error_mode: auto
+        five_factor:
+          layer_wise_phi_scale: 0.0
+          phi_estimator: conditional_ema
+          phi_mode: conditional
+          phi_ridge_lambda: 0.001
+          rls_forgetting: 0.99
+        four_factor:
+          augment_k: 8
+          augment_noise_sigma: 0.01
+          ema_alpha: 0.1
+          layer_wise_rho_scale: 0.0
+          rho_estimator: ema
+          rho_mode: dot
+        hsic:
+          enabled: false
+        morphology_aware:
+          morphology_modulator_mode: none
+          use_branch_type_rules: false
+          use_dendritic_normalization: false
+          use_path_propagation: false
+        normalize_by_batch: true
+        rule_variant: 5f
+        three_factor:
+          additive_gain_mode: none
+          dynamics_mode: auto
+          e_rev_exc: 1.0
+          e_rev_inh: 0.0
+          theta: 0.0
+          use_conductance_scaling: true
+          use_driving_force: true
+        update_inactive_weights: false
+        update_reactivation: true
+      strategy: local_ca
+  wandb:
+    use_wandb: false
+experiment_settings:
+  base_seed: 22000
+  seeds_per_condition: 20
+  use_array_jobs: true
+output_dir: /n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_requeue
+outputs:
+  run_name: journal_cifar10_shunting_feedback_ladder_requeue
+slurm_config:
+  account: kempner_dev
+  conda_env_path: ''
+  cpus_per_task: 8
+  gpus_per_node: 1
+  max_concurrent_jobs: 8
+  mem: 64GB
+  modules_to_load: []
+  nodes: 1
+  ntasks_per_node: 1
+  partition: kempner_requeue
+  run_name: journal_cifar10_shunting_feedback_ladder_requeue
+  time: 02:00:00
+  training_script: src/dendritic_modeling/scripts/training/train_experiments.py
+  qos: normal
+  constraint: rtx6000pro
+sweep_contract:
+  expected_config_count: 80
+  expected_source_commit: e516c7fec3169253ff8c14bc5f4ab1325469e4f5
+  require_clean_tracked_source: true
+sweep_variants:
+- name: cifar10_shunting_strict_scalar_confirmatory
+  overrides:
+    outputs.run_name: cifar10_shunting_strict_scalar_confirmatory
+    training.main.learning_strategy_config.error_broadcast_mode: scalar
+    training.main.strategy: local_ca
+- name: cifar10_shunting_neuron_specific_confirmatory
+  overrides:
+    outputs.run_name: cifar10_shunting_neuron_specific_confirmatory
+    training.main.learning_strategy_config.error_broadcast_mode: per_soma_shared
+    training.main.strategy: local_ca
+- name: cifar10_shunting_exact_path_confirmatory
+  overrides:
+    outputs.run_name: cifar10_shunting_exact_path_confirmatory
+    training.main.learning_strategy_config.error_broadcast_mode: path_transport
+    training.main.strategy: local_ca
+- name: cifar10_shunting_matched_bp_confirmatory
+  overrides:
+    outputs.run_name: cifar10_shunting_matched_bp_confirmatory
+    training.main.learning_strategy_config: null
+    training.main.strategy: standard

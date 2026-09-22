@@ -40,11 +40,83 @@
     "analyzer": 12,
     "pending_integration": 5
   },
-  "status": "training_in_progress; no new cohort outcome inspected; publication integration pending",
+  "status": "replacement array queued; all H100 attempts excluded; no scientific outcomes inspected",
   "files": {
     "configs/cifar10_shunting_feedback_ladder_confirmatory.yaml": "4001180cb2a4f46799954c22feaa32a16e1c0c8034ec3eaacf2f1547ee0f2980",
     "scripts/analyze_cifar10_shunting_feedback_ladder_confirmatory.py": "15d0e3dceb422872ae027e421e67db0af9a3a226ea5b2511c12ca3ea6c8eba65",
     "tests/test_analyze_cifar10_shunting_feedback_ladder_confirmatory.py": "27ba5bd46b9449e7746d9fc9add0086ff625664307fc67a638aa4b6c2708b178",
     "analysis/CIFAR10_SHUNTING_FEEDBACK_LADDER_CONFIRMATORY_20260922.md": "ff5527bbf04d0ef4c67c5e2a8b4186601b6389710cbf67ff0d7a1bae89f72176"
+  },
+  "scheduler_amendment": {
+    "protocol_sha256": "c2a20bd9d4c3f6037dbd4a1c24cd816d656c3dc4474ca16cb9fc0fed21791f38",
+    "replacement": {
+      "submitted_utc": "2026-09-22T17:26:12.914589+00:00",
+      "job_id": "47787999",
+      "command": [
+        "sbatch",
+        "--parsable",
+        "--array=0-79%1",
+        "--constraint=rtx6000pro",
+        "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_requeue/journal_cifar10_shunting_feedback_ladder_requeue_20260922132348/jobs/run_array_sweep.sh"
+      ],
+      "stdout": "47787999\n",
+      "stderr": "",
+      "constraint": "rtx6000pro",
+      "initial_throttle": 1,
+      "maximum_throttle": 8,
+      "analysis_job_id": "47788381",
+      "ramp_job_id": "47788421",
+      "excluded_h100_array": "47767554",
+      "cancelled_unstarted_array": "47787868"
+    },
+    "frozen_replacement": {
+      "frozen_utc": "2026-09-22T17:26:11.493831+00:00",
+      "sweep_root": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_requeue/journal_cifar10_shunting_feedback_ladder_requeue_20260922132348",
+      "analyzer_sha256": "6cb0f1b9d16602a26118714433fb3922e79027ff09053f31f7a7c7b48032bcba",
+      "changed_functions": [
+        "execution_identity"
+      ],
+      "scientific_functions_unchanged": true,
+      "checks": {
+        "execution": {
+          "valid": true,
+          "errors": [],
+          "source_worktree": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260827/runtime/dendritic-modeling-cifar-e516c7",
+          "source_commit": "e516c7fec3169253ff8c14bc5f4ab1325469e4f5",
+          "source_tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "output_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_requeue/journal_cifar10_shunting_feedback_ladder_requeue_20260922132348",
+          "launcher_sha256": "4bd5df47142641e644df53cee33a4ac184a7e2b4e5c02ea3607a4f156425e0f7",
+          "manifest_path": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_requeue/journal_cifar10_shunting_feedback_ladder_requeue_20260922132348/frozen_sweep_manifest.json",
+          "manifest_sha256": "18bce62dbbe7149991ae8c4405451e07931433197c95580ac5c7c54b2d1db46f"
+        },
+        "selected_recipe": {
+          "summary_path": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260828/analysis/cifar10_bp_recipe_init_screen_20260828_v2_postcalibration/summary.json",
+          "selected_bp_config_path": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260828/sweep_runs/cifar10_bp_recipe_init_screen/journal_cifar10_bp_recipe_init_screen_20260828101020/results/config_39/config.json",
+          "valid": true,
+          "errors": [],
+          "summary_sha256": "f65ef6c62867f5e1664e538c5d27e0fba4b5d6bbdc807050ac57a95b6fe6b3bb",
+          "selected_bp_config_sha256": "ac4b5e8c354c6a8b2f6ef1101ebb4ad0579a5278ad87f2501921a71d2f39fd4d",
+          "selected_cell": "shunting_empirical_local_matched",
+          "source_commit": "e516c7fec3169253ff8c14bc5f4ab1325469e4f5",
+          "analyzer_correction_version": 2,
+          "analyzer_sha256": "e938929556831cdf51323750cdf2e45588c2eaa36a1073552c47deafa27bb255"
+        }
+      },
+      "constraint_delivery": "explicit sbatch --constraint=rtx6000pro; frozen array generator omits its YAML constraint",
+      "cancelled_unstarted_submission": "47787868",
+      "amendment_sha256": "9f54611e918fb8abebc526906def153352b088edd5b9ca660c9803f48df42527"
+    },
+    "scientific_parity": {
+      "frozen_utc": "2026-09-22T17:23:01.880044+00:00",
+      "base_config_identical": true,
+      "variants_identical": true,
+      "seeds_identical": true,
+      "outcomes_inspected": false,
+      "exclude_entire_original_array": "47767554",
+      "configuration": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/configs/cifar10_shunting_feedback_ladder_confirmatory_requeue.yaml",
+      "hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition"
+    },
+    "new_focused_tests": 15,
+    "hardware_audit_script_sha256": "45837a2e45bb15dd8e563a060feb4efd1409795339324ee67e751017b5de9c56"
   }
 }

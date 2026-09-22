@@ -92,13 +92,13 @@ EXPECTED_GENERATOR = (
     "UnifiedSweepGenerator"
 )
 EXPECTED_INPUT_YAML_SHA256 = (
-    "4001180cb2a4f46799954c22feaa32a16e1c0c8034ec3eaacf2f1547ee0f2980"
+    "eb02a56b8d5b2e1d9d08edd4ff11d91cf4819756773a7560d608f3ab18d0138a"
 )
 EXPECTED_MANIFEST_SHA256 = (
-    "26b2339cb1059769c696971eb0ce0329c3043d18898a705a8e1f0d710e7b1170"
+    "18bce62dbbe7149991ae8c4405451e07931433197c95580ac5c7c54b2d1db46f"
 )
 EXPECTED_LAUNCHER_SHA256 = (
-    "f5e51176899ed75a16a2b4b399cd6e8ea04d6c7669fb5bfe2d87548354af6623"
+    "4bd5df47142641e644df53cee33a4ac184a7e2b4e5c02ea3607a4f156425e0f7"
 )
 
 
@@ -333,9 +333,10 @@ def execution_identity(sweep_root: Path) -> dict:
     if output_dir is None or not str(output_dir).startswith(str(PROJECT_B_STORAGE_ROOT / "cifar_shunting_revision_20260922")):
         errors.append(f"output directory is not on project-B storage: {output_dir!r}")
     required_fragments = (
-        "#SBATCH --partition=kempner_h100_priority",
-        "#SBATCH --account=kempner_bsabatini_lab",
+        "#SBATCH --partition=kempner_requeue",
+        "#SBATCH --account=kempner_dev",
         "#SBATCH --array=0-79%8",
+        "#SBATCH --qos=normal",
         "Mount canary",
     )
     for fragment in required_fragments:
@@ -371,9 +372,9 @@ def execution_identity(sweep_root: Path) -> dict:
         if manifest.get("generator") != EXPECTED_GENERATOR:
             errors.append(f"unexpected generator {manifest.get('generator')!r}")
         scheduler = manifest.get("scheduler_profile", {})
-        if scheduler.get("account") != "kempner_bsabatini_lab":
+        if scheduler.get("account") != "kempner_dev":
             errors.append(f"unexpected manifest account {scheduler.get('account')!r}")
-        if scheduler.get("partition") != "kempner_h100_priority":
+        if scheduler.get("partition") != "kempner_requeue":
             errors.append(
                 f"unexpected manifest partition {scheduler.get('partition')!r}"
             )
