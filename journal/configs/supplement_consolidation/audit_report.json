@@ -45,8 +45,10 @@
   "strict_audit": {
     "mechanistic_chain": {
       "figure": "S1",
-      "violations": 1,
+      "violations": 3,
       "by_kind": {
+        "canvas-aspect": 1,
+        "fill-width": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": []
@@ -111,9 +113,10 @@
     },
     "input_coverage_depth": {
       "figure": "S9",
-      "violations": 2,
+      "violations": 3,
       "by_kind": {
         "canvas-aspect": 1,
+        "fill-width": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": []
@@ -217,22 +220,6 @@
       "text_floor_examples": []
     },
     "physical_architecture": {
-      "figure": "S22",
-      "violations": 1,
-      "by_kind": {
-        "manifest-missing": 1
-      },
-      "text_floor_examples": []
-    },
-    "physical_calibration": {
-      "figure": "S23",
-      "violations": 1,
-      "by_kind": {
-        "manifest-missing": 1
-      },
-      "text_floor_examples": []
-    },
-    "physical_optimizer": {
       "figure": "S24",
       "violations": 1,
       "by_kind": {
@@ -240,7 +227,7 @@
       },
       "text_floor_examples": []
     },
-    "anatomy_capacity_controls": {
+    "physical_calibration": {
       "figure": "S25",
       "violations": 1,
       "by_kind": {
@@ -248,8 +235,24 @@
       },
       "text_floor_examples": []
     },
-    "inhibitory_spatial_controls": {
+    "physical_optimizer": {
       "figure": "S26",
+      "violations": 1,
+      "by_kind": {
+        "manifest-missing": 1
+      },
+      "text_floor_examples": []
+    },
+    "anatomy_capacity_controls": {
+      "figure": "S27",
+      "violations": 1,
+      "by_kind": {
+        "manifest-missing": 1
+      },
+      "text_floor_examples": []
+    },
+    "inhibitory_spatial_controls": {
+      "figure": "S28",
       "violations": 2,
       "by_kind": {
         "fill-width": 1,
@@ -258,7 +261,7 @@
       "text_floor_examples": []
     },
     "coarse_energy": {
-      "figure": "S27",
+      "figure": "S29",
       "violations": 2,
       "by_kind": {
         "canvas-aspect": 1,
@@ -267,7 +270,7 @@
       "text_floor_examples": []
     },
     "anatomy_preprocessing": {
-      "figure": "S28",
+      "figure": "S30",
       "violations": 3,
       "by_kind": {
         "canvas-aspect": 1,
@@ -277,22 +280,6 @@
       "text_floor_examples": []
     },
     "shunt_sensitivity": {
-      "figure": "S29",
-      "violations": 1,
-      "by_kind": {
-        "manifest-missing": 1
-      },
-      "text_floor_examples": []
-    },
-    "shunt_replication": {
-      "figure": "S30",
-      "violations": 1,
-      "by_kind": {
-        "manifest-missing": 1
-      },
-      "text_floor_examples": []
-    },
-    "measured_transfer_geometry": {
       "figure": "S31",
       "violations": 1,
       "by_kind": {
@@ -300,7 +287,7 @@
       },
       "text_floor_examples": []
     },
-    "measured_predictor_controls": {
+    "shunt_replication": {
       "figure": "S32",
       "violations": 1,
       "by_kind": {
@@ -308,7 +295,7 @@
       },
       "text_floor_examples": []
     },
-    "original_selector": {
+    "measured_transfer_geometry": {
       "figure": "S33",
       "violations": 1,
       "by_kind": {
@@ -316,7 +303,7 @@
       },
       "text_floor_examples": []
     },
-    "finite_horizon": {
+    "measured_predictor_controls": {
       "figure": "S34",
       "violations": 1,
       "by_kind": {
@@ -324,8 +311,24 @@
       },
       "text_floor_examples": []
     },
-    "morphology_estimation": {
+    "original_selector": {
       "figure": "S35",
+      "violations": 1,
+      "by_kind": {
+        "manifest-missing": 1
+      },
+      "text_floor_examples": []
+    },
+    "finite_horizon": {
+      "figure": "S36",
+      "violations": 1,
+      "by_kind": {
+        "manifest-missing": 1
+      },
+      "text_floor_examples": []
+    },
+    "morphology_estimation": {
+      "figure": "S37",
       "violations": 1,
       "by_kind": {
         "manifest-missing": 1

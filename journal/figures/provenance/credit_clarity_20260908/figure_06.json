@@ -1,7 +1,7 @@
 {
   "figure": "Figure 6",
   "output": "figures/main/figure_06.pdf",
-  "output_sha256": "7e6dd94fdf67a6d5fb8583ecaa991d289b85b32d4604e26492c6dd80be961fe5",
+  "output_sha256": "7dd5eabc3bbea4963a19933173bdf98573527a23b29ae79c7fd2c4cd041cd1c0",
   "plotted_table": "source_data/curated_publication/figure_06_plotted.csv",
   "plotted_table_sha256": "a6b93186da1b7cf7e469bf7eb926039a04815deb96cd7d919ac910223b466d83",
   "panel_sources": {

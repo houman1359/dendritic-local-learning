@@ -56,8 +56,8 @@ def test_source_data_inventory_matches_final_display_numbering() -> None:
                    for item in files), source
     assert supplementary_numbers == set(range(1, len(builder.SUPPLEMENTARY_FIGURES) + 1))
     selector = next(a for a in curated_assets() if a["id"] == "original_selector")
-    assert selector["figure"] == "S33"
-    prospective = [item for item in files if item.figure == "Supplementary Figure 33"]
+    assert selector["figure"] == "S35"
+    prospective = [item for item in files if item.figure == "Supplementary Figure 35"]
     assert prospective
     assert all(item.source.startswith("source_data/prospective_morphology_selection/") for item in prospective)
     assert any(item.source.endswith("/sealed_confirmatory_selections.csv") for item in prospective)
@@ -93,7 +93,7 @@ def test_every_curated_panel_releases_its_declared_numerical_sources() -> None:
     assert 'supplementary/curated/checkpoint_computation.pdf' in builder.SUPPLEMENTARY_FIGURES
     for filename in ('branch_tuning.csv', 'population_surfaces.csv',
                      'component_errors.csv', 'checkpoint_plotted.csv'):
-        assert any(item.figure == 'Supplementary Figure 36' and
+        assert any(item.figure == 'Supplementary Figure 22' and
                    item.source == 'source_data/checkpoint_computation/' + filename
                    for item in files), filename
     seen = set()

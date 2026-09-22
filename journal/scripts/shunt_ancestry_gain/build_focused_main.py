@@ -672,10 +672,12 @@ def panel_gain_dictionary(ax, gains):
     eta = np.asarray([gains["gain"][node] for node in order])
     hues = [BLOCK_DESC, BLOCK_SIS, BLOCK_SIS, BLOCK_SIS, BLOCK_SOMA]
 
-    _formula(f, (1.0, top), ["q\u2032 = diag(h) B \u03b7"], size=PT_BASE,
-             ha="right")
-    f.text((1.0, top - f.fy(9.5)), "h = baseline transfer", size=PT_BASE,
-           color=MUTE, ha="right", va="center")
+    # Draw the baseline-state superscript with ordinary font glyphs, at
+    # the 7 pt floor, rather than unsupported Unicode superscript brackets.
+    f.subscript((1.0, top - f.fy(3)), "q′ = diag(h", "(0)", ") B η", size=8,
+                ha="right", drop_pt=-5)
+    f.subscript((1.0, top - f.fy(14.5)), "h", "(0)", " = baseline transfer",
+                size=8, color=MUTE, ha="right", drop_pt=-5)
     prod_rect = (0.46, f.fy(band + 20.0), 0.40,
                  1.0 - f.fy(band + 20.0 + 34.0))
     check_matrix_cells(prod_rect[2] * f.w_pt, prod_rect[3] * f.h_pt, 5, 5,

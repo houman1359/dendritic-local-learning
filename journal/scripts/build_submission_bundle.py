@@ -52,6 +52,8 @@ SUPPLEMENTARY_FIGURES = (
     'supplementary/curated/conductance_precision.pdf',
     'supplementary/curated/conductance_optimization.pdf',
     'supplementary/curated/local_gate_controls.pdf',
+    'supplementary/curated/checkpoint_computation.pdf',
+    'supplementary/curated/optional_extensions.pdf',
     'supplementary/curated/physical_architecture.pdf',
     'supplementary/curated/physical_calibration.pdf',
     'supplementary/curated/physical_optimizer.pdf',
@@ -66,8 +68,6 @@ SUPPLEMENTARY_FIGURES = (
     'supplementary/curated/original_selector.pdf',
     'supplementary/curated/finite_horizon.pdf',
     'supplementary/curated/morphology_estimation.pdf',
-    'supplementary/curated/checkpoint_computation.pdf',
-    'supplementary/curated/optional_extensions.pdf',
 )
 
 FIGURES = MAIN_FIGURES + SUPPLEMENTARY_FIGURES

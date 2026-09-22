@@ -348,7 +348,7 @@ def f4_delivery_panel(ax, radii):
     cells = f.split(3, axis='x', gap_pt=9.0)
     y0, hh = f.fy(13.0), 1.0 - f.fy(13.0)
     spec = [('Exact\npath', 'per-site q(x)'),
-            ('Unit\nbroadcast', 'same drop, six sites'),
+            ('Unit\nbroadcast', 'one shared error at six sites'),
             ('Calibrated\nbroadcast', 'step 0, 256 examples')]
     for i, (cell, (title, foot)) in enumerate(zip(cells, spec)):
         cell = (cell[0], y0, cell[2], hh)
@@ -615,10 +615,13 @@ def f4_deficit(ax, contrast, seeds, rows):
     # are drawn in neutral ink and the three rule hues keep one meaning.
     # The upper bound drops 1.56 -> 1.22: the widest drawn value is the
     # 1.116 seed, so a third of the old axis carried nothing.
-    out = forest_rows(ax, entries, value_label='Quartic − pairwise deficit\n'
-                      '(calibrated − exact NMSE)', reference=0.0,
+    out = forest_rows(ax, entries, value_label='Interaction-dependent deficit D', reference=0.0,
                       reference_label='no deficit', color='ink',
                       xlim=(-.06, 1.22), tag='')
+    # Keep the subscript at the 7 pt floor used by the other figure labels.
+    ax.annotate('int', xy=(1, 0), xycoords=ax.xaxis.label,
+                xytext=(.3, -1.6), textcoords='offset points', fontsize=7,
+                ha='left', va='bottom', annotation_clip=False)
     # QA 2026-09-09: the twenty-seed fan sits 0.22 rows BELOW the row (the
     # validation-selected arm is 0.22 above), and the endpoint interval gets
     # a white casing over the fan, so both intervals stay readable.
@@ -904,15 +907,7 @@ def f4_shuffle(ax, contrast, endpoints, rows, ramp):
     return out
 
 
-FIG4_CAPTION = r"""\caption{\textbf{Higher-order interactions expose limits of fixed credit profiles despite matched input sensitivities.}
-\textbf{A}, Pairwise and quartic targets combine products of two or four inputs on compatible seven-unit scalar trees. Junction badges mark interactions; $y,\delta_0$ denote student output and error. Units are multi-affine, not conductance-based; both tasks use squared-error loss.
-\textbf{B}, Credit over six nonsomatic sites: exact path $\bm q(x)$, unit broadcast (amber) and calibrated broadcast (blue). Drop-dot radii show mean absolute calibrated weights, 0.133--0.386; signs are mixed. Other elements are schematic.
-\textbf{C,D}, Held-out normalized mean squared error (NMSE) against updates for pairwise and quartic targets at rule-specific rates; \textbf{D} includes all twenty exact trajectories. Dashed lines indicate label-noise floors and the 1,024-update primary checkpoint.
-\textbf{E}, Noise-control comparison: quartic-minus-pairwise difference in calibrated-minus-exact clean-domain NMSE at 16,384 updates for fixed-absolute noise, no noise and variance-matched relative noise, which share initialization, inputs and standardized noise within seeds. Diamonds, inherited selected rates; circles, inherited common Adam rate 0.003; dots, paired seed differences; whiskers, 95\% bootstrap intervals. Rates were inherited from the original comparison, not retuned for each noise condition.
-\textbf{F}, Quartic-minus-pairwise difference in calibrated-broadcast-minus-exact NMSE across training budgets. Dots, paired seeds; filled diamonds, endpoints; open diamonds, validation-selected states.
-\textbf{G}, Exact-trained path-field energy captured by the best $k$ oracle directions; uniform broadcast is a separate unfitted category. Grey dashed line, shared pairwise/quartic initialization spectrum; horizontal dashed line, 95\% capture. The nested mean is dashed; series are offset horizontally for visibility. States are from 1,024 updates.
-Each cohort has twenty paired seeds. \textbf{C,D,F,G} reuse the original cohort; \textbf{E} uses twenty new seeds. Bands/whiskers are 95\% seed-bootstrap intervals, paired for differences. Curves use fixed checkpoints; \textbf{F} adds validation selection. Nested and leaf-shuffle displays remain in Supplementary Figs.~S17A and S13C.
-Source Data: \texttt{source\_data/curated\_publication/figure\_04\_plotted.csv}.}"""
+FIG4_CAPTION = '\\caption{\\textbf{Higher-order interactions expose limits of fixed credit profiles despite matched input sensitivities.}\n\\textbf{A}, Pairwise and quartic targets combine products of two or four inputs on compatible seven-unit scalar trees. Junction badges mark interactions; $y,\\delta_0$ denote student output and error. Units are multi-affine, not conductance-based; both tasks use squared-error loss.\n\\textbf{B}, Credit over six nonsomatic sites: exact path $\\bm q(x)$, unit broadcast (amber) and calibrated broadcast (blue). Marker size represents mean absolute calibrated weights, 0.133--0.386; signs are mixed. Other elements are schematic.\n\\textbf{C,D}, Held-out normalized mean squared error (NMSE) against updates for pairwise and quartic targets at rule-specific rates; \\textbf{D} includes all twenty exact trajectories. Dashed lines indicate label-noise floors and the 1,024-update primary checkpoint.\n\\textbf{E}, Noise-control comparison: quartic-minus-pairwise difference in calibrated-minus-exact clean-domain NMSE at 16,384 updates for fixed-absolute noise, no noise and variance-matched relative noise, which share initialization, inputs and standardized noise within seeds. Diamonds, inherited selected rates; circles, inherited common Adam rate 0.003; dots, paired seed differences; whiskers, 95\\% bootstrap intervals. Rates were inherited from the original comparison, not retuned for each noise condition.\n\\textbf{F}, Quartic-minus-pairwise difference in calibrated-broadcast-minus-exact NMSE across training budgets. Dots, paired seeds; filled diamonds, endpoints; open diamonds, validation-selected states.\n\\textbf{G}, Exact-trained path-field energy captured by the best $k$ oracle directions; uniform broadcast is a separate unfitted category. Grey dashed line, shared pairwise/quartic initialization spectrum; horizontal dashed line, 95\\% capture. The nested mean is dashed; series are offset horizontally for visibility. States are from 1,024 updates.\nEach cohort has twenty paired seeds. \\textbf{C,D,F,G} reuse the original cohort; \\textbf{E} uses twenty new seeds. Bands/whiskers are 95\\% seed-bootstrap intervals, paired for differences. Curves use fixed checkpoints; \\textbf{F} adds validation selection. Nested and leaf-shuffle displays remain in Supplementary Figs.~S17A and S13C.\nSource Data: \\texttt{source\\_data/curated\\_publication/figure\\_04\\_plotted.csv}.}'
 
 
 def figure4():
@@ -2016,15 +2011,7 @@ def f6_paired(ax, paired, metric, rows, *, ylim, yticks, ylabel, marks,
     return ax
 
 
-F6_CAPTION = r"""\caption{\textbf{Serial computation benefits distributed gain correction, while credit-rule accuracy rankings depend on training duration.}
-\textbf{A}, Equal-compartment morphologies: one stage (D1, $[8]$) or three (D3, $[2,1,2]$). Blue, excitatory class-bearing contacts; carmine, inhibitory gain sensors; $\delta_0$, somatic error. D1 receives all gain tiers together; D3 separates them by stage. Footer, grouped-point control.
-\textbf{B}, Gain supports: nested fine/coarse/global blocks, flat equal-resolution blocks, or local ratios with an excitation-matched inhibitory sensor in each module. $\alpha$ denotes sensor fidelity.
-\textbf{C}, Serial-minus-grouped-point accuracy at fixed D3 under exact BP. Colors distinguish gain-support families; pale dots show ten paired differences at full fidelity. Open marker, analytic local-ratio tie, not an empirical null. LocalCA counterpart: Supplementary Fig.~S22C.
-\textbf{D}, Three-tier task across serial depths: exact BP (black), exact-path LocalCA (red-brown), shared-soma LocalCA (amber), additive integration, grouped/reversed resource controls and a point-network reference. Resource controls are offset horizontally. Most intervals are smaller than symbols; the separate four-tier cohort is not shown.
-\textbf{E}, Validation-selected accuracy for six restarted conditions, up to 600 epochs. Dotted lines, autograd-broadcast variants, one coinciding with shared-soma LocalCA. Thin grey, D1 reference, lightened below eight active fits. Labels identify paired endpoint comparisons.
-\textbf{F}, Best validation loss for the same conditions; open markers indicate D1 stopping epochs.
-\textbf{G,H}, Paired exact-path-minus-shared-soma accuracy and cross-entropy. Grey span in \textbf{G}, epochs 300--325, where the interval intermittently straddles zero; dashed lines in \textbf{E--H}, original 180-epoch budget.
-Means use ten paired seeds. Bars/bands are descriptive 95\% seed-bootstrap intervals: per-condition in \textbf{D--F} where drawn, paired differences elsewhere, pointwise in \textbf{E--H}. Accuracy endpoints are validation-selected. Source Data: \texttt{source\_data/curated\_publication/figure\_07\_plotted.csv}.}"""
+F6_CAPTION = '\\caption{\\textbf{Serial computation benefits distributed gain correction, while credit-rule accuracy rankings depend on training duration.}\n\\textbf{A}, Equal-compartment morphologies: one stage (D1, $[8]$) or three (D3, $[2,1,2]$). Blue, excitatory class-bearing contacts; carmine, inhibitory gain sensors; $\\delta_0$, somatic error. D1 receives all gain tiers together; D3 separates them by stage. Footer, grouped-point control.\n\\textbf{B}, Gain supports: nested fine/coarse/global blocks, flat equal-resolution blocks, or local ratios with an excitation-matched inhibitory sensor in each module. $\\alpha$ denotes sensor fidelity.\n\\textbf{C}, Serial-minus-grouped-point accuracy at fixed D3 under exact BP. Colors distinguish gain-support families; pale dots show ten paired differences at full fidelity. Open marker, analytic local-ratio tie, not an empirical null. LocalCA counterpart: Supplementary Fig.~S24C.\n\\textbf{D}, Three-tier task across serial depths: exact BP (black), exact-path LocalCA (red-brown), shared-soma LocalCA (amber), additive integration, grouped/reversed resource controls and a point-network reference. Exact BP and exact-path LocalCA use different optimizer recipes. Resource controls are offset horizontally. Most intervals are smaller than symbols; the separate four-tier cohort is not shown.\n\\textbf{E}, Validation-selected accuracy for six restarted conditions, up to 600 epochs. Dotted lines, autograd-broadcast variants, one coinciding with shared-soma LocalCA. Thin grey, D1 reference, lightened below eight active fits. Labels identify paired endpoint comparisons.\n\\textbf{F}, Best validation loss for the same conditions; open markers indicate D1 stopping epochs.\n\\textbf{G,H}, Paired exact-path-minus-shared-soma accuracy and cross-entropy. Grey span in \\textbf{G}, epochs 300--325, where the interval intermittently straddles zero; dashed lines in \\textbf{E--H}, original 180-epoch budget.\nMeans use ten paired seeds. Bars/bands are descriptive 95\\% seed-bootstrap intervals: per-condition in \\textbf{D--F} where drawn, paired differences elsewhere, pointwise in \\textbf{E--H}. Accuracy endpoints are validation-selected. Source Data: \\texttt{source\\_data/curated\\_publication/figure\\_07\\_plotted.csv}.}'
 
 
 def figure6():

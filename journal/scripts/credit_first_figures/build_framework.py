@@ -906,7 +906,7 @@ def accuracy(ax, conditions, seeds, paired, within):
     # exact path - per neuron, a different pair), so they stay -- but as an
     # aligned two-column table on one leading, name at x = 1.15 and the
     # shunting / additive pair at a single x = 2.72, not as ragged prose.
-    ax.text(1.15, 93.2, "within tree, fresh cohort:", ha="left", va="center",
+    ax.text(1.15, 93.2, "within tree: shunting / additive", ha="left", va="center",
             fontsize=PT_BASE, color=MUTE, zorder=6)
     for i, (name, values) in enumerate(within.items()):
         ax.text(1.15, 91.8 - 1.37 * i, name, ha="left", va="center",

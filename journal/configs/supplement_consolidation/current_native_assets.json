@@ -1,4 +1,26 @@
 {
+  "N9": {
+    "path": "figures/supplementary/figure_input_coverage_mnist_native.pdf",
+    "old_label": "fig:si_input_coverage_mnist",
+    "letters": [
+      {
+        "letter": "A",
+        "bbox": [
+          18.739999771118164,
+          12.939000129699707,
+          25.238000869750977,
+          21.93899917602539
+        ],
+        "origin": [
+          18.739999771118164,
+          19.5
+        ]
+      }
+    ],
+    "builder": "scripts/build_supplementary_figure_input_coverage_mnist_native.py",
+    "sha256": "de123d5520b37fe5933c6ca292700a67c4419288a8e03e2693a60b8abe82a3ad",
+    "note": "Current editorial render; the frozen original registry remains unchanged."
+  },
   "N7": {
     "path": "figures/supplementary/figure_mnist_dictionary_geometry_native.pdf",
     "old_label": "fig:si_mnist_dictionary_geometry",

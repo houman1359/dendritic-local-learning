@@ -99,7 +99,7 @@ def test_new_figure_and_complete_records_are_in_release_inventory():
     records=json.loads((J/'configs/credit_first_provenance/panel_sources.json').read_text())['records']
     for path in D.iterdir():
         if path.is_file():
-            assert any(r['figure']=='figS37' and r['path']==str(path.relative_to(J)) for r in records),path.name
+            assert any(r['figure']=='figS23' and r['path']==str(path.relative_to(J)) for r in records),path.name
     scope=json.loads((D/'scope_amendment.json').read_text())
     assert scope['deferred_studies']==['temporal']
     assert all(j['study']!='temporal' for j in protocol()['jobs'])

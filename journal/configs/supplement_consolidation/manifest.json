@@ -24,19 +24,19 @@
           "source": "S1",
           "source_panel": "A",
           "bbox": [
-            26.0,
-            5.8,
-            174.3,
-            188.3
+            44.900001525878906,
+            12.399999618530273,
+            172.85000610351562,
+            185.10000610351562
           ],
-          "width": 148.3,
-          "height": 182.5,
+          "width": 127.95000457763672,
+          "height": 172.70000648498535,
           "panel": "A",
           "target_rect": [
-            26.0,
-            5.8,
-            174.3,
-            188.3
+            38.999991607666004,
+            19.0,
+            166.94999618530272,
+            191.70000648498535
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S01_panels_A-E.pdf",
@@ -48,27 +48,32 @@
             "inherited.s1.generator"
           ],
           "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/figure2/path_gain_cv_runs.csv"
+            "drafts/dendritic-local-learning/journal/source_data/figure2/path_gain_cv_runs.csv",
+            "drafts/dendritic-local-learning/journal/source_data/inherited_neurips/path_gain_cv_mnist_ni5_seed.csv",
+            "drafts/dendritic-local-learning/journal/source_data/inherited_neurips/theory_diag_by_condition.csv"
           ],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {
+            "source_data/inherited_neurips/theory_diag_by_condition.csv": "0850c42784f950d5a6ed1cb3df83f02f9e1804be72b33c13d14e81dd90e0dee7",
+            "source_data/inherited_neurips/path_gain_cv_mnist_ni5_seed.csv": "331d096153725414c87e60929e83ae422de3d29d40d4b7ba03a6eca6d25d539d"
+          }
         },
         {
           "source": "S1",
           "source_panel": "B",
           "bbox": [
-            184.0,
-            5.8,
-            326.9,
-            200.6
+            185.14999389648438,
+            12.399999618530273,
+            326.8999938964844,
+            199.10000610351562
           ],
-          "width": 142.89999999999998,
-          "height": 194.79999999999998,
+          "width": 141.75,
+          "height": 186.70000648498535,
           "panel": "B",
           "target_rect": [
-            184.0,
-            5.8,
-            326.9,
-            200.6
+            179.94999618530272,
+            19.0,
+            321.6999961853027,
+            205.70000648498535
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S01_panels_A-E.pdf",
@@ -80,27 +85,30 @@
             "inherited.s1.generator"
           ],
           "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/figure2/path_gain_cv_runs.csv"
+            "drafts/dendritic-local-learning/journal/source_data/figure2/path_gain_cv_runs.csv",
+            "drafts/dendritic-local-learning/journal/source_data/inherited_neurips/error_field_decomposition_runs.csv"
           ],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {
+            "source_data/inherited_neurips/error_field_decomposition_runs.csv": "002490325b1575732155abd40746766432d71c6b66ecc400333f01bd2a493dd6"
+          }
         },
         {
           "source": "S1",
           "source_panel": "C",
           "bbox": [
-            348.2,
-            5.8,
-            505.1,
-            205.5
+            349.3999938964844,
+            12.399999618530273,
+            505.1000061035156,
+            202.35000610351562
           ],
-          "width": 156.90000000000003,
-          "height": 199.7,
+          "width": 155.70001220703125,
+          "height": 189.95000648498535,
           "panel": "C",
           "target_rect": [
-            348.2,
-            5.8,
-            505.1,
-            205.5
+            334.6999961853027,
+            19.0,
+            490.400008392334,
+            208.95000648498535
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S01_panels_A-E.pdf",
@@ -112,85 +120,21 @@
             "inherited.s1.generator"
           ],
           "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/figure2/path_gain_cv_runs.csv"
+            "drafts/dendritic-local-learning/journal/source_data/figure2/path_gain_cv_runs.csv",
+            "drafts/dendritic-local-learning/journal/source_data/inherited_neurips/inhibition_causality_runs.csv"
           ],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "S1",
-          "source_panel": "D",
-          "bbox": [
-            6.859999656677246,
-            214.75900268554688,
-            251.1158447265625,
-            411.4367370605469
-          ],
-          "width": 244.25584506988525,
-          "height": 196.677734375,
-          "panel": "D",
-          "target_rect": [
-            6.859999656677246,
-            214.75900268554688,
-            251.1158447265625,
-            411.4367370605469
-          ],
-          "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_S01_panels_A-E.pdf",
-          "source_sha256": "2f7eea87c8dcf46253906c60300ad6e0456c574fc0c8db0dfd83204582da9cc5",
-          "old_provenance_figure": "figS1",
-          "old_provenance_entry_ids": [
-            "fig2.path_gain",
-            "inherited.s1.asset",
-            "inherited.s1.generator"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/figure2/path_gain_cv_runs.csv"
-          ],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "S1",
-          "source_panel": "E",
-          "bbox": [
-            258.5574951171875,
-            214.75900268554688,
-            500.31585693359375,
-            411.4367370605469
-          ],
-          "width": 241.75836181640625,
-          "height": 196.677734375,
-          "panel": "E",
-          "target_rect": [
-            258.5574951171875,
-            214.75900268554688,
-            500.31585693359375,
-            411.4367370605469
-          ],
-          "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_S01_panels_A-E.pdf",
-          "source_sha256": "2f7eea87c8dcf46253906c60300ad6e0456c574fc0c8db0dfd83204582da9cc5",
-          "old_provenance_figure": "figS1",
-          "old_provenance_entry_ids": [
-            "fig2.path_gain",
-            "inherited.s1.asset",
-            "inherited.s1.generator"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/figure2/path_gain_cv_runs.csv"
-          ],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {
+            "source_data/inherited_neurips/inhibition_causality_runs.csv": "1c3c048f53b5dc515152da657aa4700d66927932c716fb90b7f3022b73769609"
+          }
         }
       ],
       "ancillary_elements": [],
-      "whole_source_sheet": true,
+      "whole_source_sheet": false,
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
-      "height_pt": 420.0,
-      "sha256": "c28158f63bcc6c1f00dffc1e4f77a5cb6583d988d333a96532ed8e94b05130e3",
-      "source_data_directories": [
-        "source_data/inherited_neurips",
-        "source_data/theory"
-      ]
+      "height_pt": 212.95001220703125,
+      "sha256": "8a044541397d82199c0f9e3daf9beab636f31a75f40c48df5c7cf9c50b9d6318",
+      "source_data_directories": []
     },
     {
       "figure": "S2",
@@ -1360,9 +1304,9 @@
           "height": 84.69999885559082,
           "panel": "A",
           "target_rect": [
-            15.274995040893543,
+            46.299979400634754,
             19.0,
-            147.47499961853026,
+            178.49998397827147,
             103.69999885559082
           ],
           "scale": 1.0,
@@ -1393,9 +1337,9 @@
           "height": 129.70000648498535,
           "panel": "B",
           "target_rect": [
-            180.67499847412108,
+            191.49998397827147,
             19.0,
-            316.97501678466796,
+            327.80000228881835,
             148.70000648498535
           ],
           "scale": 1.0,
@@ -1426,9 +1370,9 @@
           "height": 129.70000648498535,
           "panel": "C",
           "target_rect": [
-            356.4249984741211,
+            340.80000228881835,
             19.0,
-            498.72501678466796,
+            483.1000205993652,
             148.70000648498535
           ],
           "scale": 1.0,
@@ -1447,117 +1391,48 @@
           "explicit_numerical_source_hashes": {}
         },
         {
-          "source": "S7",
-          "source_panel": "D",
+          "source": "N9",
+          "source_panel": "A",
           "bbox": [
-            16.399999618530273,
-            188.39999389648438,
-            168.8000030517578,
-            324.1000061035156
+            28.899999618530273,
+            10.149999618530273,
+            464.9588928222656,
+            122.0999984741211
           ],
-          "width": 152.40000343322754,
-          "height": 135.70001220703125,
+          "width": 436.05889320373535,
+          "height": 111.94999885559082,
           "panel": "D",
           "target_rect": [
-            15.274995040893543,
+            46.299979400634754,
             171.70000648498535,
-            167.67499847412108,
-            307.4000186920166
+            482.3588726043701,
+            283.6500053405762
           ],
           "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_S07_panels_A-D.pdf",
-          "source_sha256": "be44a0a0d06cfe0d7c871610a9f7bdab611015839e72d88a70546cc451c5f565",
-          "old_provenance_figure": "figS7",
-          "old_provenance_entry_ids": [
-            "spatial.audit.asset",
-            "spatial.audit.owner",
-            "spatial.audit.performance"
-          ],
+          "source_asset": "figures/supplementary/figure_input_coverage_mnist_native.pdf",
+          "source_sha256": "de123d5520b37fe5933c6ca292700a67c4419288a8e03e2693a60b8abe82a3ad",
+          "old_provenance_figure": "figN9",
+          "old_provenance_entry_ids": [],
           "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/spatial_topology_audit/owner_metrics.csv",
+            "drafts/dendritic-local-learning/journal/source_data/curated_publication/si_mnist_coverage_plotted.csv",
+            "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_seed_outcomes.csv",
             "drafts/dendritic-local-learning/journal/source_data/spatial_topology_audit/task_feedback_effects.csv"
           ],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "S8",
-          "source_panel": "E",
-          "bbox": [
-            178.64999389648438,
-            191.64999389648438,
-            341.3999938964844,
-            327.3500061035156
-          ],
-          "width": 162.75,
-          "height": 135.70001220703125,
-          "panel": "E",
-          "target_rect": [
-            180.67499847412108,
-            171.70000648498535,
-            343.4249984741211,
-            307.4000186920166
-          ],
-          "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_S08_panels_A-I.pdf",
-          "source_sha256": "0a6d71fbdcda27bcf60862830e06c9886c1b688fa1513bcaabe73c102e8d6b84",
-          "old_provenance_figure": "figS8",
-          "old_provenance_entry_ids": [
-            "prospective.dose.conditions",
-            "prospective.dose.contrasts",
-            "prospective.fixed_budget.asset",
-            "prospective.fixed_budget.conditions",
-            "prospective.fixed_budget.runs"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_seed_outcomes.csv"
-          ],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "S8",
-          "source_panel": "G",
-          "bbox": [
-            14.899999618530273,
-            356.8999938964844,
-            172.60000610351562,
-            486.3500061035156
-          ],
-          "width": 157.70000648498535,
-          "height": 129.45001220703125,
-          "panel": "F",
-          "target_rect": [
-            356.4249984741211,
-            171.70000648498535,
-            514.1250049591065,
-            301.1500186920166
-          ],
-          "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_S08_panels_A-I.pdf",
-          "source_sha256": "0a6d71fbdcda27bcf60862830e06c9886c1b688fa1513bcaabe73c102e8d6b84",
-          "old_provenance_figure": "figS8",
-          "old_provenance_entry_ids": [
-            "prospective.dose.conditions",
-            "prospective.dose.contrasts",
-            "prospective.fixed_budget.asset",
-            "prospective.fixed_budget.conditions",
-            "prospective.fixed_budget.runs"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_seed_outcomes.csv"
-          ],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {
+            "source_data/spatial_topology_audit/task_feedback_effects.csv": "ea2c0f3208e9ef0bd9e8a0d3bc87a5273eb87e6684c9b4b8f57e53d7f0e5ef60",
+            "source_data/prospective_input_validity/followup_publication_seed_outcomes.csv": "26e3edbe4f6cb4252c783a7054d8915a489e3979d85dda04e6076bc276a80eae",
+            "source_data/curated_publication/si_mnist_coverage_plotted.csv": "4d075fa6239c689b093d4caa11f0a80b8abbf9d7733b6e34e3f51ec96a80a24e"
+          },
+          "record_type": "native supplement panel",
+          "builder": "scripts/build_supplementary_figure_input_coverage_mnist_native.py"
         }
       ],
       "ancillary_elements": [],
       "whole_source_sheet": false,
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
-      "height_pt": 311.4000244140625,
-      "sha256": "1d465b8984a63c9c16cf59bf8680cc69e23cd512dc16cb402d19a2cbda2a0ddf",
+      "height_pt": 287.6499938964844,
+      "sha256": "dcb2480f9c1868e777de2aa35cc1bdb86ea6fd2d2f8f932094a0584a42689b75",
       "source_data_directories": [
         "source_data/spatial_topology_audit",
         "source_data/prospective_input_validity"
@@ -4313,7 +4188,7 @@
       ]
     },
     {
-      "figure": "S22",
+      "figure": "S24",
       "id": "physical_architecture",
       "module": "si_06_physical_depth",
       "path": "figures/supplementary/curated/physical_architecture.pdf",
@@ -4521,7 +4396,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 484.0,
-      "sha256": "4fe3904ba5685f7f0b0b616105b571a39140f149450977cb7495f256864f834e",
+      "sha256": "5f1707c3ba6a176b805630841ae7f6225cc49cc63345eefdce241f8ec3860c9a",
       "source_data_directories": [
         "source_data/physical_alignment_dose",
         "source_data/remaining_physical_experiments",
@@ -4532,7 +4407,7 @@
       ]
     },
     {
-      "figure": "S23",
+      "figure": "S25",
       "id": "physical_calibration",
       "module": "si_06_physical_depth",
       "path": "figures/supplementary/curated/physical_calibration.pdf",
@@ -4700,7 +4575,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 360.0,
-      "sha256": "756ac515a1b2601df01ea52d5dd6803d5a9c88943cb3ba19204de56b7c2cf103",
+      "sha256": "54fb9919cdca34ee6e4aaad12ab1aca48c7323cc1b8354458cdc82f9ea9d43b3",
       "source_data_directories": [
         "source_data/nonlinear_physical_depth_accessibility",
         "source_data/nonlinear_physical_depth_boundary",
@@ -4710,7 +4585,7 @@
       ]
     },
     {
-      "figure": "S24",
+      "figure": "S26",
       "id": "physical_optimizer",
       "module": "si_06_physical_depth",
       "path": "figures/supplementary/curated/physical_optimizer.pdf",
@@ -4842,14 +4717,14 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 359.4000244140625,
-      "sha256": "401221e39a1f1a68fc5ff2b63d64c0dcd41dd67d96edeaaebf3dca94a48aeff0",
+      "sha256": "a6b195eba0c60a0ef7339d8de6809b171764b6e08ae0f92edff6a29415725ba1",
       "source_data_directories": [
         "source_data/remaining_physical_experiments",
         "source_data/point_dendrite_credit_controls"
       ]
     },
     {
-      "figure": "S25",
+      "figure": "S27",
       "id": "anatomy_capacity_controls",
       "module": "si_07_anatomy",
       "path": "figures/supplementary/curated/anatomy_capacity_controls.pdf",
@@ -5023,7 +4898,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 435.5,
-      "sha256": "b35163af6405850786b891f3cdded513ef7fe5d2083fe4b5314fa69a2995f499",
+      "sha256": "cec85e0f4b88d0a71707ce4f09a2c1a2368c41f026f1a54052b04abf49ef804b",
       "source_data_directories": [
         "source_data/figure3",
         "source_data/microns_v661_replication",
@@ -5031,7 +4906,7 @@
       ]
     },
     {
-      "figure": "S26",
+      "figure": "S28",
       "id": "inhibitory_spatial_controls",
       "module": "si_07_anatomy",
       "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf",
@@ -5050,9 +4925,9 @@
           "height": 107.65000343322754,
           "panel": "A",
           "target_rect": [
-            90.14998168945311,
+            94.47499389648436,
             19.0,
-            430.59999389648436,
+            434.9250061035156,
             126.65000343322754
           ],
           "scale": 1.0,
@@ -5092,9 +4967,9 @@
           "height": 146.45001220703125,
           "panel": "B",
           "target_rect": [
-            90.14998168945311,
+            94.47499389648436,
             149.65000343322754,
-            199.34999389648436,
+            203.6750061035156,
             296.1000156402588
           ],
           "scale": 1.0,
@@ -5133,50 +5008,9 @@
           "height": 146.45001220703125,
           "panel": "C",
           "target_rect": [
-            212.34999389648436,
+            222.6750061035156,
             149.65000343322754,
-            319.3000061035156,
-            296.1000156402588
-          ],
-          "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_S12_panels_A-J.pdf",
-          "source_sha256": "9c08d59eb111637c4be12ef21c41709b37a4359eb9d443a1e40f8070f3476644",
-          "old_provenance_figure": "figS12",
-          "old_provenance_entry_ids": [
-            "inhcensus.asset",
-            "inhcensus.axons",
-            "inhcensus.cohort",
-            "inhcensus.connections",
-            "inhcensus.routes",
-            "inhcensus.spatial3d",
-            "inhcensus.targets"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/microns_inhibitory_routes/cohort_overlap.csv",
-            "drafts/dendritic-local-learning/journal/source_data/microns_inhibitory_routes/inhibitory_3d_matched_target_metrics.csv",
-            "drafts/dendritic-local-learning/journal/source_data/microns_inhibitory_routes/inhibitory_axon_metrics.csv",
-            "drafts/dendritic-local-learning/journal/source_data/microns_inhibitory_routes/inhibitory_connection_topology.csv",
-            "drafts/dendritic-local-learning/journal/source_data/microns_inhibitory_routes/route_capture_curves.csv",
-            "drafts/dendritic-local-learning/journal/source_data/microns_inhibitory_routes/target_metrics.csv"
-          ],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "S12",
-          "source_panel": "F",
-          "bbox": [
-            404.6499938964844,
-            176.89999389648438,
-            511.6000061035156,
-            323.3500061035156
-          ],
-          "width": 106.95001220703125,
-          "height": 146.45001220703125,
-          "panel": "D",
-          "target_rect": [
-            332.3000061035156,
-            149.65000343322754,
-            439.25001831054686,
+            329.62501831054686,
             296.1000156402588
           ],
           "scale": 1.0,
@@ -5213,11 +5047,11 @@
           ],
           "width": 107.44999885559082,
           "height": 138.95001220703125,
-          "panel": "E",
+          "panel": "D",
           "target_rect": [
-            90.14998168945311,
+            94.47499389648436,
             319.1000156402588,
-            197.59998054504393,
+            201.92499275207518,
             458.05002784729004
           ],
           "scale": 1.0,
@@ -5254,11 +5088,11 @@
           ],
           "width": 148.20001220703125,
           "height": 127.95001220703125,
-          "panel": "F",
+          "panel": "E",
           "target_rect": [
-            216.59998054504393,
+            222.6750061035156,
             319.1000156402588,
-            364.7999927520752,
+            370.87501831054686,
             447.05002784729004
           ],
           "scale": 1.0,
@@ -5290,13 +5124,13 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 462.0500183105469,
-      "sha256": "7c1fbccb3cde06dd779bbfa01ccb17e5a40928914069892315a70bb3e904a6f3",
+      "sha256": "d0673d8519802ecd36066b48aa0db4b78554e0f7f9c4d38d7144b3bad887c5a4",
       "source_data_directories": [
         "source_data/microns_inhibitory_routes"
       ]
     },
     {
-      "figure": "S27",
+      "figure": "S29",
       "id": "coarse_energy",
       "module": "si_07_anatomy",
       "path": "figures/supplementary/curated/coarse_energy.pdf",
@@ -5434,13 +5268,13 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 320.3999938964844,
-      "sha256": "a20a02fd74bded43e4990403ed749036b5aaa876903a1bf365ebd27ded1ff744",
+      "sha256": "4d49e8b8513cd2a8a8f3dd54cbc4644cf5e517fc9cc5def2cd131e3f7992ba99",
       "source_data_directories": [
         "source_data/irregular_tree_wavelets"
       ]
     },
     {
-      "figure": "S28",
+      "figure": "S30",
       "id": "anatomy_preprocessing",
       "module": "si_07_anatomy",
       "path": "figures/supplementary/curated/anatomy_preprocessing.pdf",
@@ -5722,13 +5556,13 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 504.0,
-      "sha256": "3cac8f8b4e7f6dd85a08ab92c7dc10ac0efdc7b2411867fc433b06e81009cf2c",
+      "sha256": "280526ceb6e8a013d79f9dce9d5641977f7c753899a8fe81a51ec1471eed1e02",
       "source_data_directories": [
         "source_data/review_morphology_uncertainty"
       ]
     },
     {
-      "figure": "S29",
+      "figure": "S31",
       "id": "shunt_sensitivity",
       "module": "si_08_shunting",
       "path": "figures/supplementary/curated/shunt_sensitivity.pdf",
@@ -5896,7 +5730,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 489.0,
-      "sha256": "2c54a6fa913fd1f4da9dcaa69934f9a67f9bd02ba31b513ca75370eb146c41c7",
+      "sha256": "9b407e6af8634fd2eda3ec076a5f9c4fc2a5c104d24356e730e6dde2e312e486",
       "source_data_directories": [
         "source_data/figure4",
         "source_data/focal_selectivity_phase1",
@@ -5904,7 +5738,7 @@
       ]
     },
     {
-      "figure": "S30",
+      "figure": "S32",
       "id": "shunt_replication",
       "module": "si_08_shunting",
       "path": "figures/supplementary/curated/shunt_replication.pdf",
@@ -6046,7 +5880,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 414.0,
-      "sha256": "e39d96ca96ac6844842547053135e680a459ae775bc3d4d761beaf6a2d2bdc17",
+      "sha256": "3623febdbab8c9fc0b9a9136122015243d31adbee623af893134dcf6caea31f1",
       "source_data_directories": [
         "source_data/focal_selectivity_active_ensemble",
         "source_data/focal_selectivity_phase1",
@@ -6054,7 +5888,7 @@
       ]
     },
     {
-      "figure": "S31",
+      "figure": "S33",
       "id": "measured_transfer_geometry",
       "module": "si_09_measured",
       "path": "figures/supplementary/curated/measured_transfer_geometry.pdf",
@@ -6178,7 +6012,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 403.0,
-      "sha256": "513ee90dc49951a3473a8a1a39a474eafafb83c17187a5af4787a90dd9478a8a",
+      "sha256": "bfebfd91feda53d5e272994fb4f85611291e37c8b6a6fd1bf24c620ec30d41c1",
       "source_data_directories": [
         "source_data/figure5",
         "source_data/measured_alignment_power",
@@ -6189,7 +6023,7 @@
       ]
     },
     {
-      "figure": "S32",
+      "figure": "S34",
       "id": "measured_predictor_controls",
       "module": "si_09_measured",
       "path": "figures/supplementary/curated/measured_predictor_controls.pdf",
@@ -6429,13 +6263,13 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 475.20001220703125,
-      "sha256": "9a57a879e8a3da96b325765b6d795ad9b31e2f6657fc3b07e804d64951de4547",
+      "sha256": "41f5d555ecdf5dc1f5651eeff0589279d21aea85e411301eb1150bb3b122ed39",
       "source_data_directories": [
         "source_data/review_response_baselines"
       ]
     },
     {
-      "figure": "S33",
+      "figure": "S35",
       "id": "original_selector",
       "module": "si_10_selection_statistics",
       "path": "figures/supplementary/curated/original_selector.pdf",
@@ -8102,13 +7936,13 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 490.0,
-      "sha256": "b2fe3677c91949a6ac4bb3458f6d394488fd162a85974465939a26bb073ba644",
+      "sha256": "9232059a6d868fb6e4e95c794c9e5a9be746e0cf9f52534d991a73aadaf0d5f4",
       "source_data_directories": [
         "source_data/prospective_morphology_selection"
       ]
     },
     {
-      "figure": "S34",
+      "figure": "S36",
       "id": "finite_horizon",
       "module": "si_10_selection_statistics",
       "path": "figures/supplementary/curated/finite_horizon.pdf",
@@ -8276,14 +8110,14 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 476.0,
-      "sha256": "7c5d85736f41eb78f776f402b0f7127ad70590feb4877592801263b968dc5597",
+      "sha256": "f8dd30878b39d063d89d36ed4798c3b740deb9198ef32d0e7b7e4f756a1a5cab",
       "source_data_directories": [
         "source_data/morphology_finite_horizon",
         "source_data/prospective_morphology_selection"
       ]
     },
     {
-      "figure": "S35",
+      "figure": "S37",
       "id": "morphology_estimation",
       "module": "si_10_selection_statistics",
       "path": "figures/supplementary/curated/morphology_estimation.pdf",
@@ -8503,7 +8337,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 493.0,
-      "sha256": "d488138a418428afa47ee09ff2bd7c581f68e6ddec2c408314bbe1fac19bd5f2",
+      "sha256": "10a8f62bf6db78553182590eef30dd7c19af2bc5ba6be6a357fdc811f76d4d03",
       "source_data_directories": [
         "source_data/morphology_calibration"
       ]
@@ -8530,20 +8364,6 @@
         "label": "fig:si_mechanistic_chain",
         "panel": "C",
         "source_panel": "C",
-        "path": "figures/supplementary/curated/mechanistic_chain.pdf"
-      },
-      {
-        "figure": "S1",
-        "label": "fig:si_mechanistic_chain",
-        "panel": "D",
-        "source_panel": "D",
-        "path": "figures/supplementary/curated/mechanistic_chain.pdf"
-      },
-      {
-        "figure": "S1",
-        "label": "fig:si_mechanistic_chain",
-        "panel": "E",
-        "source_panel": "E",
         "path": "figures/supplementary/curated/mechanistic_chain.pdf"
       }
     ],
@@ -8630,29 +8450,13 @@
         "panel": "C",
         "source_panel": "C",
         "path": "figures/supplementary/curated/input_coverage_depth.pdf"
-      },
-      {
-        "figure": "S9",
-        "label": "fig:si_input_coverage_depth",
-        "panel": "D",
-        "source_panel": "D",
-        "path": "figures/supplementary/curated/input_coverage_depth.pdf"
       }
     ],
     "S8": [
       {
-        "figure": "S9",
-        "label": "fig:si_input_coverage_depth",
-        "panel": "E",
-        "source_panel": "E",
-        "path": "figures/supplementary/curated/input_coverage_depth.pdf"
-      },
-      {
-        "figure": "S9",
-        "label": "fig:si_input_coverage_depth",
-        "panel": "F",
-        "source_panel": "G",
-        "path": "figures/supplementary/curated/input_coverage_depth.pdf"
+        "kind": "section",
+        "label": "note:credit_images",
+        "note": "Historical fixed-budget noise outcomes are archived because the executed generator is unresolved; they are excluded from current task and depth claims."
       }
     ],
     "S9": [
@@ -8664,7 +8468,7 @@
     ],
     "S10": [
       {
-        "figure": "S25",
+        "figure": "S27",
         "label": "fig:si_anatomy_capacity_controls",
         "panel": "A",
         "source_panel": "B",
@@ -8675,49 +8479,42 @@
       {
         "kind": "section",
         "label": "fig:si_shunt_sensitivity",
-        "note": "Replaced by the native render N29, which ports the legacy panels to the canvas from the same source tables and is pasted whole as Supplementary Fig. S29."
+        "note": "Replaced by the native render N29, which ports the legacy panels to the canvas from the same source tables and is pasted whole as Supplementary Fig. S31."
       }
     ],
     "S12": [
       {
-        "figure": "S26",
+        "figure": "S28",
         "label": "fig:si_inhibitory_spatial_controls",
         "panel": "A",
         "source_panel": "B",
         "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf"
       },
       {
-        "figure": "S26",
+        "figure": "S28",
         "label": "fig:si_inhibitory_spatial_controls",
         "panel": "B",
         "source_panel": "D",
         "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf"
       },
       {
-        "figure": "S26",
+        "figure": "S28",
         "label": "fig:si_inhibitory_spatial_controls",
         "panel": "C",
         "source_panel": "E",
         "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf"
       },
       {
-        "figure": "S26",
+        "figure": "S28",
         "label": "fig:si_inhibitory_spatial_controls",
         "panel": "D",
-        "source_panel": "F",
-        "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf"
-      },
-      {
-        "figure": "S26",
-        "label": "fig:si_inhibitory_spatial_controls",
-        "panel": "E",
         "source_panel": "G",
         "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf"
       },
       {
-        "figure": "S26",
+        "figure": "S28",
         "label": "fig:si_inhibitory_spatial_controls",
-        "panel": "F",
+        "panel": "E",
         "source_panel": "H",
         "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf"
       }
@@ -8770,28 +8567,28 @@
     ],
     "S15": [
       {
-        "figure": "S23",
+        "figure": "S25",
         "label": "fig:si_physical_calibration",
         "panel": "A",
         "source_panel": "A",
         "path": "figures/supplementary/curated/physical_calibration.pdf"
       },
       {
-        "figure": "S23",
+        "figure": "S25",
         "label": "fig:si_physical_calibration",
         "panel": "B",
         "source_panel": "B",
         "path": "figures/supplementary/curated/physical_calibration.pdf"
       },
       {
-        "figure": "S23",
+        "figure": "S25",
         "label": "fig:si_physical_calibration",
         "panel": "C",
         "source_panel": "C",
         "path": "figures/supplementary/curated/physical_calibration.pdf"
       },
       {
-        "figure": "S23",
+        "figure": "S25",
         "label": "fig:si_physical_calibration",
         "panel": "D",
         "source_panel": "D",
@@ -8809,19 +8606,19 @@
       {
         "kind": "table",
         "label": "tab:animal_credit",
-        "note": "Animal-level estimates and inference are retained in the external signed-credit table and Section S9; the redundant descriptive figure remains archived."
+        "note": "Animal-level estimates and inference are retained in the external signed-credit table and Section S11; the redundant descriptive figure remains archived."
       }
     ],
     "S18": [
       {
-        "figure": "S24",
+        "figure": "S26",
         "label": "fig:si_physical_optimizer",
         "panel": "A",
         "source_panel": "E",
         "path": "figures/supplementary/curated/physical_optimizer.pdf"
       },
       {
-        "figure": "S24",
+        "figure": "S26",
         "label": "fig:si_physical_optimizer",
         "panel": "B",
         "source_panel": "F",
@@ -8839,7 +8636,7 @@
     ],
     "S20": [
       {
-        "figure": "S25",
+        "figure": "S27",
         "label": "fig:si_anatomy_capacity_controls",
         "panel": "B",
         "source_panel": "B",
@@ -8850,14 +8647,14 @@
       {
         "kind": "section",
         "label": "fig:si_shunt_sensitivity",
-        "note": "Replaced by the native render N29, drawn from the same source tables and pasted whole as Supplementary Fig. S29."
+        "note": "Replaced by the native render N29, drawn from the same source tables and pasted whole as Supplementary Fig. S31."
       }
     ],
     "S22": [
       {
         "kind": "section",
         "label": "fig:si_measured_transfer_geometry",
-        "note": "Replaced by the native render N31, drawn from the same source tables and pasted whole as Supplementary Fig. S31A."
+        "note": "Replaced by the native render N31, drawn from the same source tables and pasted whole as Supplementary Fig. S33A."
       }
     ],
     "S23": [
@@ -8887,28 +8684,28 @@
     ],
     "S25": [
       {
-        "figure": "S27",
+        "figure": "S29",
         "label": "fig:si_coarse_energy",
         "panel": "A",
         "source_panel": "A",
         "path": "figures/supplementary/curated/coarse_energy.pdf"
       },
       {
-        "figure": "S27",
+        "figure": "S29",
         "label": "fig:si_coarse_energy",
         "panel": "B",
         "source_panel": "B",
         "path": "figures/supplementary/curated/coarse_energy.pdf"
       },
       {
-        "figure": "S27",
+        "figure": "S29",
         "label": "fig:si_coarse_energy",
         "panel": "C",
         "source_panel": "C",
         "path": "figures/supplementary/curated/coarse_energy.pdf"
       },
       {
-        "figure": "S27",
+        "figure": "S29",
         "label": "fig:si_coarse_energy",
         "panel": "D",
         "source_panel": "D",
@@ -8924,14 +8721,14 @@
     ],
     "S27": [
       {
-        "figure": "S25",
+        "figure": "S27",
         "label": "fig:si_anatomy_capacity_controls",
         "panel": "C",
         "source_panel": "B",
         "path": "figures/supplementary/curated/anatomy_capacity_controls.pdf"
       },
       {
-        "figure": "S25",
+        "figure": "S27",
         "label": "fig:si_anatomy_capacity_controls",
         "panel": "D",
         "source_panel": "D",
@@ -8940,7 +8737,7 @@
     ],
     "S28": [
       {
-        "figure": "S24",
+        "figure": "S26",
         "label": "fig:si_physical_optimizer",
         "panel": "C",
         "source_panel": "B",
@@ -8990,7 +8787,7 @@
       {
         "kind": "section",
         "label": "fig:si_physical_architecture",
-        "note": "Replaced by the native render N22, drawn from the same source tables and pasted whole as Supplementary Fig. S22."
+        "note": "Replaced by the native render N22, drawn from the same source tables and pasted whole as Supplementary Fig. S24."
       }
     ],
     "S32": [
@@ -9011,42 +8808,42 @@
     ],
     "S33": [
       {
-        "figure": "S28",
+        "figure": "S30",
         "label": "fig:si_anatomy_preprocessing",
         "panel": "A",
         "source_panel": "A",
         "path": "figures/supplementary/curated/anatomy_preprocessing.pdf"
       },
       {
-        "figure": "S28",
+        "figure": "S30",
         "label": "fig:si_anatomy_preprocessing",
         "panel": "B",
         "source_panel": "B",
         "path": "figures/supplementary/curated/anatomy_preprocessing.pdf"
       },
       {
-        "figure": "S28",
+        "figure": "S30",
         "label": "fig:si_anatomy_preprocessing",
         "panel": "C",
         "source_panel": "C",
         "path": "figures/supplementary/curated/anatomy_preprocessing.pdf"
       },
       {
-        "figure": "S28",
+        "figure": "S30",
         "label": "fig:si_anatomy_preprocessing",
         "panel": "D",
         "source_panel": "D",
         "path": "figures/supplementary/curated/anatomy_preprocessing.pdf"
       },
       {
-        "figure": "S28",
+        "figure": "S30",
         "label": "fig:si_anatomy_preprocessing",
         "panel": "E",
         "source_panel": "E",
         "path": "figures/supplementary/curated/anatomy_preprocessing.pdf"
       },
       {
-        "figure": "S28",
+        "figure": "S30",
         "label": "fig:si_anatomy_preprocessing",
         "panel": "F",
         "source_panel": "F",
@@ -9055,28 +8852,28 @@
     ],
     "S34": [
       {
-        "figure": "S32",
+        "figure": "S34",
         "label": "fig:si_measured_predictor_controls",
         "panel": "A",
         "source_panel": "A",
         "path": "figures/supplementary/curated/measured_predictor_controls.pdf"
       },
       {
-        "figure": "S32",
+        "figure": "S34",
         "label": "fig:si_measured_predictor_controls",
         "panel": "B",
         "source_panel": "B",
         "path": "figures/supplementary/curated/measured_predictor_controls.pdf"
       },
       {
-        "figure": "S32",
+        "figure": "S34",
         "label": "fig:si_measured_predictor_controls",
         "panel": "C",
         "source_panel": "C",
         "path": "figures/supplementary/curated/measured_predictor_controls.pdf"
       },
       {
-        "figure": "S32",
+        "figure": "S34",
         "label": "fig:si_measured_predictor_controls",
         "panel": "D",
         "source_panel": "D",
@@ -9085,35 +8882,35 @@
     ],
     "S35": [
       {
-        "figure": "S33",
+        "figure": "S35",
         "label": "fig:si_original_selector",
         "panel": "A",
         "source_panel": "A",
         "path": "figures/supplementary/curated/original_selector.pdf"
       },
       {
-        "figure": "S33",
+        "figure": "S35",
         "label": "fig:si_original_selector",
         "panel": "B",
         "source_panel": "B",
         "path": "figures/supplementary/curated/original_selector.pdf"
       },
       {
-        "figure": "S33",
+        "figure": "S35",
         "label": "fig:si_original_selector",
         "panel": "C",
         "source_panel": "C",
         "path": "figures/supplementary/curated/original_selector.pdf"
       },
       {
-        "figure": "S33",
+        "figure": "S35",
         "label": "fig:si_original_selector",
         "panel": "D",
         "source_panel": "D",
         "path": "figures/supplementary/curated/original_selector.pdf"
       },
       {
-        "figure": "S33",
+        "figure": "S35",
         "label": "fig:si_original_selector",
         "panel": "E",
         "source_panel": "E",
@@ -9138,14 +8935,14 @@
       {
         "kind": "section",
         "label": "fig:si_finite_horizon",
-        "note": "Replaced by the native render N35, drawn from the same source tables and pasted whole as Supplementary Fig. S34."
+        "note": "Replaced by the native render N35, drawn from the same source tables and pasted whole as Supplementary Fig. S36."
       }
     ],
     "S39": [
       {
         "kind": "section",
         "label": "fig:si_finite_horizon",
-        "note": "Replaced by the native render N35, drawn from the same source tables and pasted whole as Supplementary Fig. S34."
+        "note": "Replaced by the native render N35, drawn from the same source tables and pasted whole as Supplementary Fig. S36."
       }
     ],
     "S40": [
@@ -9159,7 +8956,7 @@
       {
         "kind": "section",
         "label": "fig:si_morphology_estimation",
-        "note": "Replaced by the native render N36, drawn from the same source tables and pasted whole as Supplementary Fig. S35."
+        "note": "Replaced by the native render N36, drawn from the same source tables and pasted whole as Supplementary Fig. S37."
       }
     ],
     "S42": [
@@ -9201,7 +8998,7 @@
       {
         "kind": "section",
         "label": "fig:si_shunt_replication",
-        "note": "Replaced by the native render N30, drawn from the same source tables and pasted whole as Supplementary Fig. S30D,E."
+        "note": "Replaced by the native render N30, drawn from the same source tables and pasted whole as Supplementary Fig. S32D,E."
       }
     ],
     "S48": [
@@ -9264,14 +9061,14 @@
       {
         "kind": "section",
         "label": "fig:si_measured_transfer_geometry",
-        "note": "Replaced by the native render N31, drawn from the same calibration table and pasted whole as Supplementary Fig. S31E."
+        "note": "Replaced by the native render N31, drawn from the same calibration table and pasted whole as Supplementary Fig. S33E."
       }
     ],
     "M9": [
       {
         "kind": "section",
         "label": "fig:si_measured_transfer_geometry",
-        "note": "Replaced by the native render N31, drawn from the same source tables and pasted whole as Supplementary Fig. S31B--D."
+        "note": "Replaced by the native render N31, drawn from the same source tables and pasted whole as Supplementary Fig. S33B--D."
       }
     ],
     "N14": [
@@ -9727,42 +9524,42 @@
     ],
     "N35": [
       {
-        "figure": "S34",
+        "figure": "S36",
         "label": "fig:si_finite_horizon",
         "panel": "A",
         "source_panel": "A",
         "path": "figures/supplementary/curated/finite_horizon.pdf"
       },
       {
-        "figure": "S34",
+        "figure": "S36",
         "label": "fig:si_finite_horizon",
         "panel": "B",
         "source_panel": "B",
         "path": "figures/supplementary/curated/finite_horizon.pdf"
       },
       {
-        "figure": "S34",
+        "figure": "S36",
         "label": "fig:si_finite_horizon",
         "panel": "C",
         "source_panel": "C",
         "path": "figures/supplementary/curated/finite_horizon.pdf"
       },
       {
-        "figure": "S34",
+        "figure": "S36",
         "label": "fig:si_finite_horizon",
         "panel": "D",
         "source_panel": "D",
         "path": "figures/supplementary/curated/finite_horizon.pdf"
       },
       {
-        "figure": "S34",
+        "figure": "S36",
         "label": "fig:si_finite_horizon",
         "panel": "E",
         "source_panel": "E",
         "path": "figures/supplementary/curated/finite_horizon.pdf"
       },
       {
-        "figure": "S34",
+        "figure": "S36",
         "label": "fig:si_finite_horizon",
         "panel": "F",
         "source_panel": "F",
@@ -9771,56 +9568,56 @@
     ],
     "N36": [
       {
-        "figure": "S35",
+        "figure": "S37",
         "label": "fig:si_morphology_estimation",
         "panel": "A",
         "source_panel": "A",
         "path": "figures/supplementary/curated/morphology_estimation.pdf"
       },
       {
-        "figure": "S35",
+        "figure": "S37",
         "label": "fig:si_morphology_estimation",
         "panel": "B",
         "source_panel": "B",
         "path": "figures/supplementary/curated/morphology_estimation.pdf"
       },
       {
-        "figure": "S35",
+        "figure": "S37",
         "label": "fig:si_morphology_estimation",
         "panel": "C",
         "source_panel": "C",
         "path": "figures/supplementary/curated/morphology_estimation.pdf"
       },
       {
-        "figure": "S35",
+        "figure": "S37",
         "label": "fig:si_morphology_estimation",
         "panel": "D",
         "source_panel": "D",
         "path": "figures/supplementary/curated/morphology_estimation.pdf"
       },
       {
-        "figure": "S35",
+        "figure": "S37",
         "label": "fig:si_morphology_estimation",
         "panel": "E",
         "source_panel": "E",
         "path": "figures/supplementary/curated/morphology_estimation.pdf"
       },
       {
-        "figure": "S35",
+        "figure": "S37",
         "label": "fig:si_morphology_estimation",
         "panel": "F",
         "source_panel": "F",
         "path": "figures/supplementary/curated/morphology_estimation.pdf"
       },
       {
-        "figure": "S35",
+        "figure": "S37",
         "label": "fig:si_morphology_estimation",
         "panel": "G",
         "source_panel": "G",
         "path": "figures/supplementary/curated/morphology_estimation.pdf"
       },
       {
-        "figure": "S35",
+        "figure": "S37",
         "label": "fig:si_morphology_estimation",
         "panel": "H",
         "source_panel": "H",
@@ -9880,49 +9677,49 @@
     ],
     "N22": [
       {
-        "figure": "S22",
+        "figure": "S24",
         "label": "fig:si_physical_architecture",
         "panel": "A",
         "source_panel": "A",
         "path": "figures/supplementary/curated/physical_architecture.pdf"
       },
       {
-        "figure": "S22",
+        "figure": "S24",
         "label": "fig:si_physical_architecture",
         "panel": "B",
         "source_panel": "B",
         "path": "figures/supplementary/curated/physical_architecture.pdf"
       },
       {
-        "figure": "S22",
+        "figure": "S24",
         "label": "fig:si_physical_architecture",
         "panel": "C",
         "source_panel": "C",
         "path": "figures/supplementary/curated/physical_architecture.pdf"
       },
       {
-        "figure": "S22",
+        "figure": "S24",
         "label": "fig:si_physical_architecture",
         "panel": "D",
         "source_panel": "D",
         "path": "figures/supplementary/curated/physical_architecture.pdf"
       },
       {
-        "figure": "S22",
+        "figure": "S24",
         "label": "fig:si_physical_architecture",
         "panel": "E",
         "source_panel": "E",
         "path": "figures/supplementary/curated/physical_architecture.pdf"
       },
       {
-        "figure": "S22",
+        "figure": "S24",
         "label": "fig:si_physical_architecture",
         "panel": "F",
         "source_panel": "F",
         "path": "figures/supplementary/curated/physical_architecture.pdf"
       },
       {
-        "figure": "S22",
+        "figure": "S24",
         "label": "fig:si_physical_architecture",
         "panel": "G",
         "source_panel": "G",
@@ -9931,35 +9728,35 @@
     ],
     "N30": [
       {
-        "figure": "S30",
+        "figure": "S32",
         "label": "fig:si_shunt_replication",
         "panel": "A",
         "source_panel": "A",
         "path": "figures/supplementary/curated/shunt_replication.pdf"
       },
       {
-        "figure": "S30",
+        "figure": "S32",
         "label": "fig:si_shunt_replication",
         "panel": "B",
         "source_panel": "B",
         "path": "figures/supplementary/curated/shunt_replication.pdf"
       },
       {
-        "figure": "S30",
+        "figure": "S32",
         "label": "fig:si_shunt_replication",
         "panel": "C",
         "source_panel": "C",
         "path": "figures/supplementary/curated/shunt_replication.pdf"
       },
       {
-        "figure": "S30",
+        "figure": "S32",
         "label": "fig:si_shunt_replication",
         "panel": "D",
         "source_panel": "D",
         "path": "figures/supplementary/curated/shunt_replication.pdf"
       },
       {
-        "figure": "S30",
+        "figure": "S32",
         "label": "fig:si_shunt_replication",
         "panel": "E",
         "source_panel": "E",
@@ -9968,28 +9765,28 @@
     ],
     "N31": [
       {
-        "figure": "S31",
+        "figure": "S33",
         "label": "fig:si_measured_transfer_geometry",
         "panel": "A",
         "source_panel": "A",
         "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
       },
       {
-        "figure": "S31",
+        "figure": "S33",
         "label": "fig:si_measured_transfer_geometry",
         "panel": "B",
         "source_panel": "B",
         "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
       },
       {
-        "figure": "S31",
+        "figure": "S33",
         "label": "fig:si_measured_transfer_geometry",
         "panel": "C",
         "source_panel": "C",
         "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
       },
       {
-        "figure": "S31",
+        "figure": "S33",
         "label": "fig:si_measured_transfer_geometry",
         "panel": "D",
         "source_panel": "D",
@@ -9998,42 +9795,42 @@
     ],
     "N29": [
       {
-        "figure": "S29",
+        "figure": "S31",
         "label": "fig:si_shunt_sensitivity",
         "panel": "A",
         "source_panel": "A",
         "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
       },
       {
-        "figure": "S29",
+        "figure": "S31",
         "label": "fig:si_shunt_sensitivity",
         "panel": "B",
         "source_panel": "B",
         "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
       },
       {
-        "figure": "S29",
+        "figure": "S31",
         "label": "fig:si_shunt_sensitivity",
         "panel": "C",
         "source_panel": "C",
         "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
       },
       {
-        "figure": "S29",
+        "figure": "S31",
         "label": "fig:si_shunt_sensitivity",
         "panel": "D",
         "source_panel": "D",
         "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
       },
       {
-        "figure": "S29",
+        "figure": "S31",
         "label": "fig:si_shunt_sensitivity",
         "panel": "E",
         "source_panel": "E",
         "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
       },
       {
-        "figure": "S29",
+        "figure": "S31",
         "label": "fig:si_shunt_sensitivity",
         "panel": "F",
         "source_panel": "F",
@@ -10052,6 +9849,15 @@
         "kind": "section",
         "label": "fig:si_utility_signal_noise",
         "note": "Redrawn inside the native render N3 as Supplementary Fig. S3G; the separate component is no longer pasted."
+      }
+    ],
+    "N9": [
+      {
+        "figure": "S9",
+        "label": "fig:si_input_coverage_depth",
+        "panel": "D",
+        "source_panel": "A",
+        "path": "figures/supplementary/curated/input_coverage_depth.pdf"
       }
     ]
   }

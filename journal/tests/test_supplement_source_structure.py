@@ -78,13 +78,13 @@ def test_documented_composition_inventory_matches_manifest():
     whole = [asset for asset in assets if asset.get("whole_source_sheet", False)]
     composed = [asset for asset in assets if not asset.get("whole_source_sheet", False)]
     assert len(assets) == 35
-    assert len(whole) == 25
-    assert len(composed) == 10
+    assert len(whole) == 24
+    assert len(composed) == 11
     single_source_reflows = {
         asset["figure"]
         for asset in composed
         if len({panel["source_asset"] for panel in asset["panels"]}) == 1
     }
-    assert single_source_reflows == {"S5", "S26"}
+    assert single_source_reflows == {"S1", "S5", "S28"}
     assert all(asset["paste_scale"] == 1.0 for asset in assets)
     assert all(panel["scale"] == 1.0 for asset in assets for panel in asset["panels"])

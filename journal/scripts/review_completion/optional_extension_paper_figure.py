@@ -74,7 +74,7 @@ def main(args):
     args.output.parent.mkdir(parents=True,exist_ok=True)
     findings=c.save(args.output,name='optional_extensions',dpi=180)
     pd.DataFrame(rows).to_csv(args.data/'optional_extension_plotted.csv',index=False)
-    (args.data/'optional_extension_provenance.json').write_text(json.dumps(dict(figure='figS37',generator_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+    (args.data/'optional_extension_provenance.json').write_text(json.dumps(dict(figure='figS23',generator_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         sources={name:hashlib.sha256((args.data/name).read_bytes()).hexdigest() for name in ['endpoints.csv','summary.csv','routing.csv']},
         findings=[str(x) for x in findings],scope='Two separate twenty-seed prospective cohorts; recurrent study deferred before training'),indent=2)+'\n')
 

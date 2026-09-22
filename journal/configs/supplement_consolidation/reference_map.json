@@ -19,19 +19,24 @@
         "figure": "S1",
         "panel": "C",
         "path": "figures/supplementary/curated/mechanistic_chain.pdf"
-      },
-      "D": {
-        "figure": "S1",
-        "panel": "D",
-        "path": "figures/supplementary/curated/mechanistic_chain.pdf"
-      },
-      "E": {
-        "figure": "S1",
-        "panel": "E",
-        "path": "figures/supplementary/curated/mechanistic_chain.pdf"
       }
     },
-    "omitted_panel_status": {}
+    "omitted_panel_status": {
+      "D": {
+        "content": "use two-stage $[3,3]$ additive trees.",
+        "reason": "The historical noise-task panels are archival only: normalization and aggregate execution identity are unresolved.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/figure2/path_gain_cv_runs.csv"
+        ]
+      },
+      "E": {
+        "content": "use two-stage $[3,3]$ additive trees.",
+        "reason": "The historical noise-task panels are archival only: normalization and aggregate execution identity are unresolved.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/figure2/path_gain_cv_runs.csv"
+        ]
+      }
+    }
   },
   "S2": {
     "old_label": "fig:inherited_competence",
@@ -293,36 +298,29 @@
         "figure": "S9",
         "panel": "C",
         "path": "figures/supplementary/curated/input_coverage_depth.pdf"
-      },
-      "D": {
-        "figure": "S9",
-        "panel": "D",
-        "path": "figures/supplementary/curated/input_coverage_depth.pdf"
       }
     },
-    "omitted_panel_status": {}
+    "omitted_panel_status": {
+      "D": {
+        "content": "Spatial-minus-random accuracy under backpropagation (BP), matched-width scalar-fallback feedback (MW scalar), neuron-specific sharing (Neuron) and exact path transport. MNIST averages shunting and raw-additive models within seed; the randomly projected noise task uses the conductance-valid raw-additive model only. Panels",
+        "reason": "The mixed-task learning panel is replaced by a verified MNIST-only panel; the unresolved noise-task series remains archival.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/spatial_topology_audit/owner_metrics.csv",
+          "drafts/dendritic-local-learning/journal/source_data/spatial_topology_audit/task_feedback_effects.csv"
+        ]
+      }
+    }
   },
   "S8": {
     "old_label": "fig:supp_fixed_budget",
     "original_asset": "figures/supplementary/figure_S08_panels_A-I.pdf",
     "original_sha256": "0a6d71fbdcda27bcf60862830e06c9886c1b688fa1513bcaabe73c102e8d6b84",
-    "primary_destination": "S9",
-    "panels": {
-      "E": {
-        "figure": "S9",
-        "panel": "E",
-        "path": "figures/supplementary/curated/input_coverage_depth.pdf"
-      },
-      "G": {
-        "figure": "S9",
-        "panel": "F",
-        "path": "figures/supplementary/curated/input_coverage_depth.pdf"
-      }
-    },
+    "primary_destination": "note:credit_images",
+    "panels": {},
     "omitted_panel_status": {
       "A": {
         "content": "Held-out accuracy under matched-width scalar-fallback, neuron-specific, exact-path and backpropagated learning, respectively.",
-        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "reason": "The historical noise-task generator cannot be identified from retained execution records; these outcomes are archived and excluded from current task or depth claims.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_condition_summary.csv",
           "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_paired_contrasts.csv",
@@ -331,7 +329,7 @@
       },
       "B": {
         "content": "Held-out accuracy under matched-width scalar-fallback, neuron-specific, exact-path and backpropagated learning, respectively.",
-        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "reason": "The historical noise-task generator cannot be identified from retained execution records; these outcomes are archived and excluded from current task or depth claims.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_condition_summary.csv",
           "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_paired_contrasts.csv",
@@ -340,7 +338,7 @@
       },
       "C": {
         "content": "Held-out accuracy under matched-width scalar-fallback, neuron-specific, exact-path and backpropagated learning, respectively.",
-        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "reason": "The historical noise-task generator cannot be identified from retained execution records; these outcomes are archived and excluded from current task or depth claims.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_condition_summary.csv",
           "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_paired_contrasts.csv",
@@ -349,7 +347,16 @@
       },
       "D": {
         "content": "Held-out accuracy under matched-width scalar-fallback, neuron-specific, exact-path and backpropagated learning, respectively.",
-        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "reason": "The historical noise-task generator cannot be identified from retained execution records; these outcomes are archived and excluded from current task or depth claims.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_condition_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_paired_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_seed_outcomes.csv"
+        ]
+      },
+      "E": {
+        "content": "Prespecified D4-minus-D1 accuracy contrasts, in percentage points (pp).",
+        "reason": "The historical noise-task generator cannot be identified from retained execution records; these outcomes are archived and excluded from current task or depth claims.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_condition_summary.csv",
           "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_paired_contrasts.csv",
@@ -358,7 +365,16 @@
       },
       "F": {
         "content": "Local-minus-backpropagated (BP) accuracy in pp; line styles identify the three local fields.",
-        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "reason": "The historical noise-task generator cannot be identified from retained execution records; these outcomes are archived and excluded from current task or depth claims.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_condition_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_paired_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_seed_outcomes.csv"
+        ]
+      },
+      "G": {
+        "content": "Active contacts and trainable parameters. \\textbf{H,I}, Runtime in minutes and peak memory in mebibytes (MiB). Each condition has ten paired seeds; symbols and intervals are means and 95\\% paired-seed bootstrap intervals. All four retained D4-minus-D1 contrasts were negative in 10/10 pairs (Wilcoxon $P=0.001953$). The design fixes 16 terminals and 960--968 active contacts per soma, but not compartment or parameter count. Shunting series fail the nonnegative-conductance criterion on this task and are excluded from inference. Its exact executed noise generator remains unresolved (SI S5).",
+        "reason": "The historical noise-task generator cannot be identified from retained execution records; these outcomes are archived and excluded from current task or depth claims.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_condition_summary.csv",
           "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_paired_contrasts.csv",
@@ -405,10 +421,10 @@
     "old_label": "fig:supp_v661",
     "original_asset": "figures/supplementary/figure_S10_panels_A-H.pdf",
     "original_sha256": "628ef501daec521a038a05f850dee5b2c7c65d8d700163b1c75b2e8cdf6bbdac",
-    "primary_destination": "S25",
+    "primary_destination": "S27",
     "panels": {
       "B": {
-        "figure": "S25",
+        "figure": "S27",
         "panel": "A",
         "path": "figures/supplementary/curated/anatomy_capacity_controls.pdf"
       }
@@ -456,17 +472,17 @@
       },
       "F": {
         "content": "Localization of exact-gradient changes after a unit-dose focal shunt and baseline-current-matched current injection (45 cells, 235 sites).",
-        "reason": "Replaced by the native render N30 (scripts/build_supplementary_figure_shunt_replication_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S30; no crop of this render is used.",
+        "reason": "Replaced by the native render N30 (scripts/build_supplementary_figure_shunt_replication_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S32; no crop of this render is used.",
         "numbers_at": "source_data/microns_v661_replication/supp_figure_focal_cells.csv"
       },
       "G": {
         "content": "Localization for true descendant relations and relation templates reassigned to other focal sites (40 cells, 230 sites).",
-        "reason": "Replaced by the native render N30 (scripts/build_supplementary_figure_shunt_replication_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S30; no crop of this render is used.",
+        "reason": "Replaced by the native render N30 (scripts/build_supplementary_figure_shunt_replication_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S32; no crop of this render is used.",
         "numbers_at": "source_data/microns_v661_replication/supp_figure_focal_cells.csv"
       },
       "H": {
         "content": "Direct presynaptic excitatory/inhibitory label coverage and eligible focal sites per cell.",
-        "reason": "Replaced by the native render N30 (scripts/build_supplementary_figure_shunt_replication_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S30; no crop of this render is used.",
+        "reason": "Replaced by the native render N30 (scripts/build_supplementary_figure_shunt_replication_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S32; no crop of this render is used.",
         "numbers_at": "source_data/microns_v661_replication/cohort_manifest.csv"
       }
     }
@@ -480,17 +496,17 @@
     "omitted_panel_status": {
       "A": {
         "content": "Shunt-minus-current-injection localization across fixed absolute doses at three membrane resistances and three background multipliers.",
-        "reason": "Replaced by the native render N29 (scripts/build_supplementary_figure_shunt_sensitivity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S29; no crop of this render is used.",
+        "reason": "Replaced by the native render N29 (scripts/build_supplementary_figure_shunt_sensitivity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S31; no crop of this render is used.",
         "numbers_at": "source_data/focal_selectivity_phase1/paired_contrasts.csv"
       },
       "B": {
         "content": "Transport selectivity S_k, the descendant-to-control ratio of median absolute Green-function entries, against full synaptic-gradient localization at unit input-conductance-normalized dose.",
-        "reason": "Replaced by the native render N29 (scripts/build_supplementary_figure_shunt_sensitivity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S29; no crop of this render is used.",
+        "reason": "Replaced by the native render N29 (scripts/build_supplementary_figure_shunt_sensitivity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S31; no crop of this render is used.",
         "numbers_at": "source_data/focal_selectivity_phase1/cell_condition_metrics.csv"
       },
       "C": {
         "content": "Fraction of descendant gradients attenuated, enhanced or sign reversed at R_m = 1,000 ohm cm^2, background multiplier one and unit dose.",
-        "reason": "Replaced by the native render N29 (scripts/build_supplementary_figure_shunt_sensitivity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S29; no crop of this render is used.",
+        "reason": "Replaced by the native render N29 (scripts/build_supplementary_figure_shunt_sensitivity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S31; no crop of this render is used.",
         "numbers_at": "source_data/focal_selectivity_phase1/"
       }
     }
@@ -499,49 +515,54 @@
     "old_label": "fig:supp_inhibitory",
     "original_asset": "figures/supplementary/figure_S12_panels_A-J.pdf",
     "original_sha256": "9c08d59eb111637c4be12ef21c41709b37a4359eb9d443a1e40f8070f3476644",
-    "primary_destination": "S26",
+    "primary_destination": "S28",
     "panels": {
       "B": {
-        "figure": "S26",
+        "figure": "S28",
         "panel": "A",
         "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf"
       },
       "D": {
-        "figure": "S26",
+        "figure": "S28",
         "panel": "B",
         "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf"
       },
       "E": {
-        "figure": "S26",
+        "figure": "S28",
         "panel": "C",
         "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf"
       },
-      "F": {
-        "figure": "S26",
+      "G": {
+        "figure": "S28",
         "panel": "D",
         "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf"
       },
-      "G": {
-        "figure": "S26",
-        "panel": "E",
-        "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf"
-      },
       "H": {
-        "figure": "S26",
-        "panel": "F",
+        "figure": "S28",
+        "panel": "E",
         "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf"
       }
     },
     "omitted_panel_status": {
       "A": {
         "content": "Schematic of the inhibitory-route matching design.",
-        "reason": "Omitted; the matched-null design is described in Supplementary Section S7.",
+        "reason": "Omitted; the matched-null design is described in Supplementary Section S9.",
         "numbers_at": "source_data/microns_inhibitory_routes/"
       },
       "C": {
         "content": "Contact counts per target for the twenty-target inhibitory analysis.",
         "reason": "Omitted; the counts are tabulated in Supplementary Table S6.",
         "numbers_at": "source_data/microns_inhibitory_routes/"
+      },
+      "F": {
+        "content": "Observed-minus-matched tree distance, shared-path fraction and weighted descendant-domain overlap, respectively. Target denotes the primary 20-target analysis; axon first averages within each of 92 presynaptic axons; 3D jointly matches path distance and Euclidean proximity within target. Diamonds and intervals show unit means and bootstrap 95\\% intervals. Only tree distance persisted after axon aggregation, and no endpoint persisted after joint 3D matching.",
+        "reason": "Weighted domain overlap repeats shared-path fraction; its definition and separate inference remain in Source Data. Other historical overview panels retain their original archival status.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/microns_inhibitory_routes/cohort_overlap.csv",
+          "drafts/dendritic-local-learning/journal/source_data/microns_inhibitory_routes/inhibitory_3d_matched_target_metrics.csv",
+          "drafts/dendritic-local-learning/journal/source_data/microns_inhibitory_routes/inhibitory_axon_metrics.csv",
+          "drafts/dendritic-local-learning/journal/source_data/microns_inhibitory_routes/inhibitory_connection_topology.csv"
+        ]
       }
     }
   },
@@ -659,25 +680,25 @@
     "old_label": "fig:supp_nonlinear_depth_calibration",
     "original_asset": "figures/supplementary/figure_S15_panels_A-D.pdf",
     "original_sha256": "1ba6d9859574a52b27a94e8402c3a39f6e6c5155cdddfa9778a162ea15a7f5e4",
-    "primary_destination": "S23",
+    "primary_destination": "S25",
     "panels": {
       "A": {
-        "figure": "S23",
+        "figure": "S25",
         "panel": "A",
         "path": "figures/supplementary/curated/physical_calibration.pdf"
       },
       "B": {
-        "figure": "S23",
+        "figure": "S25",
         "panel": "B",
         "path": "figures/supplementary/curated/physical_calibration.pdf"
       },
       "C": {
-        "figure": "S23",
+        "figure": "S25",
         "panel": "C",
         "path": "figures/supplementary/curated/physical_calibration.pdf"
       },
       "D": {
-        "figure": "S23",
+        "figure": "S25",
         "panel": "D",
         "path": "figures/supplementary/curated/physical_calibration.pdf"
       }
@@ -742,17 +763,17 @@
     "omitted_panel_status": {
       "A": {
         "content": "Schematic of the published positive and negative causal decoder weights.",
-        "reason": "Redundant external display omitted; the inferential results remain in Table S7 and the protocol in Section S9.",
+        "reason": "Redundant external display omitted; the inferential results remain in Table S7 and the protocol in Section S11.",
         "numbers_at": "source_data/animal_learning_francioni/animal_signed_contrasts.csv"
       },
       "B": {
         "content": "Descriptive neuron-level residual distributions from the published source workbook.",
-        "reason": "Redundant external display omitted; the inferential results remain in Table S7 and the protocol in Section S9.",
+        "reason": "Redundant external display omitted; the inferential results remain in Table S7 and the protocol in Section S11.",
         "numbers_at": "source_data/animal_learning_francioni/neuron_sd_residual_distributions.csv"
       },
       "C": {
         "content": "Six paired animal contrasts and their bootstrap intervals.",
-        "reason": "Redundant external display omitted; the inferential results remain in Table S7 and the protocol in Section S9.",
+        "reason": "Redundant external display omitted; the inferential results remain in Table S7 and the protocol in Section S11.",
         "numbers_at": "source_data/animal_learning_francioni/animal_signed_contrasts.csv"
       }
     }
@@ -761,15 +782,15 @@
     "old_label": "fig:supp_physical_depth_controls",
     "original_asset": "figures/supplementary/figure_S18_panels_A-K.pdf",
     "original_sha256": "37f6cabc1bd80a5443133398adc629e0abad9e7f8f4da55eef95769b6df32dee",
-    "primary_destination": "S24",
+    "primary_destination": "S26",
     "panels": {
       "E": {
-        "figure": "S24",
+        "figure": "S26",
         "panel": "A",
         "path": "figures/supplementary/curated/physical_optimizer.pdf"
       },
       "F": {
-        "figure": "S24",
+        "figure": "S26",
         "panel": "B",
         "path": "figures/supplementary/curated/physical_optimizer.pdf"
       }
@@ -777,22 +798,22 @@
     "omitted_panel_status": {
       "A": {
         "content": "Serial-minus-grouped-star accuracy effects and the aligned-minus-reversed change in that D3 effect, in percentage points.",
-        "reason": "Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S22; no crop of this render is used.",
+        "reason": "Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S24; no crop of this render is used.",
         "numbers_at": "source_data/point_dendrite_credit_controls/paired_contrasts.csv"
       },
       "B": {
         "content": "Flexible point networks matched to active or total parameter count versus serial D3.",
-        "reason": "Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S22; no crop of this render is used.",
+        "reason": "Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S24; no crop of this render is used.",
         "numbers_at": "source_data/point_dendrite_credit_controls/combined_seed_outcomes.csv"
       },
       "C": {
         "content": "Accuracy across sensor--task alignment alpha at D1, D2 and D3.",
-        "reason": "Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S22; no crop of this render is used.",
+        "reason": "Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S24; no crop of this render is used.",
         "numbers_at": "source_data/physical_alignment_dose/condition_summary.csv"
       },
       "D": {
         "content": "Change in the D3-minus-D1 advantage from alpha = 0.25 to 0.75 and its within-seed fitted slope.",
-        "reason": "Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S22; no crop of this render is used.",
+        "reason": "Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S24; no crop of this render is used.",
         "numbers_at": "source_data/physical_alignment_dose/paired_contrasts.csv"
       }
     }
@@ -821,10 +842,10 @@
     "old_label": "fig:supp_morphology_detail",
     "original_asset": "figures/supplementary/figure_S20_panels_A-B.pdf",
     "original_sha256": "ecb2932b9a9c1a0f15d796765efb160bf4f7825f9b33a8f9db1c29a1d528ca04",
-    "primary_destination": "S25",
+    "primary_destination": "S27",
     "panels": {
       "B": {
-        "figure": "S25",
+        "figure": "S27",
         "panel": "B",
         "path": "figures/supplementary/curated/anatomy_capacity_controls.pdf"
       }
@@ -848,7 +869,7 @@
     "omitted_panel_status": {
       "A": {
         "content": "Within-cell controls: shunt and baseline-current-matched injection localization, and the true relation against a reassigned foreign template.",
-        "reason": "Replaced by the native render N29 (scripts/build_supplementary_figure_shunt_sensitivity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S29; no crop of this render is used.",
+        "reason": "Replaced by the native render N29 (scripts/build_supplementary_figure_shunt_sensitivity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S31; no crop of this render is used.",
         "numbers_at": "source_data/figure4/cell_primary_contrasts.csv"
       },
       "B": {
@@ -863,12 +884,12 @@
       },
       "C": {
         "content": "Dimensionless excitatory/inhibitory conductance-scale and normalized inhibitory-reversal sensitivity.",
-        "reason": "Replaced by the native render N29 (scripts/build_supplementary_figure_shunt_sensitivity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S29; no crop of this render is used.",
+        "reason": "Replaced by the native render N29 (scripts/build_supplementary_figure_shunt_sensitivity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S31; no crop of this render is used.",
         "numbers_at": "source_data/figure4/"
       },
       "D": {
         "content": "All mapped contacts versus directly typed presynaptic contacts, summarized by shunt-minus-current localization in eight reconstructed cells.",
-        "reason": "Replaced by the native render N29 (scripts/build_supplementary_figure_shunt_sensitivity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S29; no crop of this render is used.",
+        "reason": "Replaced by the native render N29 (scripts/build_supplementary_figure_shunt_sensitivity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S31; no crop of this render is used.",
         "numbers_at": "source_data/figure4/direct_typed_cell_primary_contrasts.csv"
       }
     }
@@ -882,7 +903,7 @@
     "omitted_panel_status": {
       "A": {
         "content": "Number of mapped functional presynaptic partners for each of the seven targets.",
-        "reason": "Replaced by the native render N31 (scripts/build_supplementary_figure_measured_transfer_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S31; no crop of this render is used.",
+        "reason": "Replaced by the native render N31 (scripts/build_supplementary_figure_measured_transfer_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S33; no crop of this render is used.",
         "numbers_at": "source_data/figure5/functional_target_metrics.csv"
       },
       "B": {
@@ -1006,25 +1027,25 @@
     "old_label": "fig:supp_irregular_wavelets",
     "original_asset": "figures/supplementary/figure_S25_panels_A-D.pdf",
     "original_sha256": "1cecc1a72ca95ea69cd2ce382eff5ac7d72762a0fba9c600dcff21c934cf4063",
-    "primary_destination": "S27",
+    "primary_destination": "S29",
     "panels": {
       "A": {
-        "figure": "S27",
+        "figure": "S29",
         "panel": "A",
         "path": "figures/supplementary/curated/coarse_energy.pdf"
       },
       "B": {
-        "figure": "S27",
+        "figure": "S29",
         "panel": "B",
         "path": "figures/supplementary/curated/coarse_energy.pdf"
       },
       "C": {
-        "figure": "S27",
+        "figure": "S29",
         "panel": "C",
         "path": "figures/supplementary/curated/coarse_energy.pdf"
       },
       "D": {
-        "figure": "S27",
+        "figure": "S29",
         "panel": "D",
         "path": "figures/supplementary/curated/coarse_energy.pdf"
       }
@@ -1064,15 +1085,15 @@
     "old_label": "fig:supp_pinky",
     "original_asset": "figures/supplementary/figure_S27_panels_A-C.pdf",
     "original_sha256": "a49ff3b2828dc0558706adebe1a668362ce08163c984eda035b65b4a9814dcf3",
-    "primary_destination": "S25",
+    "primary_destination": "S27",
     "panels": {
       "B": {
-        "figure": "S25",
+        "figure": "S27",
         "panel": "C",
         "path": "figures/supplementary/curated/anatomy_capacity_controls.pdf"
       },
       "D": {
-        "figure": "S25",
+        "figure": "S27",
         "panel": "D",
         "path": "figures/supplementary/curated/anatomy_capacity_controls.pdf"
       }
@@ -1104,10 +1125,10 @@
     "old_label": "fig:supp_physical_depth_diagnostics",
     "original_asset": "figures/supplementary/figure_S28_panels_A-B.pdf",
     "original_sha256": "4045e55dd5139ff4b5f97c6c735b3aa9b5ff57682bc7334c51500f8f367afeb9",
-    "primary_destination": "S24",
+    "primary_destination": "S26",
     "panels": {
       "B": {
-        "figure": "S24",
+        "figure": "S26",
         "panel": "C",
         "path": "figures/supplementary/curated/physical_optimizer.pdf"
       }
@@ -1230,7 +1251,7 @@
       },
       "B": {
         "content": "Serial D3, resource-identical grouped-point and approximately parameter-matched dense multilayer-perceptron controls; only the first two share modules and contacts.",
-        "reason": "Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S22; no crop of this render is used.",
+        "reason": "Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S24; no crop of this render is used.",
         "numbers_at": "source_data/nonlinear_physical_depth_confirmatory/"
       },
       "C": {
@@ -1240,7 +1261,7 @@
       },
       "D": {
         "content": "Four-level task, including D4, with aligned or reversed sensor placement.",
-        "reason": "Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S22; no crop of this render is used.",
+        "reason": "Replaced by the native render N22 (scripts/build_supplementary_figure_physical_architecture_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S24; no crop of this render is used.",
         "numbers_at": "source_data/physical_depth_h4_factorial/condition_summary.csv"
       },
       "E": {
@@ -1260,7 +1281,7 @@
       },
       "G": {
         "content": "Serial-minus-grouped accuracy at fixed D3 across task family and alignment under exact-path local credit assignment.",
-        "reason": "The distinct exact-path LocalCA comparison remains in Supplementary Figure S22C; main Figure 7C uses exact BP.",
+        "reason": "The distinct exact-path LocalCA comparison remains in Supplementary Figure S24C; main Figure 7C uses exact BP.",
         "numbers_at": "source_data/task_family_alignment/paired_contrasts.csv"
       },
       "H": {
@@ -1314,35 +1335,35 @@
     "old_label": "fig:supp_morphology_uncertainty",
     "original_asset": "figures/supplementary/figure_S33_panels_A-F.pdf",
     "original_sha256": "3a6ad356326371787c68b40b6f68a0ce03927e9893c5f061cef505ad099392a1",
-    "primary_destination": "S28",
+    "primary_destination": "S30",
     "panels": {
       "A": {
-        "figure": "S28",
+        "figure": "S30",
         "panel": "A",
         "path": "figures/supplementary/curated/anatomy_preprocessing.pdf"
       },
       "B": {
-        "figure": "S28",
+        "figure": "S30",
         "panel": "B",
         "path": "figures/supplementary/curated/anatomy_preprocessing.pdf"
       },
       "C": {
-        "figure": "S28",
+        "figure": "S30",
         "panel": "C",
         "path": "figures/supplementary/curated/anatomy_preprocessing.pdf"
       },
       "D": {
-        "figure": "S28",
+        "figure": "S30",
         "panel": "D",
         "path": "figures/supplementary/curated/anatomy_preprocessing.pdf"
       },
       "E": {
-        "figure": "S28",
+        "figure": "S30",
         "panel": "E",
         "path": "figures/supplementary/curated/anatomy_preprocessing.pdf"
       },
       "F": {
-        "figure": "S28",
+        "figure": "S30",
         "panel": "F",
         "path": "figures/supplementary/curated/anatomy_preprocessing.pdf"
       }
@@ -1353,25 +1374,25 @@
     "old_label": "fig:supp_response_baselines",
     "original_asset": "figures/supplementary/figure_S34_panels_A-D.pdf",
     "original_sha256": "6d04a5f2fdc938954d54b7b7cc6884e028abe1c4a06c620f6690606bca797593",
-    "primary_destination": "S32",
+    "primary_destination": "S34",
     "panels": {
       "A": {
-        "figure": "S32",
+        "figure": "S34",
         "panel": "A",
         "path": "figures/supplementary/curated/measured_predictor_controls.pdf"
       },
       "B": {
-        "figure": "S32",
+        "figure": "S34",
         "panel": "B",
         "path": "figures/supplementary/curated/measured_predictor_controls.pdf"
       },
       "C": {
-        "figure": "S32",
+        "figure": "S34",
         "panel": "C",
         "path": "figures/supplementary/curated/measured_predictor_controls.pdf"
       },
       "D": {
-        "figure": "S32",
+        "figure": "S34",
         "panel": "D",
         "path": "figures/supplementary/curated/measured_predictor_controls.pdf"
       }
@@ -1382,30 +1403,30 @@
     "old_label": "fig:supp_original_prospective_selection",
     "original_asset": "figures/supplementary/figure_S35_panels_A-F.pdf",
     "original_sha256": "f97defa94f4dc010c45ae73a211c0195dd2f8996dabbe09b08f1efadf28d720c",
-    "primary_destination": "S33",
+    "primary_destination": "S35",
     "panels": {
       "A": {
-        "figure": "S33",
+        "figure": "S35",
         "panel": "A",
         "path": "figures/supplementary/curated/original_selector.pdf"
       },
       "B": {
-        "figure": "S33",
+        "figure": "S35",
         "panel": "B",
         "path": "figures/supplementary/curated/original_selector.pdf"
       },
       "C": {
-        "figure": "S33",
+        "figure": "S35",
         "panel": "C",
         "path": "figures/supplementary/curated/original_selector.pdf"
       },
       "D": {
-        "figure": "S33",
+        "figure": "S35",
         "panel": "D",
         "path": "figures/supplementary/curated/original_selector.pdf"
       },
       "E": {
-        "figure": "S33",
+        "figure": "S35",
         "panel": "E",
         "path": "figures/supplementary/curated/original_selector.pdf"
       }
@@ -1514,7 +1535,7 @@
     "omitted_panel_status": {
       "A": {
         "content": "Final costed-test-loss regret for the feedback-only and joint-transfer fixed-cache learners, respectively; regret is excess above the best trained candidate. All candidate outcomes are retained; generating-rank and population-oracle policies receive explicitly privileged information. The primary forecast estimates its model from independent calibration observations. The observed-context-count baseline and its conditioning variant were added after development inspection and separately frozen before fresh outcomes.",
-        "reason": "Replaced by the native render N35 (scripts/build_supplementary_figure_finite_horizon_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S34; no crop of this frozen render is used.",
+        "reason": "Replaced by the native render N35 (scripts/build_supplementary_figure_finite_horizon_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S36; no crop of this frozen render is used.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/DERIVATION.md",
           "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/README.md",
@@ -1524,7 +1545,7 @@
       },
       "B": {
         "content": "Final costed-test-loss regret for the feedback-only and joint-transfer fixed-cache learners, respectively; regret is excess above the best trained candidate. All candidate outcomes are retained; generating-rank and population-oracle policies receive explicitly privileged information. The primary forecast estimates its model from independent calibration observations. The observed-context-count baseline and its conditioning variant were added after development inspection and separately frozen before fresh outcomes.",
-        "reason": "Replaced by the native render N35 (scripts/build_supplementary_figure_finite_horizon_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S34; no crop of this frozen render is used.",
+        "reason": "Replaced by the native render N35 (scripts/build_supplementary_figure_finite_horizon_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S36; no crop of this frozen render is used.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/DERIVATION.md",
           "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/README.md",
@@ -1534,7 +1555,7 @@
       },
       "C": {
         "content": "Differences among strong selectors at each rank in the joint arm. The full-batch and count-only baselines remain competitive. Curves and whiskers in",
-        "reason": "Replaced by the native render N35 (scripts/build_supplementary_figure_finite_horizon_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S34; no crop of this frozen render is used.",
+        "reason": "Replaced by the native render N35 (scripts/build_supplementary_figure_finite_horizon_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S36; no crop of this frozen render is used.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/DERIVATION.md",
           "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/README.md",
@@ -1544,7 +1565,7 @@
       },
       "D": {
         "content": "Median measured elapsed time on one CPU per twenty-candidate decision. Plug-in timings include calibration-model preparation; count-only time excludes shared calibration generation; the pilot includes sixteen candidate updates and calibration evaluation. Times measure these implementations, not hardware-independent algorithmic complexity. All finite-horizon methods choose feedback budget $K=r$, the generating task rank, on all fixed-cache tasks. The large improvement over the original scalar score therefore does not establish a large practical advantage for fine morphology selection in this linear family.",
-        "reason": "Replaced by the native render N35 (scripts/build_supplementary_figure_finite_horizon_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S34; no crop of this frozen render is used.",
+        "reason": "Replaced by the native render N35 (scripts/build_supplementary_figure_finite_horizon_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S36; no crop of this frozen render is used.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/DERIVATION.md",
           "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/README.md",
@@ -1563,7 +1584,7 @@
     "omitted_panel_status": {
       "A": {
         "content": "Original scalar forecasts versus final test half-mean-squared-error (MSE) in the feedback-only and joint arms of the new fixed-cache cohort.",
-        "reason": "Replaced by the native render N35 (scripts/build_supplementary_figure_finite_horizon_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S34; no crop of this frozen render is used.",
+        "reason": "Replaced by the native render N35 (scripts/build_supplementary_figure_finite_horizon_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S36; no crop of this frozen render is used.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/runs/development/seed_6100_audit.json",
           "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/runs/development/seed_6100_outcomes.csv",
@@ -1573,7 +1594,7 @@
       },
       "C": {
         "content": "The calibration-derived Gaussian stochastic-gradient-descent (SGD) forecast on the same 6,400 candidate--task cases per arm. Hexagons encode counts on a common logarithmic color scale; dashed lines mark equality.",
-        "reason": "Replaced by the native render N35 (scripts/build_supplementary_figure_finite_horizon_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S34; no crop of this frozen render is used.",
+        "reason": "Replaced by the native render N35 (scripts/build_supplementary_figure_finite_horizon_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S36; no crop of this frozen render is used.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/runs/development/seed_6100_audit.json",
           "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/runs/development/seed_6100_outcomes.csv",
@@ -1676,7 +1697,7 @@
     "omitted_panel_status": {
       "A": {
         "content": "Primary calibration: 256 labels, noise standard deviation (SD) 0.5; 192 observations for estimation/pilot fitting and 64 for pilot gating. The 255-term Walsh estimator receives no family labels, true support or coefficients. The pilot fits all twelve candidates for two sweeps. Choices are sealed; training restarts independently.",
-        "reason": "Replaced by the native render N36 (scripts/build_supplementary_figure_morphology_estimation_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S35; no crop of this frozen render is used.",
+        "reason": "Replaced by the native render N36 (scripts/build_supplementary_figure_morphology_estimation_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S37; no crop of this frozen render is used.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/HANDOFF.md",
           "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/METHODS.md",
@@ -1686,7 +1707,7 @@
       },
       "B": {
         "content": "Prespecified pooled fixed-baseline-minus-estimated and pilot-minus-estimated normalized mean squared error (NMSE). Whiskers are Bonferroni-adjusted 97.5\\% paired bootstrap intervals; the dotted line marks the 0.01-NMSE meaningful-improvement margin.",
-        "reason": "Replaced by the native render N36 (scripts/build_supplementary_figure_morphology_estimation_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S35; no crop of this frozen render is used.",
+        "reason": "Replaced by the native render N36 (scripts/build_supplementary_figure_morphology_estimation_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S37; no crop of this frozen render is used.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/HANDOFF.md",
           "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/METHODS.md",
@@ -1696,7 +1717,7 @@
       },
       "C": {
         "content": "Excess clean-test NMSE above the best trained candidate across calibration sizes; solid curves use noise SD 0.5 and dashed curves no noise.",
-        "reason": "Replaced by the native render N36 (scripts/build_supplementary_figure_morphology_estimation_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S35; no crop of this frozen render is used.",
+        "reason": "Replaced by the native render N36 (scripts/build_supplementary_figure_morphology_estimation_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S37; no crop of this frozen render is used.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/HANDOFF.md",
           "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/METHODS.md",
@@ -1706,7 +1727,7 @@
       },
       "D": {
         "content": "Family-specific primary regret for estimated interactions, the development-fixed/estimated-rank baseline and the fitting pilot; pooled superiority is not uniform across families.",
-        "reason": "Replaced by the native render N36 (scripts/build_supplementary_figure_morphology_estimation_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S35; no crop of this frozen render is used.",
+        "reason": "Replaced by the native render N36 (scripts/build_supplementary_figure_morphology_estimation_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S37; no crop of this frozen render is used.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/HANDOFF.md",
           "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/METHODS.md",
@@ -1716,7 +1737,7 @@
       },
       "E": {
         "content": "Secondary adaptive trees trained with alternating least squares (ALS), versus the best trained twelve-candidate menu and a full-target construction oracle. Random-interaction errors remain.",
-        "reason": "Replaced by the native render N36 (scripts/build_supplementary_figure_morphology_estimation_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S35; no crop of this frozen render is used.",
+        "reason": "Replaced by the native render N36 (scripts/build_supplementary_figure_morphology_estimation_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S37; no crop of this frozen render is used.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/HANDOFF.md",
           "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/METHODS.md",
@@ -1726,7 +1747,7 @@
       },
       "F": {
         "content": "Elapsed time (median and interquartile range) on one CPU for eighty tasks: estimation/scoring of twelve trees versus pilot fitting/gating, excluding final training. All 2,240 ALS fits are retained.",
-        "reason": "Replaced by the native render N36 (scripts/build_supplementary_figure_morphology_estimation_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S35; no crop of this frozen render is used.",
+        "reason": "Replaced by the native render N36 (scripts/build_supplementary_figure_morphology_estimation_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S37; no crop of this frozen render is used.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/HANDOFF.md",
           "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/METHODS.md",
@@ -1736,7 +1757,7 @@
       },
       "G": {
         "content": "Independent twenty-seed Adam cohort.",
-        "reason": "Replaced by the native render N36 (scripts/build_supplementary_figure_morphology_estimation_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S35; no crop of this frozen render is used.",
+        "reason": "Replaced by the native render N36 (scripts/build_supplementary_figure_morphology_estimation_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S37; no crop of this frozen render is used.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/HANDOFF.md",
           "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/METHODS.md",
@@ -1746,7 +1767,7 @@
       },
       "H": {
         "content": "Independent twenty-seed Adam cohort.",
-        "reason": "Replaced by the native render N36 (scripts/build_supplementary_figure_morphology_estimation_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S35; no crop of this frozen render is used.",
+        "reason": "Replaced by the native render N36 (scripts/build_supplementary_figure_morphology_estimation_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S37; no crop of this frozen render is used.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/HANDOFF.md",
           "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/METHODS.md",
@@ -2125,12 +2146,12 @@
     "omitted_panel_status": {
       "A": {
         "content": "Focal-shunt and baseline-current-matched injection localization across doses relative to local input conductance, for the fixed Jacobian and the passive model at the same calibration.",
-        "reason": "Replaced by the native render N30 (scripts/build_supplementary_figure_shunt_replication_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S30; no crop of this render is used.",
+        "reason": "Replaced by the native render N30 (scripts/build_supplementary_figure_shunt_replication_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S32; no crop of this render is used.",
         "numbers_at": "source_data/focal_selectivity_active_ensemble/condition_summary.csv"
       },
       "B": {
         "content": "Paired shunt-minus-current localization contrasts at the three doses in the eight-cell weak-channel ensemble.",
-        "reason": "Replaced by the native render N30 (scripts/build_supplementary_figure_shunt_replication_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S30; no crop of this render is used.",
+        "reason": "Replaced by the native render N30 (scripts/build_supplementary_figure_shunt_replication_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S32; no crop of this render is used.",
         "numbers_at": "source_data/focal_selectivity_active_ensemble/paired_contrasts.csv"
       }
     }
@@ -2496,7 +2517,7 @@
       },
       "C": {
         "content": "Mean split-half Spearman reliability in 1,000 independent calibration datasets against the measured value, for 125 partner records.",
-        "reason": "Replaced by the native render N31 (scripts/build_supplementary_figure_measured_transfer_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S31; no crop of this render is used.",
+        "reason": "Replaced by the native render N31 (scripts/build_supplementary_figure_measured_transfer_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S33; no crop of this render is used.",
         "numbers_at": "source_data/measured_alignment_power/reliability_calibration_audit.csv"
       }
     }
@@ -2510,7 +2531,7 @@
     "omitted_panel_status": {
       "A": {
         "content": "Schematic of the measured-response prediction model on a reconstructed target.",
-        "reason": "Omitted; the same construction is drawn at the main-text type scale in main Fig. 9.",
+        "reason": "Omitted; the same construction is shown in main Fig. 9.",
         "numbers_at": "source_data/credit_first_figures/"
       },
       "B": {
@@ -2525,12 +2546,12 @@
       },
       "D": {
         "content": "Response-prediction normalized MSE for exact learning, treeless ridge and the restricted dictionaries, with the random and shuffled surrogate rows.",
-        "reason": "Prediction outcomes remain in Table S6 and are compared with linear baselines in Figure S32A; the repeated absolute-error display was removed.",
+        "reason": "Prediction outcomes remain in Table S6 and are compared with linear baselines in Figure S34A; the repeated absolute-error display was removed.",
         "numbers_at": "source_data/credit_first_figures/figure_08_prediction_summary.csv"
       },
       "E": {
         "content": "Common-checkpoint update reconstruction by the unrestricted fixed transfer profile, the restricted ancestry profile and oracle trialwise amplitudes.",
-        "reason": "Replaced by the native render N31 (scripts/build_supplementary_figure_measured_transfer_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S31; no crop of this render is used.",
+        "reason": "Replaced by the native render N31 (scripts/build_supplementary_figure_measured_transfer_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S33; no crop of this render is used.",
         "numbers_at": "source_data/fulltree_within_span_oracle/condition_summary.csv"
       }
     }
@@ -2952,35 +2973,35 @@
     "old_label": "fig:si_finite_horizon",
     "original_asset": "figures/supplementary/figure_finite_horizon_native.pdf",
     "original_sha256": "a43d67fd9bd3ea2bfe6c4fba1555c35c3d24efe114669ae545f3f1b0f0651f98",
-    "primary_destination": "S34",
+    "primary_destination": "S36",
     "panels": {
       "A": {
-        "figure": "S34",
+        "figure": "S36",
         "panel": "A",
         "path": "figures/supplementary/curated/finite_horizon.pdf"
       },
       "B": {
-        "figure": "S34",
+        "figure": "S36",
         "panel": "B",
         "path": "figures/supplementary/curated/finite_horizon.pdf"
       },
       "C": {
-        "figure": "S34",
+        "figure": "S36",
         "panel": "C",
         "path": "figures/supplementary/curated/finite_horizon.pdf"
       },
       "D": {
-        "figure": "S34",
+        "figure": "S36",
         "panel": "D",
         "path": "figures/supplementary/curated/finite_horizon.pdf"
       },
       "E": {
-        "figure": "S34",
+        "figure": "S36",
         "panel": "E",
         "path": "figures/supplementary/curated/finite_horizon.pdf"
       },
       "F": {
-        "figure": "S34",
+        "figure": "S36",
         "panel": "F",
         "path": "figures/supplementary/curated/finite_horizon.pdf"
       }
@@ -2991,45 +3012,45 @@
     "old_label": "fig:si_morphology_estimation",
     "original_asset": "figures/supplementary/figure_morphology_estimation_native.pdf",
     "original_sha256": "06f874cbb45f43a3c6b7902038c3b3c25f88e2bf2b0a4a6319270bbf7cc780f3",
-    "primary_destination": "S35",
+    "primary_destination": "S37",
     "panels": {
       "A": {
-        "figure": "S35",
+        "figure": "S37",
         "panel": "A",
         "path": "figures/supplementary/curated/morphology_estimation.pdf"
       },
       "B": {
-        "figure": "S35",
+        "figure": "S37",
         "panel": "B",
         "path": "figures/supplementary/curated/morphology_estimation.pdf"
       },
       "C": {
-        "figure": "S35",
+        "figure": "S37",
         "panel": "C",
         "path": "figures/supplementary/curated/morphology_estimation.pdf"
       },
       "D": {
-        "figure": "S35",
+        "figure": "S37",
         "panel": "D",
         "path": "figures/supplementary/curated/morphology_estimation.pdf"
       },
       "E": {
-        "figure": "S35",
+        "figure": "S37",
         "panel": "E",
         "path": "figures/supplementary/curated/morphology_estimation.pdf"
       },
       "F": {
-        "figure": "S35",
+        "figure": "S37",
         "panel": "F",
         "path": "figures/supplementary/curated/morphology_estimation.pdf"
       },
       "G": {
-        "figure": "S35",
+        "figure": "S37",
         "panel": "G",
         "path": "figures/supplementary/curated/morphology_estimation.pdf"
       },
       "H": {
-        "figure": "S35",
+        "figure": "S37",
         "panel": "H",
         "path": "figures/supplementary/curated/morphology_estimation.pdf"
       }
@@ -3084,40 +3105,40 @@
     "old_label": "fig:si_physical_architecture",
     "original_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
     "original_sha256": "cd4e1f0183cebd004218cd6e12591845ceebf424a8ecbc12c3dc1c1c90239844",
-    "primary_destination": "S22",
+    "primary_destination": "S24",
     "panels": {
       "A": {
-        "figure": "S22",
+        "figure": "S24",
         "panel": "A",
         "path": "figures/supplementary/curated/physical_architecture.pdf"
       },
       "B": {
-        "figure": "S22",
+        "figure": "S24",
         "panel": "B",
         "path": "figures/supplementary/curated/physical_architecture.pdf"
       },
       "C": {
-        "figure": "S22",
+        "figure": "S24",
         "panel": "C",
         "path": "figures/supplementary/curated/physical_architecture.pdf"
       },
       "D": {
-        "figure": "S22",
+        "figure": "S24",
         "panel": "D",
         "path": "figures/supplementary/curated/physical_architecture.pdf"
       },
       "E": {
-        "figure": "S22",
+        "figure": "S24",
         "panel": "E",
         "path": "figures/supplementary/curated/physical_architecture.pdf"
       },
       "F": {
-        "figure": "S22",
+        "figure": "S24",
         "panel": "F",
         "path": "figures/supplementary/curated/physical_architecture.pdf"
       },
       "G": {
-        "figure": "S22",
+        "figure": "S24",
         "panel": "G",
         "path": "figures/supplementary/curated/physical_architecture.pdf"
       }
@@ -3128,30 +3149,30 @@
     "old_label": "fig:si_shunt_replication",
     "original_asset": "figures/supplementary/figure_shunt_replication_native.pdf",
     "original_sha256": "99a77f980e0ad8aff168fe199023c5864e16dd684ace7ce81e02f0e7bd6d72c3",
-    "primary_destination": "S30",
+    "primary_destination": "S32",
     "panels": {
       "A": {
-        "figure": "S30",
+        "figure": "S32",
         "panel": "A",
         "path": "figures/supplementary/curated/shunt_replication.pdf"
       },
       "B": {
-        "figure": "S30",
+        "figure": "S32",
         "panel": "B",
         "path": "figures/supplementary/curated/shunt_replication.pdf"
       },
       "C": {
-        "figure": "S30",
+        "figure": "S32",
         "panel": "C",
         "path": "figures/supplementary/curated/shunt_replication.pdf"
       },
       "D": {
-        "figure": "S30",
+        "figure": "S32",
         "panel": "D",
         "path": "figures/supplementary/curated/shunt_replication.pdf"
       },
       "E": {
-        "figure": "S30",
+        "figure": "S32",
         "panel": "E",
         "path": "figures/supplementary/curated/shunt_replication.pdf"
       }
@@ -3162,25 +3183,25 @@
     "old_label": "fig:si_measured_transfer_geometry",
     "original_asset": "figures/supplementary/figure_measured_transfer_geometry_native.pdf",
     "original_sha256": "13c9a4f277ee888ca55f9cdab3a87a33c5d40545cb46901360788905cab14c85",
-    "primary_destination": "S31",
+    "primary_destination": "S33",
     "panels": {
       "A": {
-        "figure": "S31",
+        "figure": "S33",
         "panel": "A",
         "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
       },
       "B": {
-        "figure": "S31",
+        "figure": "S33",
         "panel": "B",
         "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
       },
       "C": {
-        "figure": "S31",
+        "figure": "S33",
         "panel": "C",
         "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
       },
       "D": {
-        "figure": "S31",
+        "figure": "S33",
         "panel": "D",
         "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
       }
@@ -3191,35 +3212,35 @@
     "old_label": "fig:si_shunt_sensitivity",
     "original_asset": "figures/supplementary/figure_shunt_sensitivity_native.pdf",
     "original_sha256": "84a4e4a8ed1e2f0e3c2503d4453ec4a75a839e931d0cdc4ff06b115b763c5afc",
-    "primary_destination": "S29",
+    "primary_destination": "S31",
     "panels": {
       "A": {
-        "figure": "S29",
+        "figure": "S31",
         "panel": "A",
         "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
       },
       "B": {
-        "figure": "S29",
+        "figure": "S31",
         "panel": "B",
         "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
       },
       "C": {
-        "figure": "S29",
+        "figure": "S31",
         "panel": "C",
         "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
       },
       "D": {
-        "figure": "S29",
+        "figure": "S31",
         "panel": "D",
         "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
       },
       "E": {
-        "figure": "S29",
+        "figure": "S31",
         "panel": "E",
         "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
       },
       "F": {
-        "figure": "S29",
+        "figure": "S31",
         "panel": "F",
         "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
       }
@@ -3253,5 +3274,19 @@
         "numbers_at": "analytic; no table"
       }
     }
+  },
+  "N9": {
+    "old_label": "fig:si_input_coverage_mnist",
+    "original_asset": "figures/supplementary/figure_input_coverage_mnist_native.pdf",
+    "original_sha256": "de123d5520b37fe5933c6ca292700a67c4419288a8e03e2693a60b8abe82a3ad",
+    "primary_destination": "S9",
+    "panels": {
+      "A": {
+        "figure": "S9",
+        "panel": "D",
+        "path": "figures/supplementary/curated/input_coverage_depth.pdf"
+      }
+    },
+    "omitted_panel_status": {}
   }
 }

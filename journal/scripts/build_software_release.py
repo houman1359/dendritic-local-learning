@@ -149,6 +149,7 @@ JOURNAL_ANALYSIS_RECORDS = (
     "TRAINED_SUBTREE_ADDRESS_EXPERIMENT_CONTRACT.md",
 )
 JOURNAL_SCRIPTS = (
+    'build_supplementary_figure_input_coverage_mnist_native.py',
     'build_supplementary_figure_boolean_capacity_native.py',
     'build_supplementary_figure_boolean_learning_native.py',
     'build_supplementary_figure_conductance_grouping_native.py',

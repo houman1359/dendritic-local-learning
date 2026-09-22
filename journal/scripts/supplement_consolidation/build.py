@@ -31,7 +31,7 @@ from specification import (FIGURES, REMOVED_SHARED_REGIONS, SHARED_LEGENDS, WHOL
  PANEL_BOUNDS, PANEL_REDACTIONS, PANEL_PATCHES, PANEL_TEXT, NATIVE_LEGENDS,
  EXPLICIT_NUMERICAL_SOURCES, EXTRA_ASSETS, CAPTION_APPEND, ALIAS_EXTRA,
  ALIAS_BLACKLIST, PANEL_CONTENT, PANEL_REASONS, SOURCE_DATA_DIRS,
- ASSET_PATH_OVERRIDES, SCALE_EXEMPTIONS)
+ ASSET_PATH_OVERRIDES, SCALE_EXEMPTIONS, CONSOLIDATED_FIGURE_NUMBERS)
 from tex_sources import expanded_tex
 import journal_style as JS
 OUT=J/'figures/supplementary/curated'; CFG=J/'configs/supplement_consolidation'; TEX=J/'supplementary/curated'
@@ -47,9 +47,9 @@ LETTER_GUTTER=11.0  # 9-pt bold letter advance plus the 3.4-pt content gap
 ROW_COUNTS={
  'credit_validation':(2,1), 'reliability_gain':(2,2),
  'same_span_conditioning':(2,2), 'image_generalization':(3,2),
- 'input_coverage_depth':(3,3), 'branch_conflict_controls':(2,2),
+ 'mechanistic_chain':(3,), 'input_coverage_depth':(3,1), 'branch_conflict_controls':(2,2),
  'ancestry_coefficients':(1,2), 'physical_optimizer':(2,1),
- 'anatomy_capacity_controls':(2,2), 'inhibitory_spatial_controls':(1,3,2),
+ 'anatomy_capacity_controls':(2,2), 'inhibitory_spatial_controls':(1,2,2),
 }
 
 
@@ -245,7 +245,7 @@ def main():
  bold=font_manager.findfont(font_manager.FontProperties(family=JS.SANS_FAMILY,weight='bold'))
  book=font_manager.findfont(font_manager.FontProperties(family=JS.SANS_FAMILY))
  assets=[];mapping={k:[] for k in REG};captions={};scales={}
- for number,(ident,module,groups,title,caption) in enumerate(FIGURES,1):
+ for number,(ident,module,groups,title,caption) in zip(CONSOLIDATED_FIGURE_NUMBERS, FIGURES, strict=True):
   dest=OUT/(ident+'.pdf'); label='fig:si_'+ident
   sources=[k for k,_ in groups]
   for key in sources:
@@ -341,7 +341,8 @@ def main():
   print(f'S{number:<3d} {ident:<30s} height {output[0].rect.height:7.1f}  scale {scale:.3f}  panels {len(panelmap)}')
  for key in mapping:
   if not mapping[key]:
-   fallback={'S17':('tab:animal_credit','Animal-level estimates and inference are retained in the external signed-credit table and Section S9; the redundant descriptive figure remains archived.'),
+   fallback={'S8':('note:credit_images','Historical fixed-budget noise outcomes are archived because the executed generator is unresolved; they are excluded from current task and depth claims.'),
+             'S17':('tab:animal_credit','Animal-level estimates and inference are retained in the external signed-credit table and Section S11; the redundant descriptive figure remains archived.'),
              'S9':('fig:si_utility_signal_noise','Old S9A and S9C are re-rendered on one dimensionless axis as panel E of the merged utility figure; the remaining panels are recorded in omitted_panel_status.'),
              'S6':('note:conflict_ancestry','Static quadratic interference remains in the derivation; the original numerical illustration is archived.'),
              'S16':('note:interior_optimum','Designed and retrospective optimum comparisons remain numerically in the operator-theory note; the full diagnostic is archived.'),
@@ -363,21 +364,21 @@ def main():
              'S51':('fig:si_conductance_optimization','Replaced by the native render N20, drawn from the same source tables and pasted whole as Supplementary Fig. S20.'),
              'S52':('fig:si_conductance_optimization','Replaced by the native render N20, drawn from the same source tables and pasted whole as Supplementary Fig. S20.'),
              'S53':('fig:si_local_gate_controls','Replaced by the native render N21, drawn from the same source tables and pasted whole as Supplementary Fig. S21.'),
-             'S38':('fig:si_finite_horizon','Replaced by the native render N35, drawn from the same source tables and pasted whole as Supplementary Fig. S34.'),
-             'S39':('fig:si_finite_horizon','Replaced by the native render N35, drawn from the same source tables and pasted whole as Supplementary Fig. S34.'),
-             'S41':('fig:si_morphology_estimation','Replaced by the native render N36, drawn from the same source tables and pasted whole as Supplementary Fig. S35.'),
+             'S38':('fig:si_finite_horizon','Replaced by the native render N35, drawn from the same source tables and pasted whole as Supplementary Fig. S36.'),
+             'S39':('fig:si_finite_horizon','Replaced by the native render N35, drawn from the same source tables and pasted whole as Supplementary Fig. S36.'),
+             'S41':('fig:si_morphology_estimation','Replaced by the native render N36, drawn from the same source tables and pasted whole as Supplementary Fig. S37.'),
              # 2026-09-13: the last four sheets that pasted crops of frozen or training-script renders are pasted whole from native renders; the retired keys keep their provenance entries.
              'S46':('fig:si_utility_signal_noise','Replaced by the native render N3, drawn from the same source tables and pasted whole as Supplementary Fig. S3.'),
              'S5':('fig:si_utility_signal_noise','Panel E is redrawn in the native render N3 from the same alignment-controlled tables and pasted whole as Supplementary Fig. S3F; the training builder is never run.'),
              'X1':('fig:si_utility_signal_noise','Redrawn inside the native render N3 as Supplementary Fig. S3E; the separate component is no longer pasted.'),
              'X2':('fig:si_utility_signal_noise','Redrawn inside the native render N3 as Supplementary Fig. S3G; the separate component is no longer pasted.'),
-             'S31':('fig:si_physical_architecture','Replaced by the native render N22, drawn from the same source tables and pasted whole as Supplementary Fig. S22.'),
-             'S47':('fig:si_shunt_replication','Replaced by the native render N30, drawn from the same source tables and pasted whole as Supplementary Fig. S30D,E.'),
-             'S22':('fig:si_measured_transfer_geometry','Replaced by the native render N31, drawn from the same source tables and pasted whole as Supplementary Fig. S31A.'),
-             'M9':('fig:si_measured_transfer_geometry','Replaced by the native render N31, drawn from the same source tables and pasted whole as Supplementary Fig. S31B--D.'),
-             'S56':('fig:si_measured_transfer_geometry','Replaced by the native render N31, drawn from the same calibration table and pasted whole as Supplementary Fig. S31E.'),
-             'S11':('fig:si_shunt_sensitivity','Replaced by the native render N29, which ports the legacy panels to the canvas from the same source tables and is pasted whole as Supplementary Fig. S29.'),
-             'S21':('fig:si_shunt_sensitivity','Replaced by the native render N29, drawn from the same source tables and pasted whole as Supplementary Fig. S29.')}.get(key)
+             'S31':('fig:si_physical_architecture','Replaced by the native render N22, drawn from the same source tables and pasted whole as Supplementary Fig. S24.'),
+             'S47':('fig:si_shunt_replication','Replaced by the native render N30, drawn from the same source tables and pasted whole as Supplementary Fig. S32D,E.'),
+             'S22':('fig:si_measured_transfer_geometry','Replaced by the native render N31, drawn from the same source tables and pasted whole as Supplementary Fig. S33A.'),
+             'M9':('fig:si_measured_transfer_geometry','Replaced by the native render N31, drawn from the same source tables and pasted whole as Supplementary Fig. S33B--D.'),
+             'S56':('fig:si_measured_transfer_geometry','Replaced by the native render N31, drawn from the same calibration table and pasted whole as Supplementary Fig. S33E.'),
+             'S11':('fig:si_shunt_sensitivity','Replaced by the native render N29, which ports the legacy panels to the canvas from the same source tables and is pasted whole as Supplementary Fig. S31.'),
+             'S21':('fig:si_shunt_sensitivity','Replaced by the native render N29, drawn from the same source tables and pasted whole as Supplementary Fig. S31.')}.get(key)
    if not fallback:raise ValueError('No destination: '+key)
    mapping[key]=[{'kind':'table' if key in ['S17','S26'] else 'section','label':fallback[0],'note':fallback[1]}]
  manifest={'schema':'supplement-consolidation/1','selection_is_editorial':True,'numerical_results_changed':False,'builder':'scripts/supplement_consolidation/build.py','specification':'scripts/supplement_consolidation/specification.py','source_registry':'scripts/supplement_consolidation/original_assets.json','frozen_input_hashes':{str(p.relative_to(J)):sha(p) for p in [HERE/'original_assets.json',HERE/'original_captions.json',HERE/'original_provenance.json']},'paste_scale_target':PASTE_SCALE,'height_cap_pt':HEIGHT_CAP,'assets':assets,'old_to_new':mapping}

@@ -6,7 +6,7 @@ Ten numbered main figures follow this task-to-credit argument. Figures 5 and 6 s
 
 The September 20 review completion adds a nonlinear-parent sensitivity rescue, separable-target control, noise-free and relative-noise-matched interaction tests, and context-gradient alignment from 400 archived checkpoints. The recovery record, outcomes and storage locations are in [analysis/REVIEW_RECOVERY_20260920.md](analysis/REVIEW_RECOVERY_20260920.md).
 
-The Supplementary Information contains 36 figures, S1–S36, and 18 numbered tables. It retains the representability and morphology-estimation analyses, the unsuccessful prospective initialization-based selector, Boolean controls, alternative optimizers and expanded biological/model diagnostics. These support the credit argument without replacing it with a general morphology-selection claim. The current display map is in [figures/README.md](figures/README.md).
+The Supplementary Information contains 37 figures, S1–S37, and numbered reference tables. It retains the representability and morphology-estimation analyses, the unsuccessful prospective initialization-based selector, Boolean controls, alternative optimizers and expanded biological/model diagnostics. These support the credit argument without replacing it with a general morphology-selection claim. The current display map is in [figures/README.md](figures/README.md).
 
 ## Files and reproducibility
 

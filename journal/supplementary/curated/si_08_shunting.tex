@@ -36,7 +36,7 @@ the focal experiments.
 Assume additionally that the nonzero off-diagonal entries of $G$ form a
 connected tree rooted at the soma $s$, and that the adjoint source is
 $\ell\bm e_s$ for a fixed scalar somatic loss derivative $\ell$. Write
-$R=G^{-1}$ and $\bm h=R\bm e_s>0$. For a shunt at $k$, let
+$R=G^{-1}$ and $\bm h^{(0)}=R\bm e_s>0$. For a shunt at $k$, let
 $\mathcal A_k$ be the vertices on the path from $s$ to $k$, including both
 endpoints. For each $a\in\mathcal A_k$, define the disjoint block
 $P_a=\{i:\operatorname{LCA}(i,k)=a\}$, where $\operatorname{LCA}$ is the
@@ -50,7 +50,7 @@ q'_i=\eta_a q_i\quad(i\in P_a),\qquad
 \end{equation}
 For finite $\kappa\geq0$, every gain satisfies $0<\eta_a\leq1$.
 Let $B_k$ have columns $\bm 1_{P_a}$ and define the baseline-weighted
-partition dictionary $D_k=\operatorname{diag}(\bm h)B_k$. With
+partition dictionary $D_k=\operatorname{diag}(\bm h^{(0)})B_k$. With
 $\Gamma_k=\operatorname{diag}(\eta_a)$,
 \begin{equation}
 \bm q=\ell D_k\bm 1,\qquad

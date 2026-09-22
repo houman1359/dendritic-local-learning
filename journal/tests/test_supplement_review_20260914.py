@@ -63,7 +63,9 @@ def test_reviewed_caption_survives_regeneration(specification, ident):
 
 def test_uncertainty_and_bound_scope(captions):
     cap = captions["mechanistic_chain"]
-    assert "five paired seeds" in cap and "five retained runs per condition" in cap
+    assert "five paired seeds" in cap and "Points are retained runs" in cap
+    assert "unresolved execution or normalization settings" in cap
+    assert "excluded from the displayed evidence" in cap
     assert "one sample standard deviation" in cap
     assert "below 0.02" not in cap and "0.6--0.9" not in cap
     cap = captions["utility_signal_noise"]
@@ -75,8 +77,7 @@ def test_uncertainty_and_bound_scope(captions):
 
 def test_morphology_endpoint_and_alignment_scope(captions):
     cap = captions["input_coverage_depth"]
-    for token in ("$[16]$", "$[4,4]$", "$[2,2,4]$", "$[2,2,2,2]$",
-                  "16, 20, 22 and 30", "eight-module physical-depth"):
+    for token in ("MNIST", "Each seed averages shunting and raw-additive models", "executed generator is unresolved"):
         assert token in cap
     cap = captions["ancestry_coefficients"]
     assert "held-out accuracy" in cap and "0.82" in cap and "0.64" in cap
