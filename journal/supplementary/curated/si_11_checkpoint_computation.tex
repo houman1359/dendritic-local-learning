@@ -21,7 +21,7 @@ Source records under \path{source_data/checkpoint_computation/} include the eval
 \begin{figure}[p]
 \centering
 \includegraphics[width=\textwidth]{supplementary/curated/checkpoint_computation.pdf}
-\caption{\textbf{Diagnostic controls and full responses support the branch-selection and interaction results.}
+\caption{\textbf{Diagnostic controls and full responses support the branch-selection and interaction results.} Panels \textbf{A,B} use standalone NumPy seven-compartment models; \textbf{C--H} use DendriNet populations.
 \textbf{A}, Opposed-minus-aligned change in broadcast-minus-gate NMSE in the single-neuron task, using validation-selected states within each training budget. Hairlines connect the twenty paired seeds; diamonds and whiskers show means and paired 95\% seed-bootstrap intervals.
 \textbf{B}, Earlier calibrated-broadcast cohort: fraction of distal-gradient magnitude retained after context averaging, $\|\sum_c p_c\bm v_c\|/\sum_c p_c\|\bm v_c\|$, for context-specific gradients $\bm v_c$ and probabilities $p_c$. One indicates no cancellation. Exact and calibrated-broadcast gradients are evaluated at the same initial and broadcast-trained states. Hairlines connect seeds; this cohort is distinct from \textbf{A}.
 \textbf{C}, Original separable-population cohort. Left: ordinary and severity-three errors at selected rates, then severity-three errors at common rate 0.1; labels give broadcast/gate ratios of means. Right: tonic/current forward controls at severity three. Their cue-derived shunting gate remains a counterfactual backward signal, not the control model's actual resistance. Red, exact; amber, broadcast; green, resistance gate.

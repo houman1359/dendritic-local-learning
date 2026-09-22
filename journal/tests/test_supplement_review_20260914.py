@@ -71,7 +71,8 @@ def test_uncertainty_and_bound_scope(captions):
     cap = captions["utility_signal_noise"]
     assert r"bound-optimal nonnegative step $\eta^*$" in cap
     assert "smoothness along the update segments" in cap and "zero updates" in cap
-    assert r"\textbf{E} diagnoses actual trained checkpoints" in cap
+    assert r"DendriNet checkpoints (\textbf{E})" in cap
+    assert "120 trained checkpoints" in cap
     assert r"\textbf{F} imposes route alignment and uses oracle projections" in cap
 
 

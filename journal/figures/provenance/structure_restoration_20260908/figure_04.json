@@ -33,7 +33,7 @@
     "source_data/curated_publication/noise_controls_provenance.json": "4f7b1d7a4a610247123f8ec2187b92cc516351a7787f360cf62fcb01065ba7b3"
   },
   "builder_sha256": {
-    "scripts/credit_first_figures/build_restored_main.py": "67f3a15f007952738e847ba33450f642e8135767981294a42480d868f7844709",
+    "scripts/credit_first_figures/build_restored_main.py": "169c0b899a1883d71623f4661bc6bc47e14fb65a74a509e89c50a0291157d6c7",
     "scripts/credit_first_figures/focused_main_evidence.py": "e045f0fc26ce8554af19f7d2b1ee9683ec852899f19e02e76e78163b0d74e773",
     "scripts/figure_canvas.py": "7f2983ff0c52a30dd5ba9bdeccc6fda940b4366ad872cbf0755fec5daa1dd7aa",
     "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a",

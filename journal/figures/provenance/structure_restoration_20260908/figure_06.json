@@ -27,7 +27,7 @@
     "source_data/physical_depth_budget/canonical/extension_paired_contrasts.csv": "52edceb0a920f6bd3548550deb81bc1b11a065da8d56d0ae7027157ca05e02d1"
   },
   "builder_sha256": {
-    "scripts/credit_first_figures/build_restored_main.py": "67f3a15f007952738e847ba33450f642e8135767981294a42480d868f7844709",
+    "scripts/credit_first_figures/build_restored_main.py": "169c0b899a1883d71623f4661bc6bc47e14fb65a74a509e89c50a0291157d6c7",
     "scripts/credit_first_figures/focused_main_evidence.py": "e045f0fc26ce8554af19f7d2b1ee9683ec852899f19e02e76e78163b0d74e773",
     "scripts/figure_canvas.py": "7f2983ff0c52a30dd5ba9bdeccc6fda940b4366ad872cbf0755fec5daa1dd7aa",
     "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a"
