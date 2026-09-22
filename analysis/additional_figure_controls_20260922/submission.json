@@ -1,0 +1,12 @@
+{
+  "submitted_utc": "2026-09-22T20:25:14.953859+00:00",
+  "preflight_job": "47813573",
+  "array_job": "47813575",
+  "analysis_job": "47813579",
+  "manifest_sha256": "31e0a5a1d7879b6b420c374c80b0e060e24080aa522e5d9acec747373753e95c",
+  "partition": "kempner_eng",
+  "constraint": "h200",
+  "throttle": 12,
+  "n_jobs": 90,
+  "n_runs": 220
+}
