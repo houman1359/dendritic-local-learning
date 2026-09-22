@@ -36,7 +36,8 @@ $G$, $R_a$, $R_m$, $\kappa$ & Reciprocal conductance matrix, axial resistivity, 
 Bold symbols are vectors or matrices; $\mathsf T$ denotes transpose,
 $\|\cdot\|$ the Euclidean norm, $\|\cdot\|_F$ the matrix Frobenius norm,
 and $\mathbf1[\cdot]$ an indicator. Hats denote supplied approximations or
-estimates; primes denote post-intervention values in the cable experiments.
+estimates. A prime on a function, $f'$, denotes its derivative; primes on
+cable states such as $V'$ denote post-intervention values.
 An \emph{oracle} uses an exact field or target-dependent quantity that is
 not available to the restricted learner. A seed is one independent draw of
 the paired training problem, not one neuron, trial or checkpoint.
@@ -66,7 +67,8 @@ distinct from the delivery coefficients $\bm c_u$ in $A_u\bm c_u$.
 In the population transport factorization, $\kappa_{ui}$ collects coupling
 ratios from terminal $i$ through parent $p$ to soma $u$; it is constant across
 examples at fixed weights but changes during learning. The parent sensitivity
-$f'_p(V_p)=1-\tanh^2(V_p)$ is input-dependent. This $\kappa_{ui}$ is distinct
+$f'_p(V_p)$ equals one for identity outputs and $1-\tanh^2(V_p)$ for
+$\tanh$ outputs. The latter is input-dependent. This $\kappa_{ui}$ is distinct
 from the focal shunt dose $\kappa_k$ in reciprocal cables.
 In main Fig.~9B only, $B$ is the ancestry-block indicator matrix,
 $\bm h$ the baseline cable transfer, and $\bm\eta$ the block-gain vector;
@@ -81,3 +83,31 @@ Accuracy is a fraction or percent of correctly classified examples; a
 percentage-point contrast subtracts two percentages. Capture is a squared-
 energy projection ratio in the named field and coordinate system, not an
 accuracy, gradient cosine or fraction of gradient surviving context averaging.
+
+\subsection*{Model names and implementations}
+
+DendriNet denotes the PyTorch implementation used for the image, population
+selection and physical-depth studies (main Figs.~1, 6 and 7). Its directed
+compartments are evaluated from terminals to soma at steady state; additive
+controls change the integration rule on the same graph. The seven-compartment
+conductance studies (main Fig.~5; Supplementary Figs.~S18--S21) use independent
+NumPy implementations of directed current balance. Identity compartment
+outputs do not remove conductance division or its nonlinear input dependence.
+Neither implementation simulates spikes or membrane-voltage trajectories.
+
+The branch-conflict and ancestry tasks (main Figs.~2--3) use logistic
+classifiers whose trees specify feedback supports. The interaction tasks
+(main Fig.~4) use algebraic multi-affine scalar trees. Neither uses DendriNet.
+The reliability experiment (Supplementary Fig.~S4) uses a separate parallel
+conductance model; abstract quadratic and linear-learner checks are identified
+in their captions.
+
+Reconstructed anatomy supplies geometry for several distinct analyses.
+Main Figs.~8--9 use separate reciprocal steady-state cable solvers;
+Supplementary Figs.~S27--S30 analyze anatomical contacts and constructed route
+fields. Main Fig.~10 analyzes recorded calcium responses, with a Gaussian
+response simulation only for detection power in panel D. The response-prediction
+fits in Supplementary Figs.~S33--S34 use reciprocal conductance models on
+reconstructed trees and separate linear-regression baselines. These fits are
+models of measured responses, not DendriNet experiments or recordings of
+learning signals. Captions distinguish the model or analysis in mixed figures.
