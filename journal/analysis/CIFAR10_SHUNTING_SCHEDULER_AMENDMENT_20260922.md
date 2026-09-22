@@ -71,3 +71,29 @@ Its first task is an infrastructure check within the complete scientific
 cohort; after successful completion, CPU job 47788421 raises the concurrency
 limit from one to eight without inspecting accuracy. CPU job 47788381 audits
 all completed allocations and then runs the frozen scientific analysis.
+
+
+## Move the entirely unstarted replacement to kempner_eng
+
+At the user's explicit request on 22 September 2026, array 47787999 was moved
+in place from `kempner_requeue` to `kempner_eng`. All 80 tasks were pending
+before the move; no Blackwell training had started and no scientific outcomes
+were inspected. The array was held briefly while its dependent checks were
+replaced. This partition contains H200 GPUs, so the complete cohort now uses
+`h200`, with one GPU, eight CPUs, 64 GB, QoS `normal`, and the same two-hour
+wall-time allowance. Every scientific configuration, seed, frozen input,
+launcher and statistical decision remains unchanged. The original launch
+records retain their historical requeue settings; the scheduler override and
+all-task before/after records document the actual execution.
+
+The old Blackwell-specific ramp and analysis jobs (47788421 and 47788381)
+were cancelled before running. Their replacements verify H200 allocations on
+`kempner_eng`; the first successful run still raises concurrency from one to
+eight without inspecting accuracy. The completed-cohort audit still requires
+all 80 successful runs before scientific analysis. No hardware cohorts are
+pooled. The excluded original H100 attempt remains excluded in its entirety.
+Comparisons between additive and shunting architectures still differ in
+training recipe and accelerator and do not isolate the forward operator.
+The move receipt, updated checker and dependent-job receipts are retained in
+`scheduler_migration_eng_20260922/` and `eng_submission.json` in the durable
+revision directory.

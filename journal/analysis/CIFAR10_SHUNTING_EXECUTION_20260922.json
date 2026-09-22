@@ -40,7 +40,7 @@
     "analyzer": 12,
     "pending_integration": 5
   },
-  "status": "replacement array queued; all H100 attempts excluded; no scientific outcomes inspected",
+  "status": "entire unstarted replacement moved to kempner_eng/H200; first task running; all original H100 attempts excluded; no scientific outcomes inspected",
   "files": {
     "configs/cifar10_shunting_feedback_ladder_confirmatory.yaml": "4001180cb2a4f46799954c22feaa32a16e1c0c8034ec3eaacf2f1547ee0f2980",
     "scripts/analyze_cifar10_shunting_feedback_ladder_confirmatory.py": "15d0e3dceb422872ae027e421e67db0af9a3a226ea5b2511c12ca3ea6c8eba65",
@@ -118,5 +118,69 @@
     },
     "new_focused_tests": 15,
     "hardware_audit_script_sha256": "45837a2e45bb15dd8e563a060feb4efd1409795339324ee67e751017b5de9c56"
+  },
+  "eng_scheduler_amendment": {
+    "protocol_sha256": "eddeda904cd46f5c2c9dc20af3c5b9dfc1e6ac6227d16f4af9a0d632a2958f04",
+    "submission": {
+      "utc": "2026-09-22T19:16:13.228658+00:00",
+      "job_id": "47787999",
+      "command": [
+        "scontrol",
+        "update",
+        "JobId=47787999",
+        "Partition=kempner_eng",
+        "QOS=normal",
+        "Features=h200",
+        "Gres=gpu:1"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "all_80_pending_before_move": true,
+      "outcomes_inspected": false,
+      "cancelled_previous_helpers": [
+        "47788421",
+        "47788381"
+      ],
+      "dependent_submissions": [
+        {
+          "command": [
+            "sbatch",
+            "--parsable",
+            "--dependency=afterany:47787999_0",
+            "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/ramp_eng_after_canary.sh"
+          ],
+          "stdout": "47804988\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "sbatch",
+            "--parsable",
+            "--dependency=afterany:47787999",
+            "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/analyze_completed_eng_cohort.sh"
+          ],
+          "stdout": "47804995\n",
+          "stderr": ""
+        }
+      ],
+      "ramp_job_id": "47804988",
+      "analysis_job_id": "47804995",
+      "released_utc": "2026-09-22T19:17:26.247441+00:00",
+      "initial_throttle": 1,
+      "maximum_throttle": 8
+    },
+    "freeze": {
+      "frozen_utc": "2026-09-22T19:16:58.967626+00:00",
+      "hardware_audit_script_sha256": "36dc711d01ede93fafcc684a6af560c983e05fd56d49155076a136c68d263ca8",
+      "scientific_analyzer_sha256": "6cb0f1b9d16602a26118714433fb3922e79027ff09053f31f7a7c7b48032bcba",
+      "scientific_analyzer_unchanged": true,
+      "all_tasks_unstarted": true,
+      "outcomes_inspected": false,
+      "partition": "kempner_eng",
+      "constraint": "h200"
+    },
+    "focused_tests_passed": 16,
+    "first_running_allocation_sha256": "56cf89c78bfe11da8f340e9dc0a92b209c61d662a6ae4086d3df3a0d09117685"
   }
 }

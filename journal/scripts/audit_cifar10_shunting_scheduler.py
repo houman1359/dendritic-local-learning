@@ -1,4 +1,4 @@
-"""Verify completed runs use the replacement cohort's single Blackwell GPU type."""
+"""Verify completed runs use the replacement cohort's single H200 GPU type."""
 from __future__ import annotations
 import argparse
 import csv
@@ -28,13 +28,13 @@ def validate(text: str, array_id: str, n_tasks: int = 80) -> dict:
         if row['State'] != 'COMPLETED' or row['ExitCode'] != '0:0':
             errors.append(f'task {index}: not successfully completed')
         partition = row['Partition']
-        if partition not in {'kempner_requeue'}:
+        if partition not in {'kempner_eng'}:
             errors.append(f'task {index}: unexpected partition {partition}')
-        if partition == 'kempner_requeue' and row['Constraints'] != 'rtx6000pro':
-            errors.append(f'task {index}: run lost its RTX constraint')
+        if partition == 'kempner_eng' and row['Constraints'] != 'h200':
+            errors.append(f'task {index}: run lost its H200 constraint')
         tres = dict(token.split('=', 1) for token in row['AllocTRES'].split(',') if '=' in token)
-        if tres.get('gres/gpu:nvidia_rtx_pro_6000_blackwell_server_edition') != '1' or tres.get('gres/gpu') != '1':
-            errors.append(f'task {index}: allocation is not exactly one RTX PRO 6000 Blackwell')
+        if tres.get('gres/gpu:nvidia_h200') != '1' or tres.get('gres/gpu') != '1':
+            errors.append(f'task {index}: allocation is not exactly one H200')
         if tres.get('cpu') != '8' or tres.get('mem') != '64G' or tres.get('node') != '1':
             errors.append(f'task {index}: CPU, memory or node allocation changed')
     if set(tasks) != set(range(n_tasks)):
@@ -43,7 +43,7 @@ def validate(text: str, array_id: str, n_tasks: int = 80) -> dict:
                 array_id=array_id, task_records=tasks,
                 requeued_tasks=[i for i, r in tasks.items() if int(r['Restarts']) > 0],
                 partition_counts={p: sum(r['Partition'] == p for r in tasks.values())
-                                  for p in ('kempner_requeue',)})
+                                  for p in ('kempner_eng',)})
 
 
 def main():
@@ -69,7 +69,7 @@ def main():
     args.output.write_text(json.dumps(audit, indent=2) + '\n')
     if not audit['valid']:
         raise SystemExit('\n'.join(audit['errors']))
-    print(f"Scheduler audit passed: {audit['n_tasks']} completed RTX runs; {audit['partition_counts']}")
+    print(f"Scheduler audit passed: {audit['n_tasks']} completed H200 runs; {audit['partition_counts']}")
 
 
 if __name__ == '__main__':
