@@ -99,7 +99,7 @@ Question & Units and retained design & Protocol section \\
 \midrule
 \endhead
 Exact/rule screens & Fifty seeds per screen; fixed/adaptive conductance reliability 2,250/1,050 outcomes; same-span 4,800 checkpoint rows & \ref{note:exact_rules}; probes/checkpoints nested within seeds. \\
-Images & Original MNIST/Fashion/CIFAR: 15/10/20 seeds, 90/60/80 fits; random feedback 120 new fits; fresh dictionary 108 development and 190 fresh fits & \ref{note:credit_images}; twelve short dictionary checks excluded. \\
+Images & Original MNIST/Fashion: 15/10 seeds, 90/60 fits; CIFAR: 20 seeds and 80 fits per architecture; random feedback 120 new fits; fresh dictionary 108 development and 190 fresh fits & \ref{note:credit_images}; one CIFAR shunting scalar run fails convergence; all seeds retained. Twelve short dictionary checks excluded. \\
 Depth/input controls & 480/640 depth, 120/160 ownership, 240/320 spatial and 160/320 fixed-budget fits valid; separate 320-run exact/BP repeat & \ref{note:credit_images}; Table~\ref{tab:input_validity}. \\
 Branch/ancestry & Twenty conflict seeds; ten two-branch seeds; twenty eight-context seeds and 2,700 fits; cue encoder 2,160 fits & \ref{note:conflict_ancestry}; hard cue readout exploratory. \\
 Interaction/Boolean capacity & Census of 140 primary +24 nested targets; 164 constructions. Boolean: seven templates, fifteen trees and 49 exact constructions & \ref{note:interactions_boolean}; complete-domain analyses. \\
@@ -138,6 +138,7 @@ Evidence & Machine-readable record \\
 \toprule Evidence & Machine-readable record \\
 \midrule
 \endhead
+CIFAR-10 feedback & \path{cifar10_additive_feedback_ladder_confirmatory/}; \path{cifar10_shunting_feedback_ladder_confirmatory/}: seed outcomes, condition summaries, paired contrasts and unchanged audit decisions. Shunting results are descriptive because its convergence gate failed. \\
 Two-branch controls & \path{trained_subtree_address/condition_summary.csv}; \path{trained_subtree_address/paired_contrasts.csv} \\
 Graded-context generalization & \path{curated_publication/gate_generalization_endpoints.csv}; \path{curated_publication/gate_generalization_summary.csv}; \path{curated_publication/gate_generalization_contrasts.csv}; \path{curated_publication/gate_generalization_provenance.json} \\
 DendriNet sensory selection & \path{curated_publication/inhibitory_selection_endpoints.csv}; \path{curated_publication/inhibitory_selection_contrasts.csv}; \path{curated_publication/inhibitory_selection_factorial.csv}; \path{curated_publication/inhibitory_selection_rate_contrasts.csv}; \path{curated_publication/inhibitory_selection_provenance.json} \\
