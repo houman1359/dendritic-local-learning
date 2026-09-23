@@ -118,16 +118,6 @@
     "original_sha256": "511ec1ecb37300e9490fd43e5bd63596072e3092eb20d092fbee6cfb024d6969",
     "primary_destination": "S6",
     "panels": {
-      "C": {
-        "figure": "S6",
-        "panel": "A",
-        "path": "figures/supplementary/curated/image_generalization.pdf"
-      },
-      "D": {
-        "figure": "S6",
-        "panel": "B",
-        "path": "figures/supplementary/curated/image_generalization.pdf"
-      },
       "E": {
         "figure": "S6",
         "panel": "C",
@@ -154,6 +144,16 @@
           "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/seed_outcomes.csv",
           "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/summary.json"
         ]
+      },
+      "C": {
+        "content": "Historical five-seed shunting CIFAR comparison with matched-width fallback and random rank-four feedback.",
+        "reason": "Current CIFAR ladders are drawn together from the complete source tables in N4C and displayed in S6A,B; historical inputs remain archived.",
+        "numbers_at": "source_data/regular_tree_regimes/"
+      },
+      "D": {
+        "content": "Twenty-seed raw-additive CIFAR feedback ladder.",
+        "reason": "Current CIFAR ladders are drawn together from the complete source tables in N4C and displayed in S6A,B; historical inputs remain archived.",
+        "numbers_at": "source_data/cifar10_additive_feedback_ladder_confirmatory/"
       }
     }
   },
@@ -3288,5 +3288,40 @@
       }
     },
     "omitted_panel_status": {}
+  },
+  "N4C": {
+    "old_label": "fig:si_cifar_ladders",
+    "original_asset": "figures/supplementary/figure_cifar_ladders_native.pdf",
+    "original_sha256": "f24e2fd8c5f32955ddd58e15fbc91e4cc73dcb75ab727f48e4855180fc31ff3c",
+    "primary_destination": "S6",
+    "panels": {
+      "C": {
+        "figure": "S6",
+        "panel": "A",
+        "path": "figures/supplementary/curated/image_generalization.pdf"
+      },
+      "D": {
+        "figure": "S6",
+        "panel": "B",
+        "path": "figures/supplementary/curated/image_generalization.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "A": {
+        "content": "Historical regular-tree depth comparison.",
+        "reason": "Unchanged supporting panel; only the fresh CIFAR panels C,D of this sheet are selected. Historical artwork remains separately registered.",
+        "numbers_at": "source_data/regular_tree_regimes/"
+      },
+      "B": {
+        "content": "Historical regular-tree noise comparison.",
+        "reason": "Unchanged supporting panel; only the fresh CIFAR panels C,D of this sheet are selected. Historical artwork remains separately registered.",
+        "numbers_at": "source_data/regular_tree_regimes/"
+      },
+      "E": {
+        "content": "Historical Fashion-MNIST feedback ladder.",
+        "reason": "Unchanged supporting panel; only the fresh CIFAR panels C,D of this sheet are selected. Historical artwork remains separately registered.",
+        "numbers_at": "source_data/fashion_feedback_ladder/"
+      }
+    }
   }
 }

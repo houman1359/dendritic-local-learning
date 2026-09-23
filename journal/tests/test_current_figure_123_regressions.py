@@ -35,6 +35,9 @@ def framework_data():
     ("cifar10", "cifar10_additive_feedback_ladder_confirmatory", "feedback",
      {"identity": ("neuron specific", "strict scalar"),
       "exact": ("exact path", "neuron specific")}),
+    ("cifar10", "cifar10_shunting_feedback_ladder_confirmatory", "feedback",
+     {"identity": ("neuron specific", "strict scalar"),
+      "exact": ("exact path", "neuron specific")}),
 ])
 def test_cohort_seed_ids_pair_with_frozen_outcomes(
         framework_data, cohort, folder, column, conditions):
@@ -44,6 +47,8 @@ def test_cohort_seed_ids_pair_with_frozen_outcomes(
     if cohort == "mnist_dfa":
         source = source[source.between.eq("dfa")]
     for _, row in cohorts[cohorts.cohort.eq(cohort)].iterrows():
+        if cohort == "cifar10" and f"cifar10_{row.architecture}_" not in folder:
+            continue
         selected = source
         if "architecture" in selected:
             selected = selected[selected.architecture.eq(row.architecture)]
@@ -65,7 +70,7 @@ def test_figure1_export_preserves_actual_seed_ids(tmp_path, monkeypatch, framewo
         cap_seed, cap_summary, dictionaries)
     exported = pd.read_csv(output)
     drawn = exported[exported.panel.isin(["E", "F"]) & exported.record.eq("seed")]
-    assert len(drawn) == 180
+    assert len(drawn) == 220
     assert not drawn.duplicated(["panel", "architecture", "cohort", "seed"]).any()
     for _, row in cohorts.iterrows():
         selected = drawn[drawn.cohort.eq(row.cohort)

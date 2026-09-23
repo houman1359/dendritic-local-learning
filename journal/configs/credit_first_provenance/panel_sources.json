@@ -1781,15 +1781,6 @@
     {
       "figure": "fig1",
       "panel": "g",
-      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv",
-      "role": "Complete numerical input or panel-indexed display summary",
-      "generator": "scripts/credit_first_figures/build_restored_main.py",
-      "replication_unit": "ten paired fresh training seeds per architecture; separate DFA15/CIFAR20 cohorts",
-      "notes": "Separate existing MNIST DFA and flattened CIFAR10 exact\u2212neuron-specific contrasts. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
-    },
-    {
-      "figure": "fig1",
-      "panel": "g",
       "path": "scripts/credit_first_figures/build_restored_main.py",
       "role": "Native display definition",
       "generator": "scripts/credit_first_figures/build_restored_main.py",
@@ -3181,546 +3172,6 @@
       "generator": "scripts/supplement_consolidation/build.py",
       "replication_unit": "paired independent simulation seed (n=50); paired independent target-and-noise seed (n=50); paired independent target seed (n=50); confirmatory rate experiment",
       "notes": "Selected S14 panel F. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "a",
-      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/condition_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "b",
-      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/condition_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "c",
-      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/condition_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "a",
-      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "b",
-      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "c",
-      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "a",
-      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/seed_outcomes.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "b",
-      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/seed_outcomes.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "c",
-      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/seed_outcomes.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "a",
-      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/summary.json",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "b",
-      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/summary.json",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "c",
-      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/summary.json",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "a",
-      "path": "source_data/fashion_feedback_ladder/audit.json",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "b",
-      "path": "source_data/fashion_feedback_ladder/audit.json",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "c",
-      "path": "source_data/fashion_feedback_ladder/audit.json",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "a",
-      "path": "source_data/fashion_feedback_ladder/condition_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "b",
-      "path": "source_data/fashion_feedback_ladder/condition_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "c",
-      "path": "source_data/fashion_feedback_ladder/condition_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "a",
-      "path": "source_data/fashion_feedback_ladder/paired_contrasts.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "b",
-      "path": "source_data/fashion_feedback_ladder/paired_contrasts.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "c",
-      "path": "source_data/fashion_feedback_ladder/paired_contrasts.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "a",
-      "path": "source_data/fashion_feedback_ladder/seed_outcomes.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "b",
-      "path": "source_data/fashion_feedback_ladder/seed_outcomes.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "c",
-      "path": "source_data/fashion_feedback_ladder/seed_outcomes.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "a",
-      "path": "source_data/regular_tree_regimes/additive_controls_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "b",
-      "path": "source_data/regular_tree_regimes/additive_controls_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "c",
-      "path": "source_data/regular_tree_regimes/additive_controls_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "a",
-      "path": "source_data/regular_tree_regimes/backprop_reference_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "b",
-      "path": "source_data/regular_tree_regimes/backprop_reference_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "c",
-      "path": "source_data/regular_tree_regimes/backprop_reference_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "a",
-      "path": "source_data/regular_tree_regimes/broadcast_noise_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "b",
-      "path": "source_data/regular_tree_regimes/broadcast_noise_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "c",
-      "path": "source_data/regular_tree_regimes/broadcast_noise_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "a",
-      "path": "source_data/regular_tree_regimes/cifar10_control_ladder_runs.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "b",
-      "path": "source_data/regular_tree_regimes/cifar10_control_ladder_runs.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "c",
-      "path": "source_data/regular_tree_regimes/cifar10_control_ladder_runs.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "a",
-      "path": "source_data/regular_tree_regimes/competence_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "b",
-      "path": "source_data/regular_tree_regimes/competence_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "c",
-      "path": "source_data/regular_tree_regimes/competence_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "a",
-      "path": "source_data/regular_tree_regimes/depth_scaling_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "b",
-      "path": "source_data/regular_tree_regimes/depth_scaling_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "c",
-      "path": "source_data/regular_tree_regimes/depth_scaling_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "a",
-      "path": "source_data/regular_tree_regimes/error_source_runs.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "b",
-      "path": "source_data/regular_tree_regimes/error_source_runs.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "c",
-      "path": "source_data/regular_tree_regimes/error_source_runs.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "a",
-      "path": "source_data/regular_tree_regimes/exact_transport_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "b",
-      "path": "source_data/regular_tree_regimes/exact_transport_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "c",
-      "path": "source_data/regular_tree_regimes/exact_transport_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "a",
-      "path": "source_data/regular_tree_regimes/inhibition_dose_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "b",
-      "path": "source_data/regular_tree_regimes/inhibition_dose_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "c",
-      "path": "source_data/regular_tree_regimes/inhibition_dose_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "a",
-      "path": "source_data/regular_tree_regimes/noise_feedback_ladder_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "b",
-      "path": "source_data/regular_tree_regimes/noise_feedback_ladder_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "c",
-      "path": "source_data/regular_tree_regimes/noise_feedback_ladder_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "a",
-      "path": "source_data/regular_tree_regimes/reactivation_controls_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "b",
-      "path": "source_data/regular_tree_regimes/reactivation_controls_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "c",
-      "path": "source_data/regular_tree_regimes/reactivation_controls_summary.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "a",
-      "path": "source_data/regular_tree_regimes/rule_family_summary_source.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "b",
-      "path": "source_data/regular_tree_regimes/rule_family_summary_source.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS6",
-      "panel": "c",
-      "path": "source_data/regular_tree_regimes/rule_family_summary_source.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "paired independent training seed (n=10 per architecture); complete 60-fit audit; independent training seed; independent training seed (n=5 per condition); 80-run configuration and provenance audit; paired independent training seed (n=20); frozen before confirmatory outcomes; implementation clarification before outcome inspection; independent training seed (n=5); independent training seed (n=3 per condition)",
-      "notes": "Selected S4 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
     },
     {
       "figure": "figS6",
@@ -87511,6 +86962,258 @@
       "generator": "scripts/review_completion/optional_extension_paper_figure.py",
       "replication_unit": "Twenty original rescue seeds reused for common-rate and no-interaction controls",
       "notes": "Same nonlinear parents and Adam rate 0.03; no independent cohort."
+    },
+    {
+      "figure": "fig1",
+      "panel": "e",
+      "path": "source_data/cifar10_shunting_feedback_ladder_confirmatory/condition_summary.csv",
+      "role": "complete paired CIFAR cohort with unchanged audit decisions",
+      "generator": "scripts/credit_first_figures/build_framework.py",
+      "replication_unit": "20 paired training seeds per architecture",
+      "notes": "Shunting is fixed-budget descriptive: seed 22008 triggers the convergence criterion; all 80 fits remain included. Between-architecture comparisons do not isolate integration."
+    },
+    {
+      "figure": "fig1",
+      "panel": "f",
+      "path": "source_data/cifar10_shunting_feedback_ladder_confirmatory/condition_summary.csv",
+      "role": "complete paired CIFAR cohort with unchanged audit decisions",
+      "generator": "scripts/credit_first_figures/build_framework.py",
+      "replication_unit": "20 paired training seeds per architecture",
+      "notes": "Shunting is fixed-budget descriptive: seed 22008 triggers the convergence criterion; all 80 fits remain included. Between-architecture comparisons do not isolate integration."
+    },
+    {
+      "figure": "figS6",
+      "panel": "a",
+      "path": "source_data/cifar10_shunting_feedback_ladder_confirmatory/condition_summary.csv",
+      "role": "complete paired CIFAR cohort with unchanged audit decisions",
+      "generator": "scripts/build_supplementary_figure_s04_native.py",
+      "replication_unit": "20 paired training seeds per architecture",
+      "notes": "Shunting is fixed-budget descriptive: seed 22008 triggers the convergence criterion; all 80 fits remain included. Between-architecture comparisons do not isolate integration."
+    },
+    {
+      "figure": "fig1",
+      "panel": "e",
+      "path": "source_data/cifar10_shunting_feedback_ladder_confirmatory/paired_contrasts.csv",
+      "role": "complete paired CIFAR cohort with unchanged audit decisions",
+      "generator": "scripts/credit_first_figures/build_framework.py",
+      "replication_unit": "20 paired training seeds per architecture",
+      "notes": "Shunting is fixed-budget descriptive: seed 22008 triggers the convergence criterion; all 80 fits remain included. Between-architecture comparisons do not isolate integration."
+    },
+    {
+      "figure": "fig1",
+      "panel": "f",
+      "path": "source_data/cifar10_shunting_feedback_ladder_confirmatory/paired_contrasts.csv",
+      "role": "complete paired CIFAR cohort with unchanged audit decisions",
+      "generator": "scripts/credit_first_figures/build_framework.py",
+      "replication_unit": "20 paired training seeds per architecture",
+      "notes": "Shunting is fixed-budget descriptive: seed 22008 triggers the convergence criterion; all 80 fits remain included. Between-architecture comparisons do not isolate integration."
+    },
+    {
+      "figure": "figS6",
+      "panel": "a",
+      "path": "source_data/cifar10_shunting_feedback_ladder_confirmatory/paired_contrasts.csv",
+      "role": "complete paired CIFAR cohort with unchanged audit decisions",
+      "generator": "scripts/build_supplementary_figure_s04_native.py",
+      "replication_unit": "20 paired training seeds per architecture",
+      "notes": "Shunting is fixed-budget descriptive: seed 22008 triggers the convergence criterion; all 80 fits remain included. Between-architecture comparisons do not isolate integration."
+    },
+    {
+      "figure": "fig1",
+      "panel": "e",
+      "path": "source_data/cifar10_shunting_feedback_ladder_confirmatory/seed_outcomes.csv",
+      "role": "complete paired CIFAR cohort with unchanged audit decisions",
+      "generator": "scripts/credit_first_figures/build_framework.py",
+      "replication_unit": "20 paired training seeds per architecture",
+      "notes": "Shunting is fixed-budget descriptive: seed 22008 triggers the convergence criterion; all 80 fits remain included. Between-architecture comparisons do not isolate integration."
+    },
+    {
+      "figure": "fig1",
+      "panel": "f",
+      "path": "source_data/cifar10_shunting_feedback_ladder_confirmatory/seed_outcomes.csv",
+      "role": "complete paired CIFAR cohort with unchanged audit decisions",
+      "generator": "scripts/credit_first_figures/build_framework.py",
+      "replication_unit": "20 paired training seeds per architecture",
+      "notes": "Shunting is fixed-budget descriptive: seed 22008 triggers the convergence criterion; all 80 fits remain included. Between-architecture comparisons do not isolate integration."
+    },
+    {
+      "figure": "figS6",
+      "panel": "a",
+      "path": "source_data/cifar10_shunting_feedback_ladder_confirmatory/seed_outcomes.csv",
+      "role": "complete paired CIFAR cohort with unchanged audit decisions",
+      "generator": "scripts/build_supplementary_figure_s04_native.py",
+      "replication_unit": "20 paired training seeds per architecture",
+      "notes": "Shunting is fixed-budget descriptive: seed 22008 triggers the convergence criterion; all 80 fits remain included. Between-architecture comparisons do not isolate integration."
+    },
+    {
+      "figure": "fig1",
+      "panel": "e",
+      "path": "source_data/cifar10_shunting_feedback_ladder_confirmatory/summary.json",
+      "role": "complete paired CIFAR cohort with unchanged audit decisions",
+      "generator": "scripts/credit_first_figures/build_framework.py",
+      "replication_unit": "20 paired training seeds per architecture",
+      "notes": "Shunting is fixed-budget descriptive: seed 22008 triggers the convergence criterion; all 80 fits remain included. Between-architecture comparisons do not isolate integration."
+    },
+    {
+      "figure": "fig1",
+      "panel": "f",
+      "path": "source_data/cifar10_shunting_feedback_ladder_confirmatory/summary.json",
+      "role": "complete paired CIFAR cohort with unchanged audit decisions",
+      "generator": "scripts/credit_first_figures/build_framework.py",
+      "replication_unit": "20 paired training seeds per architecture",
+      "notes": "Shunting is fixed-budget descriptive: seed 22008 triggers the convergence criterion; all 80 fits remain included. Between-architecture comparisons do not isolate integration."
+    },
+    {
+      "figure": "figS6",
+      "panel": "a",
+      "path": "source_data/cifar10_shunting_feedback_ladder_confirmatory/summary.json",
+      "role": "complete paired CIFAR cohort with unchanged audit decisions",
+      "generator": "scripts/build_supplementary_figure_s04_native.py",
+      "replication_unit": "20 paired training seeds per architecture",
+      "notes": "Shunting is fixed-budget descriptive: seed 22008 triggers the convergence criterion; all 80 fits remain included. Between-architecture comparisons do not isolate integration."
+    },
+    {
+      "figure": "fig1",
+      "panel": "e",
+      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/condition_summary.csv",
+      "role": "complete paired CIFAR cohort with unchanged audit decisions",
+      "generator": "scripts/credit_first_figures/build_framework.py",
+      "replication_unit": "20 paired training seeds per architecture",
+      "notes": "Complete raw-additive cohort; within-architecture contrasts use matched recipes."
+    },
+    {
+      "figure": "fig1",
+      "panel": "f",
+      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/condition_summary.csv",
+      "role": "complete paired CIFAR cohort with unchanged audit decisions",
+      "generator": "scripts/credit_first_figures/build_framework.py",
+      "replication_unit": "20 paired training seeds per architecture",
+      "notes": "Complete raw-additive cohort; within-architecture contrasts use matched recipes."
+    },
+    {
+      "figure": "figS6",
+      "panel": "b",
+      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/condition_summary.csv",
+      "role": "complete paired CIFAR cohort with unchanged audit decisions",
+      "generator": "scripts/build_supplementary_figure_s04_native.py",
+      "replication_unit": "20 paired training seeds per architecture",
+      "notes": "Complete raw-additive cohort; within-architecture contrasts use matched recipes."
+    },
+    {
+      "figure": "fig1",
+      "panel": "e",
+      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv",
+      "role": "complete paired CIFAR cohort with unchanged audit decisions",
+      "generator": "scripts/credit_first_figures/build_framework.py",
+      "replication_unit": "20 paired training seeds per architecture",
+      "notes": "Complete raw-additive cohort; within-architecture contrasts use matched recipes."
+    },
+    {
+      "figure": "fig1",
+      "panel": "f",
+      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv",
+      "role": "complete paired CIFAR cohort with unchanged audit decisions",
+      "generator": "scripts/credit_first_figures/build_framework.py",
+      "replication_unit": "20 paired training seeds per architecture",
+      "notes": "Complete raw-additive cohort; within-architecture contrasts use matched recipes."
+    },
+    {
+      "figure": "figS6",
+      "panel": "b",
+      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv",
+      "role": "complete paired CIFAR cohort with unchanged audit decisions",
+      "generator": "scripts/build_supplementary_figure_s04_native.py",
+      "replication_unit": "20 paired training seeds per architecture",
+      "notes": "Complete raw-additive cohort; within-architecture contrasts use matched recipes."
+    },
+    {
+      "figure": "fig1",
+      "panel": "e",
+      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/seed_outcomes.csv",
+      "role": "complete paired CIFAR cohort with unchanged audit decisions",
+      "generator": "scripts/credit_first_figures/build_framework.py",
+      "replication_unit": "20 paired training seeds per architecture",
+      "notes": "Complete raw-additive cohort; within-architecture contrasts use matched recipes."
+    },
+    {
+      "figure": "fig1",
+      "panel": "f",
+      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/seed_outcomes.csv",
+      "role": "complete paired CIFAR cohort with unchanged audit decisions",
+      "generator": "scripts/credit_first_figures/build_framework.py",
+      "replication_unit": "20 paired training seeds per architecture",
+      "notes": "Complete raw-additive cohort; within-architecture contrasts use matched recipes."
+    },
+    {
+      "figure": "figS6",
+      "panel": "b",
+      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/seed_outcomes.csv",
+      "role": "complete paired CIFAR cohort with unchanged audit decisions",
+      "generator": "scripts/build_supplementary_figure_s04_native.py",
+      "replication_unit": "20 paired training seeds per architecture",
+      "notes": "Complete raw-additive cohort; within-architecture contrasts use matched recipes."
+    },
+    {
+      "figure": "fig1",
+      "panel": "e",
+      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/summary.json",
+      "role": "complete paired CIFAR cohort with unchanged audit decisions",
+      "generator": "scripts/credit_first_figures/build_framework.py",
+      "replication_unit": "20 paired training seeds per architecture",
+      "notes": "Complete raw-additive cohort; within-architecture contrasts use matched recipes."
+    },
+    {
+      "figure": "fig1",
+      "panel": "f",
+      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/summary.json",
+      "role": "complete paired CIFAR cohort with unchanged audit decisions",
+      "generator": "scripts/credit_first_figures/build_framework.py",
+      "replication_unit": "20 paired training seeds per architecture",
+      "notes": "Complete raw-additive cohort; within-architecture contrasts use matched recipes."
+    },
+    {
+      "figure": "figS6",
+      "panel": "b",
+      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/summary.json",
+      "role": "complete paired CIFAR cohort with unchanged audit decisions",
+      "generator": "scripts/build_supplementary_figure_s04_native.py",
+      "replication_unit": "20 paired training seeds per architecture",
+      "notes": "Complete raw-additive cohort; within-architecture contrasts use matched recipes."
+    },
+    {
+      "figure": "figS6",
+      "panel": "c",
+      "path": "source_data/fashion_feedback_ladder/condition_summary.csv",
+      "role": "historical matched-width-fallback Fashion cohort",
+      "generator": "scripts/build_supplementary_figure_s04_native.py",
+      "replication_unit": "ten paired seeds per architecture",
+      "notes": "Unchanged historical cohort; no results from the pending strict-scalar extension."
+    },
+    {
+      "figure": "figS6",
+      "panel": "c",
+      "path": "source_data/fashion_feedback_ladder/paired_contrasts.csv",
+      "role": "historical matched-width-fallback Fashion cohort",
+      "generator": "scripts/build_supplementary_figure_s04_native.py",
+      "replication_unit": "ten paired seeds per architecture",
+      "notes": "Unchanged historical cohort; no results from the pending strict-scalar extension."
+    },
+    {
+      "figure": "figS6",
+      "panel": "c",
+      "path": "source_data/fashion_feedback_ladder/seed_outcomes.csv",
+      "role": "historical matched-width-fallback Fashion cohort",
+      "generator": "scripts/build_supplementary_figure_s04_native.py",
+      "replication_unit": "ten paired seeds per architecture",
+      "notes": "Unchanged historical cohort; no results from the pending strict-scalar extension."
+    },
+    {
+      "figure": "figS6",
+      "panel": "c",
+      "path": "source_data/fashion_feedback_ladder/audit.json",
+      "role": "historical matched-width-fallback Fashion cohort",
+      "generator": "scripts/build_supplementary_figure_s04_native.py",
+      "replication_unit": "ten paired seeds per architecture",
+      "notes": "Unchanged historical cohort; no results from the pending strict-scalar extension."
     }
   ],
   "supporting_groups": [
@@ -87641,6 +87344,12 @@
       "figure": "methods",
       "panel": "display summaries and frozen input manifest",
       "replication_unit": "panel-specific; existing seeds, cells or illustrative values"
+    },
+    {
+      "path": "source_data/cifar10_shunting_feedback_ladder_confirmatory",
+      "figure": "methods",
+      "panel": "complete fixed-budget CIFAR shunting evidence",
+      "replication_unit": "20 paired seeds; one convergence flag retained"
     }
   ],
   "excluded_extensions": [

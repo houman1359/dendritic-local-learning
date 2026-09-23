@@ -87,7 +87,7 @@ def test_loader_rejects_convergence_flag(tmp_path: Path) -> None:
     summary["audit"]["convergence_valid"] = False
     summary["decision"]["audit_passes"] = False
     summary_path.write_text(json.dumps(summary), encoding="utf-8")
-    with pytest.raises(RuntimeError, match="convergence audit did not pass"):
+    with pytest.raises(RuntimeError, match="Unvalidated convergence; explicit fixed-budget display required"):
         MODULE.load_confirmatory_analysis(tmp_path)
 
 

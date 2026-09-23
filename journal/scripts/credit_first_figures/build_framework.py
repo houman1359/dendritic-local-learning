@@ -324,7 +324,7 @@ def read_fresh():
 def cohort_contrasts(paired, seed_diffs):
     """E and F rows: per neuron - strict scalar, exact path - per neuron.
 
-    Four separately trained cohorts, each replayed from its own frozen paired
+    Four task/protocol rows with separate architecture cohorts, each replayed from its own frozen paired
     contrast table and re-checked against that cohort's seed outcomes; the
     per-seed fan is recomputed from the seed-level table in every case.
     """
@@ -403,51 +403,85 @@ def cohort_contrasts(paired, seed_diffs):
                 seed_pp=[100 * v for v in fan.to_numpy()],
                 source_table="source_data/fashion_feedback_ladder/"
                              "paired_contrasts.csv", source_contrast=key))
-    cifar = pd.read_csv(SOURCE / "cifar10_additive_feedback_ladder_confirmatory/"
-                        "paired_contrasts.csv", float_precision="round_trip")
-    cs = pd.read_csv(SOURCE / "cifar10_additive_feedback_ladder_confirmatory/"
-                     "seed_outcomes.csv", float_precision="round_trip")
-    cifar_pairs = cs.pivot(index="seed", columns="feedback",
-                          values="test_accuracy").sort_index()
-    for kind, key in (("identity", "neuron specific minus strict scalar"),
-                      ("exact", "exact path minus neuron specific")):
-        r = cifar[cifar.contrast.eq(key)].iloc[0]
-        fan = np.array([float(v) for v in str(r.seed_differences).split(";")])
-        paired_values = cifar_pairs[r.left] - cifar_pairs[r.right]
-        assert not paired_values.isna().any()
-        # The frozen display values are rounded to nine decimal places.
-        # Verify their ordering against actual seed IDs without changing them.
-        np.testing.assert_allclose(fan, paired_values.to_numpy(),
-                                   rtol=0, atol=5e-10)
-        n_seed = len(paired_values)
-        assert len(fan) == int(r.n_seeds) == n_seed == 20
-        assert abs(fan.mean() - r.mean_difference) < 1e-8
-        rows.append(dict(
-            cohort="cifar10", task="CIFAR-10", protocol="additive [3,3,3,3]",
-            architecture="additive", kind=kind,
-            mean_pp=100 * r.mean_difference, low_pp=100 * r.ci95_low_difference,
-            high_pp=100 * r.ci95_high_difference, n_seeds=int(r.n_seeds),
-            positive_seeds=int(r.seeds_positive),
-            seed_ids=[int(seed) for seed in paired_values.index],
-            seed_pp=[100 * v for v in fan],
-            source_table="source_data/cifar10_additive_feedback_ladder_"
-                         "confirmatory/paired_contrasts.csv",
-            source_contrast=key))
+    for architecture in ARCHITECTURES:
+        folder = SOURCE / f"cifar10_{architecture}_feedback_ladder_confirmatory"
+        cifar, cifar_pairs, _ = read_cifar_ladder(architecture, allow_convergence_flags=(architecture == "shunting"))
+        for kind, key in (("identity", "neuron specific minus strict scalar"),
+                          ("exact", "exact path minus neuron specific")):
+            r = cifar[cifar.contrast.eq(key)].iloc[0]
+            fan = np.array([float(v) for v in str(r.seed_differences).split(";")])
+            paired_values = cifar_pairs[r.left] - cifar_pairs[r.right]
+            np.testing.assert_allclose(fan, paired_values.to_numpy(), rtol=0, atol=5e-10)
+            assert len(fan) == int(r.n_seeds) == 20
+            assert abs(fan.mean() - r.mean_difference) < 1e-8
+            rows.append(dict(
+                cohort="cifar10", task="CIFAR-10", protocol=f"{architecture} [3,3,3,3]",
+                architecture=architecture, kind=kind,
+                mean_pp=100 * r.mean_difference, low_pp=100 * r.ci95_low_difference,
+                high_pp=100 * r.ci95_high_difference, n_seeds=int(r.n_seeds),
+                positive_seeds=int(r.seeds_positive),
+                seed_ids=[int(seed) for seed in paired_values.index],
+                seed_pp=[100 * v for v in fan],
+                source_table=str((folder / "paired_contrasts.csv").relative_to(JOURNAL)),
+                source_contrast=key))
     return pd.DataFrame(rows)
 
 
+def read_cifar_ladder(architecture, *, allow_convergence_flags=False):
+    """Require a complete audited cohort and independently check its contrasts.
+
+    No pilot substitution or outcome-direction gate is allowed. Seed IDs and
+    source folders distinguish the two architecture-specific training recipes.
+    """
+    if architecture not in ARCHITECTURES:
+        raise ValueError(f"Unknown CIFAR architecture: {architecture}")
+    folder = SOURCE / f"cifar10_{architecture}_feedback_ladder_confirmatory"
+    summary = json.loads((folder / "summary.json").read_text())
+    audit = summary["audit"]
+    if not (summary.get("contract_frozen_before_confirmatory_outcomes") is True
+            and audit.get("integrity_valid") is True
+            and audit.get("n_expected") == audit.get("n_results_complete") == 80):
+        raise ValueError(f"Unvalidated CIFAR cohort: {architecture}")
+    outcomes = pd.read_csv(folder / "seed_outcomes.csv", float_precision="round_trip")
+    from cifar_display_validation import validate_convergence_disclosure
+    validate_convergence_disclosure(summary, outcomes, allow_convergence_flags=allow_convergence_flags)
+    contrasts = pd.read_csv(folder / "paired_contrasts.csv", float_precision="round_trip")
+    pairs = outcomes.pivot(index="seed", columns="feedback", values="test_accuracy").sort_index()
+    expected_seeds = set(range(22000, 22020) if architecture == "shunting" else range(10800, 10820))
+    assert set(pairs.index) == expected_seeds and pairs.shape == (20, 4)
+    assert set(pairs.columns) == {"strict scalar", "neuron specific", "exact path", "backpropagation"}
+    assert np.isfinite(pairs.to_numpy()).all()
+    assert ((pairs.to_numpy() >= 0) & (pairs.to_numpy() <= 1)).all()
+    assert len(outcomes) == 80 and len(contrasts) == 3
+    for _, row in contrasts.iterrows():
+        differences = pairs[row.left] - pairs[row.right]
+        assert int(row.n_seeds) == 20
+        assert abs(differences.mean() - row.mean_difference) < 1e-12
+        from scipy.stats import t
+        half_width = t.ppf(0.975, 19) * differences.std(ddof=1) / np.sqrt(20)
+        np.testing.assert_allclose(
+            [row.ci95_low_difference, row.ci95_high_difference],
+            [differences.mean() - half_width, differences.mean() + half_width],
+            rtol=0, atol=1e-12)
+    return contrasts, pairs, summary
+
+
 def read_bp_equivalence():
-    """CIFAR exact path - backpropagation and its prespecified TOST decision."""
-    cifar = pd.read_csv(SOURCE / "cifar10_additive_feedback_ladder_confirmatory/"
-                        "paired_contrasts.csv", float_precision="round_trip")
-    r = cifar[cifar.contrast.eq("exact path minus backpropagation")].iloc[0]
-    decision = json.loads((SOURCE / "cifar10_additive_feedback_ladder_"
-                           "confirmatory/summary.json").read_text())
-    eq = decision["decision"]["exact_vs_bp_equivalence"]
-    assert eq["equivalent"] and abs(eq["margin"] - 0.01) < 1e-12
-    return dict(mean_pp=100 * r.mean_difference, low_pp=100 * r.ci95_low_difference,
-                high_pp=100 * r.ci95_high_difference, n=int(r.n_seeds),
-                margin_pp=100 * eq["margin"], p_tost=eq["p_tost"])
+    """CIFAR exact-minus-BP estimates and prespecified TOST results, both cores."""
+    rows = []
+    for architecture in ARCHITECTURES:
+        cifar, _, summary = read_cifar_ladder(architecture, allow_convergence_flags=(architecture == "shunting"))
+        r = cifar[cifar.contrast.eq("exact path minus backpropagation")].iloc[0]
+        eq = summary["decision"]["exact_vs_bp_equivalence"]
+        assert abs(eq["margin"] - 0.01) < 1e-12
+        rows.append(dict(architecture=architecture,
+            mean_pp=100 * r.mean_difference, low_pp=100 * r.ci95_low_difference,
+            high_pp=100 * r.ci95_high_difference, n=int(r.n_seeds),
+            margin_pp=100 * eq["margin"], p_tost=eq["p_tost"],
+            equivalent=bool(eq["equivalent"]),
+            audit_passes=bool(summary["decision"]["audit_passes"]),
+            source_table=f"source_data/cifar10_{architecture}_feedback_ladder_confirmatory/paired_contrasts.csv"))
+    return rows
 
 
 def read_capture(coordinate=CAPTURE_COORDINATE):
@@ -981,6 +1015,8 @@ def cohort_forest(canvas, ax, cohorts, kind, *, value_label, xlim, xticks,
     """One half of the cohort comparison, through figure_canvas.forest()."""
     rows, extras = [], []
     for cohort, label in COHORT_ROWS:
+        if cohort == "cifar10":
+            label += "†"
         sub = cohorts[cohorts.cohort.eq(cohort) & cohorts.kind.eq(kind)]
         shunt = sub[sub.architecture.eq("shunting")]
         add = sub[sub.architecture.eq("additive")]
@@ -997,12 +1033,8 @@ def cohort_forest(canvas, ax, cohorts, kind, *, value_label, xlim, xticks,
                          # trained-versus-initial in G.
                          hollow=not len(shunt)))
         second = add.iloc[0] if (len(shunt) and len(add)) else None
-        # the plan's own row note: positive seeds out of the row's seed total,
-        # for the arm the row label sits on; the single-arm CIFAR row says so
-        # once, in E.
+        # Counts refer to the shunting arm aligned with each row label.
         note = f"{int(lead.positive_seeds)}/{int(lead.n_seeds)}"
-        if second is None and kind == "identity":
-            note += ", additive only"
         extras.append((second, note))
     # QA 2026-09-09: no row bands (they hid F's equivalence corridor); the
     # 0.55 pt row tick still ties the label to its row
@@ -1255,15 +1287,14 @@ def write_curated(conditions, seeds, paired, within, cohorts, equivalence,
                 cohort=r.cohort, contrast=r.source_contrast, seed=int(seed),
                 value=float(v), unit="percentage points",
                 source_table=r.source_table))
-    rows.append(dict(
-        panel="F", record="equivalence margin and contrast",
-        architecture="additive", cohort="cifar10",
-        contrast="exact path minus backpropagation",
-        mean=equivalence["mean_pp"], ci_low=equivalence["low_pp"],
-        ci_high=equivalence["high_pp"], n=equivalence["n"],
-        value=equivalence["margin_pp"], unit="percentage points",
-        source_table="source_data/cifar10_additive_feedback_ladder_"
-                     "confirmatory/paired_contrasts.csv"))
+    for eq in equivalence:
+        rows.append(dict(
+            panel="F", record="equivalence margin and contrast",
+            architecture=eq["architecture"], cohort="cifar10",
+            contrast="exact path minus backpropagation",
+            mean=eq["mean_pp"], ci_low=eq["low_pp"], ci_high=eq["high_pp"],
+            n=eq["n"], value=eq["margin_pp"], unit="percentage points",
+            source_table=eq["source_table"]))
     cap_table = "source_data/image_ladder_controls/summaries/" \
                 "delivery_coordinate_capture_summary.csv"
     seed_cap_table = "source_data/image_ladder_controls/summaries/" \
@@ -1294,7 +1325,11 @@ def write_curated(conditions, seeds, paired, within, cohorts, equivalence,
                         seed=int(sr.seed), value=float(sr.mean_capture),
                         unit=f"mean {CAPTURE_COORDINATE}-error capture "
                              "(fraction)", source_table=seed_cap_table))
-    frame = pd.DataFrame(rows, columns=CURATED_COLUMNS)
+    for row in rows:
+        if row.get("cohort") == "cifar10" and row.get("architecture") == "shunting":
+            row["inference_status"] = "fixed-budget descriptive; convergence gate failed"
+            row["convergence_flag_seed"] = 22008
+    frame = pd.DataFrame(rows, columns=[*CURATED_COLUMNS, "inference_status", "convergence_flag_seed"])
     assert set(frame.panel) == {"C", "D", "E", "F", "G"}
     CURATED.parent.mkdir(parents=True, exist_ok=True)
     frame.to_csv(CURATED, index=False)
@@ -1345,7 +1380,7 @@ def main():
     # carry no sentence titles (the legend states the claims) and the row
     # gutter is 30 pt.  Letters keep their reading order, so no pointer in the
     # text moves.
-    canvas = NativeCanvas(472 / 72, 3, row_weights=[126, 126, 100],
+    canvas = NativeCanvas(492 / 72, 3, row_weights=[126, 126, 120],
                           hgutter_pt=40, vgutter_pt=30,
                           margins=Margins(left=36, right=12, top=22, bottom=38))
     a = canvas.panel("A", 0, 0, 4, schematic=True, title="DendriNet image classifier",
@@ -1384,52 +1419,46 @@ def main():
     # with its 0.55 pt row tick, a full 17.6 pt row below row 2's marks.
     out_e = cohort_forest(canvas, e, cohorts, "identity",
                           value_label="Per neuron − scalar baseline (pp)",
-                          xlim=(0.0, 20.2), xticks=[0, 5, 10, 15, 20],
+                          xlim=(0.0, 25.0), xticks=[0, 5, 10, 15, 20, 25],
                           tag_sides=("left", "left", "right", "left"),
                           arch_code=True)
+    exact_rows = cohorts[cohorts.kind.eq("exact")]
+    lower = min([min(row.seed_pp) for _, row in exact_rows.iterrows()]
+                + [eq["low_pp"] for eq in equivalence] + [-2.0])
+    upper = max([max(row.seed_pp) for _, row in exact_rows.iterrows()]
+                + [eq["high_pp"] for eq in equivalence] + [1.0])
+    f_limits = (np.floor(lower) - 0.25, np.ceil(upper) + 0.25)
     out_f = cohort_forest(canvas, f_, cohorts, "exact",
                           value_label="Accuracy difference (pp)",
-                          xlim=(-2.35, 1.05), xticks=[-2, -1, 0, 1],
-                          tag_sides=("left", "left", "left", "right"))
-    # QA 2026-09-10: F's title claims a resolution of 0.2 pp and its coarsest
-    # tick was 1 pp, so the three near-zero rows could not be read against any
-    # gradation finer than the effect being claimed.  Unlabelled 0.25 pp minor
-    # ticks; the axis is NOT broken -- the CIFAR seed cloud reaches -2.11 and
-    # legitimately needs the range.
-    f_.set_xticks(np.arange(-2.25, 1.01, 0.25), minor=True)
-    # F carries the prespecified equivalence margin and names its referent.
-    # QA 2026-09-09 (blocker): the band is painted UNDER the zero rule
-    # (zorder 0.12 < forest()'s axvline at 1.0), so the panel's load-bearing
-    # anchor stays visible.
-    # QA 2026-09-10 (major): the margin is the CIFAR-10 exact-path-MINUS-BP
-    # contrast, and only that cohort has a BP arm at all.  Painted across all
-    # four rows it certified three cohorts against a test never run on them,
-    # on an axis that plots a different contrast.  It is now confined to the
-    # CIFAR-10 row, with that contrast drawn inside it as its own mark.
+                          xlim=f_limits,
+                          xticks=np.arange(np.ceil(f_limits[0]), np.floor(f_limits[1]) + 1),
+                          tag_sides=("left", "left", "left", "left"))
+    f_.set_xticks(np.arange(np.ceil(f_limits[0] * 4) / 4, f_limits[1], 0.25), minor=True)
     for text in list(f_.texts):
         if text.get_text() == "no effect":
             text.remove()
     cifar_y = out_f["ypos"][-1] + 0.85
-    f_.set_ylim(4.6, -1.1)
-    f_.plot([-2.35, 1.05], [3.43, 3.43], color=COLORS["edge"], lw=LW_HAIR)
+    f_.set_ylim(4.65, -1.1)
+    f_.plot(f_limits, [3.43, 3.43], color=COLORS["edge"], lw=LW_HAIR)
     f_.annotate("CIFAR-10\nexact − BP", xy=(0.0, cifar_y + 0.30),
                 xycoords=("axes fraction", "data"), xytext=(-6, 0),
                 textcoords="offset points", fontsize=PT_BASE, color=MUTE,
                 ha="right", va="center")
-    f_.text(-2.25, -0.83, "Exact − per neuron", fontsize=PT_BASE, color=MUTE)
-    # a slim strip under the CIFAR row, so the row's own marks and its seed
-    # tag stay outside the margin that does not apply to them
-    tint_patch(f_, ("rect", -equivalence["margin_pp"], cifar_y + 0.04,
-                    2 * equivalence["margin_pp"], 0.52), color="mute", pct=10,
-               edge=True, lw=LW_HAIR, radius_pt=1.5, zorder=0.12, clip_on=True)
-    f_.plot([equivalence["mean_pp"]], [cifar_y + 0.30], linestyle="none",
-            marker="D", ms=MARKER_MS - 1.0, mfc="white",
-            mec=COLORS["bp"], mew=LW_ERR, zorder=4.2)
-    f_.plot([equivalence["low_pp"], equivalence["high_pp"]],
-            [cifar_y + 0.30] * 2, color=COLORS["bp"], lw=LW_ERR, zorder=4.0,
-            solid_capstyle="butt")
-    f_.text(equivalence["margin_pp"] - 0.08, cifar_y + 0.30, "±1 pp",
-            ha="right", va="center", fontsize=PT_BASE, color=MUTE, zorder=6)
+    f_.text(f_limits[0] + 0.10, -0.83, "Exact − per neuron", fontsize=PT_BASE, color=MUTE)
+    # The margin is confined to the separate exact-minus-BP comparison.
+    margin = equivalence[0]["margin_pp"]
+    tint_patch(f_, ("rect", -margin, cifar_y - 0.02, 2 * margin, 0.65),
+               color="mute", pct=10, edge=True, lw=LW_HAIR,
+               radius_pt=1.5, zorder=0.12, clip_on=True)
+    for eq in equivalence:
+        shunting = eq["architecture"] == "shunting"
+        y = cifar_y + (0.13 if shunting else 0.46)
+        color = COLORS[eq["architecture"]]
+        f_.plot([eq["low_pp"], eq["high_pp"]], [y] * 2,
+                color=color, lw=LW_ERR, zorder=4.0, solid_capstyle="butt")
+        f_.plot([eq["mean_pp"]], [y], linestyle="none", marker="o" if shunting else "s",
+                ms=MARKER_MS - 1.0, mfc=color if shunting else "white",
+                mec=color, mew=LW_ERR, zorder=4.2)
     printed_g = capture(g, cap_seed, cap_summary)
 
     canvas.lock_reserves()          # settle the boxes before drawing in points
@@ -1462,7 +1491,7 @@ def main():
         row = cohorts[cohorts.architecture.eq(arch) & cohorts.cohort.eq(cohort)
                       & cohorts.kind.eq(kind)].iloc[0]
         close(row.mean_pp, target, 5e-3)
-    close(equivalence["mean_pp"], -0.115, 5e-3)
+    close(next(eq for eq in equivalence if eq["architecture"] == "additive")["mean_pp"], -0.115, 5e-3)
     for key, target in ((("shunting", "trained", "broadcast_k1"), 0.622),
                         (("shunting", "trained", "subtrees_k3"), 0.655),
                         (("shunting", "trained", "exact_k12"), 1.000),
@@ -1504,6 +1533,7 @@ def main():
     curated_record = register_curated(curated)
     files = [Path(__file__), JOURNAL / "scripts/figure_canvas.py",
              JOURNAL / "scripts/journal_style.py",
+             JOURNAL / "scripts/cifar_display_validation.py",
              JOURNAL / "scripts/native_schematics.py",
              JOURNAL / "scripts/credit_tree_schematics.py",
              *[FRESH / name for name in
@@ -1513,9 +1543,11 @@ def main():
                 "delivery_coordinate_capture_summary.csv"]],
              *[SOURCE / f"{study}/{name}"
                for study in ("mnist_between_within_factorial", "fashion_feedback_ladder",
-                             "cifar10_additive_feedback_ladder_confirmatory")
+                             "cifar10_additive_feedback_ladder_confirmatory",
+                             "cifar10_shunting_feedback_ladder_confirmatory")
                for name in ("paired_contrasts.csv", "seed_outcomes.csv")],
              SOURCE / "cifar10_additive_feedback_ladder_confirmatory/summary.json",
+             SOURCE / "cifar10_shunting_feedback_ladder_confirmatory/summary.json",
              *[SOURCE / "image_ladder_controls" / name for name in
                ["protocol.json", "selection.json", "projected_k1/protocol.json",
                 "projected_k1/selection.json"]]]
@@ -1539,13 +1571,13 @@ def main():
              "seeds per architecture, 180 epochs, validation-selected state. "
              "The tag is the paired per-neuron minus strict-scalar contrast.",
         "E": "Per neuron minus each cohort's scalar baseline (pp), means with paired 95% "
-             "seed-bootstrap intervals in four separately trained cohorts: "
+             "seed-bootstrap intervals (Student-t for CIFAR) in four task/protocol rows: "
              "fresh MNIST (10 seeds), MNIST DFA (15), Fashion-MNIST (10), "
-             "flattened CIFAR-10 additive (20). Cohorts are not one ladder.",
+             "flattened CIFAR-10 (20 per architecture). Shunting is descriptive after a failed convergence gate; all seeds retained. Architecture recipes differ.",
         "F": "Exact path minus per neuron (pp) in the same rows; band, the "
              "prespecified +-1 pp equivalence margin against backpropagation; "
              "notes, the CIFAR exact-minus-backprop contrast with its TOST "
-             "result and the fresh-cohort within-tree contrasts.",
+             "result and the fresh-cohort within-tree contrasts. Shunting TOST is nominal only: the convergence gate failed.",
         "G": f"Mean {CAPTURE_COORDINATE}-error capture of D's exact-path "
              "fields by C's dictionaries at K = 1 and K = 3; fresh cohort, 10 "
              "seeds per architecture, trained (filled) and initial (open) "
@@ -1569,7 +1601,7 @@ def main():
         schematic_fraction=round(SCHEMATIC_FRACTION, 4),
         waivers={"W1": f"schematic area {SCHEMATIC_FRACTION * 100:.1f} % > 30 % "
                        "(DECISIONS G4, on the AMENDMENTS B12 formula)",
-                 "W2": "row heights 126/126/98 pt (an 8-module panel on a "
+                 "W2": "row heights 126/126/120 pt (an 8-module panel on a "
                        "116 pt row is aspect 2.59 > 2.40)",
                  "W3": f"forest label gutter declared at {FOREST_GUTTER_PT:.0f} pt "
                        "and locked per module column, so A and C draw in "

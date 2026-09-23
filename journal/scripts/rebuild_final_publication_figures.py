@@ -155,6 +155,11 @@ def main() -> None:
         for name in ("input_coverage_mnist", "mnist_dictionary_geometry", "local_gate_controls",
                      "physical_architecture", "measured_transfer_geometry"):
             run_script(f"build_supplementary_figure_{name}_native.py")
+        run_script("build_supplementary_figure_s04_native.py",
+                   "--output", "figures/supplementary/figure_cifar_ladders_native.pdf",
+                   "--confirmatory-analysis-dir", "source_data/cifar10_additive_feedback_ladder_confirmatory",
+                   "--shunting-analysis-dir", "source_data/cifar10_shunting_feedback_ladder_confirmatory",
+                   "--allow-convergence-flags")
         run_script("supplement_consolidation/refresh_native_assets.py")
         run_script("supplement_consolidation/build.py")
         run_script("review_completion/checkpoint_figure.py")

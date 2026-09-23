@@ -135,6 +135,9 @@ JOURNAL_DIRECTORIES = (
     "scripts/supplement_consolidation", "scripts/inherited_neurips",
 )
 JOURNAL_ANALYSIS_RECORDS = (
+    "CIFAR10_SHUNTING_FEEDBACK_LADDER_CONFIRMATORY_20260922.md",
+    "CIFAR10_SHUNTING_SCHEDULER_AMENDMENT_20260922.md",
+    "CIFAR10_SHUNTING_DISPLAY_20260923.md",
     "ANIMAL_DATA_CONTRACT.md",
     "CIFAR10_ADDITIVE_FEEDBACK_LADDER_CONFIRMATORY_20260828.md",
     "CREDIT_PHASE_THEORY_EXPERIMENT_CONTRACT_20260811.md",
@@ -304,6 +307,9 @@ JOURNAL_SCRIPTS += (
 # Keep their original script paths so the restored package passes the same audit.
 JOURNAL_SCRIPTS += (
     'analyze_cifar10_additive_feedback_ladder_confirmatory.py',
+    'analyze_cifar10_shunting_feedback_ladder_confirmatory.py',
+    'audit_cifar10_shunting_scheduler.py',
+    'cifar_display_validation.py',
     'analyze_fashion_feedback_ladder.py',
     'analyze_fig2_path_gain_dispersion.py',
     'analyze_operator_argmax.py',
@@ -504,12 +510,14 @@ def remove_generated_tree(path: Path) -> None:
 
 # Frozen execution records of completed cluster runs (see
 # reproducibility/audit_reproducibility.py FROZEN_EXECUTION_RECORDS): the
-# confirmatory YAML is byte-pinned by its analyzer and all five carry
+# confirmatory YAML is byte-pinned by its analyzer and these carry
 # site-specific paths that document what actually ran.  They are provenance
 # records, not portable recipes, so the release omits them; their summaries,
 # hashes and outcomes ship in source_data instead.
 FROZEN_EXECUTION_RECORD_FILES = {
     "cifar10_additive_feedback_ladder_confirmatory.yaml",
+    "cifar10_shunting_feedback_ladder_confirmatory.yaml",
+    "cifar10_shunting_feedback_ladder_confirmatory_requeue.yaml",
     "cifar10_additive_operator_compatibility.yaml",
     "cifar10_bp_recipe_init_screen.yaml",
     "cifar10_credit_ladder_pilot.yaml",
@@ -1151,7 +1159,7 @@ configuration, validation, and provenance code from that paper snapshot.
 - `article_analysis/code/`: standalone regular-tree checks, reconstructed-tree
   analyses, and the portable CAVE/DANDI measured-response pipeline.
 - `article_analysis/configs/`: frozen and portable experiment specifications.
-  The five CIFAR-10 launch records with site-specific paths are intentionally
+  The CIFAR-10 launch records with site-specific paths are intentionally
   omitted; their frozen summaries and hashes ship in the source-data package.
 - `article_analysis/scripts/`: figure, source-data, cohort, perturbation,
   rerun-validation, and controlled-learning scripts.

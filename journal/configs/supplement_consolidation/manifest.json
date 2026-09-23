@@ -792,146 +792,80 @@
       "label": "fig:si_image_generalization",
       "panels": [
         {
-          "source": "S4",
+          "source": "N4C",
           "source_panel": "C",
           "bbox": [
             16.899999618530273,
             198.39999389648438,
-            167.8771209716797,
-            349.1000061035156
+            175.10000610351562,
+            342.8500061035156
           ],
-          "width": 150.9771213531494,
-          "height": 150.70001220703125,
+          "width": 158.20000648498535,
+          "height": 144.45001220703125,
           "panel": "A",
           "target_rect": [
-            24.25012035369872,
+            22.110342216491688,
             19.0,
-            175.22724170684813,
-            169.70001220703125
+            180.31034870147704,
+            163.45001220703125
           ],
           "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_S04_panels_A-E.pdf",
-          "source_sha256": "511ec1ecb37300e9490fd43e5bd63596072e3092eb20d092fbee6cfb024d6969",
-          "old_provenance_figure": "figS4",
-          "old_provenance_entry_ids": [
-            "fashion.asset",
-            "fashion.audit",
-            "fashion.conditions",
-            "fashion.contrasts",
-            "fashion.outcomes",
-            "regimes.asset",
-            "regimes.cifar",
-            "regimes.cifar.confirm.audit",
-            "regimes.cifar.confirm.conditions",
-            "regimes.cifar.confirm.contract",
-            "regimes.cifar.confirm.contrasts",
-            "regimes.cifar.confirm.outcomes",
-            "regimes.controls.additive",
-            "regimes.controls.bp",
-            "regimes.controls.exact",
-            "regimes.controls.reactivation",
-            "regimes.depth",
-            "regimes.error_source",
-            "regimes.feedback",
-            "regimes.inhibition",
-            "regimes.noise",
-            "regimes.rules",
-            "regimes.tasks"
-          ],
+          "source_asset": "figures/supplementary/figure_cifar_ladders_native.pdf",
+          "source_sha256": "f24e2fd8c5f32955ddd58e15fbc91e4cc73dcb75ab727f48e4855180fc31ff3c",
+          "old_provenance_figure": "figN4C",
+          "old_provenance_entry_ids": [],
           "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/seed_outcomes.csv",
-            "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/fashion_feedback_ladder/audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/fashion_feedback_ladder/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/fashion_feedback_ladder/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/fashion_feedback_ladder/seed_outcomes.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/additive_controls_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/backprop_reference_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/broadcast_noise_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/cifar10_control_ladder_runs.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/competence_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/depth_scaling_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/error_source_runs.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/exact_transport_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/inhibition_dose_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/noise_feedback_ladder_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/reactivation_controls_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/rule_family_summary_source.csv"
+            "drafts/dendritic-local-learning/journal/source_data/cifar10_shunting_feedback_ladder_confirmatory/condition_summary.csv",
+            "drafts/dendritic-local-learning/journal/source_data/cifar10_shunting_feedback_ladder_confirmatory/paired_contrasts.csv",
+            "drafts/dendritic-local-learning/journal/source_data/cifar10_shunting_feedback_ladder_confirmatory/seed_outcomes.csv",
+            "drafts/dendritic-local-learning/journal/source_data/cifar10_shunting_feedback_ladder_confirmatory/summary.json"
           ],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {
+            "source_data/cifar10_shunting_feedback_ladder_confirmatory/condition_summary.csv": "471c6b74e7282c77f30258e93dfefe1c3fedf0787c260bcbb0e07dbfb0122239",
+            "source_data/cifar10_shunting_feedback_ladder_confirmatory/paired_contrasts.csv": "62cfcdd0e8f25aabda6c9ab270069d30e9027a13320b89ccfda8e3c4cc2f4a48",
+            "source_data/cifar10_shunting_feedback_ladder_confirmatory/seed_outcomes.csv": "3d3d1460b1fca618ec4fc095be1a49a836bbb8e55550cc0952e606b1cb19faae",
+            "source_data/cifar10_shunting_feedback_ladder_confirmatory/summary.json": "6417ed8bdf07b96ed1df3c38524e7ec0d8b4c0ab25256c6f7df53e674fbbb6be"
+          },
+          "record_type": "native supplement panel",
+          "builder": "scripts/build_supplementary_figure_s04_native.py"
         },
         {
-          "source": "S4",
+          "source": "N4C",
           "source_panel": "D",
           "bbox": [
             192.89999389648438,
             198.39999389648438,
-            341.3500061035156,
+            338.40667724609375,
             342.8500061035156
           ],
-          "width": 148.45001220703125,
+          "width": 145.50668334960938,
           "height": 144.45001220703125,
           "panel": "B",
           "target_rect": [
-            188.22724170684813,
+            193.31034870147704,
             19.0,
-            336.6772539138794,
+            338.8170320510864,
             163.45001220703125
           ],
           "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_S04_panels_A-E.pdf",
-          "source_sha256": "511ec1ecb37300e9490fd43e5bd63596072e3092eb20d092fbee6cfb024d6969",
-          "old_provenance_figure": "figS4",
-          "old_provenance_entry_ids": [
-            "fashion.asset",
-            "fashion.audit",
-            "fashion.conditions",
-            "fashion.contrasts",
-            "fashion.outcomes",
-            "regimes.asset",
-            "regimes.cifar",
-            "regimes.cifar.confirm.audit",
-            "regimes.cifar.confirm.conditions",
-            "regimes.cifar.confirm.contract",
-            "regimes.cifar.confirm.contrasts",
-            "regimes.cifar.confirm.outcomes",
-            "regimes.controls.additive",
-            "regimes.controls.bp",
-            "regimes.controls.exact",
-            "regimes.controls.reactivation",
-            "regimes.depth",
-            "regimes.error_source",
-            "regimes.feedback",
-            "regimes.inhibition",
-            "regimes.noise",
-            "regimes.rules",
-            "regimes.tasks"
-          ],
+          "source_asset": "figures/supplementary/figure_cifar_ladders_native.pdf",
+          "source_sha256": "f24e2fd8c5f32955ddd58e15fbc91e4cc73dcb75ab727f48e4855180fc31ff3c",
+          "old_provenance_figure": "figN4C",
+          "old_provenance_entry_ids": [],
           "numerical_source_paths": [
             "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/condition_summary.csv",
             "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv",
             "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/seed_outcomes.csv",
-            "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/fashion_feedback_ladder/audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/fashion_feedback_ladder/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/fashion_feedback_ladder/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/fashion_feedback_ladder/seed_outcomes.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/additive_controls_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/backprop_reference_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/broadcast_noise_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/cifar10_control_ladder_runs.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/competence_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/depth_scaling_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/error_source_runs.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/exact_transport_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/inhibition_dose_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/noise_feedback_ladder_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/reactivation_controls_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/rule_family_summary_source.csv"
+            "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/summary.json"
           ],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {
+            "source_data/cifar10_additive_feedback_ladder_confirmatory/condition_summary.csv": "ea74786d4583d3d1545f03c1d8d575a717c45b74925d8e375db389340504df51",
+            "source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv": "cc19f7467e39e25c2f708ed7ff99b63c0f02a76ca0c6a85c940827b1a813186d",
+            "source_data/cifar10_additive_feedback_ladder_confirmatory/seed_outcomes.csv": "914982dd63f6dfbe655048629e8fdce0e3733956526372748900d19337e36aad",
+            "source_data/cifar10_additive_feedback_ladder_confirmatory/summary.json": "1f105a882f4436afcf99281c01595f1a49894704400990e83ddfbff27b46e8b0"
+          },
+          "record_type": "native supplement panel",
+          "builder": "scripts/build_supplementary_figure_s04_native.py"
         },
         {
           "source": "S4",
@@ -946,9 +880,9 @@
           "height": 150.70001220703125,
           "panel": "C",
           "target_rect": [
-            349.6772539138794,
+            351.8170320510864,
             19.0,
-            505.14987964630126,
+            507.2896577835083,
             169.70001220703125
           ],
           "scale": 1.0,
@@ -981,28 +915,17 @@
             "regimes.tasks"
           ],
           "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/seed_outcomes.csv",
-            "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/summary.json",
             "drafts/dendritic-local-learning/journal/source_data/fashion_feedback_ladder/audit.json",
             "drafts/dendritic-local-learning/journal/source_data/fashion_feedback_ladder/condition_summary.csv",
             "drafts/dendritic-local-learning/journal/source_data/fashion_feedback_ladder/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/fashion_feedback_ladder/seed_outcomes.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/additive_controls_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/backprop_reference_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/broadcast_noise_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/cifar10_control_ladder_runs.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/competence_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/depth_scaling_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/error_source_runs.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/exact_transport_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/inhibition_dose_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/noise_feedback_ladder_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/reactivation_controls_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/regular_tree_regimes/rule_family_summary_source.csv"
+            "drafts/dendritic-local-learning/journal/source_data/fashion_feedback_ladder/seed_outcomes.csv"
           ],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {
+            "source_data/fashion_feedback_ladder/condition_summary.csv": "e8f55f142b1216ff1d581f03745e3cd5589f7628ea64e7e0c81db6243f30db94",
+            "source_data/fashion_feedback_ladder/paired_contrasts.csv": "aa093c980f42df397b432ec5c3fbe85fe9aed31877ea3b43468ae7f77a076ee2",
+            "source_data/fashion_feedback_ladder/seed_outcomes.csv": "32fc9ae9c5c317a6063140146f55a4557978e03481b528f365ff5033fc77eb4c",
+            "source_data/fashion_feedback_ladder/audit.json": "6d421f7c2f9e882b016b39a72ed685d6a932ee263fbe76d42cbfef1d72486630"
+          }
         },
         {
           "source": "S30",
@@ -1017,9 +940,9 @@
           "height": 139.70001220703125,
           "panel": "D",
           "target_rect": [
-            24.25012035369872,
+            22.110342216491688,
             192.70001220703125,
-            249.71327991485595,
+            247.57350177764891,
             332.4000244140625
           ],
           "scale": 1.0,
@@ -1050,9 +973,9 @@
           "height": 139.70001220703125,
           "panel": "E",
           "target_rect": [
-            268.71327991485595,
+            266.5735017776489,
             192.70001220703125,
-            500.4132921218872,
+            498.27351398468016,
             332.4000244140625
           ],
           "scale": 1.0,
@@ -1076,8 +999,9 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 336.4000244140625,
-      "sha256": "c6b2a7f63c7a16e03d07ee6f3e598d52bf93459f117b1aed99d6bd25d9351017",
+      "sha256": "297bd3dd1b8387acbd31732aa695997a78309bda22622d6892e4575392d2ac0e",
       "source_data_directories": [
+        "source_data/cifar10_shunting_feedback_ladder_confirmatory",
         "source_data/cifar10_additive_feedback_ladder_confirmatory",
         "source_data/fashion_feedback_ladder",
         "source_data/mnist_between_within_factorial",
@@ -8396,20 +8320,6 @@
       {
         "figure": "S6",
         "label": "fig:si_image_generalization",
-        "panel": "A",
-        "source_panel": "C",
-        "path": "figures/supplementary/curated/image_generalization.pdf"
-      },
-      {
-        "figure": "S6",
-        "label": "fig:si_image_generalization",
-        "panel": "B",
-        "source_panel": "D",
-        "path": "figures/supplementary/curated/image_generalization.pdf"
-      },
-      {
-        "figure": "S6",
-        "label": "fig:si_image_generalization",
         "panel": "C",
         "source_panel": "E",
         "path": "figures/supplementary/curated/image_generalization.pdf"
@@ -9858,6 +9768,22 @@
         "panel": "D",
         "source_panel": "A",
         "path": "figures/supplementary/curated/input_coverage_depth.pdf"
+      }
+    ],
+    "N4C": [
+      {
+        "figure": "S6",
+        "label": "fig:si_image_generalization",
+        "panel": "A",
+        "source_panel": "C",
+        "path": "figures/supplementary/curated/image_generalization.pdf"
+      },
+      {
+        "figure": "S6",
+        "label": "fig:si_image_generalization",
+        "panel": "B",
+        "source_panel": "D",
+        "path": "figures/supplementary/curated/image_generalization.pdf"
       }
     ]
   }

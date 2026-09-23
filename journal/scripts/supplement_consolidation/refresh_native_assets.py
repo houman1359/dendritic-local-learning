@@ -5,6 +5,7 @@ import pymupdf as fitz
 
 J=Path(__file__).resolve().parents[2]
 RENDERS={
+ 'N4C':('cifar_ladders',5),
  'N9':('input_coverage_mnist',1),
  'N7':('mnist_dictionary_geometry',3),
  'N21':('local_gate_controls',4),
@@ -26,7 +27,7 @@ def main():
        letters.append(dict(letter=span['text'],bbox=span['bbox'],origin=span['origin']))
    assert sorted(x['letter'] for x in letters)==list('ABCDEFGHIJKLMNOPQRSTUVWXYZ'[:count]),(key,letters)
    records[key]=dict(path=str(path.relative_to(J)),old_label='fig:si_'+name,letters=sorted(letters,key=lambda x:x['letter']),
-      builder=f'scripts/build_supplementary_figure_{name}_native.py',
+      builder=('scripts/build_supplementary_figure_s04_native.py' if key == 'N4C' else f'scripts/build_supplementary_figure_{name}_native.py'),
       sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
       note='Current editorial render; the frozen original registry remains unchanged.')
  (J/'configs/supplement_consolidation/current_native_assets.json').write_text(json.dumps(records,indent=2)+'\n')

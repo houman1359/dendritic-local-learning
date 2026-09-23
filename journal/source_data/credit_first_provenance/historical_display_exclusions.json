@@ -1,0 +1,42 @@
+{
+  "scope": "Current publication display exclusions; original execution and numerical records remain unchanged in Source Data.",
+  "panels": [
+    {
+      "previous_figure": "S1",
+      "panels": [
+        "D",
+        "E"
+      ],
+      "reason": "Historical additive normalization and aggregate execution lineage are unresolved.",
+      "sources": [
+        "source_data/inherited_neurips/theory_diag_by_condition.csv",
+        "source_data/inherited_neurips/path_transport_upper_bound_summary.csv"
+      ]
+    },
+    {
+      "previous_figure": "S9",
+      "panels": [
+        "D (noise-task series)",
+        "E",
+        "F"
+      ],
+      "reason": "The executed noise-task generator is unresolved; a later implementation cannot identify the historical execution.",
+      "sources": [
+        "source_data/spatial_topology_audit/task_feedback_effects.csv",
+        "source_data/prospective_input_validity/followup_publication_seed_outcomes.csv"
+      ]
+    },
+    {
+      "previous_figure": "S26",
+      "panels": [
+        "D"
+      ],
+      "reason": "Weighted domain overlap largely repeats shared-path fraction; both definitions and separate inference remain archived.",
+      "sources": [
+        "source_data/microns_inhibitory_routes/target_metrics.csv",
+        "source_data/microns_inhibitory_routes/inhibitory_axon_metrics.csv",
+        "source_data/microns_inhibitory_routes/inhibitory_3d_matched_target_metrics.csv"
+      ]
+    }
+  ]
+}

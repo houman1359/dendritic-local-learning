@@ -290,5 +290,79 @@
     "builder": "scripts/build_supplementary_figure_measured_transfer_geometry_native.py",
     "sha256": "13c9a4f277ee888ca55f9cdab3a87a33c5d40545cb46901360788905cab14c85",
     "note": "Current editorial render; the frozen original registry remains unchanged."
+  },
+  "N4C": {
+    "path": "figures/supplementary/figure_cifar_ladders_native.pdf",
+    "old_label": "fig:si_cifar_ladders",
+    "letters": [
+      {
+        "letter": "A",
+        "bbox": [
+          6.539999961853027,
+          6.759007453918457,
+          13.038000106811523,
+          15.759007453918457
+        ],
+        "origin": [
+          6.539999961853027,
+          13.32000732421875
+        ]
+      },
+      {
+        "letter": "B",
+        "bbox": [
+          255.86000061035156,
+          6.759007453918457,
+          262.3580017089844,
+          15.759007453918457
+        ],
+        "origin": [
+          255.86000061035156,
+          13.32000732421875
+        ]
+      },
+      {
+        "letter": "C",
+        "bbox": [
+          6.539999961853027,
+          193.73500061035156,
+          13.038000106811523,
+          202.73500061035156
+        ],
+        "origin": [
+          6.539999961853027,
+          200.29600524902344
+        ]
+      },
+      {
+        "letter": "D",
+        "bbox": [
+          182.13333129882812,
+          193.73500061035156,
+          188.63133239746094,
+          202.73500061035156
+        ],
+        "origin": [
+          182.13333129882812,
+          200.29600524902344
+        ]
+      },
+      {
+        "letter": "E",
+        "bbox": [
+          339.40667724609375,
+          193.73500061035156,
+          345.40966796875,
+          202.73500061035156
+        ],
+        "origin": [
+          339.40667724609375,
+          200.29600524902344
+        ]
+      }
+    ],
+    "builder": "scripts/build_supplementary_figure_s04_native.py",
+    "sha256": "f24e2fd8c5f32955ddd58e15fbc91e4cc73dcb75ab727f48e4855180fc31ff3c",
+    "note": "Complete CIFAR ladders; shunting is explicitly descriptive after the failed convergence gate. Only C and D are selected for S6."
   }
 }

@@ -1,6 +1,6 @@
 """The frozen CIFAR execution records must never enter the software release.
 
-These five launch YAMLs document completed cluster runs with site-specific
+These frozen launch YAMLs document completed cluster runs with site-specific
 paths (the confirmatory one is byte-pinned by its analyzer), so both the
 reproducibility private-path rule and the release copier must treat them as
 provenance records, not shippable recipes — and the two policies must agree.

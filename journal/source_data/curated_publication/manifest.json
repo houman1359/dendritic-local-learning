@@ -1,0 +1,74 @@
+{
+  "records": [
+    {
+      "figure": 1,
+      "source": "scripts/credit_first_figures/build_framework.py",
+      "path": "source_data/curated_publication/figure_01_plotted.csv",
+      "sha256": "6bcb5ab02068531168ed96022fe9d4c63ec96ecb8603ada794f05e866e63ab0e",
+      "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
+    },
+    {
+      "figure": 2,
+      "source": "scripts/build_main_figure_04.py",
+      "path": "source_data/curated_publication/figure_02_plotted.csv",
+      "sha256": "36958ed17fdb2a4b52149abe10b564240d1f32424e892462d76f42e5ecebcff9",
+      "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
+    },
+    {
+      "figure": 3,
+      "source": "scripts/credit_first_figures/build_ancestry.py",
+      "path": "source_data/curated_publication/figure_03_plotted.csv",
+      "sha256": "5da940fa16b99f32db31209b65ee58bccac52e7146be95c2dea9fe7cf258a5ee",
+      "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
+    },
+    {
+      "figure": 4,
+      "source": "figures/provenance/structure_restoration_20260908/figure_04_plotted.csv",
+      "path": "source_data/curated_publication/figure_04_plotted.csv",
+      "sha256": "b5d1915dda1a5151a940687e69e2bb7ad4de52bba019fe2fabee38656e14df04",
+      "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
+    },
+    {
+      "figure": 5,
+      "source": "scripts/conductance_local_gate/figure.py",
+      "path": "source_data/curated_publication/figure_05_plotted.csv",
+      "sha256": "4b713a93098075e05d7ae5a3fab18619ccf1e00130c6bdb9c8d742a56d8d21db",
+      "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
+    },
+    {
+      "figure": 6,
+      "source": "scripts/review_completion/population_figure.py",
+      "path": "source_data/curated_publication/figure_06_plotted.csv",
+      "sha256": "935ab1a5c22f51b9a4c956c9f896f361941fc369dd7db7845c9c2a41b0fea7a3",
+      "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
+    },
+    {
+      "figure": 7,
+      "source": "figures/provenance/structure_restoration_20260908/figure_06_plotted.csv",
+      "path": "source_data/curated_publication/figure_07_plotted.csv",
+      "sha256": "f7734da5e2de0f2d536fb93fc7cfd32a6dc9b3b541b8added63fc01850421689",
+      "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
+    },
+    {
+      "figure": 8,
+      "source": "figures/provenance/structure_restoration_20260908/figure_07_plotted.csv",
+      "path": "source_data/curated_publication/figure_08_plotted.csv",
+      "sha256": "0b1a8591cd6e8c7c5ff9c3e2c64a6893c025f66872d33977d7e2a8a48aa84cbc",
+      "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
+    },
+    {
+      "figure": 9,
+      "source": "figures/provenance/credit_clarity_20260908/figure_09_plotted.csv",
+      "path": "source_data/curated_publication/figure_09_plotted.csv",
+      "sha256": "eff3fe251683352f1297e9b8b672f584291567db35e9a3990e6c70ae1799b59d",
+      "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
+    },
+    {
+      "figure": 10,
+      "source": "scripts/credit_first_figures/build_measured.py",
+      "path": "source_data/curated_publication/figure_10_plotted.csv",
+      "sha256": "7098adb82676058355aee0dbb315a50db47dd54ba28db9abd151d894c16b6c3d",
+      "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
+    }
+  ]
+}

@@ -75,6 +75,7 @@ DESTINATION_EXPECTED_ROW_COUNTS = {
 }
 
 SANITIZED_JSON_PATHS = {
+    "source_data/cifar10_shunting_feedback_ladder_confirmatory/summary.json",
     "source_data/cifar10_additive_feedback_ladder_confirmatory/summary.json",
     "source_data/physical_depth_h4_factorial/audit.json",
     "source_data/physical_depth_clean_source_replication/audit.json",

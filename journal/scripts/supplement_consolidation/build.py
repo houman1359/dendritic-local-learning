@@ -29,7 +29,7 @@ J=Path(__file__).resolve().parents[2]; HERE=Path(__file__).resolve().parent
 sys.path.insert(0,str(HERE));sys.path.insert(0,str(J/'scripts'))
 from specification import (FIGURES, REMOVED_SHARED_REGIONS, SHARED_LEGENDS, WHOLE_CROPS,
  PANEL_BOUNDS, PANEL_REDACTIONS, PANEL_PATCHES, PANEL_TEXT, NATIVE_LEGENDS,
- EXPLICIT_NUMERICAL_SOURCES, EXTRA_ASSETS, CAPTION_APPEND, ALIAS_EXTRA,
+ EXPLICIT_NUMERICAL_SOURCES, NUMERICAL_SOURCE_OVERRIDES, EXTRA_ASSETS, CAPTION_APPEND, ALIAS_EXTRA,
  ALIAS_BLACKLIST, PANEL_CONTENT, PANEL_REASONS, SOURCE_DATA_DIRS,
  ASSET_PATH_OVERRIDES, SCALE_EXEMPTIONS, CONSOLIDATED_FIGURE_NUMBERS)
 from tex_sources import expanded_tex
@@ -330,6 +330,11 @@ def main():
    p['numerical_source_paths']=sorted(set(r.get('source_path','') for r in records if 'source_data/' in r.get('source_path','') and not r.get('source_path','').endswith('.pdf')))
    explicit=EXPLICIT_NUMERICAL_SOURCES.get((source,p['source_panel']),[])
    p['numerical_source_paths']=sorted(set(p['numerical_source_paths'])|{'drafts/dendritic-local-learning/journal/'+q for q in explicit})
+   if (source,p['source_panel']) in NUMERICAL_SOURCE_OVERRIDES:
+    # Complete current panel mappings supersede figure-wide historical links.
+    # The historical entry identifiers above remain available for lineage.
+    explicit=NUMERICAL_SOURCE_OVERRIDES[(source,p['source_panel'])]
+    p['numerical_source_paths']=['drafts/dendritic-local-learning/journal/'+q for q in sorted(explicit)]
    p['explicit_numerical_source_hashes']={q:sha(J/q) for q in explicit}
    if source in EXTRA_ASSETS:p['record_type']='native supplement panel';p['builder']=REG[source]['builder']
    if (source,p['source_panel'])==('S12','B'):p['record_type']='schematic'

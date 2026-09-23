@@ -1,0 +1,5 @@
+# CIFAR-10 shunting: complete fixed-budget cohort
+
+The four numerical/audit files are unchanged exports of the frozen analyzer for 80 runs (20 paired seeds, 22000–22019). Data integrity, calibration and scheduler audits pass. Strict-scalar seed 22008 fails the prespecified convergence criterion; the frozen inferential decisions remain false. Figure 1E–F and Supplementary Figure S6A display all runs descriptively, with this limitation in Results and both captions. No seed is removed and no scientific gate is changed. Comparisons between architecture means confound their training recipes and H100/H200 hardware.
+
+The archived partial H100 attempt and five-seed pilots are excluded. The complete accepted cohort is array 47787999, kempner_eng/H200; analysis 47804995. Source implementation: e516c7fec3169253ff8c14bc5f4ab1325469e4f5. Full recipes, statistical specification and execution amendments are retained in the software source archive. The separate pending Fashion-MNIST and physical-depth extensions supply no new data to this release.

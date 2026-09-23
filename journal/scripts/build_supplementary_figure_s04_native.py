@@ -33,9 +33,9 @@ mapping and label wording are native:
 The default build contains panels A--D (the three inherited panels and the
 Fashion-MNIST replication). The canonical five-panel sheet can be rendered
 only by explicitly supplying a finalized analysis directory
-from ``analyze_cifar10_additive_feedback_ladder_confirmatory.py``.  That path
-is deliberately fail-closed: incomplete, convergence-flagged or internally
-inconsistent outputs cannot produce a publication asset.
+from ``analyze_cifar10_additive_feedback_ladder_confirmatory.py``.  Incomplete or internally inconsistent packages are rejected. A complete
+convergence-flagged cohort requires an explicit fixed-budget display opt-in;
+its original failed inferential decisions and seed-level flags are retained.
 """
 
 from __future__ import annotations
@@ -46,7 +46,6 @@ import sys
 from pathlib import Path
 
 import numpy as np
-from journal_style import style_direct_color_labels
 import pandas as pd
 from matplotlib.ticker import PercentFormatter
 from scipy import stats
@@ -55,6 +54,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
+from journal_style import style_direct_color_labels
 from figure_canvas import (  # noqa: E402
     COLORS,
     ERR_CAPSIZE,
@@ -241,15 +241,17 @@ def panel_cifar(ax):
     return ax
 
 
-def load_confirmatory_analysis(analysis_dir: Path) -> tuple[pd.DataFrame, dict]:
+def load_confirmatory_analysis(analysis_dir: Path, *, architecture="additive", allow_convergence_flags=False) -> tuple[pd.DataFrame, dict]:
     """Load one complete, analyzer-validated 80-run confirmatory package.
 
     This is stricter than a plotting convenience function.  It verifies the
     analyzer decision record, the four paired 20-seed arms, and the exported
     condition/contrast summaries before any marks are drawn.  The scientific
-    promotion gates are intentionally *not* required: a fully valid negative
-    result may still be shown as a supplementary boundary result.
+    promotion gates are intentionally *not* required: a complete negative result may still be shown. Convergence-flagged results
+    additionally require explicit disclosure and consistent seed-level flags.
     """
+    expected_seeds = {"additive": set(range(10800, 10820)),
+                      "shunting": set(range(22000, 22020))}[architecture]
     analysis_dir = Path(analysis_dir)
     required = {
         "summary": analysis_dir / "summary.json",
@@ -270,21 +272,22 @@ def load_confirmatory_analysis(analysis_dir: Path) -> tuple[pd.DataFrame, dict]:
     errors: list[str] = []
     if summary.get("contract_frozen_before_confirmatory_outcomes") is not True:
         errors.append("the frozen-before-outcomes contract flag is absent")
-    if audit.get("status") != "complete_and_validated":
+    if audit.get("status") not in {"complete_and_validated", "complete_with_convergence_flags"}:
         errors.append(f"audit status is {audit.get('status')!r}")
     if audit.get("integrity_valid") is not True:
         errors.append("integrity audit did not pass")
-    if audit.get("convergence_valid") is not True:
-        errors.append("convergence audit did not pass")
     if audit.get("n_expected") != 80 or audit.get("n_results_complete") != 80:
         errors.append(
             "audit does not record exactly 80/80 complete results "
             f"({audit.get('n_results_complete')!r}/{audit.get('n_expected')!r})"
         )
-    if decision.get("audit_passes") is not True:
-        errors.append("analyzer decision does not certify the audit")
 
     outcomes = pd.read_csv(required["outcomes"])
+    from cifar_display_validation import validate_convergence_disclosure
+    try:
+        validate_convergence_disclosure(summary, outcomes, allow_convergence_flags=allow_convergence_flags)
+    except ValueError as exc:
+        errors.append(str(exc))
     needed_columns = {"feedback", "seed", "test_accuracy"}
     absent_columns = sorted(needed_columns - set(outcomes.columns))
     if absent_columns:
@@ -310,8 +313,8 @@ def load_confirmatory_analysis(analysis_dir: Path) -> tuple[pd.DataFrame, dict]:
         ]
         if seed_sets and any(seed_set != seed_sets[0] for seed_set in seed_sets[1:]):
             errors.append("the four feedback arms do not share the same seed set")
-        if seed_sets and seed_sets[0] != EXPECTED_CONFIRMATORY_SEEDS:
-            errors.append("the paired seed set is not the frozen 10800--10819 set")
+        if seed_sets and seed_sets[0] != expected_seeds:
+            errors.append(f"the paired seed set is not the frozen {architecture} set")
         values = pd.to_numeric(outcomes["test_accuracy"], errors="coerce")
         if not np.isfinite(values).all() or not values.between(0.0, 1.0).all():
             errors.append("test accuracies are non-finite or outside [0,1]")
@@ -359,7 +362,7 @@ def load_confirmatory_analysis(analysis_dir: Path) -> tuple[pd.DataFrame, dict]:
 
 
 def panel_confirmatory_cifar(ax, outcomes: pd.DataFrame):
-    """Fresh paired raw-additive CIFAR-10 ladder with mean and 95% CI."""
+    """Fresh paired CIFAR-10 ladder with mean and 95% CI."""
     wide = outcomes.pivot(index="seed", columns="feedback", values="test_accuracy")
     order = [name for name, *_ in CONFIRMATORY_SPECS]
     wide = wide.loc[:, order]
@@ -548,12 +551,19 @@ def panel_fashion(ax, outcomes: pd.DataFrame, summary: pd.DataFrame):
 CANVAS_H_PT = 358.0                     # 518.4 / 358.0 = 1.45 aspect
 
 
-def build(path=None, *, confirmatory_analysis_dir=None):
+def build(path=None, *, confirmatory_analysis_dir=None, shunting_analysis_dir=None, allow_convergence_flags=False):
     confirmatory = None
     if confirmatory_analysis_dir is not None:
         confirmatory, _summary = load_confirmatory_analysis(
             Path(confirmatory_analysis_dir)
         )
+    shunting = None
+    if shunting_analysis_dir is not None:
+        if confirmatory is None:
+            raise ValueError("A shunting update requires the additive cohort as well")
+        shunting, _ = load_confirmatory_analysis(
+            Path(shunting_analysis_dir), architecture="shunting",
+            allow_convergence_flags=allow_convergence_flags)
     fashion_outcomes, fashion_summary = load_fashion_ladder()
     # A 38 pt gutter holds every y tick column plus its label outright, so
     # no column lock is carved and the middle panel of row 1 keeps the same
@@ -584,7 +594,11 @@ def build(path=None, *, confirmatory_analysis_dir=None):
                             title="Fashion-MNIST")
     panel_depth(ax_a)
     panel_noise(ax_b)
-    panel_cifar(ax_c)
+    if shunting is None:
+        panel_cifar(ax_c)
+    else:
+        panel_confirmatory_cifar(ax_c, shunting)
+        ax_c.set_ylabel("CIFAR-10 accuracy")
     if confirmatory is not None:
         panel_confirmatory_cifar(ax_d, confirmatory)
     panel_fashion(ax_e, fashion_outcomes, fashion_summary)
@@ -611,12 +625,18 @@ if __name__ == "__main__":
             "when supplied, validates 80/80 runs and emits panels A-E"
         ),
     )
+    parser.add_argument("--shunting-analysis-dir", type=Path,
+                        help="Validated 20-seed shunting cohort replacing the historical ladder")
+    parser.add_argument("--allow-convergence-flags", action="store_true",
+                        help="Display complete fixed-budget data with disclosed convergence flags")
     args = parser.parse_args()
     raise SystemExit(
         1
         if build(
             args.output,
             confirmatory_analysis_dir=args.confirmatory_analysis_dir,
+            shunting_analysis_dir=args.shunting_analysis_dir,
+            allow_convergence_flags=args.allow_convergence_flags,
         )
         else 0
     )

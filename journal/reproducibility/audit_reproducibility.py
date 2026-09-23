@@ -210,6 +210,8 @@ def audit_rerun_specs() -> None:
 # the private-path release rule and are not shipped as re-runnable recipes.
 FROZEN_EXECUTION_RECORDS = {
     "configs/cifar10_additive_feedback_ladder_confirmatory.yaml",
+    "configs/cifar10_shunting_feedback_ladder_confirmatory.yaml",
+    "configs/cifar10_shunting_feedback_ladder_confirmatory_requeue.yaml",
     "configs/cifar10_additive_operator_compatibility.yaml",
     "configs/cifar10_bp_recipe_init_screen.yaml",
     "configs/cifar10_credit_ladder_pilot.yaml",
