@@ -82,16 +82,19 @@ def condition_curves(ax, curves, stopping, metric, panel, rows):
                 epoch=int(r.epochs_run), mean=value, n_seeds=10))
     # Labels occupy a reserved column beyond the last observed epoch.
     # The two broadcast variants use their parent coordinate's colour.
-    seats = {'exact BP': .93, 'broadcast (BP)': .83, 'exact path': .69,
-             'shared soma': .55, 'broadcast (local)': .45, 'exact BP (D1)': .23}
-    if metric != 'test_accuracy':
-        seats = {'exact BP (D1)': .87, 'shared soma': .53,
-                 'broadcast (local)': .43, 'exact path': .28,
-                 'broadcast (BP)': .15, 'exact BP': .05}
+    if metric == 'test_accuracy':
+        # The D3 endpoints coincide at this scale; the shared style key is F.
+        seats = {'exact BP': .92, 'exact BP (D1)': .25}
+    else:
+        seats = {'exact BP (D1)': .90, 'shared soma': .61,
+                 'broadcast (local)': .48, 'exact path': .32,
+                 'broadcast (BP)': .17, 'exact BP': .045}
     for label, seat in seats.items():
         value, color = ends[label]
         printed = {'exact BP':'BP D3', 'broadcast (BP)':'broadcast',
                    'broadcast (local)':'broadcast', 'exact BP (D1)':'BP D1'}.get(label, label)
+        if metric == 'test_accuracy':
+            printed = 'D3: all rules' if label == 'exact BP' else 'D1: BP'
         endpoint = ax.transAxes.inverted().transform(ax.transData.transform((maximum, value)))
         # Keep every connector inside the narrow gutter before the label
         # column, so the coincident accuracy curves cannot cross other names.

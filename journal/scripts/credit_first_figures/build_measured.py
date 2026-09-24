@@ -789,9 +789,6 @@ def main():
         xlim=(-0.5, 0.5), reference=None, reference_label='', tag='')
     ax_b.set_xticks([-0.5, -0.25, 0.0, 0.25, 0.5])
     ax_b.set_xticklabels(['−0.5', '−0.25', '0', '0.25', '0.5'])
-    for row, y in zip(b_plot, out_b['ypos']):
-        ax_b.text(0.49, y, row['note'], fontsize=PT_BASE, color=GRAY,
-                  ha='right', va='center', zorder=6)
     # the rug is a dot column, not a flat row: four of the thirteen adjacent
     # gaps are under one ring diameter on this axis and the flat rug printed
     # about eleven countable marks against its own '13 scan values' tag.
@@ -821,7 +818,7 @@ def main():
     lower = ax_c.inset_axes([0, -.02, 1, .18])
     for axis, rows, label in ((upper, [dict(row, label=row['label'].replace('\n', ' ')) for row in c_rows[:3]], 'Rank correlation'),
                               (lower, c_rows[3:], 'Mean similarity difference')):
-        canvas.forest(axis, rows, value_label=label, xlim=(-.5, .5),
+        canvas.forest(axis, [dict(row, note=None) for row in rows], value_label=label, xlim=(-.5, .5),
                       reference=0., reference_label='', tag='', band=False)
         axis.set_xticks([-.5, 0, .5], ['−0.5', '0', '0.5'])
         axis.tick_params(labelsize=PT_BASE, pad=1, length=2)

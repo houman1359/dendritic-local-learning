@@ -25,7 +25,7 @@ import matplotlib.pyplot
 import numpy as np
 import pandas as pd
 from matplotlib.lines import Line2D
-from matplotlib.patches import FancyArrowPatch
+from matplotlib.patches import FancyArrowPatch, Rectangle
 from matplotlib.ticker import FixedLocator, NullFormatter, NullLocator
 
 from report import OUT, figures, boot
@@ -651,7 +651,8 @@ def panel_task(ax, tuning):
     # Review pass 2026-09-23: which subtree carries which tuning in the
     # aligned and opposed tasks is stated in the legend, so the two labelled
     # leaders under the inset are gone.
-    for dashed, lines, ha in ():
+    for dashed, lines, ha in ((False, ['Aligned:', 'both'], 'left'),
+                              (True, ['Opposed:', 'right'], 'right')):
         series = tuning.v_decreasing if dashed else tuning.v_increasing
         # the leader touches its own curve at V = 0.28: the two contact points
         # are then 16 pt apart, 6 pt of each leader falls inside the inset,
@@ -747,26 +748,38 @@ def panel_deliveries(ax):
                            emphasis=not oracle)
         x0, y0, w, h = core
         rect = (x0 + f.fx(6), y0 + f.fy(30), w - f.fx(12), h - f.fy(36))
-        nodes = f.balanced_tree(rect, depth=2, trunk=False, mode='plain', ghost=True)
-        f.gate(nodes['JR'], closed=True, descendants=None, nodes=nodes,
-               node='JR', badge=None)
-        f.error_in(nodes.soma, side='left')
         if oracle:
-            distal_oracle_delivery(f, nodes)
-            lines = [
-                (['distal: p', ('sub', 'j'), 'ĉ', ('sub', 'j')], INK),
-            ]
+            # Show only the two fixed supports; a third neuron would repeat A.
+            cell_w, cell_h = f.fx(17), f.fy(14)
+            left = x0 + w/2 - cell_w
+            top = y0 + h - f.fy(26)
+            for col in range(2):
+                f.subscript((left + (col+.5)*cell_w, top + f.fy(7)),
+                            'p', str(col+1), ha='center')
+                for row in range(4):
+                    active = row//2 == col
+                    ax.add_patch(Rectangle((left+col*cell_w, top-(row+1)*cell_h),
+                                 cell_w, cell_h, facecolor=COLORS['oracle'] if active else 'white',
+                                 alpha=.32 if active else 1, edgecolor=MUTE, lw=LW_HAIR))
+            for row in range(4):
+                f.text((left-f.fx(5), top-(row+.5)*cell_h), str(row+1),
+                       size=PT_BASE, color=MUTE, ha='right')
+            lines = [(['p', ('sub', '1'), 'ĉ', ('sub', '1'), ' + p',
+                       ('sub', '2'), 'ĉ', ('sub', '2')], INK)]
         else:
+            nodes = f.balanced_tree(rect, depth=2, trunk=False, mode='plain', ghost=True)
+            f.gate(nodes['JR'], closed=True, descendants=None, nodes=nodes,
+                   node='JR', badge=None)
+            f.error_in(nodes.soma, side='left')
             subtree_delivery(f, nodes, ['JL'], 'shunting', 'shunting')
             open_head(f, _lerp(nodes.soma, nodes['JR'], 0.16),
                       _lerp(nodes.soma, nodes['JR'], 0.84), COLORS['shunting'])
-            lines = [
-                (['distal: 1[', 'a', ('sub', 'p'), ('sup', 'I'), ' = 0]'], INK),
-            ]
+            lines = [(['distal: 1[', 'a', ('sub', 'p'), ('sup', 'I'), ' = 0]'], INK)]
         for row, (parts, colour) in enumerate(lines):
             chain_frame(f, (x0 + w / 2, y0 + f.fy(6 - 10 * row)),
                         parts, color=colour, ha='center')
-    # Review pass 2026-09-23: "proximal and soma x 1" is in the legend.
+    f.text((.5, -.045), 'Proximal and soma: ungated', size=PT_BASE, color=MUTE)
+    # Detailed signal definitions remain in the caption.
     f.require_soma_lowest()
     f.require_delta0()
 
@@ -1355,7 +1368,7 @@ TUNING_ROWS = []
 
 
 def build(cfg, tables, tuning):
-    from review_completion.promoted_panels import tuning_panel
+    from review_completion.promoted_panels import paired_tuning_panel
     TUNING_ROWS.clear()
     canvas = NativeCanvas(HEIGHT_PT / 72, 3, row_weights=ROWS_PT,
                           hgutter_pt=HGUTTER_PT, vgutter_pt=VGUTTER_PT,
@@ -1368,13 +1381,12 @@ def build(cfg, tables, tuning):
     # letter column; the schematic headlines are stated in the legend.
     a = canvas.panel('A', 0, 0, 6, schematic=True, lock=False)
     b = canvas.panel('B', 0, 6, 6, schematic=True, lock=False)
-    # C and D have compact condition headers; E-G need only their axis titles.
+    # C and D have compact condition headers; E and F need only axis titles.
     c = canvas.panel('C', 1, 0, 6)
     d = canvas.panel('D', 1, 6, 6)
-    e = canvas.panel('E', 2, 0, 4)
-    f_ = canvas.panel('F', 2, 4, 4)
-    g = canvas.panel('G', 2, 8, 4)
-    data_panels = ('C', 'D', 'E', 'F', 'G')
+    e = canvas.panel('E', 2, 0, 6)
+    f_ = canvas.panel('F', 2, 6, 6)
+    data_panels = ('C', 'D', 'E', 'F')
     for n in data_panels:
         canvas.declare_reserve(n, left=LEFT_RESERVE_PT, right=RIGHT_RESERVE_PT)
     canvas.lock_reserves()
@@ -1386,23 +1398,12 @@ def build(cfg, tables, tuning):
                    C=curve_annotations(c, tables, 'aligned_strong'),
                    D=curve_annotations(d, tables, 'opposed_strong'),
                    E=placement(e, tables),
-                   F=dict(context=0, n=20), G=dict(context=1, n=20))
-    tuning_panel(f_, 0, 'F', TUNING_ROWS)
-    tuning_panel(g, 1, 'G', TUNING_ROWS)
+                   F=dict(contexts=[0, 1], n=20))
+    paired_tuning_panel(f_, 'F', TUNING_ROWS)
     axis_break(c, 64.0)
     axis_break(d, 64.0)
-    # the oracle badge, pinned in points to C's axes corner after its entry
-    canvas.fig.canvas.draw()
-    r = canvas.fig.canvas.get_renderer()
-    box = c._oracle_entry.get_window_extent(r)
-    corner = c.transAxes.transform((0.0, 0.0))
-    k = 72.0 / canvas.fig.dpi
-    badge_at(c, (0.0, 0.0), 'oracle', xycoords='axes fraction',
-             offset_pt=((box.x1 - corner[0]) * k + 3.0,
-                        ((box.y0 + box.y1) / 2 - corner[1]) * k),
-             ha='left', va='center')
     # one axes width per span family: declare the widest left / right need of
-    # any data panel for all of them, so C = D and E = F = G exactly.
+    # any data panel for all of them, so C = D and E = F exactly.
     # the y-label stack has to sit inside the slot, right of the letter
     # column: verified, not assumed (audit_letter_alignment's second check)
     canvas.lock_reserves()
@@ -1453,46 +1454,19 @@ PANEL_SOURCES = {
     'main_5D': ['source_data/conductance_local_gate/figures/curve_band_source.csv',
                 'source_data/conductance_local_gate/summaries/all_curves.csv',
                 'source_data/conductance_local_gate/summaries/condition_means.csv'],
-    'main_5E': ['source_data/conductance_local_gate/summaries/paired_contrasts.csv',
-                'source_data/conductance_local_gate/summaries/paired_seed_contrasts.csv',
-                'source_data/conductance_local_gate/summaries/completeness_audit.json'],
-    'main_5F': ['source_data/conductance_local_gate/summaries/all_endpoints.csv',
+    'main_5E': ['source_data/conductance_local_gate/summaries/all_endpoints.csv',
                 'source_data/conductance_local_gate/summaries/condition_means.csv'],
-    'main_5G': ['source_data/conductance_local_gate/figures/historical_cancellation_source.csv',
-                'source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv'],
-    'main_5H': ['source_data/curated_publication/inhibitory_selection_summary.csv',
-                'source_data/curated_publication/inhibitory_selection_provenance.json'],
-    'main_5I': ['source_data/curated_publication/inhibitory_selection_endpoints.csv',
-                'source_data/curated_publication/inhibitory_selection_summary.csv',
-                'source_data/curated_publication/inhibitory_selection_provenance.json'],
+    'main_5F': ['source_data/checkpoint_computation/branch_tuning.csv',
+                'source_data/checkpoint_computation/protocol.json'],
 }
 PANEL_SCOPE = {
-    'main_5A': 'Seven-compartment circuit, E/I contacts, the context gate and the local distal gate’s addressed subtree; inset: nominal unperturbed teacher terminal voltage against the latent feature. Schematic, no data.',
-    'main_5B': 'Local distal gating versus two-profile oracle delivery, with unit proximal/somatic multipliers in both. Exact path and unit broadcast remain data comparators, defined in preceding figures and the caption rather than redrawn here. Oracle terminal dots identify support sites, not weight magnitude. Schematic, no data.',
-    'main_5C': 'Aligned targets, Adam 0.03, four prespecified rules, 20 paired simulation seeds; means with 95 % pointwise whole-seed bootstrap bands at 12 fixed checkpoints.',
+    'main_5A': 'Seven-compartment circuit, E/I contacts and context gating; inset: nominal unperturbed teacher terminal voltage against the latent feature. Schematic, no sampled data.',
+    'main_5B': 'Hard distal gating versus two-profile oracle delivery, with unit proximal/somatic multipliers in both. The matrix identifies terminal supports, not profile weights. Schematic, no data.',
+    'main_5C': 'Aligned targets, Adam 0.03, four prespecified rules, 20 paired simulation seeds; means with 95% pointwise whole-seed bootstrap bands at 12 fixed checkpoints.',
     'main_5D': 'Opposed targets, same cohort and readout as C; bound-contact mark from all_curves.first_bound_step; validation-selected broadcast mean from condition_means.',
-    'main_5E': 'Opposed-minus-aligned difference of broadcast-minus-gate NMSE at both windows, validation-selected states, 20 paired seeds joined across windows; prespecified sign-flip test, Holm-adjusted.',
-    'main_5F': 'Opposed NMSE at validation-selected states within the 4,096-update window: exact path, the local distal gate in its hard and continuous shapes, the swapped gate and the gate-also-proximal control, at all three Adam rates.',
-    'main_5G': 'Earlier cohort seeds 2101–2120; fraction of the distal-parameter gradient retained after context averaging at matched initial and broadcast-trained weight states.',
-    'main_5H': 'Independent 20-seed DendriNet population cohort: sixteen [4,2] neurons, separable externally specified four-stream selection target, exact BP, broadcast and relative-resistance credit; mean held-out NMSE and paired-seed bootstrap bands across irrelevant-input severity. Other rules and the nonlinear-parent condition are retained in Table S14 and full source tables.',
-    'main_5I': 'Same population cohort at severity three; shunting, tonic and reference-voltage-matched current forward controls retain identical cue inputs and parameter counts. Every seed and mean with 95% whole-seed bootstrap intervals; exact BP, broadcast and relative-resistance credit.',
+    'main_5E': 'Opposed NMSE at validation-selected states within 4,096 updates: exact path, hard and continuous distal gates, wrong branch and gate-also-proximal controls at all three Adam rates.',
+    'main_5F': 'All twenty primary opposed-target seeds at their original validation-selected states and Adam rate 0.03; left and right selected-branch contributions to soma, integrating feature 2; pointwise whole-seed bootstrap intervals.',
 }
-
-
-# Population evidence has its own readable continuation, H-M.
-PANEL_SOURCES = {k: v for k, v in PANEL_SOURCES.items() if k[-1] in "ABCDEFG"}
-PANEL_SCOPE = {k: v for k, v in PANEL_SCOPE.items() if k[-1] in "ABCDEFG"}
-
-
-# Promoted learned tuning replaces the two diagnostic panels moved to S22.
-PANEL_SOURCES['main_5E'] = PANEL_SOURCES['main_5F']
-PANEL_SCOPE['main_5E'] = PANEL_SCOPE['main_5F']
-for letter, context in [('F', 'left'), ('G', 'right')]:
-    PANEL_SOURCES['main_5'+letter] = ['source_data/checkpoint_computation/branch_tuning.csv',
-                                     'source_data/checkpoint_computation/protocol.json']
-    PANEL_SCOPE['main_5'+letter] = ('All twenty primary opposed-target seeds at their original '
-        'validation-selected states and Adam rate 0.03; selected '+context+' branch contribution '
-        'to soma, integrating feature 2; pointwise whole-seed bootstrap intervals.')
 
 
 def legacy_display_rows(tables, printed):
@@ -1631,7 +1605,7 @@ def figure_provenance(cfg, printed, problems, audit):
         return {str(p.relative_to(J)): digest(p) for p in paths}
     record = dict(
         status='PASS',
-        scope='Panels A–G retain the original frozen experiments and numerical '
+        scope='Panels A–F retain the original frozen experiments and numerical '
               'summaries. Population selection and rescue are displayed separately in Figure 6. '
               'Learned tuning uses all retained primary-cohort checkpoints. The renderer trains no model.',
         protocol_sha256=digest(OUT / 'protocol.json'),
@@ -1640,7 +1614,7 @@ def figure_provenance(cfg, printed, problems, audit):
         figure_sha256=hashes(files), input_sha256=hashes(inputs),
         code_sha256=hashes(code),
         panel_sources={key: {'type': 'schematic' if key in ('main_5A', 'main_5B')
-                             else ('checkpoint analysis of the primary cohort' if key in ('main_5F', 'main_5G')
+                             else ('checkpoint analysis of the primary cohort' if key == 'main_5F'
                                    else 'fresh cohort'),
                              'sources': PANEL_SOURCES[key],
                              'scope': PANEL_SCOPE[key]}
@@ -1700,7 +1674,7 @@ def main():
         panels={key: {'sources': PANEL_SOURCES[key], 'scope': PANEL_SCOPE[key]}
                 for key in PANEL_SOURCES},
         emit_main=True, layout_findings=problems,
-        notes=('Main Figure 5 (fig:conductancecredit): A–G retain the mechanism '
+        notes=('Main Figure 5 (fig:conductancecredit): A–F retain the mechanism '
                'cohorts; Figure 6 shows population controls and rescue. '
                'Rendering only; no training is performed by this builder. '
                + G4_WAIVER + ' ' + KEY_EXCEPTION))

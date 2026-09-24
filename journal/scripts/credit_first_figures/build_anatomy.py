@@ -358,7 +358,7 @@ CAPTION = r'''\caption{\textbf{Ancestry routes sparsely compress modeled focal-s
 \textbf{D}, Total capture against profile budget; SVD, oracle basis. Bands show per-condition cell uncertainty, not paired contrasts; dashed lines, shared-broadcast capture 0.203 and analysed budget $K=8$. $n=47$ cells, 46 at $K=16$.
 \textbf{E}, Spatial share $C-C_0$ for six dictionaries at eight profiles; $C$ is total capture and $C_0$ broadcast capture. Cell means without intervals.
 \textbf{F}, Ancestry capture minus each cell's 200-surrogate mean, plotted against that mean. Open green circles identify eleven cells where at least half the surrogates match or exceed the actual tree. Open black diamond, cohort mean with intervals on both coordinates; dashed line, zero difference.
-\textbf{G}, Paired ancestry-minus-control differences in residual (filled) and total (open) capture; one unit equals 100 percentage points. All 188 within-cell differences are shown without clipping. Adjacent columns give nonzero-entry fraction, rank and positive-cell count, not cable-length costs; $\dagger$, rank-limited (maximum 8).
+\textbf{G}, Paired ancestry-minus-control differences in residual (filled) and total (open) capture; one unit equals 100 percentage points. All 188 within-cell differences are shown without clipping. Nonzero-entry fractions, ranks and positive-cell counts are retained in Source Data (Supplementary Section~S9).
 \textbf{H}, Residual capture $(C-C_0)/(1-C_0)$ for the initial and disjoint MICrONS cohorts (one mouse) and Pinky (second mouse); $n=8,47,8$. Styles as in \textbf{D}.
 \textbf{E--G}: $n=47$; \textbf{E--H}: eight profiles. Symbols and whiskers/bands denote means and 95\% cell-bootstrap intervals where drawn; small dots denote cells. Reciprocal passive cable fields test compression, not observed teaching. Source Data: \texttt{source\_data/curated\_publication/figure\_08\_plotted.csv}.}'''
 
@@ -1253,7 +1253,7 @@ def panel_f(ax, pairs):
 
 
 # ── row 2 ────────────────────────────────────────────────────────────────
-G_XLIM = (-45.0, 162.0)      # full cell range, followed by annotation columns
+G_XLIM = (-45.0, 96.5)      # full cell range, followed by annotation columns
 G_FAN_MAX = 95.0
 # Review pass 2026-09-23: all three printed columns sit inside the axes.  The
 # third used to be forest()'s note outside the right spine, and its 20 pt
@@ -1303,7 +1303,7 @@ def panel_g(canvas, ax, report, tables, summaries):
     # strips: sub-title and column headers above, one note line below the
     # last row so the four-line footer stack of the previous build loses a
     # line and stops colliding with the axis label
-    ax.set_ylim(3.62, -1.42)   # 2026-09-23: the dagger note moved to the legend
+    ax.set_ylim(3.62, -.65)   # 2026-09-23: the dagger note moved to the legend
     # forest() spans its 6 % row band across the whole x range; the three
     # printed columns then sit ON an area mark, which the overlap audit
     # reports as TEXT-ON-DATA (eight findings).  The band is a row cue, not a
@@ -1363,23 +1363,6 @@ def panel_g(canvas, ax, report, tables, summaries):
     # follows from the axis)
     # the three printed columns, inside the axes, clear of every interval;
     # the rule runs up to the header baseline so the heads read as theirs
-    ax.plot([G_FAN_MAX + 1.5, G_FAN_MAX + 1.5], [-1.05, 3.40],
-            color=COLORS["grid"], lw=LW_HAIR, zorder=0.5)
-    for x, head in G_COLS:
-        ax.text(x, -1.05, head, fontsize=PT_BASE, color=COLORS["ink"],
-                ha="right", va="center", zorder=5)
-    # the third printed column is forest()'s own per-row note, set outside the
-    # right spine; it carried no header, so the caption named three columns
-    # and the artwork two (QA round 3).  Same baseline, same offset as the
-    # notes it heads.
-    for i, item in enumerate(extra):
-        dagger = "\u2020" if CONTROLS[i] == RANDOM else ""
-        for x, value in zip([c[0] for c in G_COLS],
-                            (f"{item['wiring']:.1f} %",
-                             f"{item['rank']:.2f}{dagger}",
-                             f"{item['positive']}/{item['n']}")):
-            ax.text(x, ypos[i], value, fontsize=PT_BASE, color=COLORS["ink"],
-                    ha="right", va="center", zorder=5)
     ax.set_xticks([-40, 0, 40, 80])
     # the scale stops where the data stops: the drawn spine ends at the
     # column rule, so the reserved band that carries the printed wiring and

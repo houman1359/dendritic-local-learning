@@ -50,6 +50,26 @@ def tuning_panel(ax, context, panel, rows, *, legend=False):
                   loc='lower right', handlelength=1.5, handletextpad=.35)
 
 
+def paired_tuning_panel(ax, panel, rows):
+    """Both selected branches on common axes; no averaging across contexts."""
+    for context in (0, 1):
+        tuning_panel(ax, context, panel, rows)
+    # Replace the two single-context headings with labels at their curve ends.
+    for artist in list(ax.texts):
+        artist.remove()
+    ax.set_ylabel('Contribution to soma')
+    ax.set_xlim(-2, 2.9)
+    ax.text(2.10, .415, 'Left', fontsize=7, va='center')
+    ax.text(2.10, .030, 'Right', fontsize=7, va='center')
+    handles = [Line2D([], [], color=TUNING_COLORS[r],
+                     ls=(0, (3, 2)) if r == 'target' else
+                        ((0, (1, 2)) if r == 'exact' else '-'), lw=LW_DATA)
+               for r in ('target', 'hard_distal_unit_proximal', 'exact', 'unit_broadcast')]
+    ax.legend(handles, ['Teacher', 'Hard distal gate', 'Exact', 'Broadcast'],
+              frameon=False, fontsize=7, ncol=2, loc='upper center',
+              handlelength=1.5, handletextpad=.35, columnspacing=.8)
+
+
 def response_matrices():
     source = pd.read_csv(CHECKPOINT / 'population_surfaces.csv')
     grid = np.sort(source.z1.unique()); weights = np.ones(len(grid))
@@ -69,7 +89,7 @@ def interaction_maps(host, panel, rows):
     grid, weights, matrices = response_matrices()
     for k, (rule, name) in enumerate([('target', 'Target'), ('resistance', 'Resistance h'),
                                      ('derivative', 'Augmented hf′')]):
-        ax = host.inset_axes([.015 + .315 * k, .24, .255, .60])
+        ax = host.inset_axes([.015 + .315 * k, .20, .275, .68])
         style_panel(ax)
         matrix = interaction_component(matrices[rule], weights)
         im = ax.pcolormesh(grid, grid, matrix.T, cmap=DIV_CMAP, vmin=-.25, vmax=.25,
@@ -83,12 +103,78 @@ def interaction_maps(host, panel, rows):
                          z1=float(grid[i]), z2=float(grid[j]), value=float(matrix[i, j]),
                          quantity='interaction', n=20)
                     for i in range(len(grid)) for j in range(len(grid)))
-    host.text(.45, .08, 'Feature 1', ha='center', fontsize=8, transform=host.transAxes)
+    host.text(.45, .04, 'Feature 1', ha='center', fontsize=8, transform=host.transAxes)
     host.text(-.10, .54, 'Feature 2', va='center', rotation=90, fontsize=8, transform=host.transAxes)
-    cbax = host.inset_axes([.965, .36, .018, .35])
+    cbax = host.inset_axes([.975, .36, .018, .35])
     cb = host.figure.colorbar(im, cax=cbax, ticks=[-.25, 0, .25])
     cb.ax.tick_params(labelsize=7, width=LW_HAIR, length=2, pad=2)
     # Review pass 2026-09-23: the heading is stated in the legend.
+
+
+def horizontal_nmse(ax):
+    style_panel(ax)
+    ax.set_xscale('log')
+    ax.set_xlim(5e-6, 1.5)
+    ax.set_xticks([1e-5, 1e-3, 1e-1, 1], ['0.00001', '0.001', '0.1', '1'])
+    ax.minorticks_off()
+    ax.set_xlabel('Ordinary-test NMSE')
+    ax.tick_params(axis='y', length=0, labelsize=7)
+    ax.spines['left'].set_visible(False)
+
+
+def extension_summary(ax, panel, rows):
+    """Two independent cohorts, separated spatially on one common NMSE axis."""
+    ep = pd.read_csv(EXTENSION/'endpoints.csv')
+    summary = pd.read_csv(EXTENSION/'summary.csv')
+    horizontal_nmse(ax)
+    groups = [
+        ('proxy', 'common', 'Approximate parent sensitivity', [
+            ('derivative', 'Parent slope', 'additive'),
+            ('bins2', '2 voltage bins', 'additive'),
+            ('bins4', '4 voltage bins', 'additive'),
+            ('noise05', 'Noisy voltage', 'additive'),
+            ('shuffle_bins4', 'Shuffled bins', 'highlight'),
+            ('shuffle_noise05', 'Shuffled noisy', 'highlight')]),
+        ('routing', 'selected', 'Cue-to-inhibition routing', [
+            ('oracle_augmented', 'Supplied, hf′', 'additive'),
+            ('learned_local_augmented', 'Learned, hf′', 'additive'),
+            ('learned_local_resistance', 'Learned, h', 'shunting'),
+            ('uniform_augmented', 'Uniform, hf′', 'mute')])]
+    ys, labels = [], []
+    y = 0
+    for study, policy, heading, arms in groups:
+        ax.text(5e-6, y-.8, heading, fontsize=7, fontweight='bold', va='center')
+        for arm, label, color_key in arms:
+            g = ep[ep.study.eq(study) & ep.arm.eq(arm) & ep.policy.eq(policy)].sort_values('seed')
+            r = summary[summary.study.eq(study) & summary.arm.eq(arm)
+                        & summary.policy.eq(policy) & summary.metric.eq('test_nmse')]
+            assert len(g) == 20 and len(r) == 1
+            r = r.iloc[0]
+            assert abs(g.test_nmse.mean()-r['mean']) < 1e-12
+            color = COLORS[color_key]
+            ax.errorbar(r['mean'], y,
+                        xerr=[[r['mean']-r.ci95_low], [r.ci95_high-r['mean']]],
+                        fmt='D', mfc=color, mec='white', mew=.5, ecolor=color,
+                        ms=4.8, lw=LW_ERR, capsize=2, zorder=4)
+            ax.axhline(y, color=COLORS['grid'], lw=.35, zorder=0)
+            rows.append(dict(panel=panel, record='extension mean', study=study, arm=arm,
+                             policy=policy, mean=r['mean'], ci_low=r.ci95_low,
+                             ci_high=r.ci95_high, n=20))
+            rows.extend(dict(panel=panel, record='extension seed', study=study, arm=arm,
+                             policy=policy, seed=int(s.seed), value=float(s.test_nmse),
+                             rate=float(s.rate)) for s in g.itertuples())
+            ys.append(y); labels.append(label); y += 1
+        y += 1.6
+    # The resistance reference belongs only to the approximate-sensitivity cohort.
+    r = summary[summary.study.eq('proxy') & summary.arm.eq('resistance')
+                & summary.policy.eq('common') & summary.metric.eq('test_nmse')].iloc[0]
+    ax.plot([r['mean']]*2, [-.35, 5.35], color=COLORS['shunting'], ls='--', lw=LW_DATA)
+    ax.text(r['mean']*1.3, 2.5, 'Resistance h', color=COLORS['shunting'],
+            fontsize=7, va='center')
+    rows.append(dict(panel=panel, record='extension reference', study='proxy',
+                     arm='resistance', policy='common', mean=r['mean'], n=20))
+    ax.set_yticks(ys, labels)
+    ax.set_ylim(ys[-1]+.55, -1.35)
 
 
 def extension_mark(ax, ep, summary, study, arm, policy, x, panel, rows, color):

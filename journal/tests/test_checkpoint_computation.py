@@ -55,7 +55,7 @@ def test_main_branch_tuning_uses_each_teachers_complete_cohort():
     source=pd.read_csv(D/'branch_tuning.csv')
     plotted=pd.read_csv(J/'source_data/curated_publication/figure_05_plotted.csv')
     tuning=plotted[plotted.record.eq('tuning mean')]
-    assert len(tuning)==2*4*65 and set(tuning.panel)=={'F','G'}
+    assert len(tuning)==2*4*65 and set(tuning.panel)=={'F'}
     ix=np.random.default_rng(2026092121).integers(20,size=(10000,20))
     for (context,rule),g in tuning.groupby(['context','rule']):
         expected=source[source.context.eq(context)&source.rule.eq(rule)].pivot(index='seed',columns='z1',values='branch_contribution').sort_index()
@@ -63,7 +63,7 @@ def test_main_branch_tuning_uses_each_teachers_complete_cohort():
         values=expected.to_numpy();lo,hi=np.quantile(values[ix].mean(1),[.025,.975],axis=0)
         actual=g.sort_values('z1')
         np.testing.assert_allclose(actual[['mean','ci_low','ci_high']].to_numpy(),np.array([values.mean(0),lo,hi]).T,atol=5e-15)
-        assert set(actual.panel)==({'F'} if context==0 else {'G'})
+        assert set(actual.panel)=={'F'}
 
 
 def test_main_interaction_maps_use_all_rescue_seeds_without_reselection():
@@ -108,3 +108,30 @@ def test_relocated_population_controls_keep_separable_cohort_and_rate_policy():
         np.testing.assert_allclose(g.sort_values('seed').value,expected.sort_values('seed')[metric],rtol=1e-12)
     ratios=plotted[plotted.record.eq('broadcast/gate ratio of means')].set_index('condition').value
     np.testing.assert_allclose(ratios[['Ordinary','Stress 3','Stress 3 rate 0.1']],[1.7,87,6.6],rtol=.035)
+
+
+def test_consolidated_extension_export_preserves_cohorts_rates_and_intervals():
+    """Moving independent studies onto one axis must not pool or reselect them."""
+    plot=pd.read_csv(J/'source_data/curated_publication/figure_06_plotted.csv')
+    endpoints=pd.read_csv(J/'source_data/optional_extensions/endpoints.csv')
+    summary=pd.read_csv(J/'source_data/optional_extensions/summary.csv')
+    means=plot[plot.record.eq('extension mean')]
+    seeds=plot[plot.record.eq('extension seed')]
+    assert len(means)==10 and len(seeds)==200
+    assert set(means.panel)=={'E'}
+    assert set(zip(means.study,means.policy))=={('proxy','common'),('routing','selected')}
+    for row in means.itertuples():
+        expected=summary[summary.study.eq(row.study)&summary.arm.eq(row.arm)
+                         &summary.policy.eq(row.policy)&summary.metric.eq('test_nmse')]
+        assert len(expected)==1
+        np.testing.assert_allclose([row.mean,row.ci_low,row.ci_high],
+            expected[['mean','ci95_low','ci95_high']].iloc[0],rtol=1e-12)
+        actual=seeds[seeds.study.eq(row.study)&seeds.arm.eq(row.arm)
+                     &seeds.policy.eq(row.policy)].sort_values('seed')
+        source=endpoints[endpoints.study.eq(row.study)&endpoints.arm.eq(row.arm)
+                         &endpoints.policy.eq(row.policy)].sort_values('seed')
+        assert len(actual)==len(source)==20 and list(actual.seed)==list(source.seed)
+        np.testing.assert_allclose(actual[['value','rate']],source[['test_nmse','rate']],rtol=1e-12)
+    reference=plot[plot.record.eq('extension reference')]
+    assert len(reference)==1 and reference.iloc[0].study=='proxy'
+    assert reference.iloc[0].policy=='common' and reference.iloc[0].arm=='resistance'

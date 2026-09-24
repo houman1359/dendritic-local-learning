@@ -173,37 +173,44 @@ def test_figure6_moves_generator_to_text_and_limits_the_loss_claim(displays):
 
 
 def test_oracle_support_drawing_excludes_proximal_and_soma():
-    """Extract the small drawing helper without importing training adapters."""
+    """The current oracle matrix has two terminal supports, not parent sites."""
+    from matplotlib.patches import Rectangle
+
     tree = ast.parse(GATE.read_text())
     helper = next(node for node in tree.body
                   if isinstance(node, ast.FunctionDef)
-                  and node.name == 'distal_oracle_delivery')
-    namespace = {'COLORS': {'oracle': 'purple'}, 'mix': lambda *_: 'pale purple'}
-    exec(compile(ast.Module(body=[helper], type_ignores=[]), str(GATE), 'exec'), namespace)
-    positions = {'JL': (1, 1), 'JR': (4, 1), 'S': (2.5, 0),
-                 'T1': (0, 2), 'T2': (2, 2), 'T3': (3, 2), 'T4': (5, 2)}
+                  and node.name == 'panel_deliveries')
+    patches, labels, profiles = [], [], []
 
     class Nodes(dict):
-        def terminals_under(self, root):
-            return ['T1', 'T2'] if root == 'JL' else ['T3', 'T4']
+        soma = (0., 0.)
 
-    collars, dots = [], []
-    frame = SimpleNamespace(_draw_chains=lambda chains, *_: collars.extend(chains),
-                            disc=lambda xy, *_, **kwargs: dots.append(xy))
-    namespace['distal_oracle_delivery'](frame, Nodes(positions))
-    expected = {positions[name] for name in ('T1', 'T2', 'T3', 'T4')}
-    assert set(dots) == expected
-    assert {point for collar in collars for point in collar} == expected
-    source = ast.get_source_segment(GATE.read_text(), next(
-        node for node in tree.body if isinstance(node, ast.FunctionDef)
-        and node.name == 'panel_deliveries'))
-    # The enlarged two-card schematic indexes the two profiles by j instead
-    # of repeating two tiny formula lines; its nonlocal coefficient source
-    # and unit proximal/somatic factors must remain explicit.
-    assert "'distal: p'" in source and "('sub', 'j')" in source
-    # review pass 2026-09-23: the coefficient source and the ungated
-    # proximal/somatic factors are stated in the legend, not on the cards
+    noop = lambda *args, **kwargs: None
+    frame = SimpleNamespace(
+        fx=lambda x: x/200, fy=lambda y: y/100,
+        task_card=lambda cell, **kwargs: cell,
+        balanced_tree=lambda *args, **kwargs: Nodes(JR=(1., 1.)),
+        gate=noop, error_in=noop,
+        subscript=lambda xy, base, sub, **kwargs: profiles.append((base, sub)),
+        text=lambda xy, label, **kwargs: labels.append(label),
+        require_soma_lowest=noop, require_delta0=noop)
+    namespace = dict(Frame=lambda ax: frame, Rectangle=Rectangle,
+        COLORS={'oracle': 'purple', 'shunting': 'green'}, MUTE='grey',
+        INK='black', LW_HAIR=.5, PT_BASE=7, chain_frame=noop,
+        subtree_delivery=noop, open_head=noop, _lerp=lambda a,b,t: a)
+    exec(compile(ast.Module(body=[helper], type_ignores=[]), str(GATE), 'exec'), namespace)
+    namespace['panel_deliveries'](SimpleNamespace(add_patch=patches.append))
+    assert len(patches)==8 and profiles==[('p','1'),('p','2')]
+    xs=sorted({p.get_x() for p in patches})
+    ys=sorted({p.get_y() for p in patches},reverse=True)
+    assert len(xs)==2 and len(ys)==4
+    support=np.zeros((4,2),dtype=int)
+    for p in patches:
+        support[ys.index(p.get_y()),xs.index(p.get_x())]=p.get_alpha()<1
+    np.testing.assert_array_equal(support,[[1,0],[1,0],[0,1],[0,1]])
+    assert labels==['1','2','3','4','Proximal and soma: ungated']
     caption = (ROOT / 'main.tex').read_text().split(
         r'\label{fig:conductancecredit}')[0].rsplit(r'\caption{', 1)[1]
     assert r'$\hat c_j$ its coefficient from the exact field' in caption
     assert 'Proximal/somatic signals remain ungated in both' in caption
+    assert 'support on terminals 1--4, not weight magnitude' in caption

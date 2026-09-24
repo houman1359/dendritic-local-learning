@@ -114,7 +114,7 @@ LINE_ALPHA = 0.30
 # A: the two measured feedback fields, at checkpoints trained with per-neuron
 # (per_soma_shared) feedback; the exact-path cosine (1 by construction) is not
 # a column of the table and is not drawn.
-FIELDS = (("scalar_fallback", "matched-width\nfallback"), ("neuron_wise", "neuron-\nspecific"))
+FIELDS = (("scalar_fallback", "matched-width\nfallback"), ("neuron_wise", "per\nneuron"))
 TRAINED_MODE = "per_soma_shared"
 COSINE = "branch_numel_weighted_cosine"
 

@@ -36,8 +36,8 @@ SCOPE = {
     'main_6B': 'Original separable-target cohort: all five assignment rules under distractor stress, selected rates.',
     'main_6C': 'Twenty new paired rescue seeds: original-bound nonlinear interaction task, separately selected Adam rates, two predefined primary contrasts.',
     'main_6D': 'Same twenty rescue seeds and their original selected states: interaction components of target and mean resistance/augmented predictions, averaging sign-aligned contexts and irrelevant inputs.',
-    'main_6E': 'Separate twenty-seed approximate-sensitivity cohort, common Adam rate 0.03; exact parent slope, two/four bins, noisy voltage SD 0.5 and matched shuffled controls.',
-    'main_6F': 'Separate twenty-seed routing cohort, selected Adam rates; supplied, locally learned and uniform routes, with terminal cue contacts removed in every condition.'}
+    'main_6E': 'Two independent twenty-seed cohorts: approximate sensitivity at common rate 0.03, then cue-to-inhibition routing at selected rates with terminal cue contacts removed. Means and intervals; full seed values remain in Source Data.',
+}
 SOURCES = {
     'main_6A': [],
     'main_6B': ['source_data/curated_publication/inhibitory_selection_summary.csv'],
@@ -46,7 +46,7 @@ SOURCES = {
     'main_6D': ['source_data/checkpoint_computation/population_surfaces.csv',
                'source_data/checkpoint_computation/protocol.json'],
     'main_6E': ['source_data/optional_extensions/endpoints.csv', 'source_data/optional_extensions/summary.csv'],
-    'main_6F': ['source_data/optional_extensions/endpoints.csv', 'source_data/optional_extensions/summary.csv']}
+}
 
 
 def chain(ax, x, y, parts, *, color, size=PT, drop=1.6, rise_pt=2.6, ha='left',
@@ -302,51 +302,60 @@ def rescue_panel(ax, rescue, common, separable, contrasts, log_ticks):
 
 
 def primary_rescue_panel(ax, rescue, contrasts, log_ticks):
+    from review_completion.promoted_panels import horizontal_nmse
     order = ['exact', 'broadcast', 'resistance', 'derivative', 'shuffled_derivative']
     frame = rescue[rescue.optimizer.eq('adam') & rescue.bound.eq(9)]
-    for k, rule in enumerate(order):
-        group = frame[frame.rule.eq(rule)]
-        assert len(group) == 20
-        mark(ax, k, group.assign(value=group.test_nmse), rule, 'C',
-             metric='test_nmse', condition='selected rates')
-    log_axis(ax, log_ticks, ylim=(1e-5, 2), label='Ordinary-test NMSE')
-    ax.set_xticks(range(5), ['Exact', 'Broadcast', 'Resistance\nh', 'Augmented\nhf′', 'Shuffled\nf′'])
-    ax.set_xlim(-.55, 4.55)
-    primary = contrasts[contrasts.primary.eq(True)]
-    assert len(primary) == 2
-    for row in primary.itertuples():
-        x1, x2 = order.index(row.left), order.index(row.right)
-        y = .17 if row.left == 'resistance' else .48
-        ax.plot([x1, x1, x2, x2], [y/1.3, y, y, y/1.3], color=COLORS['ink'], lw=LW_HAIR)
-        ROWS.append(dict(panel='C', record='primary contrast', rule=row.left,
-                         comparison=f'{row.left} minus {row.right}', mean=float(row.mean),
-                         ci_low=float(row.ci_low), ci_high=float(row.ci_high), n=int(row.n),
-                         positive=int(row.positive), holm_p=float(row.holm_p), condition='selected rates'))
-    assert primary.holm_p.nunique() == 1
-    value = f'{primary.holm_p.iloc[0]:.1e}'.split('e')
-    chain(ax, -.35, 1.05, [(f'Both: Holm P = {value[0]} × 10', 0),
-                          (f'−{abs(int(value[1]))}', 1)], color=COLORS['ink'])
+    horizontal_nmse(ax)
+    for y, rule in enumerate(order):
+        g = frame[frame.rule.eq(rule)].sort_values('seed')
+        assert len(g) == 20
+        values = g.test_nmse.to_numpy()
+        m, lo, hi = boot(values)
+        color = C[rule]
+        ax.scatter(values, y + np.linspace(-.15, .15, len(g)),
+                   s=4.5, color=color, alpha=.35, lw=0, zorder=2)
+        ax.errorbar(m, y, xerr=[[m-lo], [hi-m]], fmt='D', ms=5,
+                    mfc=color, mec='white', mew=.6, ecolor=color,
+                    capsize=2, lw=LW_ERR, zorder=4)
+        ax.axhline(y, color=COLORS['grid'], lw=.35, zorder=0)
+        ROWS.append(dict(panel='C', record='mean and bootstrap interval', rule=rule,
+                         mean=m, ci_low=lo, ci_high=hi, n=20,
+                         metric='test_nmse', condition='selected rates'))
+        ROWS.extend(dict(panel='C', record='seed outcome', rule=rule, seed=int(r.seed),
+                         value=float(r.test_nmse), metric='test_nmse',
+                         condition='selected rates') for r in g.itertuples())
+    ax.set_yticks(range(5), ['Exact', 'Broadcast', 'Resistance h', 'Augmented hf′', 'Shuffled f′'])
+    ax.set_ylim(4.55, -.55)
+    for r in contrasts[contrasts.primary.eq(True)].itertuples():
+        ROWS.append(dict(panel='C', record='primary contrast', rule=r.left,
+                         comparison=f'{r.left} minus {r.right}', mean=float(r.mean),
+                         ci_low=float(r.ci_low), ci_high=float(r.ci_high), n=int(r.n),
+                         positive=int(r.positive), holm_p=float(r.holm_p), condition='selected rates'))
 
 
 def build(log_ticks):
-    from review_completion.promoted_panels import interaction_maps, proxy_panel, routing_panel
+    from review_completion.promoted_panels import interaction_maps, extension_summary
     ROWS.clear()
     summary = pd.read_csv(D/'inhibitory_selection_summary.csv')
     rescue = pd.read_csv(D/'inhibitory_rescue_endpoints.csv')
     contrasts = pd.read_csv(D/'inhibitory_rescue_contrasts.csv')
-    c = NativeCanvas(490/72, 3, row_weights=[128, 112, 118], hgutter_pt=30, vgutter_pt=36,
-                     margins=Margins(left=40, right=30, top=24, bottom=44))
+    c = NativeCanvas(490/72, 3, row_weights=[114, 108, 144], hgutter_pt=30, vgutter_pt=38,
+                     margins=Margins(left=38, right=29, top=24, bottom=44))
     task_panel(c.panel('A', 0, 0, 6, schematic=True, lock=False))
     stress_panel(c.panel('B', 0, 6, 6, grid='none'), summary, log_ticks)
-    primary_rescue_panel(c.panel('C', 1, 0, 6, grid='none'), rescue, contrasts, log_ticks)
+    rescue_host = c.panel('C', 1, 0, 6, grid='none')
+    rescue_host.set_axis_off()
+    rescue_axis = rescue_host.inset_axes([.33, .05, .67, .90])
+    primary_rescue_panel(rescue_axis, rescue, contrasts, log_ticks)
     d = c.panel('D', 1, 6, 6, grid='none')
     interaction_maps(d, 'D', ROWS)
-    proxy_panel(c.panel('E', 2, 0, 6, grid='none'), 'E', ROWS, log_ticks)
-    routing_panel(c.panel('F', 2, 6, 6, grid='none'), 'F', ROWS, log_ticks)
+    extension_host = c.panel('E', 2, 0, 12, grid='none')
+    extension_host.set_axis_off()
+    extension_summary(extension_host.inset_axes([.18, .02, .82, .96]), 'E', ROWS)
     locks = c.lock_reserves()
-    left = max(locks[p][0] for p in 'BCEF')
-    right = max(locks[p][1] for p in 'BCEF')
-    for panel in 'BCDEF': c.declare_reserve(panel, left=left, right=right)
+    for panel in 'CD':
+        c.declare_reserve(panel, left=max(locks[p][0] for p in 'CD'),
+                          right=max(locks[p][1] for p in 'CD'))
     findings = list(c.save(OUTPUT, name='figure_06', dpi=180))
     from credit_first_figures.focused_provenance import publish
     publish(6, OUTPUT, ROWS, [J/n for n in sorted({n for paths in SOURCES.values() for n in paths})],
@@ -356,7 +365,7 @@ def build(log_ticks):
             {k: dict(sources=SOURCES[k], scope=SCOPE[k]) for k in SCOPE},
             emit_main=False, layout_findings=findings,
             notes='B original cohort; C/D original rescue cohort and its retained checkpoints; '
-                  'E and F separate prospective cohorts. All seeds retained. Rendering only.')
+                  'E groups two separate prospective cohorts. All seeds retained in source tables. Rendering only.')
     return findings
 
 

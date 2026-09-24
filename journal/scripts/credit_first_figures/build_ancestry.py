@@ -304,7 +304,7 @@ CAPTION = r'''\caption{\textbf{Ancestry-route benefits depend on task alignment 
 \textbf{B}, Ancestry dictionaries: $K$ profiles, each spanning $8/K$ terminals; green, selected profile; grey, other profiles. Full resolution is $A=I_8$. Footers give raw class-signal sums before route normalization. Right, signed credit delivered for context $b_3$ at four channels, normalized by each row's maximum absolute value: correct ancestry, then four controls; random-sparse and dense rows are single illustrative draws.
 \textbf{C}, Held-out accuracy against channel budget for ancestry, deranged delivery and the per-seed best of four matched controls.
 \textbf{D}, Task-matched versus degree- and depth-matched rewired trees with ancestry feedback. Error bars describe each condition, not the paired difference; shared and fully resolved routes coincide.
-\textbf{E}, Paired ancestry-minus-control differences at four channels. Labels give positive-seed counts and Holm-adjusted $P$ values across four budgets for the best-control comparison, or four individual controls. The best control is a hindsight reference using those same seeds. The deranged contrast lies off scale and is printed numerically.
+\textbf{E}, Paired ancestry-minus-control differences at four channels. Seed counts and Holm-adjusted tests are reported in Supplementary Section~S3 and Source Data. The best control is a hindsight reference using those same seeds. The deranged contrast lies off scale and is printed numerically.
 \textbf{F}, Cue encoder supervised by supplied route-activation targets, at zero delay: soft readout (solid) and exploratory hard selection (dashed), with calibration size labeled. Reference lines show oracle delivery, chance and a frozen profile. Hard selection matches the oracle for noise-free cues. The paired-difference strip shows accuracy minus oracle; faint dots, seeds; larger symbols and whiskers, means and intervals. Cue noise is its Gaussian standard deviation; calibration size counts training cues.
 \textbf{C--F}: epoch-80 outcomes, $n=20$ paired seeds per cohort; means and 95\% seed-bootstrap intervals or bands. Intervals smaller than symbols are not visible. \textbf{F} uses a separate cohort. Teal ramps in \textbf{A,F} are ordinal within this figure.
 Source Data: \texttt{source\_data/curated\_publication/figure\_03\_plotted.csv}.}'''
@@ -1106,13 +1106,9 @@ def panel_forest(canvas, ax, contrasts, pairs):
     x_right = -2.0 - _data_dx(ax, 4.0)
     widest = 0.0
     for y, (label, wins, p) in zip(out["ypos"], notes):
-        ax.text(x_right, y - 0.21, label, fontsize=PT_SMALL, color=INK,
+        ax.text(x_right, y, label, fontsize=PT_SMALL, color=INK,
                 ha="right", va="center")
-        _p_draw(ax, x_right, y + 0.25, f"{wins}/20, ", p, "", head="P = ")
-        body, expo = _p_text(p)
-        widest = max(widest, _text_w_pt(ax, label, PT_SMALL),
-                     _text_w_pt(ax, f"{wins}/20, P = {body}{expo or ''}",
-                                PT_SMALL) + (1.6 if expo else 0.0))
+        widest = max(widest, _text_w_pt(ax, label, PT_SMALL))
     gutter = widest + 8.0
     canvas.declare_reserve("E", left=gutter)
     # the off-scale deranged row: an arrow at the axis end and the value

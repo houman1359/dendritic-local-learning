@@ -28,7 +28,7 @@ def test_figure4_saved_export_has_one_noise_panel_with_both_rate_policies():
 
 def test_figure6_saved_export_matches_promotions_and_relocated_controls():
     saved = pd.read_csv(CURATED / 'figure_06_plotted.csv')
-    assert set(saved.panel) == set('BCDEF'), sorted(set(saved.panel))
+    assert set(saved.panel) == set('BCDE'), sorted(set(saved.panel))
     rescue = saved[saved.panel.eq('C') & saved.record.eq('seed outcome')]
     assert set(rescue.condition) == {'selected rates'} and len(rescue)==100
     primary = saved[saved.panel.eq('C') & saved.record.eq('primary contrast')]

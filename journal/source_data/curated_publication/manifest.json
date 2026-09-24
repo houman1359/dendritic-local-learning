@@ -32,14 +32,14 @@
       "figure": 5,
       "source": "scripts/conductance_local_gate/figure.py",
       "path": "source_data/curated_publication/figure_05_plotted.csv",
-      "sha256": "4b713a93098075e05d7ae5a3fab18619ccf1e00130c6bdb9c8d742a56d8d21db",
+      "sha256": "d3ef7a19fe416fab8505a62e165d75c281300c693ec04e9421ca295f19c92bb6",
       "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
     },
     {
       "figure": 6,
       "source": "scripts/review_completion/population_figure.py",
       "path": "source_data/curated_publication/figure_06_plotted.csv",
-      "sha256": "935ab1a5c22f51b9a4c956c9f896f361941fc369dd7db7845c9c2a41b0fea7a3",
+      "sha256": "1767c3ee2ebf757b00edb2bc6d6b684a8aae391e78a381da3ec38367c45c2dc5",
       "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
     },
     {

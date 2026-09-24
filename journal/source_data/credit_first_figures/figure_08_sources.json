@@ -199,7 +199,7 @@
     "ci95_high": 0.105545551658
   },
   "source_sha256": {
-    "scripts/credit_first_figures/build_measured.py": "89284f6fb415496cb95b04f75774434d1180ef37fc1023f3521ff4d3a77e4b22",
+    "scripts/credit_first_figures/build_measured.py": "4073f740846efe0d93ab9a633137b8a939cf180fda9e69e95177ffd64b43d91c",
     "source_data/figure3/segment_metrics.csv": "7829c298c4e5b3209b758fb88b92b55f070420c00b383436e5d4e1601e7ff1cf",
     "source_data/fulltree_boundary/output/dictionary_and_validation_metadata.jsonl": "12bd1392df9c3db14b9746f042786dcabbc9fd7f8acc99926277217b55554c7f",
     "source_data/curated_publication/figure_10_plotted.csv": "7098adb82676058355aee0dbb315a50db47dd54ba28db9abd151d894c16b6c3d",
@@ -216,7 +216,6 @@
     "scripts/credit_first_figures/source_data_export.py": "140262b3750a3fbe56fe9d92323788b05553dbb7cb24bb56ca75dce8b7501ee6"
   },
   "layout_findings": [
-    "TEXT-ON-DATA '3/7 +'",
     "TEXT-ON-DATA 'perfect reliability'"
   ]
 }

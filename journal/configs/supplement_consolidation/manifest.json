@@ -796,18 +796,18 @@
           "source_panel": "C",
           "bbox": [
             16.899999618530273,
-            206.89999389648438,
+            198.39999389648438,
             175.10000610351562,
             350.6000061035156
           ],
           "width": 158.20000648498535,
-          "height": 143.70001220703125,
+          "height": 152.20001220703125,
           "panel": "A",
           "target_rect": [
             21.603796195983875,
             19.0,
             179.80380268096923,
-            162.70001220703125
+            171.20001220703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_cifar_ladders_native.pdf",
@@ -834,18 +834,18 @@
           "source_panel": "D",
           "bbox": [
             192.89999389648438,
-            206.89999389648438,
+            198.39999389648438,
             338.40667724609375,
             350.6000061035156
           ],
           "width": 145.50668334960938,
-          "height": 143.70001220703125,
+          "height": 152.20001220703125,
           "panel": "B",
           "target_rect": [
             192.80380268096923,
             19.0,
             338.3104860305786,
-            162.70001220703125
+            171.20001220703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_cifar_ladders_native.pdf",
@@ -872,18 +872,18 @@
           "source_panel": "E",
           "bbox": [
             349.1499938964844,
-            206.89999389648438,
+            198.39999389648438,
             505.6357116699219,
             350.6000061035156
           ],
           "width": 156.4857177734375,
-          "height": 143.70001220703125,
+          "height": 152.20001220703125,
           "panel": "C",
           "target_rect": [
             351.3104860305786,
             19.0,
             507.7962038040161,
-            162.70001220703125
+            171.20001220703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_cifar_ladders_native.pdf",
@@ -919,9 +919,9 @@
           "panel": "D",
           "target_rect": [
             21.603796195983875,
-            185.70001220703125,
+            194.20001220703125,
             247.0669557571411,
-            316.9000244140625
+            325.4000244140625
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S30_panels_A-D.pdf",
@@ -952,9 +952,9 @@
           "panel": "E",
           "target_rect": [
             266.0669557571411,
-            185.70001220703125,
+            194.20001220703125,
             496.01696796417235,
-            316.9000244140625
+            325.4000244140625
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S30_panels_A-D.pdf",
@@ -976,8 +976,8 @@
       "whole_source_sheet": false,
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
-      "height_pt": 320.9000244140625,
-      "sha256": "8a7139eaff881a652d3524e1b7410170b7d115de63523aa8551fcbbbb26c0bd9",
+      "height_pt": 329.4000244140625,
+      "sha256": "2b53cdab9549505b2b5287a4c956cfea65cbde14ccfbecbf2a215b283dd14979",
       "source_data_directories": [
         "source_data/cifar10_shunting_stopping_extension",
         "source_data/cifar10_additive_feedback_ladder_confirmatory",
@@ -1103,24 +1103,26 @@
             13.088000297546387,
             9.939000129699707,
             220.71630859375,
-            177.6179962158203
+            177.5992431640625
           ],
           "width": 207.6283082962036,
-          "height": 167.6789960861206,
+          "height": 167.6602430343628,
           "panel": "A",
           "target_rect": [
             13.088000297546387,
             9.939000129699707,
             220.71630859375,
-            177.6179962158203
+            177.5992431640625
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_error_field_geometry_native.pdf",
-          "source_sha256": "10321a6bb3278523a047941783c1fb02b1692cedb842775f464100a3866f4637",
+          "source_sha256": "0e663ca421eebdb330019cb7ad72ce7c2402dd29123c6ac89905dff665b0b659",
           "old_provenance_figure": "figN8",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {},
+          "record_type": "native supplement panel",
+          "builder": "scripts/build_supplementary_figure_error_field_geometry_native.py"
         },
         {
           "source": "N8",
@@ -1142,11 +1144,13 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_error_field_geometry_native.pdf",
-          "source_sha256": "10321a6bb3278523a047941783c1fb02b1692cedb842775f464100a3866f4637",
+          "source_sha256": "0e663ca421eebdb330019cb7ad72ce7c2402dd29123c6ac89905dff665b0b659",
           "old_provenance_figure": "figN8",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {},
+          "record_type": "native supplement panel",
+          "builder": "scripts/build_supplementary_figure_error_field_geometry_native.py"
         },
         {
           "source": "N8",
@@ -1168,11 +1172,13 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_error_field_geometry_native.pdf",
-          "source_sha256": "10321a6bb3278523a047941783c1fb02b1692cedb842775f464100a3866f4637",
+          "source_sha256": "0e663ca421eebdb330019cb7ad72ce7c2402dd29123c6ac89905dff665b0b659",
           "old_provenance_figure": "figN8",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {}
+          "explicit_numerical_source_hashes": {},
+          "record_type": "native supplement panel",
+          "builder": "scripts/build_supplementary_figure_error_field_geometry_native.py"
         }
       ],
       "ancillary_elements": [],
@@ -1180,7 +1186,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 364.0,
-      "sha256": "9204b69013e8e47bf676cb7ce6cf6b2448abb4aad76648c4e269dd05e9d9d3c7",
+      "sha256": "e1212ce7a2fd53e8aa38d81571238877fe0db5beb41bd35251c3c970c62ab603",
       "source_data_directories": [
         "source_data/figure2",
         "source_data/prospective_input_validity"

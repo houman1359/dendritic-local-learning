@@ -1060,7 +1060,7 @@ def cohort_forest(canvas, ax, cohorts, kind, *, value_label, xlim, xticks,
                         COLORS["additive"])
             span_lo = min(span_lo, second.low_pp, min(second.seed_pp))
             span_hi = max(span_hi, second.high_pp, max(second.seed_pp))
-        row_tag(ax, y, note, span_lo, span_hi, xlim, tag_sides[i])
+        # Positive-seed counts are retained in Source Data, not repeated in the artwork.
     if arch_code:
         # CF-5: the architecture code is stated ONCE, as two direct labels in
         # the series hues on row 1 -- shunting above the row line, additive

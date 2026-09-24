@@ -2,7 +2,7 @@
   "figure": "Figure 7",
   "label": "fig:topology",
   "output": "figures/components/credit_first_figure_07.pdf",
-  "output_sha256": "0df661508be62049c5834ccae8e88c7d89259ec6c86b4112a62937219f5ea5f1",
+  "output_sha256": "e29e9997617630f359c43b058c5ba31c0d7e4287a8da08cdc56fc4a15a693061",
   "main_copy": "figures/main/figure_08.pdf",
   "panel_letters": "abcdefgh",
   "replication_unit": "reconstructed cell; initial eight-cell, disjoint 47-cell and Pinky second-mouse cohorts kept separate",
@@ -17,7 +17,7 @@
     "h": "residual_capture at K = 8 per cohort from each cohort's cell_method_summary.csv (initial 8, disjoint 47, Pinky 8) for ancestry, surrogate tree, depth bins, random routes and the common-constrained SVD; the cells themselves are drawn behind each mean and are rows of figure_07_plotted.csv; 20,000-draw cell bootstrap, seed 202609061 + 100 g + i; Pinky site counts and eligibility from pinky/cohort_inclusion.csv"
   },
   "source_sha256": {
-    "scripts/credit_first_figures/build_anatomy.py": "09b6bfc9ada732755d894fe9a9255a47eb6d00609fa329f04ee3d9afd7f89c04",
+    "scripts/credit_first_figures/build_anatomy.py": "b5989eeb907f8b74a182186acd9689efeb0851f2e273d737c6bb182693c02cd1",
     "scripts/build_main_figure_07.py": "8dd526d60d35b572a17a68c77c1813279756251052d4921471d77c3fb16b885e",
     "scripts/credit_first_figures/source_data_export.py": "140262b3750a3fbe56fe9d92323788b05553dbb7cb24bb56ca75dce8b7501ee6",
     "scripts/figure_canvas.py": "7f2983ff0c52a30dd5ba9bdeccc6fda940b4366ad872cbf0755fec5daa1dd7aa",

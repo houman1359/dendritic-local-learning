@@ -27,7 +27,7 @@
     "TEXT-ON-DATA '256'",
     "TEXT-ON-DATA '16'"
   ],
-  "forest_gutter_pt": 76.8,
+  "forest_gutter_pt": 73.1,
   "gap_gutter_pt": 84.48,
   "schematic_area_fraction": 0.2989,
   "g4_waiver": "G4 waiver recorded for Fig 3 at the superseded 31.6 % measure; on the B12 formula the figure is 29.9 % and the waiver is dormant",
@@ -234,7 +234,7 @@
     }
   },
   "coefficient_scope": "Raw group sums; implemented route rows divide by sqrt(group size). Signs follow from the generator and are not a new prospective prediction.",
-  "caption_word_count": 323,
+  "caption_word_count": 318,
   "deviations_from_plan": [
     "row weights 124/113/113 at a 44 pt vertical gutter and margins 44/12/20/32, not the plan's 112/121/121 at 42 pt with margins 52/14.  FILL_W_MIN 0.92 makes left + right <= 57.5 pt a hard constraint (52 + 14 fills only 90.3 % of the page width and fails the strict audit's fill-width check); at a 112 pt row 0 the eight-module panel B has axes aspect 2.64, above PANEL_ASPECT_MAX 2.40, which DECISIONS G4 forbids relaxing, and 124 pt is the shortest row 0 that clears it; a 42 pt gutter leaves 7.2 pt between rows 1 and 2 against audit_row_separation.py's 8.5 pt floor, 44 pt measures 9.4 pt.  The two data rows gain 6 pt against the previous build and the schematic fraction falls to 26.0 %",
     "E uses lock=False plus a measured private left inset instead of declare_reserve(left=66): a declared reserve locks the whole grid column and C starts in column 0, so C and D would differ in width",

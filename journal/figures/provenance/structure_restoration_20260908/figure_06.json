@@ -1,7 +1,7 @@
 {
   "figure": "Figure 6",
   "output": "figures/components/restored_main_06.pdf",
-  "output_sha256": "460ff9278a0dafe5c31aedb895475e96749d2bc2f2b4fc1c787468d571f9954c",
+  "output_sha256": "45a5fc2ef3099e95615ab1194c4e6c6ad3a6817b289ee4b90bf25c0109c65ddd",
   "panel_sources": {
     "A": "Native architecture schematic (no data): D1 [8] and D3 [2,1,2] over the same eight nonsomatic compartments, the grouped-point control swatch, and the shared inventory printed from physical_depth_h4_factorial/seed_outcomes.csv (66,178 trainable parameters, 14,336 active synapses).",
     "B": "Native generative-model schematic (no data): tier supports and family strips from configs/nonlinear_physical_depth/confirmatory/aligned_shunting_bp.yaml (n_levels 3, hierarchy_branching 2, n_flat_groups 8, e_signal_delta 0.8) and supplementary/curated/si_06_physical_depth.tex Eq. S1-S2.",
@@ -27,11 +27,11 @@
     "source_data/physical_depth_stopping_extension/paired_contrasts.csv": "664b08e41c956e12c056b751044fcb20cf39d390db6f60177442816bb21ed3c7"
   },
   "builder_sha256": {
-    "scripts/credit_first_figures/build_restored_main.py": "fdec877cef7f0e2a143c4533bc25169a28e3f738ada1afa570c21ee9896fa59e",
+    "scripts/credit_first_figures/build_restored_main.py": "54638d6bf0e72a179aaf13ab5925c27f6e4c67aecb26c133ab61450f478d09d1",
     "scripts/credit_first_figures/focused_main_evidence.py": "e045f0fc26ce8554af19f7d2b1ee9683ec852899f19e02e76e78163b0d74e773",
     "scripts/figure_canvas.py": "7f2983ff0c52a30dd5ba9bdeccc6fda940b4366ad872cbf0755fec5daa1dd7aa",
     "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a",
-    "scripts/run_completion/stopping_panels.py": "e80540aa88e7791e3e4ab299dcf4ae365efa1a6e7cf5845c5bc1494809008b10"
+    "scripts/run_completion/stopping_panels.py": "adb0e9ca63ed7306bb12ea62ade6fde2076aaad3f0d1cba22180394e5ac53e2b"
   },
   "source_data_immutable": true,
   "new_experiments": 0,

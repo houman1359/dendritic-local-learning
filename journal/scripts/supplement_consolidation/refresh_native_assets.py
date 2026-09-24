@@ -8,6 +8,7 @@ RENDERS={
  'N4C':('cifar_ladders',5),
  'N9':('input_coverage_mnist',1),
  'N7':('mnist_dictionary_geometry',3),
+ 'N8':('error_field_geometry',3),
  'N21':('local_gate_controls',4),
  'N22':('physical_architecture',7),
  'N31':('measured_transfer_geometry',4),

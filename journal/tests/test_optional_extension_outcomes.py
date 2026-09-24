@@ -96,7 +96,7 @@ def test_saved_figure_rows_match_all_seeds_and_routing_maps():
     # Promoted panels retain all seeds from their own cohort and rate policy.
     main=pd.read_csv(J/'source_data/curated_publication/figure_06_plotted.csv')
     for (panel,study,arm,policy),g in main[main.record.eq('extension seed')].groupby(['panel','study','arm','policy']):
-        assert (panel,study,policy) in [('E','proxy','common'),('F','routing','selected')]
+        assert (panel,study,policy) in [('E','proxy','common'),('E','routing','selected')]
         expected=ep[ep.study.eq(study)&ep.arm.eq(arm)&ep.policy.eq(policy)].sort_values('seed')
         assert len(g)==20 and set(g.seed)==set(expected.seed)
         np.testing.assert_allclose(g.sort_values('seed').value,expected.test_nmse,rtol=1e-12)

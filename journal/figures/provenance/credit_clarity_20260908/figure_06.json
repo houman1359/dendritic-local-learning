@@ -1,9 +1,9 @@
 {
   "figure": "Figure 6",
   "output": "figures/main/figure_06.pdf",
-  "output_sha256": "6c5d6d30048a8dda988dc116a3f2c02ac2a3884b7d3ecf1394b095e6fba7705a",
+  "output_sha256": "0a38b621a470f4cc51330bd860093e2fa42ad9a0bcfeb7e2cee82d16967230fd",
   "plotted_table": "source_data/curated_publication/figure_06_plotted.csv",
-  "plotted_table_sha256": "935ab1a5c22f51b9a4c956c9f896f361941fc369dd7db7845c9c2a41b0fea7a3",
+  "plotted_table_sha256": "1767c3ee2ebf757b00edb2bc6d6b684a8aae391e78a381da3ec38367c45c2dc5",
   "panel_sources": {
     "main_6A": {
       "sources": [],
@@ -34,14 +34,7 @@
         "source_data/optional_extensions/endpoints.csv",
         "source_data/optional_extensions/summary.csv"
       ],
-      "scope": "Separate twenty-seed approximate-sensitivity cohort, common Adam rate 0.03; exact parent slope, two/four bins, noisy voltage SD 0.5 and matched shuffled controls."
-    },
-    "main_6F": {
-      "sources": [
-        "source_data/optional_extensions/endpoints.csv",
-        "source_data/optional_extensions/summary.csv"
-      ],
-      "scope": "Separate twenty-seed routing cohort, selected Adam rates; supplied, locally learned and uniform routes, with terminal cue contacts removed in every condition."
+      "scope": "Two independent twenty-seed cohorts: approximate sensitivity at common rate 0.03, then cue-to-inhibition routing at selected rates with terminal cue contacts removed. Means and intervals; full seed values remain in Source Data."
     }
   },
   "source_sha256": {
@@ -54,15 +47,15 @@
     "source_data/optional_extensions/summary.csv": "0c15c3534fda404c62b71f345d21b9d511d0d88e83ea6d16e2b9bad2e1fc9310"
   },
   "builders_sha256": {
-    "scripts/review_completion/population_figure.py": "7df4733a5708e896047ee74e20aeed54e0baf49be0ffa7cdeecf26b23c6200f1",
-    "scripts/review_completion/promoted_panels.py": "e585b31002dfbc39eab75267926bd172edf9797ffb0713aa09f61a18a8948413",
+    "scripts/review_completion/population_figure.py": "c18cf5eb630cb1f23e3ed4368fb94a971172349508de2649fb4d864ea49af178",
+    "scripts/review_completion/promoted_panels.py": "ac90cf203cb75ea550576db2f6465246591608e5824766e8f19a4ebe36fe799a",
     "scripts/review_completion/checkpoint_computation.py": "ab82a5cf6cd94352fd9b2a10d9660c4059a8536fda4b0b3ab46c94f0f466094c",
-    "scripts/conductance_local_gate/figure.py": "cdd8ecc59817040d2f8f096120cf2a27ca88ecf1fc000e87a73a9cdc745dae3e",
+    "scripts/conductance_local_gate/figure.py": "0447a345957434f17a83839fbe5f8d1d2e46d481dccbec068eaa92ba33e67b89",
     "scripts/figure_canvas.py": "7f2983ff0c52a30dd5ba9bdeccc6fda940b4366ad872cbf0755fec5daa1dd7aa",
     "scripts/credit_first_figures/focused_provenance.py": "b7ade95b88e7d10a43bab01716dee6211bc2f09735b605d489c0012a147ecea7"
   },
   "source_data_immutable": true,
   "new_experiments": 0,
   "layout_findings": [],
-  "scope": "B original cohort; C/D original rescue cohort and its retained checkpoints; E and F separate prospective cohorts. All seeds retained. Rendering only."
+  "scope": "B original cohort; C/D original rescue cohort and its retained checkpoints; E groups two separate prospective cohorts. All seeds retained in source tables. Rendering only."
 }
