@@ -231,9 +231,10 @@ def _wrapped(lines):
 # ── panel A: the statistic, on one arbor ─────────────────────────────────
 def panel_statistic(f, subtitle_lines):
     """Two contact pairs on one arbor; one shares a soma-to-ancestor path."""
-    band = f.footer(_wrapped([
-        'Stimulus-response recordings;', 'no learning assay']),
-        band_pt=21.0, min_frame_pt=60.0)
+    # Review pass 2026-09-23: the title, the two count lines and the
+    # `Stimulus-response recordings; no learning assay` footer are legend A's
+    # sentences; the schematic takes the whole slot.
+    band = 0.0
     sub_pt = 10.5 * len(subtitle_lines)
     top = 1.0 - f.fy(sub_pt)
     for i, line in enumerate(subtitle_lines):
@@ -243,7 +244,7 @@ def panel_statistic(f, subtitle_lines):
     core_y0, core_h = f.fy(band), top - f.fy(band)
     core_pt = core_h * f.h_pt
     foot_pt, head_pt = 11.0, 9.0        # tag strip under the soma / over the canopy
-    tree_w_pt = min(80.0, 0.64 * f.w_pt)   # the slot was under-filled
+    tree_w_pt = min(92.0, 0.60 * f.w_pt)   # 2026-09-23: 80 -> 92, fills the freed slot
     nodes = f.balanced_tree((-f.fx(3.0), core_y0 + f.fy(foot_pt), f.fx(tree_w_pt),
                              f.fy(core_pt - foot_pt - head_pt)),
                             depth=3, mode='forward', labels=True, trunk=True,
@@ -256,7 +257,9 @@ def panel_statistic(f, subtitle_lines):
     for name in ('T1', 'T2'):
         f.contact(nodes[name], kind='exc')
     pair1_x = (nodes['T1'][0] + nodes['T2'][0]) / 2.0
-    tag1 = (pair1_x, core_y0 + core_h - f.fy(7.0))
+    # 2026-09-23: the name sits just above the capsule it names, not at the
+    # top of the slot 40 pt away
+    tag1 = (pair1_x, max(nodes['T1'][1], nodes['T2'][1]) + f.fy(9.0))
     lab1 = f.text(tag1, 'shared path', size=PT_BASE, color=label_color(ROUTE),
                   ha='center', va='center')
 
@@ -325,9 +328,9 @@ def panel_routes(f, matrix, groups, n_routes, subtitle_lines):
     """Nine mapped inputs placed by ancestry beside the realized 9 x 4
     support; the delivered field is imposed, not observed."""
     n = matrix.shape[0]
-    band = f.footer(_wrapped([
-        'schematic placement by ancestry']),
-        band_pt=10.5, min_frame_pt=60.0)
+    # Review pass 2026-09-23: title, count line, footer and `local rule`
+    # badge moved to legend E; arbor and matrix take the freed slot.
+    band = 0.0
     sub_pt = 10.5 * len(subtitle_lines)
     for i, line in enumerate(subtitle_lines):
         f.text((0.5, 1.0 - f.fy(10.5 * i + 5.2)), line, size=PT_BASE,
@@ -339,7 +342,7 @@ def panel_routes(f, matrix, groups, n_routes, subtitle_lines):
     # ``tree_w_pt + 4`` and a wider arbor walks it into the matrix row
     # labels (1.2 pt clear at 72 pt against 7.4 pt here).  E's freed height
     # goes to the realized-support matrix instead.
-    tree_w_pt = min(70.0, 0.52 * f.w_pt)
+    tree_w_pt = min(86.0, 0.54 * f.w_pt)
     nodes = f.balanced_tree((0.0, core_y0 + f.fy(13.0), f.fx(tree_w_pt),
                              core_h - f.fy(13.0)),
                             depth=3, mode='forward', labels=True,
@@ -364,11 +367,9 @@ def panel_routes(f, matrix, groups, n_routes, subtitle_lines):
     for label in seats:
         f.contact(placed[label], kind='exc')
     f.error_in(nodes.soma, side='right', dashed=True)
-    f.badge((f.fx(tree_w_pt + 4.0), core_y0 + core_h - f.fy(4.0)),
-            'local rule', ha='right', va='top')
 
     mat_w = 44.0
-    mat_h = min(68.0, core_h * f.h_pt - 20.0)
+    mat_h = min(86.0, core_h * f.h_pt - 20.0)
     mat_x = 1.0 - f.fx(mat_w)
     mat_y = core_y0 + f.fy(13.0)
     f.dictionary_matrix((mat_x, mat_y, f.fx(mat_w), f.fy(mat_h)), matrix,
@@ -752,18 +753,24 @@ def main():
     canvas = NativeCanvas(490 / 72, 3, row_weights=[132, 130, 112],
                           hgutter_pt=30, vgutter_pt=30,
                           margins=Margins(left=40, right=14, top=22, bottom=34))
-    ax_a = canvas.panel('A', 0, 0, 5, schematic=True,
-                        title='Shared path vs similarity')
+    # 2026-09-23: no titles, and the two schematics are unlocked: locked,
+    # they inherited C's 54 pt row-label reserve and sat 54 pt right of
+    # their letters in a 117 pt box
+    ax_a = canvas.panel('A', 0, 0, 5, schematic=True, lock=False,
+                        inset_pt=(0.0, 0.0, 14.0, 0.0))   # = B's top reserve
     ax_b = canvas.panel('B', 0, 5, 7)
     ax_c = canvas.panel('C', 1, 0, 5)
     ax_d = canvas.panel('D', 1, 5, 7)
-    ax_e = canvas.panel('E', 2, 0, 5, schematic=True,
-                        title='One input per route')
+    ax_e = canvas.panel('E', 2, 0, 5, schematic=True, lock=False,
+                        inset_pt=(0.0, 0.0, 9.0, 2.0))    # = F's reserves
     ax_f = canvas.panel('F', 2, 5, 7)
     # row 2 carries E's title above its axes as well as the letters, and
     # row 1's x labels hang 20 pt into the gutter: a 14 pt declared top
     # reserve keeps the two rows 3 mm apart (audit_row_separation)
-    canvas.declare_reserve('F', top=14.0)
+    # 2026-09-23: A and E no longer carry titles, but the 14 pt top reserve
+    # stays on B and F: it keeps the data panels' slot fill within the
+    # 1.35x panel-emphasis band (B reached 1.01 of its slot without it).
+    canvas.declare_reserve('F', top=9.0)     # 14 -> 9: no blank band over row 2
     canvas.declare_reserve('B', top=14.0)
 
     # -- B ----------------------------------------------------------------
@@ -804,8 +811,7 @@ def main():
     # white so the rule cannot print through a mark.
     ax_b.plot([0.0, 0.0], [-0.45, rug_bot + 0.17], color=GRAY, lw=LW_REF,
               dashes=(2.6, 2.0), zorder=1.0, solid_capstyle='butt')
-    ax_b.text(-0.012, -0.52, 'no alignment', fontsize=PT_BASE,
-              color=GRAY, ha='right', va='center', zorder=6)
+    # (2026-09-23: the zero rule is unlabelled; its meaning follows from the axis)
     # The concise rug label distinguishes its thirteen scan values from the
     # seven-target estimate above; it does not introduce a second inference.
 
@@ -862,16 +868,9 @@ def main():
     # phrase would instead cross the x = 0 rule, so it breaks after the noun.
     # one line: the caption gives the two false-detection rates, so the rule
     # is named and not numbered on the panel (design pass 2026-09-14)
-    ax_d.text(-0.295, 0.145, 'false detection', fontsize=PT_BASE,
-              color=GRAY, ha='left', va='center', zorder=6)
-    ax_d.text(-0.008, 0.645, 'no alignment', fontsize=PT_BASE, color=GRAY,
-              ha='right', va='center', zorder=6)
-    ax_d.text(0.190, 0.95, f'{cut_m:.3f} measured', fontsize=PT_BASE,
-              color=GRAY, ha='right', va='center', zorder=6)
-    ax_d.text(0.190, 0.86, f'{cut_p:.3f} perfect', fontsize=PT_BASE,
-              color=GRAY, ha='right', va='center', zorder=6)
-    ax_d.plot([0.200, 0.2445], [0.895, 0.815], color=GRAY, lw=LW_HAIR,
-              zorder=2)
+    # Review pass 2026-09-23: `false detection`, `no alignment` and the two
+    # 80 % crossing values are legend D's; the values are held here.
+    assert f'{cut_m:.3f}' == '0.249' and f'{cut_p:.3f}' == '0.248', (cut_m, cut_p)
     # (design pass 2026-09-14: the two-line `ancestry variance lambda = 0.65
     # / respecting the MC band` note is gone -- the running text carries the
     # sentence -- and the value is held to the source here instead)
@@ -890,13 +889,11 @@ def main():
     ax_d.plot([float(obs['mean'])], [y_obs], marker='D', markersize=MARKER_MS,
               markerfacecolor='white', markeredgecolor=ROUTE,
               markeredgewidth=LW_ERR, linestyle='none', zorder=5)
-    ax_d.text(0.135, y_obs - 0.10, 'observed (selected scans)',
+    ax_d.text(0.135, y_obs - 0.10, 'observed',
               fontsize=PT_BASE, color=label_color(ROUTE), ha='left',
               va='center', zorder=6)
     # inset: measured split-half reliability, the calibration of the curves
     # the inset title starts 8 pt right of the 0.249 drop (deviation 24)
-    ax_d.text(0.300, 0.570, 'Repeat reliability', fontsize=PT_BASE,
-              color=GRAY, ha='left', va='center', zorder=6)
     # 0.29, not 0.255: on the shorter 2026-09-14 row the inset's rotated
     # `records` label reached the measured-reliability curve
     inset = _data_inset(ax_d, (0.290, 0.17, 0.255, 0.34))
@@ -923,11 +920,10 @@ def main():
     # ran through five of the thirteen markers and they read as ornaments on
     # the reference rather than as measurements (visual review 2026-09-10).
     ax_f.axhline(100.0, color=GRAY, lw=LW_REF, dashes=(0.9, 1.7), zorder=1)
-    ax_f.text(18.5, 102.0, 'all inputs', fontsize=PT_BASE, color=GRAY,
-              ha='right', va='bottom', zorder=6)
     ax_f.axhline(mean_cov, color=GRAY, lw=LW_REF, dashes=(5.0, 1.6, 1.2, 1.6),
                  zorder=1.5)
-    ax_f.text(18.5, mean_cov + 2.5, f'mean {mean_cov:.1f} %', fontsize=PT_BASE,
+    assert f'{mean_cov:.1f}' == '48.0', mean_cov      # value: legend F
+    ax_f.text(18.5, mean_cov + 2.5, 'mean', fontsize=PT_BASE,
               color=GRAY, ha='right', va='bottom', zorder=6)
     # open first, filled last: nothing of the thirteen may be covered
     ax_f.plot(n_in[single], cov[single], linestyle='none', marker='o',
@@ -976,9 +972,8 @@ def main():
     style_direct_color_labels(canvas.fig)
     canvas.lock_reserves()
 
-    panel_statistic(Frame(ax_a), subtitle_a)
-    panel_routes(Frame(ax_e), a, (shared, singles), int(a.shape[1]),
-                 [f'{len(a)} mapped inputs, {a.shape[1]} routes'])
+    panel_statistic(Frame(ax_a), [])
+    panel_routes(Frame(ax_e), a, (shared, singles), int(a.shape[1]), [])
 
     problems = canvas.save(OUT, name='credit_first_figure_08', dpi=180)
     if emit_main:

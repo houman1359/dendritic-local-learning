@@ -107,8 +107,11 @@ def test_derangement_is_cyclic_and_caption_defines_last_branch_wrap():
     try:
         conflict.backward_credit_schematic(ax)
         labels = {text.get_text() for text in ax.texts}
-        assert "Next branch only" in labels
-        assert "Cyclic reassignment" in labels
+        # review pass 2026-09-23: each card is its rule's name and badge; the
+        # next-branch, cyclic definition is the legend's (checked below)
+        assert {"branch-specific", "deranged route"} <= labels
+        assert "Next branch only" not in labels
+        assert "Cyclic reassignment" not in labels
         assert " = δ 1[b ≡ b* + 1]" not in labels
         assert "b → b + 1" not in labels
         manuscript = (JOURNAL / "main.tex").read_text()

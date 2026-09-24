@@ -4,8 +4,8 @@
       "figure": 1,
       "source": "scripts/credit_first_figures/build_framework.py",
       "path": "source_data/curated_publication/figure_01_plotted.csv",
-      "sha256": "6bcb5ab02068531168ed96022fe9d4c63ec96ecb8603ada794f05e866e63ab0e",
-      "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
+      "sha256": "8723cbd4e3ce1a6acde3a7d029184050a67550023a01f0a1f38202bd07f1a80b",
+      "scope": "Display summaries from existing inputs; panel column identifies the selected data. One record per drawn mark. Panels A and B are schematics and contribute no rows. Not an additional experiment."
     },
     {
       "figure": 2,
@@ -18,7 +18,7 @@
       "figure": 3,
       "source": "scripts/credit_first_figures/build_ancestry.py",
       "path": "source_data/curated_publication/figure_03_plotted.csv",
-      "sha256": "5da940fa16b99f32db31209b65ee58bccac52e7146be95c2dea9fe7cf258a5ee",
+      "sha256": "126449057279c5acaf56f40207420e2a749877944652cc5e87e013fd7d399505",
       "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
     },
     {
@@ -32,7 +32,7 @@
       "figure": 5,
       "source": "scripts/conductance_local_gate/figure.py",
       "path": "source_data/curated_publication/figure_05_plotted.csv",
-      "sha256": "4b713a93098075e05d7ae5a3fab18619ccf1e00130c6bdb9c8d742a56d8d21db",
+      "sha256": "b92e4be948021f4b6258d365522ab9f9f5dec6298e46357612c7bdf918874b06",
       "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
     },
     {
@@ -60,7 +60,7 @@
       "figure": 9,
       "source": "figures/provenance/credit_clarity_20260908/figure_09_plotted.csv",
       "path": "source_data/curated_publication/figure_09_plotted.csv",
-      "sha256": "eff3fe251683352f1297e9b8b672f584291567db35e9a3990e6c70ae1799b59d",
+      "sha256": "e505db76ab991ed93728fd103746aa06f966937bcaa25d921add61a84340162b",
       "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
     },
     {

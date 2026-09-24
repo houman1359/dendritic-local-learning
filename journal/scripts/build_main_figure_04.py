@@ -165,9 +165,11 @@ CURATED = ROOT / "source_data" / "curated_publication" / "figure_02_plotted.csv"
 # letters (that carve, not a fat gutter, is what keeps the rows 3 mm apart:
 # the 46 pt gutter the 2026-09-09 build needed was a white band).  Gutters
 # are 24 pt horizontally and 34 pt vertically.  Data panels carry no titles.
-CANVAS_H_PT = 462.0
+CANVAS_H_PT = 460.0
 HEIGHT_IN = CANVAS_H_PT / 72.0
-ROW_PT = [130.0, 108.0, 106.0]
+# Review pass 2026-09-23: A spans 8 modules (302 pt), so row 0 must stay
+# >= 126 pt for the 2.40 panel-aspect ceiling; the drawing now fills it.
+ROW_PT = [128.0, 108.0, 106.0]
 HGUTTER_PT = 24.0
 VGUTTER_PT = 34.0
 MARGINS = Margins(left=41.0, right=12.0, top=20.0, bottom=30.0)
@@ -464,8 +466,8 @@ def _glyph_key(frame: Frame, *, y_pt, x0_pt, width_pt):
 
 
 # ── A: the task ───────────────────────────────────────────────────────────
-A_TITLE = "Context selects one of B branches"
-A_FOOT_PT = 22.0
+A_TITLE = None          # review pass 2026-09-23: the legend names the task
+A_FOOT_PT = 0.0
 
 
 def branch_conflict_task(ax) -> Frame:
@@ -480,7 +482,7 @@ def branch_conflict_task(ax) -> Frame:
     # is stretched vertically to the core it is given (the x geometry is the
     # cell's full width already), so a taller row 0 grows the tree instead of
     # leaving a white band under the title.
-    ka = min(max((core[3] * frame.h_pt) / 80.0, 1.0), 1.35)
+    ka = min(max((core[3] * frame.h_pt) / 80.0, 1.0), 1.62)   # review pass 2026-09-23
 
     def P(x_pt, y_pt):
         return (ox + frame.fx(x_pt), oy + frame.fy(y_pt * ka))
@@ -503,7 +505,10 @@ def branch_conflict_task(ax) -> Frame:
                color=label_color(COLORS["inh"]), ha="left", va="center")
 
     # -- the conflict-state tiles -------------------------------------------
-    tx0, tw, tgap = 130.0, 27.0, 4.0
+    # Review pass 2026-09-23: the tiles spread over the width the removed
+    # headline and key leave, instead of stopping 48 pt short of the edge.
+    tx0, tgap = 138.0, 6.0
+    tw = (core_w - tx0 - 2.0 - 3 * tgap) / 4.0
     rows = ((76.0, 53.0, "χ = 0  compatible", False),
             (49.0, 26.0, "χ = 1  conflicting", True))
     for y_label, y_tile, label, conflict in rows:
@@ -536,10 +541,8 @@ def branch_conflict_task(ax) -> Frame:
     # forward 'z' tag owns the right at soma height) and on a 7 pt leash, so
     # it clears the footer band; the three footer baselines are then set on a
     # uniform 8.6 pt pitch instead of the 7.0 pt slab the previous build had.
-    frame.text((0.5, frame.fy(A_FOOT_PT - 6.0)),
-               "0 < χ < 1: each nonselected view is replaced independently",
-               size=PT_BASE, color=MUTE, ha="center", va="center")
-    _glyph_key(frame, y_pt=3.1, x0_pt=1.0, width_pt=frame.w_pt - 2.0)
+    # Review pass 2026-09-23: the intermediate-dose sentence and the glyph
+    # key are stated in the legend; the drawing takes their band.
     return frame
 
 
@@ -551,8 +554,8 @@ def branch_conflict_task(ax) -> Frame:
 # split leaves the tree about 7 pt tall, which is not a tree; the split below
 # gives the bus card its 6 pt of extra head-room and keeps the FAN GEOMETRY
 # IDENTICAL in all three, which is what the comparison-card rule asks for.
-B_TITLE = "Three ways to deliver the same error"
-B_FOOT_PT = 12.0
+B_TITLE = None          # review pass 2026-09-23
+B_FOOT_PT = 0.0
 B_CARDS = ((56.0, 29.0), (25.0, 31.0), (0.0, 25.0))     # top card first
 # QA 2026-09-10: the fan sits 4 pt further right and splays 5-6 pt wider than
 # it did, and the contacts step back off the tips (19.4 of the 15.5 -> 20.0
@@ -616,7 +619,7 @@ def backward_credit_schematic(ax) -> Frame:
     # with 10 pt-tall fans; every point coordinate of the fan, the card stack
     # and the text column is scaled to the core the cell provides (1.25x at
     # the 132 pt row), the type and its 9.6 pt line pitch excepted.
-    kb = min(max((core[3] * frame.h_pt) / 85.0, 1.0), 1.4)
+    kb = min(max((core[3] * frame.h_pt) / 85.0, 1.0), 1.5)   # review pass 2026-09-23
 
     specs = (
         ("branch-specific", GREEN_TEXT, "exact", "subtree", "J1",
@@ -683,22 +686,15 @@ def backward_credit_schematic(ax) -> Frame:
                             zorder=4.6)
         tx = ox0 + frame.fx(B_TEXT_X * kb)
         ytop = oy + frame.fy(24.0 * kb)
+        # Review pass 2026-09-23: each card is its rule's name with its badge
+        # beneath; the descriptions and the footer moved to the legend.
         frame.text((tx, ytop), name, size=PT_BASE, color=text_col,
                    ha="left", va="top")
-        frame.text((tx, ytop - frame.fy(9.6)), description,
-                   size=PT_BASE, color=INK, ha="left", va="top")
-        if tail:
-            frame.text((tx, ytop - frame.fy(19.2)), tail, size=PT_BASE,
-                       color=MUTE, ha="left", va="top")
         # every badge uses the neutral 'control' face: BADGE_STYLE's 'exact'
         # is drawn in ``bp`` and its 'local rule' in ``shunting``, and both
         # hues are barred / reserved in this figure (AMENDMENTS §5)
-        frame.badge((core[0] + core[2], oy + frame.fy(25.0 * kb)), "control",
-                    text=badge, ha="right", va="top")
-    # Exact selectors and their normalization remain in the caption and text.
-    frame.text((frame.fx(1.0), frame.fy(5.0)),
-               "Forward computation unchanged", size=PT_BASE,
-               color=MUTE, ha="left", va="center")
+        frame.badge((tx, ytop - frame.fy(11.0)), "control",
+                    text=badge, ha="left", va="top")
     return frame
 
 
@@ -812,17 +808,14 @@ def initial_utility(ax, summary: pd.DataFrame) -> dict:
     # zero rule is where the B = 2 line lands and where the B = 4 and B = 8
     # lines cross it, so the reference label sits right-aligned at chi = 0.52
     # below the rule instead of at its right end.
-    ax.annotate("zero utility", xy=(0.52, 0.0), xytext=(0.0, -1.8),
-                textcoords="offset points", fontsize=PT_BASE, color=MUTE,
-                ha="right", va="top", zorder=6, annotation_clip=False)
+    # Review pass 2026-09-23: the zero rule is not labelled.
     # QA 2026-09-10: the three χ_c diamonds are gone.  They sat ON the zero
     # rule at 0.571, 0.667 and 1.0, i.e. exactly on the measured markers the
     # analytic line already crosses there, so the one region the panel exists
     # to show was a knot of two open teal marks and a black diamond; and the
     # same three values are plotted against B, with their trained partners,
     # in panel D.  The crossing is now read off the line and the rule.
-    _corner_lines(ax, ("initialization prediction",), corner=(1.0, 1.0),
-                  x_pt=-1.0, y_pt=-1.0, ha="right", color=INK)
+    # Review pass 2026-09-23: lines versus markers is defined in the legend.
     # C plots ONE rule -- neuron-shared -- in an ordinal ramp keyed to B, so
     # the panel says so in the amber the rest of the figure gives that rule.
     # It sits in the wedge the B = 8 line leaves empty, where the four-line
@@ -838,14 +831,12 @@ def initial_utility(ax, summary: pd.DataFrame) -> dict:
     # Design pass 2026-09-14: two lines, not one.  At 103 pt of axes width a
     # one-line "markers: neuron-shared" spans the whole χ range and meets the
     # B = 8 line; each 50 pt line stays inside the wedge.
-    _corner_lines(ax, ("markers:", "neuron-shared"), corner=(0.0, 0.0),
-                  x_pt=1.0, y_pt=44.0, step_pt=9.0, color=AMBER_TEXT)
+    # (review pass 2026-09-23: the rule is named in the legend)
     # QA 2026-09-10: the χ_c definition is not set here any more.  With the
     # three diamonds gone C marks no χ_c, so the token named a symbol the
     # panel no longer draws; it is defined in the caption, printed per facet
     # in F-H and plotted against B in D, where its trained partner sits.
-    ax.text(C_XLIM[0] + 0.035, C_STRIP_TOP + 0.025, "measured − analytic",
-            fontsize=PT_BASE, color=MUTE, ha="left", va="bottom", zorder=6)
+    strip.set_ylabel("Residual", fontsize=PT_BASE, color=INK, labelpad=1.0)
     ax.set_xticks([0.0, 0.25, 0.5, 0.75, 1.0],
                   ["0", "0.25", "0.5", "0.75", "1"])
     # QA 2026-09-10: one tick interval for the whole axis (it stepped by 0.5
@@ -856,8 +847,8 @@ def initial_utility(ax, summary: pd.DataFrame) -> dict:
     ax.set_yticks([-0.75, -0.25, 0.25, 0.75], minor=True)
     ax.spines["left"].set_bounds(-0.80, C_YLIM[1])
     ax.spines["bottom"].set_bounds(0.0, 1.0)
-    ax.set_xlabel("conflict dose χ")
-    ax.set_ylabel("initial signed utility s(χ)", y=0.62)
+    ax.set_xlabel("Conflict dose χ")
+    ax.set_ylabel("Initial signed utility s(χ)", y=0.64)
     return {"max_dev": max_dev, "excluded": excluded}
 
 
@@ -914,9 +905,7 @@ def boundary_order(ax, crossings: pd.DataFrame, seeds: pd.DataFrame,
     # QA 2026-09-09: the plan's verbatim strip label is 131 pt at 7 pt and
     # the axes are 93.2 pt, so it is set on two right-aligned lines inside a
     # strip deepened from 0.14 to 0.20 data units (20.5 pt) to hold them.
-    _corner_lines(ax, ("no crossing within", "the sweep (χ ≤ 1)"),
-                  corner=(1.0, 1.0), x_pt=-2.0, y_pt=-2.0, step_pt=8.0,
-                  ha="right")
+    # Review pass 2026-09-23: the strip's meaning is stated in the legend.
 
     for i, b in enumerate(BRANCHES):
         column = seeds[seeds.branches.eq(b)].first_at_or_below_chance_accuracy_dose
@@ -984,15 +973,15 @@ def boundary_order(ax, crossings: pd.DataFrame, seeds: pd.DataFrame,
     # right of the spine, not 0.11, so the upper one clears the axis-break
     # hairlines by 2.3 pt instead of 1 pt while the pair stays aligned.
     token_subscript(ax, D_XLIM[0] + 0.16, predicted[0] + 0.068,
-                    "analytic χ", "c", "", size=PT_BASE, sub_size=PT_BASE,
+                    "predicted χ", "c", "", size=PT_BASE, sub_size=PT_BASE,
                     color=INK, ha="left", va="bottom")
     ax.text(D_XLIM[0] + 0.16, trained[0] - 0.030, "trained crossing",
             fontsize=PT_BASE, color=AMBER_TEXT, ha="left", va="top",
             zorder=6)
     ax.set_xticks(xs, [str(b) for b in BRANCHES])
     ax.set_yticks([0.6, 0.8, 1.0], ["0.6", "0.8", "1.0"])
-    ax.set_xlabel("branches B")
-    ax.set_ylabel("chance-crossing dose χ")
+    ax.set_xlabel("Branches B")
+    ax.set_ylabel("Chance-crossing dose χ")
 
 
 # ── E: only shared credit forgets (the forest idiom) ──────────────────────
@@ -1037,7 +1026,7 @@ def forgetting_forest(canvas: NativeCanvas, ax, summary: pd.DataFrame,
             "n": int(s.n_seeds),
             "accuracy": 100.0 * float(s.mean_test_accuracy),
         })
-    out = forest(ax, rows, value_label="context-0 accuracy lost (pp)",
+    out = forest(ax, rows, value_label="Context-0 accuracy lost (pp)",
                  reference=0.0, reference_label=None, xlim=E_XLIM, tag="",
                  label_size=PT_BASE, band=False)
     record = canvas._record_for("E")
@@ -1050,10 +1039,9 @@ def forgetting_forest(canvas: NativeCanvas, ax, summary: pd.DataFrame,
             line.remove()
     ax.plot([0.0, 0.0], [-0.50, 3.45], color=MUTE, lw=LW_REF, zorder=1.0,
             dashes=(2.6, 2.0), solid_capstyle="butt")
-    ax.annotate("no accuracy loss", xy=(0.0, -0.45), xycoords=("data", "data"),
-                xytext=(2.5, 0.0), textcoords="offset points",
-                fontsize=PT_BASE, color=MUTE, ha="left", va="center",
-                zorder=6, annotation_clip=False)
+    # Review pass 2026-09-23: the zero-line label `no accuracy loss` is
+    # gone; `not learned` stays, because a forgetting value for a route that
+    # never acquired the task must not read as retention.
     ax.annotate("not learned", xy=(rows[2]["mean"], out["ypos"][2]),
                 xytext=(7.0, 0.0), textcoords="offset points",
                 fontsize=PT_BASE, color=MUTE, ha="left", va="center",
@@ -1210,13 +1198,13 @@ def accuracy_facet(ax, summary: pd.DataFrame, seeds: pd.DataFrame,
         ax.annotate("chance", xy=(0.860, 50.0), xytext=(0.0, 1.8),
                     textcoords="offset points", fontsize=PT_BASE, color=MUTE,
                     ha="right", va="bottom", zorder=6)
-        ax.set_ylabel("held-out accuracy (%)")
+        ax.set_ylabel("Held-out accuracy (%)")
     ax.set_xticks([0.0, 0.5, 1.0], ["0", "0.5", "1"])
     # every facet keeps its three tick labels and only the first carries the
     # y title -- the set's shared-y convention (Fig. 3 D, F) -- so each facet
     # can be read as numbers on its own
     ax.set_yticks([20, 50, 80])
-    ax.set_xlabel("conflict dose χ")
+    ax.set_xlabel("Conflict dose χ")
 
 
 def facet_tags(ax, branches: int) -> None:
@@ -1419,8 +1407,10 @@ def build() -> list:
         HEIGHT_IN, 3, row_weights=ROW_PT,
         hgutter_pt=HGUTTER_PT, vgutter_pt=VGUTTER_PT, margins=MARGINS,
     )
-    ax_a = canvas.panel("A", 0, 0, 7, schematic=True, lock=False)
-    ax_b = canvas.panel("B", 0, 7, 5, schematic=True, lock=False)
+    # Review pass 2026-09-23: B starts in column 8 with E and H so the three
+    # letters share one x; A takes the freed module.
+    ax_a = canvas.panel("A", 0, 0, 8, schematic=True, lock=False)
+    ax_b = canvas.panel("B", 0, 8, 4, schematic=True, lock=False)
     # data panels carry no titles (design pass 2026-09-14): the axes and the
     # direct labels say what they show, the caption says what it means
     ax_c = canvas.panel("C", 1, 0, 4)

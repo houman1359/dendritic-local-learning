@@ -558,7 +558,8 @@ PERTURB_A = ('nominal teacher; every fitted teacher is independently '
 
 def panel_task(ax, tuning):
     f = Frame(ax)
-    core = f.task_card((0.0, f.fy(4.5), 1.0, 1.0-f.fy(4.5)), footer=FOOTER_A)
+    # Review pass 2026-09-23: the input/plasticity footer is in the legend.
+    core = f.task_card((0.0, f.fy(4.5), 1.0, 1.0-f.fy(4.5)), footer=None)
     x0, y0, w, h = core
     w_pt, h_pt = w * f.w_pt, h * f.h_pt
     right_w = 66.0                      # the inset column, at the card's right
@@ -605,7 +606,10 @@ def panel_task(ax, tuning):
     n0 = len(ax.texts)
     # anchored from the inset column, not from J2: run east from J2 and the
     # tag crosses the inset's y spine, a collision no audit can see
-    chain_frame(f, (col_x - f.fx(4.0), jr[1] - f.fy(13.0)), ['a', ('sub', 'p'), ('sup', 'I'), ' = 10'],
+    # Review pass 2026-09-23: without the footer the tree is taller, so the
+    # tag is also held 4 pt below the inset's floor, clear of its tick labels.
+    tag_y = min(jr[1] - f.fy(13.0), y0 + f.fy(41.5) - f.fy(8.0))
+    chain_frame(f, (col_x - f.fx(4.0), tag_y), ['a', ('sub', 'p'), ('sup', 'I'), ' = 10'],
                 color=gate, ha='right', va='top')
     gate_tag = list(ax.texts[n0:])
     lift = CONTACT_DIA_PT * 0.5 + 3.0
@@ -644,9 +648,10 @@ def panel_task(ax, tuning):
     # label cannot be set between the curves; it is set in the free band under
     # the inset, on its curve's own side, and tied to the curve it names by a
     # hairline leader that ends 1.6 pt short of the trace.
-    for dashed, lines, ha in (
-            (False, ('aligned:', 'both', 'subtrees'), 'left'),
-            (True, ('opposed:', 'subtree 2'), 'right')):
+    # Review pass 2026-09-23: which subtree carries which tuning in the
+    # aligned and opposed tasks is stated in the legend, so the two labelled
+    # leaders under the inset are gone.
+    for dashed, lines, ha in ():
         series = tuning.v_decreasing if dashed else tuning.v_increasing
         # the leader touches its own curve at V = 0.28: the two contact points
         # are then 16 pt apart, 6 pt of each leader falls inside the inset,
@@ -667,8 +672,7 @@ def panel_task(ax, tuning):
         # reads as a leader to its curve and not as a second axis rule
         ax.plot([lx, lx], [y0 + f.fy(33.6), ly - f.fy(1.8)],
                 color=MUTE, lw=LW_HAIR, zorder=2, solid_capstyle='butt')
-    perturbation = f.room(core, 30.0) and (
-        _text_w_pt(ax, PERTURB_A, PT_BASE) <= w_pt - 6.0)
+    perturbation = False        # review pass 2026-09-23: legend only
     if perturbation:
         f.text((x0 + w / 2.0, y0 + f.fy(2.5)), PERTURB_A, size=PT_BASE,
                color=MUTE, va='bottom')
@@ -738,7 +742,7 @@ def panel_deliveries(ax):
     gap = f.fx(10.0)
     width = (1.0 - gap) / 2.0
     for index, oracle in enumerate((False, True)):
-        cell = (index * (width + gap), f.fy(17.0), width, 1 - f.fy(17.0))
+        cell = (index * (width + gap), 0.0, width, 1.0)
         core = f.task_card(cell, title='Oracle profiles' if oracle else 'Hard distal gate',
                            emphasis=not oracle)
         x0, y0, w, h = core
@@ -751,7 +755,6 @@ def panel_deliveries(ax):
             distal_oracle_delivery(f, nodes)
             lines = [
                 (['distal: p', ('sub', 'j'), 'ĉ', ('sub', 'j')], INK),
-                (['ĉ from exact field'], COLORS['oracle']),
             ]
         else:
             subtree_delivery(f, nodes, ['JL'], 'shunting', 'shunting')
@@ -759,13 +762,11 @@ def panel_deliveries(ax):
                       _lerp(nodes.soma, nodes['JR'], 0.84), COLORS['shunting'])
             lines = [
                 (['distal: 1[', 'a', ('sub', 'p'), ('sup', 'I'), ' = 0]'], INK),
-                (['inhibitory context only'], MUTE),
             ]
         for row, (parts, colour) in enumerate(lines):
-            chain_frame(f, (x0 + w / 2, y0 + f.fy(14 - 10 * row)),
+            chain_frame(f, (x0 + w / 2, y0 + f.fy(6 - 10 * row)),
                         parts, color=colour, ha='center')
-    f.text((.5, f.fy(7)), 'Both: proximal and soma × 1',
-           size=PT_BASE, color=MUTE, ha='center', va='center')
+    # Review pass 2026-09-23: "proximal and soma x 1" is in the legend.
     f.require_soma_lowest()
     f.require_delta0()
 
@@ -872,8 +873,8 @@ def curve_annotations(ax, t, task):
     # its own trace now that the head is a decade lower, and in D it stops at
     # 0.55 of the width -- right of that the bound-contact tick hangs off the
     # broadcast curve at this height and would strike the text.
-    chain_data(ax, (0.98, y_frac(4.0e-2) if aligned else 0.86), amber_parts,
-               color=AMBER_TEXT, ha='right', transform=ax.transAxes)
+    # Review pass 2026-09-23: the broadcast end value is reported in the
+    # text, not printed on the curve.
     # The caption explains the coincident traces and the text gives their
     # endpoints. Keep numerical provenance, without a second in-axis summary.
     # the window reference is named at the top of its own dotted rule.  The
@@ -893,11 +894,7 @@ def curve_annotations(ax, t, task):
     # stops), ha='left' -- the C/D symmetry the plan asks for, and the only
     # height in D that is clear of both the broadcast trace and the
     # conductance-bound tag.
-    ax.annotate('4,096', xy=(PRIMARY['budget'], REF_TOP), xycoords='data',
-                xytext=(2.0, 0.0),
-                textcoords='offset points', fontsize=PT_BASE, color=MUTE,
-                ha='left', va='center',
-                zorder=6, annotation_clip=False)
+    # Review pass 2026-09-23: the rule's value is in the legend.
     w = axes_w_pt(ax) - 4.0
     # A separate, symmetric condition header prevents the aligned task from
     # reading as another entry in C's two-column credit-rule key.
@@ -967,9 +964,7 @@ def bound_contact(ax, t):
     # decades below) and the mute hairline is back: it rises from the top
     # line, which spans the tick's x, to 2.2 pt under the tick's foot, the
     # same y_text < y_lead < datum rule as F's column ties.
-    tag_top = 0.60
-    stack(ax, 0.99, tag_top, lines, ha='right', lead_pt=8.5)
-    tie_leader(ax, step, tag_top, y_here * 0.72)
+    # Review pass 2026-09-23: the tick is defined in the legend; no tag.
     return dict(bound_median_step=step, bound_by_4096=by_4096,
                 bound_by_16384=by_16384, bound_y=y_here)
 
@@ -1172,7 +1167,8 @@ def placement(ax, t):
     reference_line(ax, broadcast, label=None)
     # under its own rule: set above it the 7-pt label reads at the height of
     # the swapped-gate mean, which it does not name
-    ax.annotate(f'unit broadcast {broadcast:.2f}', xy=(F_XLIM[0], broadcast),
+    # Review pass 2026-09-23: a named reference keeps its name, not its value.
+    ax.annotate('unit broadcast', xy=(F_XLIM[0], broadcast),
                 xytext=(1.0, -3.8), textcoords='offset points',
                 fontsize=PT_BASE, color=MUTE, ha='left', va='top', zorder=5)
     # QA 2026-09-10 (visual review): the three key lines are deleted.  CF-5
@@ -1200,9 +1196,7 @@ def placement(ax, t):
                       float(cond(t, 'opposed_strong',
                                  'swapped_distal_unit_proximal').ci_high))
     tag_y = y_frac(swapped_top) + 12.0 / axes_h_pt(ax)
-    stack(ax, x_frac(ax, 2.0), tag_y, [f"{swapped['mean']:.2f}"], ha='center',
-          color=INK)
-    tie_leader(ax, 2.0, tag_y, swapped_top, above=True)
+    # Review pass 2026-09-23: the wrong-branch mean is reported in the text.
     assert abs(printed['hard_distal_unit_proximal']['mean']
                - cont['mean']) / cont['mean'] < 0.02
     printed['unit_broadcast_reference'] = float(broadcast)
@@ -1370,10 +1364,10 @@ def build(cfg, tables, tuning):
     # sit INSIDE their slots, right of the letters, instead of hanging into the
     # left margin (audit_letter_alignment's second check)
     canvas.letter_dx = LETTER_DX_PT
-    a = canvas.panel('A', 0, 0, 5, schematic=True, lock=False,
-                     title='Context shunts one branch')
-    b = canvas.panel('B', 0, 5, 7, schematic=True, lock=False,
-                     title='Local selection versus oracle profiles')
+    # Review pass 2026-09-23: A and B are equal halves, so B shares D's
+    # letter column; the schematic headlines are stated in the legend.
+    a = canvas.panel('A', 0, 0, 6, schematic=True, lock=False)
+    b = canvas.panel('B', 0, 6, 6, schematic=True, lock=False)
     # C and D have compact condition headers; E-G need only their axis titles.
     c = canvas.panel('C', 1, 0, 6)
     d = canvas.panel('D', 1, 6, 6)

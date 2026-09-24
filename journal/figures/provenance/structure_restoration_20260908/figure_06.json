@@ -1,7 +1,7 @@
 {
   "figure": "Figure 6",
   "output": "figures/components/restored_main_06.pdf",
-  "output_sha256": "b59e45c816d397aa69e8656610084d0b1775f40440ffd6d97f3b9a1ce4ffbd6d",
+  "output_sha256": "c0991f935af3665e11bd8e48f3c09242624e4c1c617fbf6de93056240ce0ad09",
   "panel_sources": {
     "A": "Native architecture schematic (no data): D1 [8] and D3 [2,1,2] over the same eight nonsomatic compartments, the grouped-point control swatch, and the shared inventory printed from physical_depth_h4_factorial/seed_outcomes.csv (66,178 trainable parameters, 14,336 active synapses).",
     "B": "Native generative-model schematic (no data): tier supports and family strips from configs/nonlinear_physical_depth/confirmatory/aligned_shunting_bp.yaml (n_levels 3, hierarchy_branching 2, n_flat_groups 8, e_signal_delta 0.8) and supplementary/curated/si_06_physical_depth.tex Eq. S1-S2.",
@@ -27,23 +27,21 @@
     "source_data/physical_depth_budget/canonical/extension_paired_contrasts.csv": "52edceb0a920f6bd3548550deb81bc1b11a065da8d56d0ae7027157ca05e02d1"
   },
   "builder_sha256": {
-    "scripts/credit_first_figures/build_restored_main.py": "169c0b899a1883d71623f4661bc6bc47e14fb65a74a509e89c50a0291157d6c7",
+    "scripts/credit_first_figures/build_restored_main.py": "11b4854ea8f77a622142610b17acf86c3e559d2c6e0c688b67147fe22e19b454",
     "scripts/credit_first_figures/focused_main_evidence.py": "e045f0fc26ce8554af19f7d2b1ee9683ec852899f19e02e76e78163b0d74e773",
     "scripts/figure_canvas.py": "7f2983ff0c52a30dd5ba9bdeccc6fda940b4366ad872cbf0755fec5daa1dd7aa",
     "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a"
   },
   "source_data_immutable": true,
   "new_experiments": 0,
-  "layout_findings": [
-    "TEXT-ON-DATA '+10.86 pp'",
-    "TEXT-ON-DATA '\u22122.94 pp'"
-  ],
+  "layout_findings": [],
   "rendering_scope": "Existing outcomes only; no scientific endpoint or rate selection. Any redraw bootstrap uses whole existing seeds/cells, not independent pairs.",
   "helper_sha256": {
     "scripts/build_main_figure_06.py": "a9a0182be4f9f4223151d186ba6d4c8b7b6800ea9874eb4e1d49d076b17d6453"
   },
-  "schematic_fraction_percent": 17.1,
+  "schematic_fraction_percent": 16.3,
   "design_pass_2026_09_14": "444 pt on rows 116/108/108 at 32/30 pt gutters; no titles on C-H; C drops its tie note, E its restart sub-title, F its stopping-epoch note and two caveats, G and H every clause but the marked values (all quoted in the running text); G and H y titles shortened to fit a 99 pt axes; per-column reserves kept (save equalize=False)",
+  "review_pass_2026_09_23": "no titles on A or B; A drops its card footers and inventory lines, B its sensor, product and ratio-key lines, C its zero label and interval note, D the value on the point-network name, F its style note, G and H their sign keys and zero labels (all in the legend); G spans columns 0-7, H 8-11",
   "schematic_fraction_formula": "sum(schematic slot w_pt*h_pt) / (live_w_pt*live_h_pt), A and B slots over the 116 pt row against the live area",
   "no_forest": "CF-6: Fig 6 uses no forest panel (recorded)",
   "in_axes_key_count": 0

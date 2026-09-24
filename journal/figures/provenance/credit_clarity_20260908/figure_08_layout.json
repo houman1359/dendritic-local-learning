@@ -1,17 +1,17 @@
 {
-  "main_figure_sha256": "6178f74add73401e44bccebbf9a32ce43c0e625e03e83328ff730525ef8679c2",
+  "main_figure_sha256": "63c36900225978c32e57b6ea0420b7765bf25c5c14ba9677d9025f69faf7c816",
   "slot_fill_balance": {
     "left_reserve_pt": 28.0,
-    "slot_fill_spread": 1.232,
+    "slot_fill_spread": 1.223,
     "slot_fill": {
       "A": 0.847,
       "B": 0.847,
       "C": 0.753,
       "D": 0.753,
       "E": 0.753,
-      "F": 0.688,
-      "G": 0.688,
-      "H": 0.688
+      "F": 0.693,
+      "G": 0.693,
+      "H": 0.693
     }
   },
   "schematic_fraction": 0.2662,
@@ -20,7 +20,7 @@
     "v661_disjoint": 33.43760240516116
   },
   "kappa_unit_dose": 0.3897874146964674,
-  "identity_residual": 1.3877787807814457e-17,
+  "identity_residual": 1.0408340855860843e-17,
   "block_sizes": [
     17,
     5,

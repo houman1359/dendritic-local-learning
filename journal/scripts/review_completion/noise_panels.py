@@ -54,8 +54,7 @@ def panel(ax, letter, rows):
     ax.set_ylim(-.08, 1.65)
     ax.set_yticks([0, .5, 1., 1.5])
     ax.set_xticks([0, 1, 2], ['Fixed\nabsolute', 'Noise\nfree', 'Relative\nmatched'])
-    ax.set_ylabel('Interaction-dependent\ncredit deficit', fontsize=8)
-    token_subscript(ax, .88, .93, 'D', 'int', transform=ax.transAxes, ha='right')
+    ax.set_ylabel('Interaction deficit', fontsize=8)   # review pass 2026-09-23
     ax.legend([Line2D([], [], marker=m, color=colour, ls='none', ms=4) for m in ('D', 'o')],
               ['Selected rates', 'Common rate 0.003'], loc='lower left', ncol=1,
               frameon=False, fontsize=7, handletextpad=.3, columnspacing=.8)

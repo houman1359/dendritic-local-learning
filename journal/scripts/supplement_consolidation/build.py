@@ -33,6 +33,7 @@ from specification import (FIGURES, REMOVED_SHARED_REGIONS, SHARED_LEGENDS, WHOL
  ALIAS_BLACKLIST, PANEL_CONTENT, PANEL_REASONS, SOURCE_DATA_DIRS,
  ASSET_PATH_OVERRIDES, SCALE_EXEMPTIONS, CONSOLIDATED_FIGURE_NUMBERS)
 from tex_sources import expanded_tex
+from letter_relocation import relocate_letters
 import journal_style as JS
 OUT=J/'figures/supplementary/curated'; CFG=J/'configs/supplement_consolidation'; TEX=J/'supplementary/curated'
 REG=json.loads((HERE/'original_assets.json').read_text())
@@ -320,7 +321,10 @@ def main():
   scales[ident]=round(scale,4)
   if args.only is None or args.only==ident:
    source_metadata=json.loads(output.metadata.get('keywords') or '{}')
-   output.set_metadata({'title':title or re.sub(r'\\textbf\{([^}]+)\}.*',r'\1',originals[groups[0][0]],flags=re.S),'author':'Safaai, Richards and Sabatini','creator':'supplement_consolidation/build.py; native vector-panel reflow','keywords':json.dumps({'schema':'native-vector-reflow/1','id':ident,'figure':f'S{number}','paste_scale':round(scale,4),'panels':panelmap,'source_layout':source_metadata if whole else None,'letter_layout':letter_layout},separators=(',',':'))})
+   # review pass 2026-09-23: every panel letter above-left of all its ink
+   relocations=relocate_letters(output[0],panelmap,bold)
+   if relocations:output.subset_fonts()   # the re-set letters embed one bold font; keep only its glyphs
+   output.set_metadata({'title':title or re.sub(r'\\textbf\{([^}]+)\}.*',r'\1',originals[groups[0][0]],flags=re.S),'author':'Safaai, Richards and Sabatini','creator':'supplement_consolidation/build.py; native vector-panel reflow','keywords':json.dumps({'schema':'native-vector-reflow/1','id':ident,'figure':f'S{number}','paste_scale':round(scale,4),'panels':panelmap,'source_layout':source_metadata if whole else None,'letter_layout':letter_layout,**({'letter_relocations':relocations} if relocations else {})},separators=(',',':'))})
    output.save(dest,garbage=4,deflate=True,no_new_id=True)
    output[0].get_pixmap(matrix=fitz.Matrix(1.5,1.5)).save(OUT/(ident+'.png'))
   for p in panelmap:

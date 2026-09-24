@@ -2,7 +2,7 @@
   "figure": "Figure 7",
   "label": "fig:topology",
   "output": "figures/components/credit_first_figure_07.pdf",
-  "output_sha256": "234c80cb1eb8cf65b070e97786b87d0328fdd247484a712043341b3469da148c",
+  "output_sha256": "ec2ce6c4ac3e76f228efd3e4d64b58d8aa10b4c20960a220c2d3f01c9493a0f4",
   "main_copy": "figures/main/figure_08.pdf",
   "panel_letters": "abcdefgh",
   "replication_unit": "reconstructed cell; initial eight-cell, disjoint 47-cell and Pinky second-mouse cohorts kept separate",
@@ -17,7 +17,7 @@
     "h": "residual_capture at K = 8 per cohort from each cohort's cell_method_summary.csv (initial 8, disjoint 47, Pinky 8) for ancestry, surrogate tree, depth bins, random routes and the common-constrained SVD; the cells themselves are drawn behind each mean and are rows of figure_07_plotted.csv; 20,000-draw cell bootstrap, seed 202609061 + 100 g + i; Pinky site counts and eligibility from pinky/cohort_inclusion.csv"
   },
   "source_sha256": {
-    "scripts/credit_first_figures/build_anatomy.py": "224713bb67351983a93625c662a8fa33a7c63d9e60d39984f2dc64a8565ffee3",
+    "scripts/credit_first_figures/build_anatomy.py": "9627343e1fbdbdd957ad006d9c8106d4e9980a725020b4a81ef9e0f57c9e88cd",
     "scripts/build_main_figure_07.py": "8dd526d60d35b572a17a68c77c1813279756251052d4921471d77c3fb16b885e",
     "scripts/credit_first_figures/source_data_export.py": "140262b3750a3fbe56fe9d92323788b05553dbb7cb24bb56ca75dce8b7501ee6",
     "scripts/figure_canvas.py": "7f2983ff0c52a30dd5ba9bdeccc6fda940b4366ad872cbf0755fec5daa1dd7aa",
@@ -43,7 +43,7 @@
     "source_data/anatomy_commonmode/pinky/summary.json": "85607aa5a4cec1b12a2b213ba0995cfe4c11585e39e292a5aa5e8d8c3a6f0d5b",
     "source_data/anatomy_commonmode/pinky/operator_audit.csv": "51ae1f83902dbf7eaec7f664b611b1c3be69d9424d6d997913d549de0dd30f6b"
   },
-  "schematic_fraction": 0.26722,
+  "schematic_fraction": 0.24481,
   "schematic_fraction_formula": "sum(schematic slot w x h) / (live_w x live_h) = 3 x (125.5 x 122) / (452.4 x 430)",
   "palette": {
     "families": {

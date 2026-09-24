@@ -49,21 +49,31 @@ SOURCES = {
     'main_6F': ['source_data/optional_extensions/endpoints.csv', 'source_data/optional_extensions/summary.csv']}
 
 
-def chain(ax, x, y, parts, *, color, size=PT, drop=1.6, ha='left', va='center', zorder=5):
+def chain(ax, x, y, parts, *, color, size=PT, drop=1.6, rise_pt=2.6, ha='left',
+          va='center', zorder=5):
     """Plain-text spans chained on one baseline: ('text', level) with level -1 for a
     subscript, +1 for a superscript and 0 for the line.  Every span is a token size,
-    so the figure contract's ban on mathtext sub/superscripts is respected."""
-    prev, level = None, 0
+    so the figure contract's ban on mathtext sub/superscripts is respected.
+
+    Review pass 2026-09-23: every span takes its x from the previous span and its
+    y from the FIRST span (as Frame.subscript does), so text after a subscript
+    returns to the line instead of drifting down by one descent per span.
+    """
+    first = prev = None
     for text, lvl in parts:
-        if prev is None:
-            prev = ax.text(x, y, text, fontsize=size, color=color, ha=ha, va=va, zorder=zorder)
+        if first is None:
+            first = prev = ax.text(x, y, text, fontsize=size, color=color, ha=ha, va=va,
+                                   zorder=zorder)
+            continue
+        if lvl < 0:
+            kw = dict(va='baseline', xytext=(0.4, -drop))
+        elif lvl > 0:
+            kw = dict(va='bottom', xytext=(0.4, rise_pt))
         else:
-            rise = {-1: -drop, 0: 0.0, 1: 2.6}
-            dy = rise[lvl] - rise[level]
-            prev = ax.annotate(text, xy=(1.0, 0.0), xycoords=prev, xytext=(0.5, dy),
-                               textcoords='offset points', fontsize=size, color=color,
-                               ha='left', va='baseline', zorder=zorder, annotation_clip=False)
-        level = lvl
+            kw = dict(va='bottom', xytext=(0.5, 0.0))
+        prev = ax.annotate(text, xy=(1.0, 0.0), xycoords=(prev, first),
+                           textcoords='offset points', fontsize=size, color=color,
+                           ha='left', zorder=zorder, annotation_clip=False, **kw)
     return prev
 
 
@@ -126,13 +136,11 @@ def task_panel(ax):
             ls=DOT, zorder=1)
     ax.text(0.02, 0.585, 'cue', fontsize=PT, color=inh, ha='center', va='top')
     ax.text(px[1] - 0.02, 0.975, 'selected', fontsize=PT, color=sel, ha='center', va='center')
-    ax.text(0.375, 0.975, 'inputs exp(±z)', fontsize=PT, color=ink, ha='center', va='center')
-    ax.text(0.31, 0.505, 'inhibited', fontsize=PT, color=inh, ha='left', va='center')
+    # beside branch 3's stem, clear of the branch line and between key rows
+    ax.text(0.35, 0.385, 'inhibited', fontsize=PT, color=inh, ha='left', va='center')
     ax.annotate('', xy=(0.43, soma[1]), xytext=(0.265, soma[1]),
                 arrowprops=dict(arrowstyle='->', lw=LW_EDGE, color=ink, shrinkA=0, shrinkB=0))
     ax.text(0.445, soma[1], 'ŷ', fontsize=PT, color=ink, ha='left', va='center')
-    ax.text(0.345, 0.03, '16 neurons', fontsize=PT, color=COLORS['mute'], ha='center',
-            va='bottom')
     # delivery key
     x0 = 0.52
     ax.text(x0, 0.975, 'Terminal signals', fontsize=PT, color=ink,
@@ -142,13 +150,11 @@ def task_panel(ax):
             ('derivative', 'Augmented h f′', [('δ', 0), ('u', -1), (' h f′', 0), ('p', -1)]),
             ('exact', 'Exact', [('δ', 0), ('u', -1), (' κ h f′', 0), ('p', -1)])]
     for k, (rule, name, formula) in enumerate(rows):
-        y = 0.84 - 0.115 * k
+        y = 0.80 - 0.17 * k          # review pass 2026-09-23: rows fill the column
         ax.text(x0, y, name, fontsize=PT, color=C[rule], ha='left', va='center')
         chain(ax, 0.82, y, formula, color=ink)
-    notes = [[('h: relative parent resistance', 0)], [('f′', 0), ('p', -1), (': parent output slope', 0)],
-             [('κ: fixed across examples;', 0)], [('changes during learning', 0)]]
-    for k, note in enumerate(notes):
-        chain(ax, x0, 0.335 - 0.095 * k, note, color=COLORS['mute'])
+    # Review pass 2026-09-23: the definitions of h, f'_p and kappa, the input
+    # encoding and the population size are stated in the legend.
 
 
 # ── B: stress curves with direct end labels ────────────────────────────────

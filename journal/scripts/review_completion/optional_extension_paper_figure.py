@@ -34,10 +34,16 @@ def main(args):
     ax=c.panel('A',0,0,colspan=5);style_panel(ax);ax.set_yscale('log')
     xx=[0,.25,.5,1.];means=[draw(ax,'A','proxy',a,'common',x,.012) for a,x in zip(['derivative','noise025','noise05','noise1'],xx)]
     ax.plot(xx,means,color=COLORS['additive'],lw=LW_DATA,zorder=1)
+    refs=[]
     for arm,ls,label in [('resistance','--','Resistance gate'),('shuffle_noise05',':','Shuffled noise 0.5')]:
-        g,s=extract('proxy',arm,'common');ax.axhline(s['mean'],color=colour(arm),ls=ls,lw=LW_DATA,label=label)
+        g,s=extract('proxy',arm,'common');ax.axhline(s['mean'],color=colour(arm),ls=ls,lw=LW_DATA)
+        refs.append((s['mean'],label,colour(arm)))
         rows.append(dict(panel='A',study='proxy',arm=arm,policy='common',value=s['mean'],quantity='mean ordinary-test NMSE'))
-    c.fig.legend(*ax.get_legend_handles_labels(),loc='upper center',bbox_to_anchor=(.5,1.002),frameon=False,ncol=2,fontsize=7)
+    # review pass 2026-09-23: the two reference lines are named on A itself;
+    # the figure-level key sat over both A and B, above B's letter
+    (hi,hi_label,hi_col),(lo,lo_label,lo_col)=sorted(refs,reverse=True)
+    ax.text(1.05,hi*1.18,hi_label,color=hi_col,fontsize=7,ha='right',va='bottom')
+    ax.text(1.05,lo/1.18,lo_label,color=lo_col,fontsize=7,ha='right',va='top')
     ax.set_xticks(xx);ax.set_xlim(-.06,1.06);ax.set_xlabel('Parent-voltage noise SD');ax.set_ylabel('Ordinary-test NMSE')
     ax=c.panel('B',0,5,colspan=7);style_panel(ax);ax.set_yscale('log')
     from review_completion import population_figure as pop

@@ -301,7 +301,7 @@ Y_LIM_C = (-4.0, 100.0)
 #: Counted under CF-8 by :func:`caption_words` and recorded in the manifest.
 CAPTION = r'''\caption{\textbf{Ancestry-route benefits depend on task alignment and accurate coefficient selection.}
 \textbf{A}, Eight logistic input blocks occupy a balanced feedback-only tree. Context selects terminal $b_3$, whose block determines logit $z$; at four channels, credit also reaches sibling $b_4$. Junctions define feedback supports, not forward compartments. Tier shading indicates distractor class coefficients.
-\textbf{B}, Ancestry dictionaries: $K$ profiles, each spanning $8/K$ terminals; green, selected profile; grey, other profiles. Full resolution is $A=I_8$. Footers give raw class-signal sums before route normalization. Control rows show signed delivered credit normalized by each row's maximum absolute value for the same context at four channels; random-sparse and dense routes are illustrative draws.
+\textbf{B}, Ancestry dictionaries: $K$ profiles, each spanning $8/K$ terminals; green, selected profile; grey, other profiles. Full resolution is $A=I_8$. Footers give raw class-signal sums before route normalization. Right, signed credit delivered for context $b_3$ at four channels, normalized by each row's maximum absolute value: correct ancestry, then four controls; random-sparse and dense rows are single illustrative draws.
 \textbf{C}, Held-out accuracy against channel budget for ancestry, deranged delivery and the per-seed best of four matched controls.
 \textbf{D}, Task-matched versus degree- and depth-matched rewired trees with ancestry feedback. Error bars describe each condition, not the paired difference; shared and fully resolved routes coincide.
 \textbf{E}, Paired ancestry-minus-control differences at four channels. Labels give positive-seed counts and Holm-adjusted $P$ values across four budgets for the best-control comparison, or four individual controls. The best control is a hindsight reference using those same seeds. The deranged contrast lies off scale and is printed numerically.
@@ -520,6 +520,12 @@ def control_supports(rng_seed=0):
     table.insert(0, "control", order)
     table.insert(1, "cued_stream", "b3")
     return table
+
+
+def ancestry_support():
+    """Correct-ancestry delivery of b3's credit at K = 4, row-max normalized."""
+    row = ancestry_dictionary(4) @ ancestry_dictionary(4)[CUED]
+    return row / np.abs(row).max()
 
 
 def normalized_control_supports(supports):
@@ -776,8 +782,7 @@ def panel_task(ax, tiers):
     W, H = f.w_pt, f.h_pt
     sub_pt, key_pt, delta_pt = LINE_BAND_PT, 22.0, 12.0
     # sub-title: the cued stream, and the rule under test on it
-    f.subscript((f.fx(1.0), 1.0 - f.fy(sub_pt * 0.5)), "context c selects b", "3",
-                size=PT_SMALL, color=INK, ha="left")
+    # Review pass 2026-09-23: "context c selects b3" is stated in the legend.
     f.text((1.0 - f.fx(1.0), 1.0 - f.fy(sub_pt * 0.5)), "K = 4 route",
            size=PT_SMALL, color=GREEN, ha="right")
     rect = (0.0, f.fy(delta_pt), 1.0, 1.0 - f.fy(sub_pt + key_pt + delta_pt))
@@ -880,8 +885,7 @@ def panel_dictionaries(ax, prediction, supports):
     left_w = split_pt - 8.0
     f.text((f.fx(left_w / 2.0), 1.0 - f.fy(LINE_BAND_PT * 0.5)),
            "ancestry dictionaries A (8 × K)", size=PT_SMALL, color=INK)
-    f.text((f.fx(left_w / 2.0), f.fy(LINE_BAND_PT * 0.5)),
-           "group sum of the class signal", size=PT_SMALL, color=MUTE)
+    # Review pass 2026-09-23: the footers' meaning is stated in the legend.
     gap_pt = 6.0
     card_w = (left_w - 3 * gap_pt) / 4.0
     card_y0 = f.fy(LINE_BAND_PT + 2.0)
@@ -933,35 +937,29 @@ def panel_dictionaries(ax, prediction, supports):
     # ---- right block: the four matched controls at K = 4 -----------------
     # The reference drawing at the top of this block carries the panel's one
     # soma and its one delta-0 arrow, so B declares no DELTA0_EXEMPTIONS entry.
+    # Review pass 2026-09-23: correct ancestry is the heatmap's first row,
+    # directly above the four controls it is compared with, instead of a
+    # separate reference tree with a three-line note beside it.
     rx0 = split_pt + 6.0
     right_w = W - rx0 - 1.0
-    tree_w = 46.0
-    tree_rect = (f.fx(rx0), 1.0 - f.fy(36.0), f.fx(tree_w), f.fy(36.0))
-    ref = f.balanced_tree(tree_rect, depth=3, mode="forward", labels=False,
-                          output=None, soma_r_pt=2.6)
-    f.credit_delivery(ref, mode="subtree", targets=[_group_root(ref, 4)],
-                      rule_color="shunting")
-    f.contact(ref["T3"], kind="exc", dia_pt=3.0)
-    f.error_in(ref.soma, label="δ0", side="right", r_pt=2.6)
-    for i, line in enumerate(("correct ancestry", "at K = 4 delivers",
-                              "the cued pair")):
-        f.text((f.fx(rx0 + tree_w + 5.0), 1.0 - f.fy(8.0 + 9.5 * i)), line,
-               size=PT_SMALL, color=INK, ha="left")
-    lab_pt, col_pt, row_pt = 56.0, 7.0, 10.0
-    mw, mh = f.fx(col_pt * 8), f.fy(row_pt * 4)
+    f.text((f.fx(rx0 + right_w / 2.0), 1.0 - f.fy(LINE_BAND_PT * 0.5)),
+           "delivered credit at K = 4", size=PT_SMALL, color=INK)
+    lab_pt, col_pt, row_pt = 56.0, 8.0, 12.0
+    mw, mh = f.fx(col_pt * 8), f.fy(row_pt * 5)
     mx = f.fx(rx0 + lab_pt)
-    my = f.fy(26.0)
-    S = normalized_control_supports(supports)
+    my = f.fy(34.0)
+    S = np.vstack([ancestry_support(), normalized_control_supports(supports)])
     inner = f.dictionary_matrix((mx, my, mw, mh), S, color="point_mlp",
-                                label=None, row_groups=[1] * 4,
+                                label=None, row_groups=[1] * 5,
                                 col_labels=[str(i + 1) for i in range(8)],
-                                yticks=[name for name, _ in CONTROL_ROWS],
+                                yticks=["ancestry"]
+                                + [name for name, _ in CONTROL_ROWS],
                                 min_cell_pt=6.0)
     inner.tick_params(axis="y", labelsize=PT_SMALL, pad=2.0)
     f.subscript((mx - f.fx(2.0), my + mh + f.fy(2.4)), "b", "i",
                 size=PT_SMALL, color=MUTE, ha="right")
     # Signed key: the dense-random row contains three negative entries.
-    bar_y, bar_w = f.fy(17.0), f.fx(9.0)
+    bar_y, bar_w = f.fy(12.0), f.fx(9.0)
     f.text((mx - f.fx(1.5), bar_y + f.fy(2.7)), "Φ / max |Φ|", size=PT_SMALL,
            color=MUTE, ha="right")
     for j, level in enumerate((-1.0, 0.0, 1.0)):
@@ -972,12 +970,10 @@ def panel_dictionaries(ax, prediction, supports):
             edgecolor=COLORS['edge'], linewidth=LW_HAIR, zorder=3, clip_on=False))
         f.text((bx + bar_w + f.fx(2.0), bar_y + f.fy(2.7)), f"{level:g}",
                size=PT_SMALL, color=MUTE, ha="left")
-    for i, line in enumerate(("random-sparse and dense rows are",
-                              "one illustrative draw (rng seed 0)")):
-        f.text((f.fx(rx0), f.fy(8.0 - 8.0 * i)), line, size=PT_SMALL,
-               color=MUTE, ha="left")
+    # Review pass 2026-09-23: the illustrative-draw note is in the legend.
     f.require_soma_lowest()
-    f.require_delta0()
+    f.require_delta0(allow_no_delta0=True,
+                     reason="dictionary and delivered-credit matrices only")
     assert right_w >= lab_pt + col_pt * 8, right_w
     return raw
 
@@ -1100,7 +1096,7 @@ def panel_forest(canvas, ax, contrasts, pairs):
     # CF-6 allows a 0.55 pt row tick OR a 6 % band; the tick is used because a
     # band patch leaves no clear strip for the label column.
     out = forest(ax, rows, value_label="Ancestry − control (pp)",
-                 reference=0.0, reference_label="no difference",
+                 reference=0.0, reference_label=None,
                  xlim=(-2.0, 15.6), tag="", seed_alpha=0.45, band=False,
                  tick=True)
     # The label column (design pass 2026-09-14): the row name in ink over its
@@ -1190,7 +1186,7 @@ def panel_cues(ax_soft, ax_hard, grid, oracle, frozen, mismatched, enc_c,
         floor, = ax.plot([-0.10, 1.0], [frozen, frozen], color=MUTE,
                          lw=LW_REF, zorder=1.2, solid_capstyle="butt")
         floor.set_dashes((2.2, 1.8))
-        ax.text(-0.33, 96.0, "soft readout" if soft else "hard readout",
+        ax.text(-0.33, 96.0, "Soft readout" if soft else "Hard readout",
                 fontsize=PT_SMALL, color=INK if soft else MUTE, ha="left",
                 va="center")
         ax.set_xticks([0.0, 0.5, 1.0], ["0", "0.5", "1"])
@@ -1340,10 +1336,9 @@ def build():
     canvas = NativeCanvas(454 / 72, 3, row_weights=[126, 96, 110],
                           hgutter_pt=28, vgutter_pt=32,
                           margins=Margins(left=44, right=12, top=22, bottom=36))
-    a = canvas.panel("A", 0, 0, 4, title="Eight-stream task tree",
-                     schematic=True, lock=False)
-    b = canvas.panel("B", 0, 4, 8, title="Ancestry and control dictionaries",
-                     schematic=True, lock=False)
+    # Review pass 2026-09-23: no schematic headlines; the legend names A, B.
+    a = canvas.panel("A", 0, 0, 4, schematic=True, lock=False)
+    b = canvas.panel("B", 0, 4, 8, schematic=True, lock=False)
     # data panels carry no titles: the axes and the direct labels say what
     # they show, the caption says what it means
     c = canvas.panel("C", 1, 0, 3)
@@ -1408,6 +1403,10 @@ def build():
                 for r in prediction.to_dict("records")]
     display += [dict(panel="B", record="control support", **r)
                 for r in supports.to_dict("records")]
+    display.append(dict(panel="B", record="ancestry support (normalized)",
+                        control="correct_ancestry_subtrees", cued_stream="b3",
+                        **{f"b{i + 1}": float(v)
+                           for i, v in enumerate(ancestry_support())}))
     dend = summary[summary.architecture.eq("dendritic_tree")]
     for family in ("correct_ancestry_subtrees", "within_neuron_route_derangement"):
         display += [dict(panel="C", record="condition_mean", **r)

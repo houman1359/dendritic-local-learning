@@ -114,6 +114,7 @@ from native_schematics import (CONTACT_DIA_PT, GHOST_PCT, Frame,
 SOURCE = JOURNAL / "source_data"
 FRESH = SOURCE / "image_ladder_controls/summaries"
 OUT = JOURNAL / "figures/components/credit_first_figure_01.pdf"
+DIGIT = JOURNAL / "source_data/curated_publication/figure_01_input_digit.json"
 MAIN = JOURNAL / "figures/main/figure_01.pdf"
 RECORDS = SOURCE / "credit_first_figures"
 CURATED = SOURCE / "curated_publication/figure_01_plotted.csv"
@@ -539,19 +540,16 @@ def credit_entry(ax):
     k = max(W / 92.0, 1.0)
     # Keep the organizing update, not a second derivation in the artwork.
     # Eligibility and route-coefficient equations are defined in the text.
+    # Review pass 2026-09-23: the update rule stays; the two definition
+    # lines under it moved to the legend, and every band drops 14 pt.
     x0, w_delta = X(1.0), _text_w_pt(ax, "δ", PT_BASE)
-    _, _, starts = chain(f, (x0, Y(22.0)),
+    eq_y = 5.0
+    _, _, starts = chain(f, (x0, Y(eq_y)),
                          ["Δ", ("g", "i"), " = −η ", ("e", "i"), " ", ("δ", "n")],
                          size=PT_BASE)
-    hat(f, starts[5], Y(22.0), w_delta)
-    chain(f, (x0, Y(12.0)),
-          [("e", "i"), ": local sensitivity"], size=PT_BASE, color=MUTE)
-    _, _, starts = chain(f, (x0, Y(2.0)),
-                         [("δ", "n"), ": delivered error"],
-                         size=PT_BASE, color=MUTE)
-    hat(f, starts[0], Y(2.0), w_delta, color=MUTE)
+    hat(f, starts[5], Y(eq_y), w_delta)
     # -- the neuron and its one ghosted neighbour -------------------------
-    tree_w, tree_h, tree_y = min(44.0 * k, 0.46 * W), 52.0 + 4.0 * (k - 1.0), 44.0
+    tree_w, tree_h, tree_y = min(44.0 * k, 0.46 * W), 50.0, 30.0
     base = (X(0.5), Y(tree_y), X(tree_w), Y(tree_h))
     # QA 2026-09-09: no ghost neighbour in A.  A 92 pt panel that also holds
     # two task cards leaves a 7.5 pt window in which a ghost soma is both
@@ -571,23 +569,27 @@ def credit_entry(ax):
            ha="right", va="bottom")
     f.text(f._off(inh, 2.6, 0.8), "I", size=PT_BASE, color=COLORS["inh"],
            ha="left")
-    # -- stimulus: drawn, never a sub-300 dpi raster (DECISIONS Fig 1) -----
-    tile = (X(1.0), Y(102.0), X(15.0 * min(k, 1.2)), Y(15.0 * min(k, 1.2)))
-    tint_patch(ax, ("rect", *tile), color="grid", pct=70, edge=True,
-               lw=LW_HAIR, radius_pt=1.0, zorder=1.0)
-    for k in (1, 2, 3):
-        ax.plot([tile[0] + X(2.0), tile[0] + tile[2] - X(2.0)],
-                [tile[1] + tile[3] * k / 4.0] * 2, color=COLORS["grid"],
-                lw=f.lw(LW_HAIR), zorder=1.2)
-    f.text((tile[0] + tile[2] + X(2.5), tile[1] + tile[3] / 2.0), "x (MNIST)",
+    # -- stimulus: one real MNIST test digit, drawn as vector pixels -------
+    # Review pass 2026-09-23: the grey placeholder tile is replaced by test
+    # image 0 (a 7), read from the curated copy with its source hash.
+    tile_pt = 20.0
+    tile = (X(1.0), Y(tree_y + tree_h + 6.0), X(tile_pt), Y(tile_pt))
+    digit = np.asarray(json.loads(DIGIT.read_text())["pixels"], float) / 255.0
+    edges_x = np.linspace(tile[0], tile[0] + tile[2], digit.shape[1] + 1)
+    edges_y = np.linspace(tile[1] + tile[3], tile[1], digit.shape[0] + 1)
+    ax.pcolormesh(edges_x, edges_y, digit, cmap="Greys", vmin=0.0, vmax=1.0,
+                  shading="flat", rasterized=False, zorder=1.0)
+    ax.add_patch(Rectangle((tile[0], tile[1]), tile[2], tile[3], fill=False,
+                           ec=COLORS["dend"], lw=f.lw(LW_HAIR), zorder=1.2))
+    f.text((tile[0] + tile[2] + X(2.5), tile[1] + tile[3] / 2.0), "x",
            size=PT_BASE, color=INK, ha="left")
     f.leader((tile[0] + tile[2] / 2.0, tile[1] - Y(0.5)),
              (exc[0], exc[1] + Y(3.2)), color=MUTE)
     # -- readout, loss, and the error that returns to this soma -----------
     card_w = 42.0 + 4.0 * min(k - 1.0, 1.0)
     card_x = W - card_w - 2.0                # flush with the cell's right edge
-    read_y, read_h = 38.0, 16.0             # centred on the soma (y = 46)
-    loss_y, loss_h = 62.0, 18.0
+    read_y, read_h = 24.0, 16.0             # centred on the soma (y = 32)
+    loss_y, loss_h = 48.0, 18.0
     f.task_card((X(card_x), Y(read_y), X(card_w), Y(read_h)))
     f.task_card((X(card_x), Y(loss_y), X(card_w), Y(loss_h)))
     f.text((X(card_x + card_w / 2.0), Y(read_y + read_h / 2.0)), "ŷ = Wz + b",
@@ -650,17 +652,21 @@ def deliveries(ax):
     # figure.  Each is now stated once, beside the thing it defines, and B's
     # three cards take the 21 pt the footer band held.
     foot_pt = 0.0
-    gap_pt, share = 5.0, np.array([104.0, 88.0, 98.0])
+    # Review pass 2026-09-23: B is 7 modules now; the per-neuron card gets a
+    # larger share so its return loop and bus stay inside the card.
+    gap_pt, share = 5.0, np.array([101.0, 101.0, 88.0])
     widths = share / share.sum() * (f.w_pt - 2 * gap_pt)
     cells, x_pt = [], 0.0
     for w_pt in widths:
         cells.append((X(x_pt), Y(foot_pt + 1.0), X(w_pt),
                       1.0 - Y(foot_pt + 1.0)))
         x_pt += w_pt + gap_pt
-    specs = (("Strict scalar", False, ["one s across neurons"]),
-             ("Per neuron", True, ["one ", ("δ", "u"), ", spread evenly"]),
+    # Review pass 2026-09-23: the two prose footers moved to the legend;
+    # card 3 keeps its path-gain equation.
+    specs = (("Strict scalar", False, []),
+             ("Per neuron", True, []),
              ("Exact path", False, None))
-    tree_w_pt = 72.0
+    tree_w_pt = 69.0      # 8 terminals: >= 8.5 pt pitch keeps the alpha tags
     for i, (cell, (title, hero, footer)) in enumerate(zip(cells, specs)):
         core = f.task_card(cell, title=title, emphasis=hero)
         core_pt = core[3] * f.h_pt
@@ -717,7 +723,7 @@ def deliveries(ax):
                                   ("α", "1"), ("δ", "0")], size=PT_BASE,
                                  color=INK, ha="center")
             hat(f, starts[0], footer_y, _text_w_pt(ax, "δ", PT_BASE))
-        else:
+        elif footer:
             chain(f, (cell[0] + cell[2] / 2.0, footer_y), footer,
                   size=PT_BASE, color=MUTE, ha="center")
     f.require_soma_lowest()
@@ -742,7 +748,9 @@ def dictionaries(ax):
     # QA 2026-09-09: the stack keeps its top (117.5 pt, 2.7 pt under the
     # title) and its floor rises 3 pt, so the delta-0 tag clears the
     # matrix-name row and the coefficient band under it.
-    rows_h, y0 = 75.0, 41.0             # 12 rows at 6.25 pt
+    # Review pass 2026-09-23: the three definition lines under the drawing
+    # moved to the legend, so the stack drops into their band.
+    rows_h, y0 = 96.0, 16.0             # 12 rows at 8.0 pt
     # QA 2026-09-11 (major): these were K_CYCLE[:3], i.e. the shunting,
     # additive and scalar inks, so C's three subtree tints came out
     # pixel-identical to the architecture series drawn in D-G and to B's
@@ -825,12 +833,6 @@ def dictionaries(ax):
                             label=None, col_labels=None)
         f.text((X(x_pt + w_pt) if ha == "right" else X(x_pt), Y(y0 - 8.0)),
                name, size=PT_BASE, color=INK, ha=ha, va="center")
-    chain(f, (X(1.5), Y(24.0)), ["per neuron: c = ", ("δ", "u")], size=PT_BASE)
-    _, x_end, _ = chain(f, (X(1.5), Y(13.0)), ["projected K = 1, 3:"],
-                        size=PT_BASE)
-    f.badge((x_end + X(4.0), Y(13.0)), "oracle", ha="left", va="center")
-    f.text((X(1.5), Y(3.0)), "c from the exact field", size=PT_BASE, color=INK,
-           ha="left")
     f.require_soma_lowest()
     f.require_delta0()
     return dict(broadcast=a1, subtrees=a3, resolved=a12, display_row_order=order)
@@ -896,8 +898,8 @@ def accuracy(ax, conditions, seeds, paired, within):
     # it read as another line of body text rather than as the band's label.  The
     # x tick under the band already says "Decoder only"; the band adds only what
     # was frozen, set in two short lines that fit inside the band's own width.
-    ax.text(5.0, 97.9, "frozen\ncore", ha="center", va="top",
-            fontsize=PT_BASE, color=MUTE, zorder=6, linespacing=1.35)
+    # Review pass 2026-09-23: the band's "frozen core" key is gone; the x
+    # tick names the column and the legend defines the shading.
     printed = {}
     # Fill means ARCHITECTURE in D, E and F (filled shunting circle, open
     # additive square); only G re-uses open, for its initial checkpoint, and
@@ -940,14 +942,8 @@ def accuracy(ax, conditions, seeds, paired, within):
     # exact path - per neuron, a different pair), so they stay -- but as an
     # aligned two-column table on one leading, name at x = 1.15 and the
     # shunting / additive pair at a single x = 2.72, not as ragged prose.
-    ax.text(1.15, 93.2, "within tree: shunting / additive", ha="left", va="center",
-            fontsize=PT_BASE, color=MUTE, zorder=6)
-    for i, (name, values) in enumerate(within.items()):
-        ax.text(1.15, 91.8 - 1.37 * i, name, ha="left", va="center",
-                fontsize=PT_BASE, color=MUTE, zorder=6)
-        ax.text(2.72, 91.8 - 1.37 * i,
-                f"{signed(values[0])} / {signed(values[1])}", ha="left",
-                va="center", fontsize=PT_BASE, color=MUTE, zorder=6)
+    # Review pass 2026-09-23: the within-tree contrasts are reported in the
+    # Results text, not as a table inside the plot.
     plateau_inset(ax, conditions, seeds)
     ax.set(xlim=(-0.5, 6.3), ylim=(78, 98.5), xticks=xs, xticklabels=ARM_LABELS,
            yticks=[80, 85, 90, 95], ylabel="Test accuracy (%)")
@@ -1049,9 +1045,7 @@ def cohort_forest(canvas, ax, cohorts, kind, *, value_label, xlim, xticks,
                                                  # reference labels
     # QA 2026-09-09: 2 pt lower than the top of the rule, so the mute label
     # clears the panel title box instead of crowding it
-    ax.annotate("no effect", xy=(0.0, hi - 0.36), xycoords=("data", "data"),
-                xytext=(2.5, 0.0), textcoords="offset points", ha="left",
-                va="center", fontsize=PT_BASE, color=MUTE, zorder=6)
+    # Review pass 2026-09-23: the zero rule is not labelled.
     for i, (y, row, (second, note)) in enumerate(zip(out["ypos"], rows,
                                                      extras)):
         span_lo, span_hi = row["lo"], row["hi"]
@@ -1071,8 +1065,8 @@ def cohort_forest(canvas, ax, cohorts, kind, *, value_label, xlim, xticks,
         # the series hues on row 1 -- shunting above the row line, additive
         # below the open arm that hangs 0.22 rows under it.
         edge = xlim[1] - 4.0 * _units_per_pt(ax, xlim)
-        for name, key, dy in (("shunting", "shunting", -0.42),
-                              ("additive", "additive", 0.30)):
+        for name, key, dy in (("Shunting", "shunting", -0.42),
+                              ("Additive", "additive", 0.30)):
             ax.text(edge, out["ypos"][0] + dy, name, ha="right", va="center",
                     fontsize=PT_BASE, color=label_color(COLORS[key]), zorder=6)
     # 2026-09-14: the "mean [95 % CI]" sub-label under the axis is gone; the
@@ -1116,7 +1110,7 @@ def capture(ax, per_seed, summary):
     ax.axhline(1.0, color=MUTE, lw=LW_REF, dashes=(2.6, 2.0), zorder=1.0)
     # on TOP of its own rule, right-aligned: below the rule the label would
     # now sit on the additive initial marker at K = 3.
-    ax.text(xhi - 0.02, 1.012, "identity, K = 12", ha="right", va="bottom",
+    ax.text(xhi - 0.02, 1.012, "K = 12", ha="right", va="bottom",
             fontsize=PT_BASE, color=MUTE, zorder=6)
     # The rule stands for the identity column, so its level is read back from
     # the same table the markers use and asserted with them, not hard-coded.
@@ -1217,8 +1211,10 @@ def write_curated(conditions, seeds, paired, within, cohorts, equivalence,
                   cap_seed, cap_summary, matrices):
     """Emit ``source_data/curated_publication/figure_01_plotted.csv``.
 
-    One record per drawn mark, in panel order C -> G.  A and B are schematics
-    (no data), so they contribute no rows; the panel column carries the letter
+    One record per drawn mark, in panel order C -> G, then A.  B is a
+    schematic (no data); A is a schematic too, but its input tile draws one
+    real MNIST test image, so its 784 pixels close the table (review pass
+    2026-09-23); the panel column carries the letter
     the artwork actually uses, which the HEAD-era table -- written against the
     retired panel semantics, with a panel C of one-step-bound curves that is
     now Supplementary S3G -- did not.
@@ -1325,12 +1321,23 @@ def write_curated(conditions, seeds, paired, within, cohorts, equivalence,
                         seed=int(sr.seed), value=float(sr.mean_capture),
                         unit=f"mean {CAPTURE_COORDINATE}-error capture "
                              "(fraction)", source_table=seed_cap_table))
+    # A: the one real MNIST test image the input tile draws, pixel by pixel
+    digit = json.loads(DIGIT.read_text())
+    for row, line in enumerate(digit["pixels"]):
+        for col, level in enumerate(line):
+            rows.append(dict(
+                panel="A", record="input digit pixel", pixel_row=row,
+                pixel_col=col, value=float(level) / 255.0,
+                unit="pixel intensity (0 to 1)",
+                source_table="source_data/curated_publication/"
+                             "figure_01_input_digit.json"))
     for row in rows:
         if row.get("cohort") == "cifar10" and row.get("architecture") == "shunting":
             row["inference_status"] = "fixed-budget descriptive; convergence gate failed"
             row["convergence_flag_seed"] = 22008
-    frame = pd.DataFrame(rows, columns=[*CURATED_COLUMNS, "inference_status", "convergence_flag_seed"])
-    assert set(frame.panel) == {"C", "D", "E", "F", "G"}
+    frame = pd.DataFrame(rows, columns=[*CURATED_COLUMNS, "inference_status", "convergence_flag_seed",
+                                        "pixel_row", "pixel_col"])
+    assert set(frame.panel) == {"A", "C", "D", "E", "F", "G"}
     CURATED.parent.mkdir(parents=True, exist_ok=True)
     frame.to_csv(CURATED, index=False)
     return CURATED
@@ -1380,18 +1387,21 @@ def main():
     # carry no sentence titles (the legend states the claims) and the row
     # gutter is 30 pt.  Letters keep their reading order, so no pointer in the
     # text moves.
-    canvas = NativeCanvas(492 / 72, 3, row_weights=[126, 126, 120],
+    # Review pass 2026-09-23: with the schematic headlines gone the top row
+    # needs 112 pt, not 126; the canvas shrinks by the same 14 pt.
+    canvas = NativeCanvas(478 / 72, 3, row_weights=[112, 126, 120],
                           hgutter_pt=40, vgutter_pt=30,
                           margins=Margins(left=36, right=12, top=22, bottom=38))
-    a = canvas.panel("A", 0, 0, 4, schematic=True, title="DendriNet image classifier",
-                     lock=False)
-    b = canvas.panel("B", 0, 4, 8, schematic=True,
-                     title="Voltage-error schematic; image rules use activation errors")
+    # Review pass 2026-09-23: B starts in column 5 with D and F, so the
+    # letters B, D and F share one x; A takes the freed module.  Schematic
+    # headlines are gone -- the legend names each panel.  B is unlocked so
+    # the forest gutter locked on column 5 (E, F) does not narrow its cards.
+    a = canvas.panel("A", 0, 0, 5, schematic=True, lock=False)
+    b = canvas.panel("B", 0, 5, 7, schematic=True, lock=False)
     # C and D start in the same grid columns as E and F below them, so the
     # forest label gutter locked on those columns is shared rather than paid
     # by the forests alone (the canvas locks reserves per column).
-    c = canvas.panel("C", 1, 0, 5, schematic=True,
-                     title="Profiles at K = 1, 3, 12", lock=False)
+    c = canvas.panel("C", 1, 0, 5, schematic=True, lock=False)
     d = canvas.panel("D", 1, 5, 7)
     e = canvas.panel("E", 2, 0, 5)
     f_ = canvas.panel("F", 2, 5, 4)
@@ -1429,7 +1439,7 @@ def main():
                 + [eq["high_pp"] for eq in equivalence] + [1.0])
     f_limits = (np.floor(lower) - 0.25, np.ceil(upper) + 0.25)
     out_f = cohort_forest(canvas, f_, cohorts, "exact",
-                          value_label="Accuracy difference (pp)",
+                          value_label="Exact path − per neuron (pp)",
                           xlim=f_limits,
                           xticks=np.arange(np.ceil(f_limits[0]), np.floor(f_limits[1]) + 1),
                           tag_sides=("left", "left", "left", "left"))
@@ -1438,13 +1448,13 @@ def main():
         if text.get_text() == "no effect":
             text.remove()
     cifar_y = out_f["ypos"][-1] + 0.85
-    f_.set_ylim(4.65, -1.1)
+    f_.set_ylim(4.65, -0.55)
     f_.plot(f_limits, [3.43, 3.43], color=COLORS["edge"], lw=LW_HAIR)
     f_.annotate("CIFAR-10\nexact − BP", xy=(0.0, cifar_y + 0.30),
                 xycoords=("axes fraction", "data"), xytext=(-6, 0),
                 textcoords="offset points", fontsize=PT_BASE, color=MUTE,
                 ha="right", va="center")
-    f_.text(f_limits[0] + 0.10, -0.83, "Exact − per neuron", fontsize=PT_BASE, color=MUTE)
+    # Review pass 2026-09-23: "Exact − per neuron" is the axis label now.
     # The margin is confined to the separate exact-minus-BP comparison.
     margin = equivalence[0]["margin_pp"]
     tint_patch(f_, ("rect", -margin, cifar_y - 0.02, 2 * margin, 0.65),

@@ -42,20 +42,22 @@ def test_figure1_delivery_footer_subscripts_clear_card_borders():
                  and 80 < drawing["rect"].width < 110
                  and drawing["fill"] is not None]
         assert len(cards) == 3
+        # review pass 2026-09-23: the card footers moved to the legend; each
+        # card keeps one incoming somatic error, inside its own border
         footers = [block for block in page.get_text("blocks")
                    if "one s across neurons" in block[4]
-                   or "spread evenly" in block[4]
-                   or all(symbol in block[4] for symbol in ("α3", "α2", "α1"))]
-        assert len(footers) == 3
+                   or "spread evenly" in block[4]]
+        assert not footers
         incoming_errors = [block for block in page.get_text("blocks")
                            if block[4].strip() == "δ0"]
         assert len(incoming_errors) == 3
-        for x0, top, x1, bottom, *_ in footers:
+        for x0, top, x1, bottom, *_ in incoming_errors:
             card = next(card for card in cards if card.x0 < (x0 + x1) / 2 < card.x1)
-            assert bottom <= card.y1 - 2.0
-            error = next(block for block in incoming_errors
-                         if card.x0 < (block[0] + block[2]) / 2 < card.x1)
-            assert top >= error[3] + 1.5
+            assert bottom <= card.y1 - 1.0
+    caption = (JOURNAL / "main.tex").read_text().split(
+        r"\label{fig:framework}")[0].rsplit(r"\caption{", 1)[1]
+    assert r"Strict scalar $s$ shared across neurons" in caption
+    assert r"$\alpha_j$ are successive edge derivatives" in caption
 
 
 def test_figure2_failed_acquisition_is_qualified_at_the_deranged_row():

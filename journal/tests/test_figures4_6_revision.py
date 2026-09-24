@@ -110,7 +110,7 @@ def test_figure4_noise_panel_exports_both_rate_policies(displays):
         means = dots.groupby('noise').value.mean().sort_index()
         np.testing.assert_allclose(means, summaries.set_index('noise')['mean'].sort_index(),
                                    rtol=0, atol=1e-12)
-    assert canvas.axes['E'].get_ylabel() == 'Interaction-dependent\ncredit deficit'
+    assert canvas.axes['E'].get_ylabel() == 'Interaction deficit'
     assert [t.get_text() for t in canvas.axes['E'].get_legend().get_texts()] == ['Selected rates', 'Common rate 0.003']
 
 
@@ -139,9 +139,13 @@ def test_figure6_moves_generator_to_text_and_limits_the_loss_claim(displays):
     rows, canvas = displays[6]
     texts = [text.get_text() for ax in canvas.fig.axes for text in ax.texts]
     assert not any('max(b' in text or '0.0001' in text for text in texts)
-    assert 'Class signal × nuisance gains' in texts
-    assert '÷ : local E/I ratio' in texts
+    # review pass 2026-09-23: B's product header and ratio key moved to the
+    # legend, which must now carry both
+    assert 'Class signal × nuisance gains' not in texts
+    assert '÷ : local E/I ratio' not in texts
     source = (ROOT / 'main.tex').read_text()
+    assert 'Nuisance gains multiply the class signal' in source
+    assert r'local ratios ($\div$)' in source
     assert r'\max\{b_{\rm E}+y\Delta+\epsilon_{\rm E},10^{-4}\}' in source
     assert r'$\Delta=0.80$ and $\sigma_\ell=0.25$' in source
     assert '66,178 trainable parameters and 14,336 active synapses' in source
@@ -152,10 +156,13 @@ def test_figure6_moves_generator_to_text_and_limits_the_loss_claim(displays):
     titles = [ax.get_title() for ax in canvas.fig.axes]
     assert 'Cross-entropy ordering does not flip' not in titles
     assert not any('Cross-entropy' in title for title in titles)
-    assert any(text == 'exact path ahead' for text in texts)
-    assert any(text == 'shared soma ahead' for text in texts)
-    assert any(text.startswith('−0.073 nats at 180') for text in texts)
-    assert any(text.startswith('−0.021 nats at 600') for text in texts)
+    # review pass 2026-09-23: the sign key moved from G and H into the
+    # legend; the two marked values stay on H
+    assert not any(text in ('exact path ahead', 'shared soma ahead') for text in texts)
+    assert ('positive accuracy and negative cross-entropy differences favour '
+            'exact paths') in source
+    assert any(text == '−0.073 nats' for text in texts)
+    assert any(text == '−0.021 nats' for text in texts)
     loss = rows[rows.panel.eq('H') & rows.record.eq('paired curve summary')]
     assert (loss[loss.epoch.between(180, 600)]['mean'] < 0).all()
     assert float(loss[loss.epoch.eq(34)]['mean'].iloc[0]) > 0
@@ -190,5 +197,9 @@ def test_oracle_support_drawing_excludes_proximal_and_soma():
     # of repeating two tiny formula lines; its nonlocal coefficient source
     # and unit proximal/somatic factors must remain explicit.
     assert "'distal: p'" in source and "('sub', 'j')" in source
-    assert "'ĉ from exact field'" in source
-    assert "'Both: proximal and soma × 1'" in source
+    # review pass 2026-09-23: the coefficient source and the ungated
+    # proximal/somatic factors are stated in the legend, not on the cards
+    caption = (ROOT / 'main.tex').read_text().split(
+        r'\label{fig:conductancecredit}')[0].rsplit(r'\caption{', 1)[1]
+    assert r'$\hat c_j$ its coefficient from the exact field' in caption
+    assert 'Proximal/somatic signals remain ungated in both' in caption

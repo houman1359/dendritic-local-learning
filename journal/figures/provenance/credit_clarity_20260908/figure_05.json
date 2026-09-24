@@ -1,9 +1,9 @@
 {
   "figure": "Figure 5",
   "output": "source_data/conductance_local_gate/figures/local_gate_primary.pdf",
-  "output_sha256": "4dcaa1825b86adda1f0728d4ed3a0fd8c3c05228c4329e6e6b795ee1bcd4715b",
+  "output_sha256": "4113265bd696a0fcf29c5ac370f4a4891cbbcd09bfb8a7f6d776c78376e4bb8f",
   "plotted_table": "source_data/curated_publication/figure_05_plotted.csv",
-  "plotted_table_sha256": "4b713a93098075e05d7ae5a3fab18619ccf1e00130c6bdb9c8d742a56d8d21db",
+  "plotted_table_sha256": "b92e4be948021f4b6258d365522ab9f9f5dec6298e46357612c7bdf918874b06",
   "panel_sources": {
     "main_5A": {
       "sources": [
@@ -63,19 +63,19 @@
     "source_data/checkpoint_computation/protocol.json": "d7e0c5a4467381f4fa89095385ee5fdc1b32d53c1527d0251a7765795dec64e2",
     "source_data/conductance_local_gate/METHODS.md": "62a713d2c9e60b46fdeaa1d65ce6c93688e30f9f0ce2e3f3251834ec1386f543",
     "source_data/conductance_local_gate/figures/curve_band_source.csv": "0dd58c44591943c6696bf0e27b0486af240c58acec1d801ef7234c0746b50e1c",
-    "source_data/conductance_local_gate/figures/teacher_tuning_source.csv": "0b7c4842375f7e52cf93475b0fdce019717ed2f2078279eef8fb877b20c15863",
+    "source_data/conductance_local_gate/figures/teacher_tuning_source.csv": "26b9ebc985bc662465c9a03af5a9197f54d8443383f44090121ddcf24c4c3086",
     "source_data/conductance_local_gate/summaries/all_curves.csv": "4a24ea4aa1046cb638cc47fabc72b71fb3dbc96bbcb9aea6ebef33e79f3ac456",
     "source_data/conductance_local_gate/summaries/all_endpoints.csv": "7d3f6df93795afe7b752b0b7a239f51dcafe246f851efe158a7b2c3ac30e4d1d",
     "source_data/conductance_local_gate/summaries/condition_means.csv": "e3ed564e0fd24cb7fee0f1fa6fc337a30fc5481f7b29381419991281829e81a5"
   },
   "builders_sha256": {
-    "scripts/conductance_local_gate/figure.py": "f3e6f7e29cc90ef0d6326b05820757b26cc126b79c96d760334b33aee3751e63",
+    "scripts/conductance_local_gate/figure.py": "cdd8ecc59817040d2f8f096120cf2a27ca88ecf1fc000e87a73a9cdc745dae3e",
     "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
     "scripts/figure_canvas.py": "7f2983ff0c52a30dd5ba9bdeccc6fda940b4366ad872cbf0755fec5daa1dd7aa",
     "scripts/native_schematics.py": "68530ec60f85e496b9b0ba7a7ad53510dce2fae91cc38231046c1175e1cb7aeb",
-    "scripts/review_completion/population_figure.py": "84f0cc2c0276d0cf866bcd36ee066f0db26d00333df5b7ec0f4d1ea174ff81e3",
-    "scripts/review_completion/promoted_panels.py": "fb97c2a30b02bad9f589c47a004649dced9ce255106e9865e37476372937aa25",
+    "scripts/review_completion/population_figure.py": "7df4733a5708e896047ee74e20aeed54e0baf49be0ffa7cdeecf26b23c6200f1",
+    "scripts/review_completion/promoted_panels.py": "e585b31002dfbc39eab75267926bd172edf9797ffb0713aa09f61a18a8948413",
     "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a",
     "scripts/credit_first_figures/focused_provenance.py": "b7ade95b88e7d10a43bab01716dee6211bc2f09735b605d489c0012a147ecea7"
   },

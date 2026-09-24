@@ -316,8 +316,8 @@ LABELS = [FAMILIES[m]["label"] for m in ORDER]
 H_GRID_XMAX = 2.75         # the y grid stops before the direct-label band
 H_BADGE_W = 0.66           # `oracle` badge width in x data units (23.0 pt)
 COHORTS = ["original8", "v661", "pinky"]
-COHORT_PANEL = {"original8": "Initial,\n8 cells", "v661": "Disjoint,\n47 cells",
-                "pinky": "Pinky,\n8 cells"}
+COHORT_PANEL = {"original8": "Initial", "v661": "Disjoint",
+                "pinky": "Pinky"}           # cohort sizes: legend H (2026-09-23)
 BOOT_SEED = 202609061
 FAN_SEED = 26090847
 N_BOOT = 20_000
@@ -332,9 +332,12 @@ BROADCAST = "local"         # amber, reserved in this figure for the broadcast
 # letters, so its axes are ~98 pt).  Gutters 30 pt.  No data panel carries a
 # title, and the footers of G and H and H's head note are gone: every clause
 # they carried is a sentence of the running text or of the caption.
-CANVAS_H_PT = 456.0
-ROW_H = [122.0, 102.0, 112.0]
-MARGINS = dict(left=52.0, right=14.0, top=24.0, bottom=36.0)
+# Review pass 2026-09-23: 24 + 110 + 30 + 102 + 30 + 118 + 36 = 450 pt.  The
+# schematic row lost its titles and footers (110 pt); row 2 gains 6 pt so the
+# 8-module G stays inside the 2.40 aspect band.
+CANVAS_H_PT = 450.0
+ROW_H = [110.0, 102.0, 118.0]
+MARGINS = dict(left=52.0, right=12.0, top=24.0, bottom=36.0)   # right 14 -> 12, 2026-09-23 (fill width)
 HGUT, VGUT = 30.0, 30.0
 LIVE_W = 518.4 - MARGINS["left"] - MARGINS["right"]          # 452.4
 LIVE_H = CANVAS_H_PT - MARGINS["top"] - MARGINS["bottom"]    # 430.0
@@ -349,14 +352,14 @@ BOTTOM_R2 = 0.0           # G's and H's footers went in the 2026-09-14 pass
 
 
 CAPTION = r'''\caption{\textbf{Ancestry routes sparsely compress modeled focal-shunt responses, with a modest advantage over matched tree surrogates.}
-\textbf{A}, Median-sized reconstructed arbor from the initial cohort: 78 segments, 76 bearing inhibitory contacts. Route 3 is green; its origin is ringed and it addresses five sites. Scale bar, 50~$\mu$m.
-\textbf{B}, Seven ancestry routes plus broadcast at budget $K=8$; matrix $A_8$ groups sites into eight tree-ordered blocks. Supports nest.
-\textbf{C}, Signed log-gradient change per unit relative shunt dose, modeled for route 3. Block means are normalized by the field's maximum absolute value before area weighting. Capture is the fraction of excitatory-contact-area-weighted field energy reproduced by projection onto the dictionary (Eq.~\ref{eq:reconstructioncapture}).
-\textbf{D}, Total capture against profile budget. Bands show per-condition cell uncertainty, not paired contrasts; dashed line, shared-broadcast capture 0.203. $n=47$ cells, 46 at $K=16$.
+\textbf{A}, Median-sized reconstructed arbor from the initial cohort: 78 segments, 76 bearing inhibitory contacts (carmine). Route 3 is green; its origin is ringed and it addresses five of 70 input sites (blue). Scale bar, 50~$\mu$m.
+\textbf{B}, Seven ancestry routes plus broadcast (amber column $s$) at budget $K=8$; matrix $A_8$ groups sites into eight tree-ordered blocks (sizes at right). Supports nest.
+\textbf{C}, Modeled signed log-gradient change $\bm t$ per unit relative shunt dose on route 3, one cell per block of \textbf{B}, and its reconstruction $A_8\bm c$. Cells show block means scaled to maximum absolute value 1 before area weighting. Capture is the fraction of excitatory-contact-area-weighted field energy reproduced by projection onto the dictionary (Eq.~\ref{eq:reconstructioncapture}).
+\textbf{D}, Total capture against profile budget; SVD, oracle basis. Bands show per-condition cell uncertainty, not paired contrasts; dashed lines, shared-broadcast capture 0.203 and analysed budget $K=8$. $n=47$ cells, 46 at $K=16$.
 \textbf{E}, Spatial share $C-C_0$ for six dictionaries at eight profiles; $C$ is total capture and $C_0$ broadcast capture. Cell means without intervals.
 \textbf{F}, Ancestry capture minus each cell's 200-surrogate mean, plotted against that mean. Open green circles identify eleven cells where at least half the surrogates match or exceed the actual tree. Open black diamond, cohort mean with intervals on both coordinates; dashed line, zero difference.
-\textbf{G}, Paired ancestry-minus-control differences in residual (filled) and total (open) capture; one unit equals 100 percentage points. All 188 within-cell differences are shown without clipping. Adjacent columns give nonzero-entry fraction, rank and positive-cell count, not cable-length costs.
-\textbf{H}, Residual capture $(C-C_0)/(1-C_0)$ for the initial and disjoint MICrONS cohorts (one mouse) and Pinky (second mouse); $n=8,47,8$.
+\textbf{G}, Paired ancestry-minus-control differences in residual (filled) and total (open) capture; one unit equals 100 percentage points. All 188 within-cell differences are shown without clipping. Adjacent columns give nonzero-entry fraction, rank and positive-cell count, not cable-length costs; $\dagger$, rank-limited (maximum 8).
+\textbf{H}, Residual capture $(C-C_0)/(1-C_0)$ for the initial and disjoint MICrONS cohorts (one mouse) and Pinky (second mouse); $n=8,47,8$. Styles as in \textbf{D}.
 \textbf{E--G}: $n=47$; \textbf{E--H}: eight profiles. Symbols and whiskers/bands denote means and 95\% cell-bootstrap intervals where drawn; small dots denote cells. Reciprocal passive cable fields test compression, not observed teaching. Source Data: \texttt{source\_data/curated\_publication/figure\_08\_plotted.csv}.}'''
 
 
@@ -637,7 +640,9 @@ def panel_a(ax, arb):
     """A: the reconstruction, its inhibitory-bearing segments and route 3."""
     f = Frame(ax)
     core = (0.0, 0.0, 1.0, 1.0)
-    foot_pt = _foot(f, core, [f"root {ROOT_B}"])
+    # Review pass 2026-09-23: the root identifier and the key's counts are in
+    # the Source Data and the legend; the two-entry key stays.
+    foot_pt = 0.0
     key_pt = 18.0
     draw = (core[0], core[1] + f.fy(foot_pt + key_pt), core[2],
             core[3] - f.fy(foot_pt + key_pt))
@@ -675,10 +680,11 @@ def panel_a(ax, arb):
             lw=LW_EDGE, head=4.0, zorder=5)
     f.text((px + f.fx(2.0), py - f.fy(6.0)), "pia", size=PT_BASE,
            color=COLORS["mute"], ha="left")
-    tag = (xy[ROUTE_SITE][0] + f.fx(9.0), xy[ROUTE_SITE][1] + f.fy(10.0))
-    f.leader(xy[ROUTE_SITE], tag)
-    f.text((tag[0] + f.fx(1.0), tag[1]), "route 3", size=PT_BASE,
-           color=COLORS["shunting"], ha="left")
+    # review pass 2026-09-23: the name sits off the capsule's distal end, in
+    # clear paper; beside the origin it was struck by a canopy branch
+    tip = min((xy[s] for s in set(chain)), key=lambda q: q[0])
+    f.text((tip[0] - f.fx(5.5), tip[1]), "route 3", size=PT_BASE,
+           color=COLORS["shunting"], ha="right", va="center")
     _scale_bar(f, draw, scale, span_um,
                x0=draw[0] + draw[2] - f.fx(50.0 / span_um * scale + 1.0),
                y0=draw[1] + f.fy(3.0))
@@ -686,10 +692,8 @@ def panel_a(ax, arb):
     # count, and set as bare fractions on two consecutive lines they read as
     # one denominator mistyped (QA round 5)
     for row, (kind, text) in enumerate((
-            ("inh", f"inhibitory-bearing ({len(i_bearing)} of {len(cell)} "
-                    "segments)"),
-            ("exc", f"route-3 sites ({len(support)} of "
-                    f"{len(arb['e_sites'])} sites)"))):
+            ("inh", "inhibitory-bearing segments"),
+            ("exc", "route-3 sites"))):
         y = core[1] + f.fy(foot_pt + key_pt - 5.0 - row * 8.6)
         f.contact((core[0] + f.fx(2.0), y), kind=kind, dia_pt=3.0, zorder=5)
         f.text((core[0] + f.fx(6.0), y), text, size=PT_BASE,
@@ -744,22 +748,14 @@ def panel_b(ax, arb):
     """B: the same arbor's seven routes and the collapsed dictionary A8."""
     f = Frame(ax)
     core = (0.0, 0.0, 1.0, 1.0)
-    foot_pt = _foot(f, core, [
-        "rows: eight tree-ordered site blocks",
-        f"{arb['coverage']} of {len(arb['e_sites'])} sites lie on a route",
-        # PLAN section 3 B1 sanctions the amber address hue only if the
-        # footer says the broadcast tag is the one amber in the matrix.  The
-        # nesting 4 in 3 in 6 leaves the footer to keep this line inside the
-        # three-line budget (four lines run into the matrix): it is asserted
-        # on the supports themselves in arbor_routes() and drawn in the
-        # matrix, and PLAN section 3 lists it as asserted, not printed.
-        "amber = the broadcast column s"])
-    sub_pt = 10.0
-    f.text((core[0] + core[2] / 2.0, core[1] + core[3] - f.fy(sub_pt * 0.4)),
-           "A8 = [ s | r1 ... r7 ]", size=PT_BASE, color=COLORS["ink"])
-    body = (core[0], core[1] + f.fy(foot_pt + 4.0), core[2],
-            core[3] - f.fy(foot_pt + 4.0 + sub_pt))
+    # Review pass 2026-09-23: the three footer lines (row blocks, route
+    # coverage, amber broadcast column) and the `A8 = [s | r1 ... r7]`
+    # sentence moved to the legend; the matrix is named once, A with
+    # subscript 8, and its rows take the height the footer held.
+    body = core
+    head_pt = 19.0                    # the A8 name line + the column heads
     cell_pt = 6.4
+    row_pt = min(9.0, (body[3] * f.h_pt - head_pt) / 8.0)
     matrix_w = f.fx(8 * cell_pt)
     counts_w = f.fx(11.0)
     arbor_rect = (body[0], body[1], body[2] - matrix_w - counts_w - f.fx(4.0),
@@ -866,9 +862,11 @@ def panel_b(ax, arb):
     colors = [[COLORS[BROADCAST]]
               + [COLORS["shunting"] if k in key else COLORS["panel_bg"]
                  for k in range(7)] for key in keys]
-    m_h = f.fy(8 * cell_pt)
+    m_h = f.fy(8 * row_pt)
     m_rect = (body[0] + body[2] - matrix_w - counts_w,
-              body[1] + body[3] - m_h - f.fy(9.5), matrix_w, m_h)
+              body[1] + body[3] - m_h - f.fy(head_pt), matrix_w, m_h)
+    f.subscript((m_rect[0], m_rect[1] + m_rect[3] + f.fy(14.5)), "A", "8",
+                size=PT_BASE, color=COLORS["ink"], ha="left")
     headers = ["s"] + [str(k + 1) for k in range(7)]
     _matrix_cells(f, m_rect, None, colors, n=8, k=8,
                   where="figure 7B dictionary", headers=headers)
@@ -904,12 +902,11 @@ def panel_c(ax, arb, field, scale):
     """C: a focal shunt on route 3 makes the field t; capture is its energy."""
     f = Frame(ax)
     core = (0.0, 0.0, 1.0, 1.0)
-    # Keep the color scale and the meaning of capture on the artwork.
-    # The exact weighted projection and absolute scale are in text/caption.
-    foot_pt = _foot(f, core, [
-        "Capture: fraction of weighted energy",
-        "reconstructed by the routes"])
-    strip_pt, form_pt, bar_pt = 34.0, 12.0, 12.0
+    # Review pass 2026-09-23: the capture definition, the `Fit route
+    # profiles` cue and the sister-block value are legend/text material;
+    # the arbor takes the band they held.
+    foot_pt = 0.0
+    strip_pt, form_pt, bar_pt = 30.0, 4.0, 12.0
     top = (core[0], core[1] + f.fy(foot_pt + strip_pt + form_pt), core[2],
            core[3] - f.fy(foot_pt + strip_pt + form_pt))
     place, xy, soma, iso, span_um, n_below = _arbor(f, top, arb, mode="ghost")
@@ -954,7 +951,7 @@ def panel_c(ax, arb, field, scale):
     f.soma(soma, output=8.0, label="z", zorder=6)
     f.error_in(soma, label="δ0", side="left")
     # the modeled field, one signed cell per site block, aligned with B
-    cell_pt = 8.0
+    cell_pt = 10.0                   # 2026-09-23: 8 -> 10, the strip spans C
     strip_w = f.fx(8 * cell_pt)
     strip_h = f.fy(cell_pt)
     sx = core[0] + f.fx(10.0)
@@ -966,7 +963,7 @@ def panel_c(ax, arb, field, scale):
     # the strip's scale, drawn once: a 34 pt ramp over the half of DIV_CMAP
     # the field uses, with its two ends labelled.  Vector slices, not an
     # image (CF-11), and a single hairline frame so it is one area mark.
-    bar_x0, bar_w = sx + f.fx(13.0), f.fx(34.0)
+    bar_x0, bar_w = sx + f.fx(13.0), f.fx(50.0)
     bar_y, bar_h = core[1] + f.fy(foot_pt + 2.2), f.fy(3.6)
     lo = float(min(field))
     slices = 26
@@ -979,25 +976,15 @@ def panel_c(ax, arb, field, scale):
     f.ax.add_patch(Rectangle((bar_x0, bar_y), bar_w, bar_h, facecolor="none",
                              edgecolor=COLORS["edge"], lw=LW_HAIR, zorder=3.1))
     f.text((bar_x0 - f.fx(2.0), bar_y + bar_h / 2.0),
-           f"{lo:.2f}".replace("-", "\u2212"), size=PT_BASE,
+           f"{lo:g}".replace("-", "\u2212"), size=PT_BASE,
            color=COLORS["mute"], ha="right", va="center")
     f.text((bar_x0 + bar_w + f.fx(2.5), bar_y + bar_h / 2.0), "0",
            size=PT_BASE, color=COLORS["mute"], ha="left", va="center")
     f.text((sx - f.fx(2.5), sy + strip_h / 2.0), "t", size=PT_EMPH,
            color=COLORS["ink"], ha="right")
-    f.text((sx + strip_w + f.fx(3.0), sy + strip_h / 2.0), "→ A c",
-           size=PT_EMPH, color=COLORS["ink"], ha="left")
-    sister = 6                       # row 7: the sister block on the path
-    f.leader((sx + (sister + 0.5) * strip_w / 8.0, sy),
-             (sx + (sister + 0.5) * strip_w / 8.0, sy - f.fy(3.5)))
-    f.text((sx + strip_w, sy - f.fy(4.5)),
-           f"sister block {field[sister]:.2f}".replace("-", "\u2212"),
-           size=PT_BASE, color=COLORS["mute"], ha="right", va="top")
-    # The graphic shows field-to-route reconstruction, not the derivation
-    # of the area-weighted energy fraction in the Results.
-    eq_y = core[1] + f.fy(foot_pt + strip_pt + form_pt * 0.45)
-    f.text((core[0] + core[2] - f.fx(1.5), eq_y), 'Fit route profiles',
-           size=PT_BASE, color=COLORS['ink'], ha='right')
+    # review pass 2026-09-23: the dictionary is named A8 here, as in B
+    f.subscript((sx + strip_w + f.fx(3.0), sy + strip_h / 2.0), "→ A", "8",
+                " c", size=PT_EMPH, color=COLORS["ink"], ha="left")
     f.note("soma-below", panel="C", below=n_below, segments=len(xy),
            reason="see panel A")
     f.require_soma_lowest()
@@ -1009,12 +996,29 @@ def panel_c(ax, arb, field, scale):
 #: D and E share one fraction axis: identical points-per-unit (plan check 8).
 Y_TOP = 1.34
 Y_TICKS = [0.25, 0.5, 0.75, 1.0]
-D_Y0, D_Y_TOP = 0.15, 1.11   # the data (0.203-0.926) plus the budget tag
+D_Y0, D_Y_TOP = 0.15, 1.03   # the data (0.203-0.926); tags moved to the legend 2026-09-23
 E_XMAX = 0.60                # E's spatial shares run 0.201 (random) to 0.540
 F_Y0, F_Y1 = -0.225, 0.245   # F's differences run -0.188 to +0.214
 D_XMAX = 108.0             # 16 -> 87 reserves the direct-label band at the right
 D_GRID_XMAX = 16.6         # the grid stops at the data; the label band is clean
 D_BUDGET_Y0 = 0.32         # the K = 8 rule stops above the floor label
+
+
+def _center_x_title(ax):
+    """Centre the x title on the drawn (bounded) bottom spine.
+
+    Review pass 2026-09-23: D and G carry label or table columns inside the
+    axes, so a title centred on the axes box sat right of the drawn axis.
+    The midpoint is taken in axes fraction, so D's log scale is honoured.
+    """
+    bounds = ax.spines["bottom"].get_bounds()
+    if bounds is None:
+        return
+    to_axes = ax.transData + ax.transAxes.inverted()
+    y = ax.get_ylim()[0]
+    f0 = to_axes.transform((bounds[0], y))[0]
+    f1 = to_axes.transform((bounds[1], y))[0]
+    ax.xaxis.label.set_x(0.5 * (f0 + f1))
 
 
 def _clip_grid(ax, x0, x1):
@@ -1130,19 +1134,14 @@ def panel_d(ax, summaries, tables, floor):
     # rule.  The tag keeps its place in the direct-label band, right-aligned
     # at the axes edge like the panel's own end labels: set right-aligned at
     # K = 16.6 it would span K = 1.9 -> 16.6 and strike the K = 2 markers.
+    # Review pass 2026-09-23: both rules are named in the legend.
     reference_line(ax, floor, axis="y", label="", span=(0.85, D_GRID_XMAX))
-    ax.annotate("shared broadcast", xy=(D_XMAX, floor), xytext=(0.0, 1.4),
-                textcoords="offset points", fontsize=PT_BASE,
-                color=COLORS["mute"], ha="right", va="bottom", zorder=5,
-                annotation_clip=False)
     # clipped to the band that carries no text: drawn to y = 0 the dashes
     # ran through the floor label `shared broadcast` (y 0.21-0.31) and the
     # footer `47 disjoint cells` (QA round 3).  The lowest K = 8 datum is
     # 0.404, so no data lies under the removed stretch.
     ax.plot([8, 8], [D_BUDGET_Y0, 1.0], color=COLORS["edge"], lw=LW_REF,
             dashes=(2.2, 1.8), zorder=0.6, solid_capstyle="butt")
-    ax.text(8.0, 1.012, "analysed budget", fontsize=PT_BASE,
-            color=COLORS["mute"], ha="center", va="bottom")
     # the two prose lines this panel used to carry -- the band's meaning and
     # `47 disjoint cells (46 at K = 16)` -- are the caption's own words and
     # are set there only (QA round 4)
@@ -1208,10 +1207,8 @@ def panel_f(ax, pairs):
     delta = (pairs.tree - pairs.surrogate_mean).to_numpy(float)
     ax.plot([0.25, 1.0], [0.0, 0.0], color=COLORS["mute"], lw=LW_REF,
             zorder=1, solid_capstyle="butt", dashes=(2.2, 1.8))
-    # right-aligned on the reference (CF-7), in the band the cells leave
-    # empty: the only two cells right of x = 0.85 sit within 0.011 of zero
-    ax.text(1.0, 0.046, "equal", fontsize=PT_BASE, color=COLORS["mute"],
-            ha="right", va="bottom")
+    # Review pass 2026-09-23: the zero rule and the cohort-mean marker are
+    # named in the legend, so neither carries an in-panel label.
     ax.plot(pairs.surrogate_mean[~tie], delta[~tie.to_numpy()], marker="o",
             ls="none", ms=4.2, mfc=COLORS["shunting"], mec="none",
             alpha=0.75, zorder=2)
@@ -1238,9 +1235,6 @@ def panel_f(ax, pairs):
     # spine so it no longer reads as `-0.1 cohort mean,`; the band it
     # occupies (x 0.285-0.665, y -0.118 to -0.182) holds no cell: the
     # nearest are (0.653, -0.089) above and (0.712, -0.132) to the right.
-    _leader(ax, (mx, my), (0.442, -0.113), COLORS["ink"])
-    ax.text(0.285, -0.150, "cohort mean,\n95 % CI", fontsize=PT_BASE,
-            color=COLORS["ink"], ha="left", va="center", linespacing=1.2)
     ax.set_xlim(0.25, 1.0)
     ax.set_ylim(F_Y0, F_Y1)
     ax.set_xticks([0.25, 0.5, 0.75, 1.0])
@@ -1259,10 +1253,13 @@ def panel_f(ax, pairs):
 
 
 # ── row 2 ────────────────────────────────────────────────────────────────
-G_XLIM = (-45.0, 142.0)      # full cell range, followed by annotation columns
+G_XLIM = (-45.0, 162.0)      # full cell range, followed by annotation columns
 G_FAN_MAX = 95.0
-G_COLS = ((122.0, "nonzero"), (140.0, "rank"))
-G_RIGHT = 20.0            # keeps the 7-module panel inside the aspect band
+# Review pass 2026-09-23: all three printed columns sit inside the axes.  The
+# third used to be forest()'s note outside the right spine, and its 20 pt
+# right reserve leaked onto E, which shares G's column-8 boundary.
+G_COLS = ((122.0, "nonzero"), (140.0, "rank"), (160.0, "cells > 0"))
+G_RIGHT = 8.0             # = RIGHT_R1, so row 1 keeps one axes width
 
 
 def panel_g(canvas, ax, report, tables, summaries):
@@ -1289,9 +1286,7 @@ def panel_g(canvas, ax, report, tables, summaries):
                          mean=100.0 * res["mean_difference"],
                          lo=100.0 * res["ci95"][0], hi=100.0 * res["ci95"][1],
                          color=spec["color"], marker=spec["marker"],
-                         n=int(res["n_cells"]),
-                         note=f"{int(res['cells_positive'])}/"
-                              f"{int(res['n_cells'])}"))
+                         n=int(res["n_cells"])))
         second.append((100.0 * tot["mean_difference"],
                        100.0 * tot["ci95"][0], 100.0 * tot["ci95"][1]))
         extra.append(dict(
@@ -1308,7 +1303,7 @@ def panel_g(canvas, ax, report, tables, summaries):
     # strips: sub-title and column headers above, one note line below the
     # last row so the four-line footer stack of the previous build loses a
     # line and stops colliding with the axis label
-    ax.set_ylim(4.25, -1.42)
+    ax.set_ylim(3.62, -1.42)   # 2026-09-23: the dagger note moved to the legend
     # forest() spans its 6 % row band across the whole x range; the three
     # printed columns then sit ON an area mark, which the overlap audit
     # reports as TEXT-ON-DATA (eight findings).  The band is a row cue, not a
@@ -1364,8 +1359,8 @@ def panel_g(canvas, ax, report, tables, summaries):
     # it shares with the printed column headers the two read as one header
     # row (QA round 5), so the headers move up to -1.20 and this keeps
     # -0.70.  y stays clear of the 0.42-unit row band and of the row-0 fan.
-    ax.text(-1.0, -0.70, "no advantage", fontsize=PT_BASE,
-            color=COLORS["mute"], ha="right", va="center", zorder=5)
+    # (review pass 2026-09-23: the zero rule is unlabelled; its meaning
+    # follows from the axis)
     # the three printed columns, inside the axes, clear of every interval;
     # the rule runs up to the header baseline so the heads read as theirs
     ax.plot([G_FAN_MAX + 1.5, G_FAN_MAX + 1.5], [-1.05, 3.40],
@@ -1377,15 +1372,12 @@ def panel_g(canvas, ax, report, tables, summaries):
     # right spine; it carried no header, so the caption named three columns
     # and the artwork two (QA round 3).  Same baseline, same offset as the
     # notes it heads.
-    ax.annotate("cells +", xy=(1.0, -1.05), xycoords=("axes fraction", "data"),
-                xytext=(3.0, 0.0), textcoords="offset points", ha="left",
-                va="center", fontsize=PT_BASE, color=COLORS["ink"],
-                annotation_clip=False, zorder=5)
     for i, item in enumerate(extra):
         dagger = "\u2020" if CONTROLS[i] == RANDOM else ""
         for x, value in zip([c[0] for c in G_COLS],
                             (f"{item['wiring']:.1f} %",
-                             f"{item['rank']:.2f}{dagger}")):
+                             f"{item['rank']:.2f}{dagger}",
+                             f"{item['positive']}/{item['n']}")):
             ax.text(x, ypos[i], value, fontsize=PT_BASE, color=COLORS["ink"],
                     ha="right", va="center", zorder=5)
     ax.set_xticks([-40, 0, 40, 80])
@@ -1402,10 +1394,6 @@ def panel_g(canvas, ax, report, tables, summaries):
     # G_FAN_MAX + 1.5 instead of 40 pt past it, in the printed-column band:
     # the rank column prints 5.66\u2020 on the row itself, and the count is
     # set in the `cells +` column's own n/N notation.
-    ax.text(G_XLIM[0] + 0.5, 4.04,
-            "\u2020 rank-limited (of 8)",
-            fontsize=PT_BASE, color=COLORS["mute"], ha="left", va="bottom",
-            zorder=5)
     ancestry = eight.loc[ANCESTRY]
     nonzero = float(eight.loc[ANCESTRY, "nonzero_coefficients_mean"])
     assert abs(nonzero
@@ -1498,8 +1486,8 @@ def panel_h(ax, tables, inclusion):
                                  cell_residual_capture=float(value)))
             if cohort == "pinky":
                 pinky[method] = (x, mean)
-    ax.set_xlim(-0.55, 3.55)
-    ax.set_ylim(0.0, 1.16)
+    ax.set_xlim(-0.5, 2.5)
+    ax.set_ylim(0.0, 1.04)
     ax.set_yticks([0.0, 0.25, 0.5, 0.75, 1.0])
     ax.set_xticks(range(len(COHORTS)), [COHORT_PANEL[c] for c in COHORTS])
     ax.set_ylabel("Residual capture\nafter the broadcast")
@@ -1507,40 +1495,10 @@ def panel_h(ax, tables, inclusion):
     # the rule is bounded by its ticks: drawn to the axes top it ran an
     # eighth of its length above the 1.00 tick, under the panel's own note
     ax.spines["left"].set_bounds(0.0, 1.0)
-    _clip_grid(ax, -0.55, H_GRID_XMAX)
-    # CF-7's ceiling, drawn once, with its label right-aligned on the rule's
-    # own end.  QA round 5 tried clipping it to the data at H_GRID_XMAX, as
-    # the grid is clipped: the label then landed on the panel's `mean [95 %
-    # cell bootstrap]` note, and the rule is a reference for all three
-    # cohorts, not a row cue, so the full span stays.
-    ax.plot([-0.55, 3.55], [1.0, 1.0], color=COLORS["mute"], lw=LW_REF,
-            zorder=1.0, solid_capstyle="butt")
-    ax.text(3.53, 1.012, "ceiling", fontsize=PT_BASE, color=COLORS["mute"],
-            ha="right", va="bottom")
-    # (design pass 2026-09-14: the `mean [95 % cell bootstrap]; K = 8` head
-    # note is the caption's own sentence and is gone)
-    # the four family names, once, beside the Pinky group (CF-5)
-    order = sorted(pinky, key=lambda m: -pinky[m][1])
-    # five names, not four (QA round 5): the step is the tightest the 7 pt
-    # type allows (0.115 units = 8.8 pt at this panel's scale) so that each
-    # leader travels the shortest way to its own mark and the fan crosses the
-    # Pinky intervals as little as the value order permits
-    step, last = 0.115, 0.950
-    # Regression repair 2026-09-11: started on its own marker, a leader had to
-    # cross the Pinky columns to its right; started in clear paper it was a
-    # stroke attached to nothing at either end (checked at 600 dpi: 9-14 pt
-    # from its own mark, 12-29 pt from its label).  The leaders are gone.  The
-    # ladder is colour-matched to the marks and ordered by value, exactly as
-    # D's direct labels are, so shape and colour carry the identity alone.
-    for method in order:
-        x, mean = pinky[method]
-        y = min(mean, last)
-        last = y - step
-        ax.annotate(FAMILIES[method]["short"], xy=(1.0, y),
-                    xycoords=("axes fraction", "data"), xytext=(10.0, 0.0),
-                    textcoords="offset points", fontsize=PT_BASE,
-                    color=COLORS[FAMILIES[method]["color"]], ha="right",
-                    va="center", annotation_clip=False)
+    # Review pass 2026-09-23: H moves to columns 8-11 under C and F.  The
+    # ceiling rule duplicated the 1.00 gridline, and the family key and the
+    # `oracle` badge restated D's direct labels and the legend, so all three
+    # are gone and the cohorts take the full width.
     # Design pass 2026-09-14: the two-line footer (Pinky's 9-13 sites per
     # cell and 8 of 10 cells; the two mice and the three cohort sizes) is
     # gone -- the running text and the caption carry both sentences -- and
@@ -1548,27 +1506,6 @@ def panel_h(ax, tables, inclusion):
     eligible = inclusion[inclusion.focus_budget_eligible]
     assert (int(eligible.n_e_sites.min()), int(eligible.n_e_sites.max())) == (9, 13)
     assert (len(eligible), int(inclusion.inherited_qc_included.sum())) == (8, 10)
-    # the badge goes in the free strip between the ceiling line and the
-    # initial cohort's tallest interval CAP, at the left edge of the axes:
-    # placed over the oracle marker it covered that interval's upper cap and
-    # the bar appeared to run on to ~0.72 instead of stopping at 0.678.
-    initial = [r for r in rows if r["cohort"] == "original8"
-               and "ci95_high" in r]
-    top = max(r["ci95_high"] for r in initial)
-    y_badge = 0.5 * (top + 1.0)
-    assert y_badge - 0.080 > top and y_badge + 0.080 < 1.0, (
-        "figure 7H: the oracle badge does not clear the drawn intervals")
-    badge = _badge(ax, -0.50, y_badge, "oracle", ha="left", va="center")
-    # ... and a hairline leader to the marker it names: unanchored, the badge
-    # read as a label for the two nearest intervals (QA round 3).  It runs
-    # from the badge's right edge to just short of the initial cohort's
-    # oracle diamond, over empty paper (every interval of that group tops out
-    # below 0.72 and the leader stays above 0.79 until x = 0.18).
-    oracle_x = 0.0 + offsets[COHORT_FAMILIES.index(ORACLE)]
-    oracle_hi = next(r["ci95_high"] for r in initial
-                     if r["method"] == ORACLE)
-    _leader(ax, (-0.50 + H_BADGE_W, y_badge - 0.050),
-            (oracle_x - 0.030, oracle_hi + 0.045))
     from source_data_export import exact_id_table
     return exact_id_table(rows)
 
@@ -1594,18 +1531,19 @@ def figure7(*, out=COMPONENT, png=True, dpi=200, quiet=False):
     canvas = NativeCanvas(
         CANVAS_H_PT / 72.0, 3, row_weights=ROW_H, hgutter_pt=HGUT,
         vgutter_pt=VGUT, margins=Margins(**MARGINS))
+    # review pass 2026-09-23: no schematic titles
     a = canvas.panel("A", 0, 0, 4, schematic=True, lock=False,
-                     inset_pt=SCHEMATIC_INSET, title="Routes on a real arbor")
+                     inset_pt=SCHEMATIC_INSET)
     b = canvas.panel("B", 0, 4, 4, schematic=True, lock=False,
-                     inset_pt=SCHEMATIC_INSET, title="One arbor, seven routes")
+                     inset_pt=SCHEMATIC_INSET)
     c = canvas.panel("C", 0, 8, 4, schematic=True, lock=False,
-                     inset_pt=SCHEMATIC_INSET, title="A shunt makes the field")
+                     inset_pt=SCHEMATIC_INSET)
     # data panels carry no titles (design pass 2026-09-14)
     d = canvas.panel("D", 1, 0, 4)
     e = canvas.panel("E", 1, 4, 4)
     fx = canvas.panel("F", 1, 8, 4)
-    g = canvas.panel("G", 2, 0, 7)
-    h = canvas.panel("H", 2, 7, 5)
+    g = canvas.panel("G", 2, 0, 8)   # review pass 2026-09-23: H under C and F
+    h = canvas.panel("H", 2, 8, 4)
     # One axes width for the whole of row 1, declared rather than measured.
     # D's direct end labels and E's last x tick claim different shares of
     # their gutters, so the measured locks came out 83.0 / 81.4 / 88.5 pt and
@@ -1634,6 +1572,8 @@ def figure7(*, out=COMPONENT, png=True, dpi=200, quiet=False):
     rows_f = panel_f(fx, pairs)
     rows_g, forest_out = panel_g(canvas, g, report["v661"], tables, summaries)
     rows_h = panel_h(h, tables, inclusion)
+    for panel in (d, g):
+        _center_x_title(panel)
 
     canvas.lock_reserves()
     findings = canvas.align_letters()

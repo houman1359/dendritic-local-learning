@@ -213,8 +213,9 @@
     },
     "local_gate_controls": {
       "figure": "S21",
-      "violations": 1,
+      "violations": 2,
       "by_kind": {
+        "edge-clearance": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": []

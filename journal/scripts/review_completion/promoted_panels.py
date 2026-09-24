@@ -88,8 +88,7 @@ def interaction_maps(host, panel, rows):
     cbax = host.inset_axes([.965, .36, .018, .35])
     cb = host.figure.colorbar(im, cax=cbax, ticks=[-.25, 0, .25])
     cb.ax.tick_params(labelsize=7, width=LW_HAIR, length=2, pad=2)
-    host.text(.46, .99, 'Interaction component', ha='center', va='top', fontsize=8,
-              transform=host.transAxes)
+    # Review pass 2026-09-23: the heading is stated in the legend.
 
 
 def extension_mark(ax, ep, summary, study, arm, policy, x, panel, rows, color):

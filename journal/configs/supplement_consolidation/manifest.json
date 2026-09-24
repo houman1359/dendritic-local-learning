@@ -133,7 +133,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 212.95001220703125,
-      "sha256": "8a044541397d82199c0f9e3daf9beab636f31a75f40c48df5c7cf9c50b9d6318",
+      "sha256": "b11ee4fba489e2ac6c05d5a3726fc67ea84659c319d9d2fff68d13b6c09726e7",
       "source_data_directories": []
     },
     {
@@ -248,7 +248,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 365.1500244140625,
-      "sha256": "37726e5a1662c1a4d5900e57b9aa583406e08f49b170422269f523c3eae2598a",
+      "sha256": "82c58d5619982b020451ae097c6f832e30b358469531a1995b0679ad59967467",
       "source_data_directories": [
         "source_data/figure2"
       ]
@@ -448,7 +448,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 490.0,
-      "sha256": "12d27f43793bf960b3c99c54597d93c7a5f7309f31e508653eb7c7c8d53047a6",
+      "sha256": "37f09863b91c34ee33ea252afa80e60f555d75f2da96fcaf0296fc254e098a91",
       "source_data_directories": [
         "source_data/credit_phase_theory",
         "source_data/review_evidence_reanalysis",
@@ -605,7 +605,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 316.4000244140625,
-      "sha256": "baf000d601ac1a991e2b978691ca264783441437642a36818e033943522d1e20",
+      "sha256": "9f5a69824cc7051025a3f97cbf5f2acc1a27c399e178efb7aa96edb6b9e266c5",
       "source_data_directories": [
         "source_data/positive_conductance_reliability_step_consistent"
       ]
@@ -779,7 +779,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 364.9000244140625,
-      "sha256": "66c99a486e0ccc3d5fb05e0f28ee47732f3f5c828b74bd65ef49508b8d0f4fef",
+      "sha256": "044ff15e33019eeb49da41a1adba8a0ad7cca4bf219ba92c2f66aab4fa9899ee",
       "source_data_directories": [
         "source_data/same_span_coefficient_learning"
       ]
@@ -999,7 +999,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 336.4000244140625,
-      "sha256": "297bd3dd1b8387acbd31732aa695997a78309bda22622d6892e4575392d2ac0e",
+      "sha256": "c8b90e628f96706a4b4611ea07f171927f02eee89126b2bc1a7fea7c5d57db36",
       "source_data_directories": [
         "source_data/cifar10_shunting_feedback_ladder_confirmatory",
         "source_data/cifar10_additive_feedback_ladder_confirmatory",
@@ -1105,7 +1105,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 392.0,
-      "sha256": "5361d6f96d67b109573e807ef63de552445e6923139e9f0741f0a0ada8c6ccf7",
+      "sha256": "5d33e690374d9dd4fdf1e68f0a2eff465daf5892101941e6a36642ee9ee7d23b",
       "source_data_directories": [
         "source_data/image_ladder_controls",
         "source_data/mnist_feedback_ladder"
@@ -1202,7 +1202,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 364.0,
-      "sha256": "b926f7c6a71f112bfc1ae53aa48be86fa4454d848a04bf1031ae933e4c099da9",
+      "sha256": "76298e9e5610dbe3c9622cbe3c1f47833d7d7147f8c2054fa3bd09eff1df3dff",
       "source_data_directories": [
         "source_data/figure2",
         "source_data/prospective_input_validity"
@@ -1356,7 +1356,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 287.6499938964844,
-      "sha256": "dcb2480f9c1868e777de2aa35cc1bdb86ea6fd2d2f8f932094a0584a42689b75",
+      "sha256": "1320d1735ad4e3db38322c6117053c4b08001565525633695e001301859e75ac",
       "source_data_directories": [
         "source_data/spatial_topology_audit",
         "source_data/prospective_input_validity"
@@ -1982,7 +1982,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 432.1499938964844,
-      "sha256": "46f9ceb82d5dbcc1c2ea3dfeaa5e13e71127b87a686f847ffce38d7446ad108a",
+      "sha256": "c81f26f3590c0d30e69f12e1294754a69da142ce95dc8bb446d19511919597d1",
       "source_data_directories": [
         "source_data/path_necessity_fashion",
         "source_data/review_branch_trajectories",
@@ -2485,7 +2485,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 376.6500244140625,
-      "sha256": "0678203f896d475c87ed34ead7c8f97437542b4ca15abdc1343830019fa94717",
+      "sha256": "c01bf2db236a75bf79ac3fddac7eb1a9f55af89489f5fb8f5b93dab961f142c4",
       "source_data_directories": [
         "source_data/review_coefficient_encoder",
         "source_data/review_coefficient_hard_readout",
@@ -2662,7 +2662,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 492.0,
-      "sha256": "2deb92d828e2b56f53bd829516fd1445bbf812352bc0d8b0e49acfce200c9951",
+      "sha256": "f74c994664fae8fe3a7761d360466381576d866c20c0f50916c46f4984cd9822",
       "source_data_directories": [
         "source_data/morphology_structure"
       ]
@@ -2836,7 +2836,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 490.0,
-      "sha256": "0875044e6debb3ace37e14c0a4448888e66ba61edbf9851b0b4d4f61091a8ee9",
+      "sha256": "d2666774f81628cdf7c1542a9904a7ea7c6eb9dd951357dfdeda5c6989552ea1",
       "source_data_directories": [
         "source_data/morphology_credit"
       ]
@@ -3010,7 +3010,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 493.0,
-      "sha256": "4a4ae3d65bbce3691b6b19123856ab1de62c6f5e152bd4794e3916877f3b8390",
+      "sha256": "3812e02b9ba9ebd669c1c01993281e799740519aabefa45b0aa7251a6160134c",
       "source_data_directories": [
         "source_data/boolean_theory"
       ]
@@ -3236,7 +3236,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 493.0,
-      "sha256": "88d057ca58623f3b6ee1a1d69353932e8599196409339f69852a32314ed4daa1",
+      "sha256": "31c31f1a482e54d4a4614b996ad35940c758105f3180ed312886f599ce285f0e",
       "source_data_directories": [
         "source_data/boolean_morphology"
       ]
@@ -3410,7 +3410,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 493.0,
-      "sha256": "952c39f4bba87de9ca4e181391a38212fc3274f25f58773f6a82548f1518b0fd",
+      "sha256": "f43d58fbe4ea4abeed110d2b08089bcd18420d89df42da100f3337291dcdbe38",
       "source_data_directories": [
         "source_data/credit_rule_extension"
       ]
@@ -3532,7 +3532,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 470.0,
-      "sha256": "b7276b1e0589c055494ef93be503ec7658eeec925fbfda0f25d13127dc60365e",
+      "sha256": "842f42f0348343e7ea00fa86d1e36ca07e0264854dd6382f2cf69dd42b11059c",
       "source_data_directories": [
         "source_data/credit_rule_extension"
       ]
@@ -3706,7 +3706,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 484.0,
-      "sha256": "c576922839a8be8213f0c3953a28cc4905036f3076d92cde5512a03c234b6e77",
+      "sha256": "5b4aab52c918c7a8c20e1bbd283679806b371bc43fb0e45a7a2f3dc2e7f5183c",
       "source_data_directories": [
         "source_data/morphology_conductance"
       ]
@@ -3828,7 +3828,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 370.0,
-      "sha256": "0d18caf15c491cd99275fa0caec132c5342f853300f16c576047a51b0aca2860",
+      "sha256": "d8bf2359ec5d1dfa0ee5e32d317bee6a1259cec168169aee709a135fa2dbf229",
       "source_data_directories": [
         "source_data/conductance_credit_demand"
       ]
@@ -3976,7 +3976,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 492.0,
-      "sha256": "f6193925cf6d0498d78d54b8737ff771f80075521db985b3caa3b24e9fed7cc0",
+      "sha256": "782e9928fb0b9732660f871ba009bf759295b16932f9fb6692b9764a1c7c4079",
       "source_data_directories": [
         "source_data/conductance_credit_demand"
       ]
@@ -4106,7 +4106,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 492.0,
-      "sha256": "918097d9f5ba84a970b5b0473e4379ee2b0f97d84add841708877ce9852c6541",
+      "sha256": "7ecc3d45afc38add0bccd4ac6d83de7b313efcd1bf2ba863c76d3480ec95b008",
       "source_data_directories": [
         "source_data/conductance_local_gate"
       ]
@@ -4320,7 +4320,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 484.0,
-      "sha256": "5f1707c3ba6a176b805630841ae7f6225cc49cc63345eefdce241f8ec3860c9a",
+      "sha256": "be006c77b888618eed2a7e60c448feb6c3edb1a1274a77c0325cd7e861376284",
       "source_data_directories": [
         "source_data/physical_alignment_dose",
         "source_data/remaining_physical_experiments",
@@ -4499,7 +4499,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 360.0,
-      "sha256": "54fb9919cdca34ee6e4aaad12ab1aca48c7323cc1b8354458cdc82f9ea9d43b3",
+      "sha256": "13fb1cef20da70ef6d3c063e200327bbeb05814898bff34d98f94746e9d94e9d",
       "source_data_directories": [
         "source_data/nonlinear_physical_depth_accessibility",
         "source_data/nonlinear_physical_depth_boundary",
@@ -4641,7 +4641,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 359.4000244140625,
-      "sha256": "a6b195eba0c60a0ef7339d8de6809b171764b6e08ae0f92edff6a29415725ba1",
+      "sha256": "02f4cc0e17a9eed3cfc4f3a8c221a1631ac9f9d1dc0a9f13b35ad3ab4c51f223",
       "source_data_directories": [
         "source_data/remaining_physical_experiments",
         "source_data/point_dendrite_credit_controls"
@@ -4822,7 +4822,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 435.5,
-      "sha256": "cec85e0f4b88d0a71707ce4f09a2c1a2368c41f026f1a54052b04abf49ef804b",
+      "sha256": "b9f2e14fe7c3fd36a025432ae777eb68c36012a8ba5e265a81155c1acc45703b",
       "source_data_directories": [
         "source_data/figure3",
         "source_data/microns_v661_replication",
@@ -5048,7 +5048,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 462.0500183105469,
-      "sha256": "d0673d8519802ecd36066b48aa0db4b78554e0f7f9c4d38d7144b3bad887c5a4",
+      "sha256": "cbb2cba3ed13d1b8545944208dcfcd034276a94532bcf1e3a429dbfd7180e4ae",
       "source_data_directories": [
         "source_data/microns_inhibitory_routes"
       ]
@@ -5192,7 +5192,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 320.3999938964844,
-      "sha256": "4d49e8b8513cd2a8a8f3dd54cbc4644cf5e517fc9cc5def2cd131e3f7992ba99",
+      "sha256": "5a539d575bc08c094d56b174974fcc7f612058e2b0d4574d7b46bdd2ae9ac2d6",
       "source_data_directories": [
         "source_data/irregular_tree_wavelets"
       ]
@@ -5480,7 +5480,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 504.0,
-      "sha256": "280526ceb6e8a013d79f9dce9d5641977f7c753899a8fe81a51ec1471eed1e02",
+      "sha256": "21e1b38442a449270f90e309dc09c3033758174734aa630be106ebcb03e519e8",
       "source_data_directories": [
         "source_data/review_morphology_uncertainty"
       ]
@@ -5654,7 +5654,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 489.0,
-      "sha256": "9b407e6af8634fd2eda3ec076a5f9c4fc2a5c104d24356e730e6dde2e312e486",
+      "sha256": "c39f3c72acc6adf29c49ff2ef6b65ec38ffef7078e10e4ddc0c1a7c53c7f112d",
       "source_data_directories": [
         "source_data/figure4",
         "source_data/focal_selectivity_phase1",
@@ -5804,7 +5804,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 414.0,
-      "sha256": "3623febdbab8c9fc0b9a9136122015243d31adbee623af893134dcf6caea31f1",
+      "sha256": "fb77d41411e3514c4ab8d68edf402df00ee8c3e09d8cec98923d4328d4c70b4e",
       "source_data_directories": [
         "source_data/focal_selectivity_active_ensemble",
         "source_data/focal_selectivity_phase1",
@@ -5936,7 +5936,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 403.0,
-      "sha256": "bfebfd91feda53d5e272994fb4f85611291e37c8b6a6fd1bf24c620ec30d41c1",
+      "sha256": "b13787f9e45794fc7c30fe3c56b84f44c6cec401abe400be4ed657dcea4f8379",
       "source_data_directories": [
         "source_data/figure5",
         "source_data/measured_alignment_power",
@@ -6187,7 +6187,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 475.20001220703125,
-      "sha256": "41f5d555ecdf5dc1f5651eeff0589279d21aea85e411301eb1150bb3b122ed39",
+      "sha256": "879ef023dba699389f7c5fc69c8e122f0228035ad81375eec5f27da4331e5bf0",
       "source_data_directories": [
         "source_data/review_response_baselines"
       ]
@@ -7860,7 +7860,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 490.0,
-      "sha256": "9232059a6d868fb6e4e95c794c9e5a9be746e0cf9f52534d991a73aadaf0d5f4",
+      "sha256": "ea5387a780e752cc18c622be49f5fab96a56f4613b440b8b901b4a5e883b5318",
       "source_data_directories": [
         "source_data/prospective_morphology_selection"
       ]
@@ -8034,7 +8034,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 476.0,
-      "sha256": "f8dd30878b39d063d89d36ed4798c3b740deb9198ef32d0e7b7e4f756a1a5cab",
+      "sha256": "d6d04b1c6b5fb7b6a09600fc669ef711627fd141ad9185cd6f4482ee9c25a165",
       "source_data_directories": [
         "source_data/morphology_finite_horizon",
         "source_data/prospective_morphology_selection"
@@ -8261,7 +8261,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 493.0,
-      "sha256": "10a8f62bf6db78553182590eef30dd7c19af2bc5ba6be6a357fdc811f76d4d03",
+      "sha256": "c6d04d56235154c9401b99b4d6ec56bfcf88aa26803cbac2455466d40e8241a1",
       "source_data_directories": [
         "source_data/morphology_calibration"
       ]
