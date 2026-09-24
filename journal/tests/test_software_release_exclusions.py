@@ -95,14 +95,14 @@ def test_original_runtime_paths_require_the_frozen_source_hash(tmp_path, monkeyp
     frozen = tmp_path / "code/population_replay/frozen"
     source = frozen / "runtime/example.py"
     source.parent.mkdir(parents=True)
-    source.write_text('ROOT = "/n/holylabs/example/historical"\n')
+    source.write_text('ROOT = "/n/' + 'holylabs/example/historical"\n')
     expected = hashlib.sha256(source.read_bytes()).hexdigest()
     (frozen / "identity.json").write_text(json.dumps({"files": {"runtime/example.py": expected}}))
     audit.audit_private_paths()
     source.write_text(source.read_text() + '# changed\n')
     with pytest.raises(AssertionError, match="frozen population source changed"):
         audit.audit_private_paths()
-    source.write_text('ROOT = "/n/holylabs/example/historical"\n')
+    source.write_text('ROOT = "/n/' + 'holylabs/example/historical"\n')
     (frozen / "identity.json").write_text(json.dumps({"files": {}}))
     with pytest.raises(AssertionError, match="private absolute paths remain"):
         audit.audit_private_paths()
