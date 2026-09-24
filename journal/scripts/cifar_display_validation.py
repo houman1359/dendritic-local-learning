@@ -5,6 +5,28 @@ requires consistent flags in both the audit and the complete seed-level table.
 """
 
 
+def cifar_source_folder(root, architecture):
+    """Keep the original archive while displaying the audited stopping extension."""
+    if architecture == "shunting" and (root / "cifar10_shunting_stopping_extension").is_dir():
+        return root / "cifar10_shunting_stopping_extension"
+    return root / f"cifar10_{architecture}_feedback_ladder_confirmatory"
+
+
+def validate_protocol_scope(summary):
+    """A retrospective extension must never masquerade as fresh confirmation."""
+    if "extension_frozen_before_extension_outcomes" in summary:
+        if not (summary.get("extension_frozen_before_extension_outcomes") is True
+                and summary.get("original_design_frozen_before_original_outcomes") is True
+                and summary.get("original_results_already_inspected") is True
+                and summary["audit"].get("all_seeds_retained") is True
+                and summary.get("contract_frozen_before_confirmatory_outcomes") is not True):
+            raise ValueError("Inconsistent post-review stopping-extension scope")
+        return "post-review stopping extension; original seeds reused"
+    if summary.get("contract_frozen_before_confirmatory_outcomes") is not True:
+        raise ValueError("Unvalidated frozen-before-outcomes contract")
+    return "original frozen cohort"
+
+
 def validate_convergence_disclosure(summary, outcomes, *, allow_convergence_flags=False):
     audit = summary["audit"]
     valid = audit.get("convergence_valid") is True

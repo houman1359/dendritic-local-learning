@@ -1,7 +1,7 @@
 {
   "figure": "Figure 3",
   "output": "figures/components/credit_first_figure_03.pdf",
-  "output_sha256": "ea10af9cbf881a3eb0bb2c7b30757d01babaacbfd4fe7c0f18c2e45277e77644",
+  "output_sha256": "5d322b7c352c7691584e48bdf0db702aa948a86186f69aae87e6aad3c37e64c4",
   "plotted_table": "source_data/curated_publication/figure_03_plotted.csv",
   "plotted_table_sha256": "126449057279c5acaf56f40207420e2a749877944652cc5e87e013fd7d399505",
   "panel_sources": {

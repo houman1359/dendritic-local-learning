@@ -1,16 +1,16 @@
 {
   "figure": "Figure 6",
   "output": "figures/components/restored_main_06.pdf",
-  "output_sha256": "c0991f935af3665e11bd8e48f3c09242624e4c1c617fbf6de93056240ce0ad09",
+  "output_sha256": "460ff9278a0dafe5c31aedb895475e96749d2bc2f2b4fc1c787468d571f9954c",
   "panel_sources": {
     "A": "Native architecture schematic (no data): D1 [8] and D3 [2,1,2] over the same eight nonsomatic compartments, the grouped-point control swatch, and the shared inventory printed from physical_depth_h4_factorial/seed_outcomes.csv (66,178 trainable parameters, 14,336 active synapses).",
     "B": "Native generative-model schematic (no data): tier supports and family strips from configs/nonlinear_physical_depth/confirmatory/aligned_shunting_bp.yaml (n_levels 3, hierarchy_branching 2, n_flat_groups 8, e_signal_delta 0.8) and supplementary/curated/si_06_physical_depth.tex Eq. S1-S2.",
     "C": "Frozen serial-minus-grouped-point effects under exact BP at 180 epochs, seeds 10500-10509; per-seed fan at alpha = 1 from the same cohort. No re-estimation.",
     "D": "Frozen three-tier condition summaries, seeds 10200-10209, 180 epochs, with the parameter-matched point network and the four-tier D4-D3 paired contrast (seeds 10400-10409).",
-    "E": "Frozen 600-epoch restart trajectories for six arms, ten seeds each, with the archived pointwise intervals and the exact per-seed stopping records.",
-    "F": "Same restarts, best validation loss, with the eight exact-BP D1 stopping epochs marked; all fifty D3 fits reach the cap.",
-    "G": "Frozen paired exact-path-minus-shared-soma accuracy trajectory with archived pointwise intervals and sign counts.",
-    "H": "Same paired states, test cross-entropy difference, with the two absolute 600-epoch levels printed."
+    "E": "Complete same-seed uniform-H200 stopping extension: six conditions, ten seeds each; validation-best states retained after ordinary stopping.",
+    "F": "Same conditions and selected states, best validation loss on a logarithmic ordinate; D1 stopping epochs are marked.",
+    "G": "Paired exact-path-minus-shared-soma LocalCA accuracy over the full stopping extension; all ten seed differences retained.",
+    "H": "Same paired selected states, test cross-entropy difference; descriptive pointwise intervals."
   },
   "source_sha256": {
     "source_data/task_family_alignment/architecture_effects.csv": "8fb388c9505f9d646a69db7e283f446a811ca2886fe89bd1a695d2df041550dc",
@@ -20,17 +20,18 @@
     "source_data/point_dendrite_credit_controls/condition_summary.csv": "4e842c5c1a5a9acf06ce5f450eb8da4bc65c0e0578fdc09dbf367396705c158e",
     "source_data/physical_depth_h4_factorial/paired_contrasts.csv": "1463906b2633012954a870cf67d41dbdab2e35b6c7513098bc6021fa67750f30",
     "source_data/physical_depth_h4_factorial/seed_outcomes.csv": "3096b4ee6ebceb96248d962677ffbf4001d63615e1b296e68a40a7f753a66f55",
-    "source_data/physical_depth_followup/condition_trajectory_summary.csv": "8171e8088c37ae607efd3afb8bd58c7544d6e8cfc8a221f329e2b0d7dc0d869f",
-    "source_data/physical_depth_followup/validation_selected_seed_trajectories.csv": "d44c6216556425a118f4b0dc22de3dc823345accb18e727b754cca95281392d4",
-    "source_data/physical_depth_followup/stopping_by_seed.csv": "6acf0fa6798f01167529f7434e1d40b087afbeba518fc6eb58fc73a92a2e3da5",
-    "source_data/physical_depth_followup/paired_trajectory_summary.csv": "05786841eb50eb631704a0d72374600de8900db6fb61f440b74eecaf810630a0",
-    "source_data/physical_depth_budget/canonical/extension_paired_contrasts.csv": "52edceb0a920f6bd3548550deb81bc1b11a065da8d56d0ae7027157ca05e02d1"
+    "source_data/physical_depth_stopping_extension/condition_trajectory_summary.csv": "1acd6f3c3f8b26fe486373b40dd62dd873e163734f5eca4ae9c679b8f19bf64b",
+    "source_data/physical_depth_stopping_extension/validation_selected_seed_trajectories.csv": "5fbf35339aea419f586421cea0785080618eb246c5b7ce7737bff4990ae4f854",
+    "source_data/physical_depth_stopping_extension/stopping_by_seed.csv": "55991eb81b810663ed4ea208bb90af8ef07e4fb65bb7740db0692d483d164edd",
+    "source_data/physical_depth_stopping_extension/paired_trajectory_summary.csv": "32262292af75ca0cb5ed486eb46519e117535d9325cdd6e6eb25c4ec71fdb7c8",
+    "source_data/physical_depth_stopping_extension/paired_contrasts.csv": "664b08e41c956e12c056b751044fcb20cf39d390db6f60177442816bb21ed3c7"
   },
   "builder_sha256": {
-    "scripts/credit_first_figures/build_restored_main.py": "11b4854ea8f77a622142610b17acf86c3e559d2c6e0c688b67147fe22e19b454",
+    "scripts/credit_first_figures/build_restored_main.py": "fc614d2f59f816b037bb1d44a440eafe75e28699cd66b13086819b426818f16e",
     "scripts/credit_first_figures/focused_main_evidence.py": "e045f0fc26ce8554af19f7d2b1ee9683ec852899f19e02e76e78163b0d74e773",
     "scripts/figure_canvas.py": "7f2983ff0c52a30dd5ba9bdeccc6fda940b4366ad872cbf0755fec5daa1dd7aa",
-    "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a"
+    "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a",
+    "scripts/run_completion/stopping_panels.py": "e80540aa88e7791e3e4ab299dcf4ae365efa1a6e7cf5845c5bc1494809008b10"
   },
   "source_data_immutable": true,
   "new_experiments": 0,

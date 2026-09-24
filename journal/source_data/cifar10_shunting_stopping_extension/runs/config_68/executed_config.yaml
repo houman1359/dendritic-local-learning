@@ -1,0 +1,140 @@
+analysis:
+  correlation_analysis:
+    enabled: false
+  information_analysis:
+    enabled: false
+  performance_analysis:
+    enabled: true
+    params:
+      accuracy: true
+      auc: false
+      categorical_loglikelihood: true
+      cosine_similarity: false
+      mse: false
+    training: true
+data:
+  base_dir: /n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/data
+  dataset_name: cifar10
+  processing:
+    flatten: true
+    normalize: false
+experiment:
+  enable_amp: false
+  enable_hooks: true
+  enable_profiling: false
+  train_valid_split: 0.9
+  seed: 22008
+model:
+  core:
+    architecture:
+      excitatory_branch_factors:
+      - 3
+      - 3
+      - 3
+      - 3
+      excitatory_layer_sizes:
+      - 20
+      inhibitory_branch_factors:
+      - 1
+      inhibitory_layer_sizes:
+      - 20
+      inhibitory_network_type: dendritic
+    connectivity:
+      ee_synapses_per_branch_per_layer:
+      - 25
+      ei_synapses_per_branch_per_layer:
+      - 25
+      ie_synapses_per_branch_per_layer:
+      - 25
+      ii_synapses_per_branch_per_layer:
+      - 0
+    implementation:
+      adaptive_initialization: true
+      adaptive_initialization_policy: preserve_shunting_center
+      adaptive_target_conductance: 5.0
+      initial_child_conductance: 1.0
+    morphology:
+      additive_mode: raw
+      somatic_synapses: false
+      use_additive_normalization: false
+      use_shunting: true
+      weight_transform: softplus
+    reactivation:
+      calibration_max_m: 50.0
+      calibration_min_quantile_width: 0.001
+      calibration_revert_on_invalid: true
+      enabled: true
+      init_b: 0.5
+      init_m: 1.5
+      init_policy: empirical
+      type: param_tanh
+    transfer:
+      independent_pathways: false
+      inhibitory_mode: first
+      input_mode: 1
+      output_activation: relu
+    type: dendritic_shunting
+  decoder:
+    params:
+      activation: relu
+      hidden_dims:
+      - 32
+      - 16
+      output_dim: 10
+    type: MLP
+  encoder:
+    params:
+      input_dim: null
+    type: identity
+  task: classification
+outputs:
+  run_name: cifar_stopping_extension_config_68
+  results_dir: /n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_68
+  exact_run_dir: true
+training:
+  main:
+    common:
+      batch_size: 256
+      checkpoint_interval: 50
+      checkpointing: true
+      early_stopping: true
+      enable_adaptive_clipping: false
+      enable_nan_checking: false
+      epochs: 1600
+      grad_clip_value: 5.0
+      load_best_state_dict: true
+      loss_function: cat_nll
+      lr_schedule: none
+      lr_warmup_epochs: 0
+      param_groups:
+        blocklinear_lr: 0.0001
+        decoder_input_lr: null
+        decoder_lr: 0.001
+        encoder_lr: null
+        lr: 0.001
+        reactivation_lr: 0.0001
+        split_params: true
+        topk_lr: 0.001
+      patience: 50
+      plot_losses: false
+      print_every: 10
+      reactivation_initialization_batch_size: 256
+      reactivation_initialization_max_iterations: null
+      reactivation_initialization_num_batches: 3
+      reactivation_recalibration_ema_alpha: 1.0
+      reactivation_recalibration_mode: from_init_policy
+      reactivation_recalibration_num_batches: 3
+      reactivation_recalibration_start_epoch: 1
+      reactivation_update_mode: backprop
+      recalibrate_reactivation_every: 0
+      shuffle: true
+      suppress_prints: false
+      use_amp: false
+      weight_boosting: false
+      weight_decay_rate: 0
+    learning_strategy_config: null
+    strategy: standard
+wandb:
+  use_wandb: false
+_sweep_variant: cifar10_shunting_matched_bp_confirmatory
+_sweep_config_id: config_68

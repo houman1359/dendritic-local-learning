@@ -1,0 +1,202 @@
+[
+  {
+    "path": "runs/config_61/execution.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_61/execution.json",
+    "sha256": "5a3258456685473faf5391001885258c278643192b0de76c3a645eddbbf9a12c"
+  },
+  {
+    "path": "runs/config_61/config.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_61/config.json",
+    "sha256": "84297ae79e0ed23a48e5e48b45b5302196d86793203b73bce351acd89bb5cb93"
+  },
+  {
+    "path": "runs/config_61/training_summary.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_61/training_summary.json",
+    "sha256": "c5a94bf9f295b6218841cb5b7becf33be3fcbc9e4d922248d11a8ec4ac570fdb"
+  },
+  {
+    "path": "runs/config_61/model_resources.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_61/model_resources.json",
+    "sha256": "795fc2a79a44efbab8cf149ce74daf39bcb84a8851831b8d3a11470198d281e3"
+  },
+  {
+    "path": "runs/config_61/performance/final.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_61/performance/final.json",
+    "sha256": "26aba17d2079bf2b4b685379c7232b3ad403186822b01fc9df650e21c3ea472f"
+  },
+  {
+    "path": "runs/config_41/execution.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_41/execution.json",
+    "sha256": "b46c9e35408c3a70fb3905692de27e51fbfec6a1e99e713f37637b1750efd6cd"
+  },
+  {
+    "path": "runs/config_41/config.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_41/config.json",
+    "sha256": "4101f8022a7addc786ab4527932098a69d7fe1025b23fa424c48470908aee510"
+  },
+  {
+    "path": "runs/config_41/training_summary.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_41/training_summary.json",
+    "sha256": "2bb2516d4085f3bc99f0baab81e34be63c3568743d17d99db92acebcc15fb605"
+  },
+  {
+    "path": "runs/config_41/model_resources.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_41/model_resources.json",
+    "sha256": "71a70eb456a57978a4afd664360884d0c9e16a71c1cc179c10ef658b62e62cdc"
+  },
+  {
+    "path": "runs/config_41/performance/final.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_41/performance/final.json",
+    "sha256": "d92c00292bd27c3c9946e79a77ccce73a80479960ebbbb2a50c616ec9a7d5d86"
+  },
+  {
+    "path": "runs/config_21/execution.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_21/execution.json",
+    "sha256": "5399c343422da17899142b35fbcc90be272b9c97edf3eeeb738590860471a739"
+  },
+  {
+    "path": "runs/config_21/config.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_21/config.json",
+    "sha256": "9bbc52bb9b2c8d3131aa7166c9592a63fab5be8af209d47e30889433efd15ad2"
+  },
+  {
+    "path": "runs/config_21/training_summary.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_21/training_summary.json",
+    "sha256": "9a8686a934b87be516fa890d28967d71885f7226f703ab915e1ddb28cf3c5532"
+  },
+  {
+    "path": "runs/config_21/model_resources.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_21/model_resources.json",
+    "sha256": "a64df67016e083247594481ee315be20d02e156587b2d4dbc10eba7300ca77c8"
+  },
+  {
+    "path": "runs/config_21/performance/final.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_21/performance/final.json",
+    "sha256": "7ca7dd53815865024815c9c07b36935f31e7855b716224dd585a1c42194b5c92"
+  },
+  {
+    "path": "runs/config_1/execution.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_1/execution.json",
+    "sha256": "1fe590717f5b9087e26f9090f7abdf6908525e142487362d01a9b0906e5b2b59"
+  },
+  {
+    "path": "runs/config_1/config.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_1/config.json",
+    "sha256": "c07fff07519f60bc2ae8a8b99495114e53f2b5349d153ccdb8f9ae5e6cbfaa27"
+  },
+  {
+    "path": "runs/config_1/training_summary.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_1/training_summary.json",
+    "sha256": "54c1c1abf9a04eab46dc9a592e082b08394de677b8966df71ce7a70bfecbf88c"
+  },
+  {
+    "path": "runs/config_1/model_resources.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_1/model_resources.json",
+    "sha256": "2ca7f895f592b4eb9595a93709924841ff96b8b010b89ba60b6e9aab14f857f8"
+  },
+  {
+    "path": "runs/config_1/performance/final.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_1/performance/final.json",
+    "sha256": "b36e64a8954d47cd8473ce72062eabbf9a971fac427b290540dafc2ad3688460"
+  },
+  {
+    "path": "runs/config_68/execution.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_68/execution.json",
+    "sha256": "4bebc65b3e4cf2d90dd64b2000cf508afdc503823ff184b87b30c1d36f76e35a"
+  },
+  {
+    "path": "runs/config_68/config.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_68/config.json",
+    "sha256": "6b8eedecb6f4f2c91a6259b2fee755c34f87fcaca577b682f02dee878e1bdd40"
+  },
+  {
+    "path": "runs/config_68/training_summary.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_68/training_summary.json",
+    "sha256": "1c1dd0fe3094257f7459a31ed86cdba4781060c52356245fc3409cd55c85fcc2"
+  },
+  {
+    "path": "runs/config_68/model_resources.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_68/model_resources.json",
+    "sha256": "e45f02ae6e22bedcd80cfabb35d4cb2b6c1fa827e57d017b3d9eac4618813319"
+  },
+  {
+    "path": "runs/config_68/performance/final.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_68/performance/final.json",
+    "sha256": "f7bae5d56cee6bd53e40e3712bdda809de2bc10cdd2bda3e65546b941c790e99"
+  },
+  {
+    "path": "runs/config_48/execution.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_48/execution.json",
+    "sha256": "76f34b0ba45dfba58ca54aae06340e85363e5ba658c5ffeaa453bdd67e8457b5"
+  },
+  {
+    "path": "runs/config_48/config.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_48/config.json",
+    "sha256": "2e063a52bca5a5b6a3ab4a85f98315df19b4721e5f70c923c444c5a2428edbfa"
+  },
+  {
+    "path": "runs/config_48/training_summary.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_48/training_summary.json",
+    "sha256": "4d08441a45913d637553846ad93b7108f66443021850a7d446932b794ead87d6"
+  },
+  {
+    "path": "runs/config_48/model_resources.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_48/model_resources.json",
+    "sha256": "71ab1f9977ff9c56fdbed4937b72472312ae353bf6342eeedeec4d7e52165fbd"
+  },
+  {
+    "path": "runs/config_48/performance/final.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_48/performance/final.json",
+    "sha256": "93fa466c9461f8f9a1c4b0aa3b150ac8943f12c299912e8b9426df7dee5e92f4"
+  },
+  {
+    "path": "runs/config_28/execution.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_28/execution.json",
+    "sha256": "f5cfc7505e14d9141f37074bc3f4c5d97932cd85ea7a15769d22f06f91670a46"
+  },
+  {
+    "path": "runs/config_28/config.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_28/config.json",
+    "sha256": "f261f38750b56b1f3a784b53a2ce1baf3f5f0ca3b0dcea20a48eb8aaf4c7dd49"
+  },
+  {
+    "path": "runs/config_28/training_summary.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_28/training_summary.json",
+    "sha256": "f65d06d032886febdba22ed59c3dd6666c5b1d45213f39c3f209ba310cf801b3"
+  },
+  {
+    "path": "runs/config_28/model_resources.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_28/model_resources.json",
+    "sha256": "88ef3b27c0760074bc4f3a30856dded3ece07f40909e7ffa846e64a5677b55cb"
+  },
+  {
+    "path": "runs/config_28/performance/final.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_28/performance/final.json",
+    "sha256": "7dac9532426a79584372e3694e2fc5e2e2a8dedc2d665904e20fc8e0351cdd66"
+  },
+  {
+    "path": "runs/config_8/execution.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_8/execution.json",
+    "sha256": "fc27c5151a48614eb8ed207c3a49397941b0d670fe4d3222d8df5909b7a8adf5"
+  },
+  {
+    "path": "runs/config_8/config.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_8/config.json",
+    "sha256": "a98bf5dc3c1f810bac9de9d107b4f25c0bce2ad99102c19a5b431384660299d5"
+  },
+  {
+    "path": "runs/config_8/training_summary.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_8/training_summary.json",
+    "sha256": "10a94614594423b626009e39567fcf46cbbf64002897306bb599d5ad8ba77c88"
+  },
+  {
+    "path": "runs/config_8/model_resources.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_8/model_resources.json",
+    "sha256": "4d46ad3128fb6313519eed924c88235c82a493a67ced1b61f1e0153601c0da59"
+  },
+  {
+    "path": "runs/config_8/performance/final.json",
+    "original": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_8/performance/final.json",
+    "sha256": "da0c55f00a2cba4c6e72c9e03706295a72e0f953f04c9d56e18adeb75b55f4c7"
+  }
+]

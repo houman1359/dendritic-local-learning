@@ -1,0 +1,41 @@
+{
+  "status": "passed",
+  "maximum_primary_table_error": 8.881784197001252e-16,
+  "paired_interval_replay": "exact to 1e-12",
+  "text_outside_page": [],
+  "minimum_font_pt": 6.800000190734863,
+  "panel_letter_boxes": {
+    "A": [
+      6.0,
+      6.685502052307129,
+      14.12700080871582,
+      18.91800308227539
+    ],
+    "B": [
+      246.82000732421875,
+      6.685502052307129,
+      254.82101440429688,
+      18.91800308227539
+    ],
+    "C": [
+      6.0,
+      190.0237274169922,
+      13.707000732421875,
+      202.2562255859375
+    ],
+    "D": [
+      6.0,
+      351.06787109375,
+      14.71500015258789,
+      363.30035400390625
+    ],
+    "E": [
+      246.82000732421875,
+      351.06787109375,
+      253.9915008544922,
+      363.30035400390625
+    ]
+  },
+  "pdf_sha256": "ac7c197158a061dafc68afc85053174d05dba97c2d064f5fd2f23cad89b14ed2",
+  "visual_review": "Full-size rendering reviewed; forest-label reserve and legend/title/data collisions repaired; no remaining overlaps or clipping."
+}

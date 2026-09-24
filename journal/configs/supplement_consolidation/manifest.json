@@ -133,7 +133,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 206.70001220703125,
-      "sha256": "3ba7f0dde41b0845eef68eb2db108f3a1a986c717a38973b95cc0014cb77d27e",
+      "sha256": "d185e15b51956933b2f954d68b6221f1a8b19dfc665ac91e1ec683191f634ca2",
       "source_data_directories": []
     },
     {
@@ -248,7 +248,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 356.6500244140625,
-      "sha256": "14b76134943e37d16498097f0ce4047be79925cbfede27cf97361e2542ffdb81",
+      "sha256": "29cf6b834e4736be8fba8d7c12e8f68c0b1c946afde2f2b67ccd65441f269901",
       "source_data_directories": [
         "source_data/figure2"
       ]
@@ -448,7 +448,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 458.3999938964844,
-      "sha256": "05160a167a17a8fc55837a511b1d47c798875039eee0e59dfdb0eb771d7954b5",
+      "sha256": "14a2c29aa9aa097c852c2b15aca712b043f6528c46a7224423afed99ec9f3272",
       "source_data_directories": [
         "source_data/credit_phase_theory",
         "source_data/review_evidence_reanalysis",
@@ -605,7 +605,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 295.4000244140625,
-      "sha256": "6a3b158f5ad32f1776e87c4f06daa5197a7931a075079fb7fa54b8e6ac121210",
+      "sha256": "1e3853c1f31afa71038cbc2744fc0b9b75b37fd31ca6944ff14864ee1605867f",
       "source_data_directories": [
         "source_data/positive_conductance_reliability_step_consistent"
       ]
@@ -779,7 +779,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 344.1500244140625,
-      "sha256": "353d0219ec86ef3204156725e18368bbb1b2141f54124bf8b9bf2eebe0e4196c",
+      "sha256": "00193c47ee3fc08a929b17b08775b44f3bc95bc32f9769664b7e8c7cd735f7df",
       "source_data_directories": [
         "source_data/same_span_coefficient_learning"
       ]
@@ -796,35 +796,35 @@
           "source_panel": "C",
           "bbox": [
             16.899999618530273,
-            198.39999389648438,
+            206.89999389648438,
             175.10000610351562,
-            342.8500061035156
+            350.6000061035156
           ],
           "width": 158.20000648498535,
-          "height": 144.45001220703125,
+          "height": 143.70001220703125,
           "panel": "A",
           "target_rect": [
-            22.110342216491688,
+            21.603796195983875,
             19.0,
-            180.31034870147704,
-            163.45001220703125
+            179.80380268096923,
+            162.70001220703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_cifar_ladders_native.pdf",
-          "source_sha256": "f24e2fd8c5f32955ddd58e15fbc91e4cc73dcb75ab727f48e4855180fc31ff3c",
+          "source_sha256": "c6105a3cae32361304bb0ecdca18f290fa501730be6a0501794f4385d81eab03",
           "old_provenance_figure": "figN4C",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/cifar10_shunting_feedback_ladder_confirmatory/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/cifar10_shunting_feedback_ladder_confirmatory/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/cifar10_shunting_feedback_ladder_confirmatory/seed_outcomes.csv",
-            "drafts/dendritic-local-learning/journal/source_data/cifar10_shunting_feedback_ladder_confirmatory/summary.json"
+            "drafts/dendritic-local-learning/journal/source_data/cifar10_shunting_stopping_extension/condition_summary.csv",
+            "drafts/dendritic-local-learning/journal/source_data/cifar10_shunting_stopping_extension/paired_contrasts.csv",
+            "drafts/dendritic-local-learning/journal/source_data/cifar10_shunting_stopping_extension/seed_outcomes.csv",
+            "drafts/dendritic-local-learning/journal/source_data/cifar10_shunting_stopping_extension/summary.json"
           ],
           "explicit_numerical_source_hashes": {
-            "source_data/cifar10_shunting_feedback_ladder_confirmatory/condition_summary.csv": "471c6b74e7282c77f30258e93dfefe1c3fedf0787c260bcbb0e07dbfb0122239",
-            "source_data/cifar10_shunting_feedback_ladder_confirmatory/paired_contrasts.csv": "62cfcdd0e8f25aabda6c9ab270069d30e9027a13320b89ccfda8e3c4cc2f4a48",
-            "source_data/cifar10_shunting_feedback_ladder_confirmatory/seed_outcomes.csv": "3d3d1460b1fca618ec4fc095be1a49a836bbb8e55550cc0952e606b1cb19faae",
-            "source_data/cifar10_shunting_feedback_ladder_confirmatory/summary.json": "6417ed8bdf07b96ed1df3c38524e7ec0d8b4c0ab25256c6f7df53e674fbbb6be"
+            "source_data/cifar10_shunting_stopping_extension/condition_summary.csv": "471c6b74e7282c77f30258e93dfefe1c3fedf0787c260bcbb0e07dbfb0122239",
+            "source_data/cifar10_shunting_stopping_extension/paired_contrasts.csv": "62cfcdd0e8f25aabda6c9ab270069d30e9027a13320b89ccfda8e3c4cc2f4a48",
+            "source_data/cifar10_shunting_stopping_extension/seed_outcomes.csv": "c5829ecbd97d0ce8f2bbb92a65850dc4c8427894b23ea1b0e98391b62b7ccecf",
+            "source_data/cifar10_shunting_stopping_extension/summary.json": "62670cf940b2949e99dc6834e2b77be78b77d29cec205b761523ad063b70f0fc"
           },
           "record_type": "native supplement panel",
           "builder": "scripts/build_supplementary_figure_s04_native.py"
@@ -834,22 +834,22 @@
           "source_panel": "D",
           "bbox": [
             192.89999389648438,
-            198.39999389648438,
+            206.89999389648438,
             338.40667724609375,
-            342.8500061035156
+            350.6000061035156
           ],
           "width": 145.50668334960938,
-          "height": 144.45001220703125,
+          "height": 143.70001220703125,
           "panel": "B",
           "target_rect": [
-            193.31034870147704,
+            192.80380268096923,
             19.0,
-            338.8170320510864,
-            163.45001220703125
+            338.3104860305786,
+            162.70001220703125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_cifar_ladders_native.pdf",
-          "source_sha256": "f24e2fd8c5f32955ddd58e15fbc91e4cc73dcb75ab727f48e4855180fc31ff3c",
+          "source_sha256": "c6105a3cae32361304bb0ecdca18f290fa501730be6a0501794f4385d81eab03",
           "old_provenance_figure": "figN4C",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [
@@ -868,64 +868,42 @@
           "builder": "scripts/build_supplementary_figure_s04_native.py"
         },
         {
-          "source": "S4",
+          "source": "N4C",
           "source_panel": "E",
           "bbox": [
             349.1499938964844,
             206.89999389648438,
-            504.62261962890625,
-            349.1000061035156
+            505.6357116699219,
+            350.6000061035156
           ],
-          "width": 155.47262573242188,
-          "height": 142.20001220703125,
+          "width": 156.4857177734375,
+          "height": 143.70001220703125,
           "panel": "C",
           "target_rect": [
-            351.8170320510864,
+            351.3104860305786,
             19.0,
-            507.2896577835083,
-            161.20001220703125
+            507.7962038040161,
+            162.70001220703125
           ],
           "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_S04_panels_A-E.pdf",
-          "source_sha256": "511ec1ecb37300e9490fd43e5bd63596072e3092eb20d092fbee6cfb024d6969",
-          "old_provenance_figure": "figS4",
-          "old_provenance_entry_ids": [
-            "fashion.asset",
-            "fashion.audit",
-            "fashion.conditions",
-            "fashion.contrasts",
-            "fashion.outcomes",
-            "regimes.asset",
-            "regimes.cifar",
-            "regimes.cifar.confirm.audit",
-            "regimes.cifar.confirm.conditions",
-            "regimes.cifar.confirm.contract",
-            "regimes.cifar.confirm.contrasts",
-            "regimes.cifar.confirm.outcomes",
-            "regimes.controls.additive",
-            "regimes.controls.bp",
-            "regimes.controls.exact",
-            "regimes.controls.reactivation",
-            "regimes.depth",
-            "regimes.error_source",
-            "regimes.feedback",
-            "regimes.inhibition",
-            "regimes.noise",
-            "regimes.rules",
-            "regimes.tasks"
-          ],
+          "source_asset": "figures/supplementary/figure_cifar_ladders_native.pdf",
+          "source_sha256": "c6105a3cae32361304bb0ecdca18f290fa501730be6a0501794f4385d81eab03",
+          "old_provenance_figure": "figN4C",
+          "old_provenance_entry_ids": [],
           "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/fashion_feedback_ladder/audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/fashion_feedback_ladder/condition_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/fashion_feedback_ladder/paired_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/fashion_feedback_ladder/seed_outcomes.csv"
+            "drafts/dendritic-local-learning/journal/source_data/fashion_strict_scalar_control/condition_summary.csv",
+            "drafts/dendritic-local-learning/journal/source_data/fashion_strict_scalar_control/paired_contrasts.csv",
+            "drafts/dendritic-local-learning/journal/source_data/fashion_strict_scalar_control/seed_outcomes.csv",
+            "drafts/dendritic-local-learning/journal/source_data/fashion_strict_scalar_control/summary.json"
           ],
           "explicit_numerical_source_hashes": {
-            "source_data/fashion_feedback_ladder/condition_summary.csv": "e8f55f142b1216ff1d581f03745e3cd5589f7628ea64e7e0c81db6243f30db94",
-            "source_data/fashion_feedback_ladder/paired_contrasts.csv": "aa093c980f42df397b432ec5c3fbe85fe9aed31877ea3b43468ae7f77a076ee2",
-            "source_data/fashion_feedback_ladder/seed_outcomes.csv": "32fc9ae9c5c317a6063140146f55a4557978e03481b528f365ff5033fc77eb4c",
-            "source_data/fashion_feedback_ladder/audit.json": "6d421f7c2f9e882b016b39a72ed685d6a932ee263fbe76d42cbfef1d72486630"
-          }
+            "source_data/fashion_strict_scalar_control/seed_outcomes.csv": "aafd6af14267c42e71ca287126e4da9485dad07db0719aba71437b863327febd",
+            "source_data/fashion_strict_scalar_control/condition_summary.csv": "b3ff64842e471242aa0cbe371bdd79de366640f684c610514374b0e4ab138248",
+            "source_data/fashion_strict_scalar_control/paired_contrasts.csv": "cc265700de47c032eaf9b0e98cf7b0450e928008e5789b68eb933d5fc30e1a19",
+            "source_data/fashion_strict_scalar_control/summary.json": "5e48a644184c2f6169d826aa2382a6ae31debb8e0aeab97c8d93be33e4cb9e7e"
+          },
+          "record_type": "native supplement panel",
+          "builder": "scripts/build_supplementary_figure_s04_native.py"
         },
         {
           "source": "S30",
@@ -940,10 +918,10 @@
           "height": 131.20001220703125,
           "panel": "D",
           "target_rect": [
-            22.110342216491688,
-            186.45001220703125,
-            247.57350177764891,
-            317.6500244140625
+            21.603796195983875,
+            185.70001220703125,
+            247.0669557571411,
+            316.9000244140625
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S30_panels_A-D.pdf",
@@ -973,10 +951,10 @@
           "height": 131.20001220703125,
           "panel": "E",
           "target_rect": [
-            266.5735017776489,
-            186.45001220703125,
-            496.52351398468016,
-            317.6500244140625
+            266.0669557571411,
+            185.70001220703125,
+            496.01696796417235,
+            316.9000244140625
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S30_panels_A-D.pdf",
@@ -998,12 +976,12 @@
       "whole_source_sheet": false,
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
-      "height_pt": 321.6500244140625,
-      "sha256": "0ec751859c1bfeec21afed4976e8cafcfce610373c43fa03a2f695129e3acb25",
+      "height_pt": 320.9000244140625,
+      "sha256": "4d1e6e4f7fc2bee3f0ac1b4838c33dc9265e0fa43c68f0e4e387d0be950b062b",
       "source_data_directories": [
-        "source_data/cifar10_shunting_feedback_ladder_confirmatory",
+        "source_data/cifar10_shunting_stopping_extension",
         "source_data/cifar10_additive_feedback_ladder_confirmatory",
-        "source_data/fashion_feedback_ladder",
+        "source_data/fashion_strict_scalar_control",
         "source_data/mnist_between_within_factorial",
         "source_data/regular_tree_regimes"
       ]
@@ -1105,7 +1083,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 382.0,
-      "sha256": "e54c12f885bd1ce44d89db712d7058ab0f0cedf52aad4525ae59c6b26b9745ee",
+      "sha256": "6096cd0981b6a6475dec4c56f16409fa8f1bf2ec01990ccc6306717bf0ddfdff",
       "source_data_directories": [
         "source_data/image_ladder_controls",
         "source_data/mnist_feedback_ladder"
@@ -1202,7 +1180,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 364.0,
-      "sha256": "9c5aa724ad1cdbdd3075d6f4c2307489346bcf165c2487a4daf7b2624bf51027",
+      "sha256": "9204b69013e8e47bf676cb7ce6cf6b2448abb4aad76648c4e269dd05e9d9d3c7",
       "source_data_directories": [
         "source_data/figure2",
         "source_data/prospective_input_validity"
@@ -1356,7 +1334,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 277.1499938964844,
-      "sha256": "25bd5d92e7bbf53e290c1098aad4e490a1ba8c617d270eab243cd8378252a5ef",
+      "sha256": "c6d366c2b33c5d254674f642e95d5ca9e34a01adf67fe4eea8d291b3bf944c3b",
       "source_data_directories": [
         "source_data/spatial_topology_audit",
         "source_data/prospective_input_validity"
@@ -1982,7 +1960,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 423.6499938964844,
-      "sha256": "6953ed9aaa995f0695bf6d12e4d450889a013336872537849a0d8c57116b0bc9",
+      "sha256": "c366cb65f3558c16b800919a9b013614cc6e946d90da7c85725198bf1e544c04",
       "source_data_directories": [
         "source_data/path_necessity_fashion",
         "source_data/review_branch_trajectories",
@@ -2485,7 +2463,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 343.6500244140625,
-      "sha256": "e3d5c86b3d58d07cd3d349ece4b141335a1c35e24b118d77da69edfa838a2605",
+      "sha256": "30e9a170cf0e8e7e454a44cdb3fcde16ddde0b469881d00bdbad7287810fbf94",
       "source_data_directories": [
         "source_data/review_coefficient_encoder",
         "source_data/review_coefficient_hard_readout",
@@ -2662,7 +2640,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 492.0,
-      "sha256": "aaa9e7cac81d0fc042000cd3b1b4ee8fe867af28960c36c7a941bd6fd8f00491",
+      "sha256": "0621efb2792fd7c06cb5707f37b9cd26866387b195f41a77b1dd4b3283243fe5",
       "source_data_directories": [
         "source_data/morphology_structure"
       ]
@@ -2836,7 +2814,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 490.0,
-      "sha256": "8439705824759b8604509690af9c9c6f4e0b6ab477583ec6f511849637c6b6b8",
+      "sha256": "caee6f240f165cacaf00b6958dca1831dcdc32ced544136a4ccc224176403157",
       "source_data_directories": [
         "source_data/morphology_credit"
       ]
@@ -3010,7 +2988,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 493.0,
-      "sha256": "019933cf30486a3bfb41f0fb538aee9e3178fa6a715d41d5a671be827350c7f1",
+      "sha256": "262242eaedda584204073aedbdd50ef0e9e51135ef2f64ac205c1b1cfba98520",
       "source_data_directories": [
         "source_data/boolean_theory"
       ]
@@ -3236,7 +3214,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 493.0,
-      "sha256": "483f0863e22e63d2bfc0f14b08556c5be575f0af8abe3065a63395c64c55fc3d",
+      "sha256": "464218af50acdc24a36bed8490e486b6e8677790edab175d3f73a38d9697141a",
       "source_data_directories": [
         "source_data/boolean_morphology"
       ]
@@ -3410,7 +3388,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 493.0,
-      "sha256": "27282ce5b9c3219b3e14461c8819c1af22d9c84bdae4c6e3d1a0bdd7a0bf3941",
+      "sha256": "0f9a6acfbab3aa2288d65129619f3bcd44478d4e601778ec52af38f2e960c72d",
       "source_data_directories": [
         "source_data/credit_rule_extension"
       ]
@@ -3532,7 +3510,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 470.0,
-      "sha256": "2618c3a7f2a3850bd43ee549c047d4bf5301eb5d22e3c7851b8a3d93d243b674",
+      "sha256": "d6ab8f8e4be1f0c5b0ffdfd061b6e39a49e50f272de5e5cc7ecf9e5001b71eb2",
       "source_data_directories": [
         "source_data/credit_rule_extension"
       ]
@@ -3706,7 +3684,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 484.0,
-      "sha256": "97b1cca8dbde6984145db471c19f0f47bc53f19278f319296f126be32a0092bc",
+      "sha256": "cb4ad6b9baf3fa7bb188aa311753a7a9a480133cbbe4e0779f321031acfe801c",
       "source_data_directories": [
         "source_data/morphology_conductance"
       ]
@@ -3828,7 +3806,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 370.0,
-      "sha256": "1d593795d59763f882042f25eaa561a87395205cb450bd6412bc1184cb1ab738",
+      "sha256": "b31b74ebd937fb537c3b5ba56f537636b83eeeaae2c20fb9de4338d527e4c768",
       "source_data_directories": [
         "source_data/conductance_credit_demand"
       ]
@@ -3976,7 +3954,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 486.0,
-      "sha256": "537ac47d19ab8e6448f3295c8510dc8d198fb25658941c6f5640223318426c43",
+      "sha256": "df0a1fcac873cef77971cb1b1b1976347bed6111a0f929833a7378fc0709d85c",
       "source_data_directories": [
         "source_data/conductance_credit_demand"
       ]
@@ -4106,7 +4084,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 478.0,
-      "sha256": "cd8d7ae4c7d29f5ce9a02b9a732b6b51dbfc3b117ab4cc0197cd4152fba1f6e9",
+      "sha256": "2a7f40962f0194972e643e8fdfe95dff9d8bdc7cebfbae33735fa238801f9464",
       "source_data_directories": [
         "source_data/conductance_local_gate"
       ]
@@ -4138,7 +4116,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-          "source_sha256": "911b7bff06b3a537639dc4137d7da72d74406852ff7ff62f4e64f12058c9e326",
+          "source_sha256": "2f4aa43c2bb19292e9219cadca167a6a3589490f5326f63455fa2947bbc6f575",
           "old_provenance_figure": "figN22",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [],
@@ -4166,11 +4144,23 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-          "source_sha256": "911b7bff06b3a537639dc4137d7da72d74406852ff7ff62f4e64f12058c9e326",
+          "source_sha256": "2f4aa43c2bb19292e9219cadca167a6a3589490f5326f63455fa2947bbc6f575",
           "old_provenance_figure": "figN22",
           "old_provenance_entry_ids": [],
-          "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {},
+          "numerical_source_paths": [
+            "drafts/dendritic-local-learning/journal/source_data/additional_figure_controls/paired_contrasts.csv",
+            "drafts/dendritic-local-learning/journal/source_data/additional_figure_controls/physical_placement_summary.csv",
+            "drafts/dendritic-local-learning/journal/source_data/additional_figure_controls/seed_outcomes.csv",
+            "drafts/dendritic-local-learning/journal/source_data/physical_depth_h4_factorial/condition_summary.csv",
+            "drafts/dendritic-local-learning/journal/source_data/physical_depth_h4_factorial/seed_outcomes.csv"
+          ],
+          "explicit_numerical_source_hashes": {
+            "source_data/physical_depth_h4_factorial/condition_summary.csv": "565616a01d0bb8a1856e68b6fee43ed4a878773ea99eecd429739b7ba65d056f",
+            "source_data/physical_depth_h4_factorial/seed_outcomes.csv": "3096b4ee6ebceb96248d962677ffbf4001d63615e1b296e68a40a7f753a66f55",
+            "source_data/additional_figure_controls/physical_placement_summary.csv": "e71352be0fbb241aff746a616298cc7809446c4b2da89ce368368003ac754dd5",
+            "source_data/additional_figure_controls/seed_outcomes.csv": "667ffd5075192abfaf7deae7d09e68fb259996a6e30889469f8037f362d7a42b",
+            "source_data/additional_figure_controls/paired_contrasts.csv": "00c983400897e0a462314f40b946d6ffd905436dc4577c9f2b9c6861d24a4941"
+          },
           "record_type": "native supplement panel",
           "builder": "scripts/build_supplementary_figure_physical_architecture_native.py"
         },
@@ -4194,11 +4184,17 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-          "source_sha256": "911b7bff06b3a537639dc4137d7da72d74406852ff7ff62f4e64f12058c9e326",
+          "source_sha256": "2f4aa43c2bb19292e9219cadca167a6a3589490f5326f63455fa2947bbc6f575",
           "old_provenance_figure": "figN22",
           "old_provenance_entry_ids": [],
-          "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {},
+          "numerical_source_paths": [
+            "drafts/dendritic-local-learning/journal/source_data/task_family_alignment/architecture_effects.csv",
+            "drafts/dendritic-local-learning/journal/source_data/task_family_alignment/seed_outcomes.csv"
+          ],
+          "explicit_numerical_source_hashes": {
+            "source_data/task_family_alignment/architecture_effects.csv": "8fb388c9505f9d646a69db7e283f446a811ca2886fe89bd1a695d2df041550dc",
+            "source_data/task_family_alignment/seed_outcomes.csv": "e24a03ab82a70183ae3d5a3d7ae644b68a67c926fc0bfa39ab48189c6d26f76f"
+          },
           "record_type": "native supplement panel",
           "builder": "scripts/build_supplementary_figure_physical_architecture_native.py"
         },
@@ -4222,11 +4218,19 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-          "source_sha256": "911b7bff06b3a537639dc4137d7da72d74406852ff7ff62f4e64f12058c9e326",
+          "source_sha256": "2f4aa43c2bb19292e9219cadca167a6a3589490f5326f63455fa2947bbc6f575",
           "old_provenance_figure": "figN22",
           "old_provenance_entry_ids": [],
-          "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {},
+          "numerical_source_paths": [
+            "drafts/dendritic-local-learning/journal/source_data/point_dendrite_credit_controls/combined_seed_outcomes.csv",
+            "drafts/dendritic-local-learning/journal/source_data/point_dendrite_credit_controls/condition_summary.csv",
+            "drafts/dendritic-local-learning/journal/source_data/point_dendrite_credit_controls/paired_contrasts.csv"
+          ],
+          "explicit_numerical_source_hashes": {
+            "source_data/point_dendrite_credit_controls/condition_summary.csv": "4e842c5c1a5a9acf06ce5f450eb8da4bc65c0e0578fdc09dbf367396705c158e",
+            "source_data/point_dendrite_credit_controls/paired_contrasts.csv": "b8089da523f2f13f1a834e067ceef1f0a6bf650f65cd378318ce75544cb76605",
+            "source_data/point_dendrite_credit_controls/combined_seed_outcomes.csv": "824a9625d9453d43b632924b2cfdced129737d95573039acecd398878613df3f"
+          },
           "record_type": "native supplement panel",
           "builder": "scripts/build_supplementary_figure_physical_architecture_native.py"
         },
@@ -4250,11 +4254,19 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-          "source_sha256": "911b7bff06b3a537639dc4137d7da72d74406852ff7ff62f4e64f12058c9e326",
+          "source_sha256": "2f4aa43c2bb19292e9219cadca167a6a3589490f5326f63455fa2947bbc6f575",
           "old_provenance_figure": "figN22",
           "old_provenance_entry_ids": [],
-          "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {},
+          "numerical_source_paths": [
+            "drafts/dendritic-local-learning/journal/source_data/point_dendrite_credit_controls/combined_seed_outcomes.csv",
+            "drafts/dendritic-local-learning/journal/source_data/point_dendrite_credit_controls/condition_summary.csv",
+            "drafts/dendritic-local-learning/journal/source_data/point_dendrite_credit_controls/paired_contrasts.csv"
+          ],
+          "explicit_numerical_source_hashes": {
+            "source_data/point_dendrite_credit_controls/condition_summary.csv": "4e842c5c1a5a9acf06ce5f450eb8da4bc65c0e0578fdc09dbf367396705c158e",
+            "source_data/point_dendrite_credit_controls/paired_contrasts.csv": "b8089da523f2f13f1a834e067ceef1f0a6bf650f65cd378318ce75544cb76605",
+            "source_data/point_dendrite_credit_controls/combined_seed_outcomes.csv": "824a9625d9453d43b632924b2cfdced129737d95573039acecd398878613df3f"
+          },
           "record_type": "native supplement panel",
           "builder": "scripts/build_supplementary_figure_physical_architecture_native.py"
         },
@@ -4278,11 +4290,19 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-          "source_sha256": "911b7bff06b3a537639dc4137d7da72d74406852ff7ff62f4e64f12058c9e326",
+          "source_sha256": "2f4aa43c2bb19292e9219cadca167a6a3589490f5326f63455fa2947bbc6f575",
           "old_provenance_figure": "figN22",
           "old_provenance_entry_ids": [],
-          "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {},
+          "numerical_source_paths": [
+            "drafts/dendritic-local-learning/journal/source_data/physical_alignment_dose/combined_seed_outcomes.csv",
+            "drafts/dendritic-local-learning/journal/source_data/physical_alignment_dose/condition_summary.csv",
+            "drafts/dendritic-local-learning/journal/source_data/physical_alignment_dose/paired_contrasts.csv"
+          ],
+          "explicit_numerical_source_hashes": {
+            "source_data/physical_alignment_dose/condition_summary.csv": "4f158992f3a492951741a06e83dc190600df0ca9da21e883884984e6c210dc78",
+            "source_data/physical_alignment_dose/paired_contrasts.csv": "a0458f1c7160a4e380a026ebbeac8609ab07e39da4853540351b59b6ac6b2a32",
+            "source_data/physical_alignment_dose/combined_seed_outcomes.csv": "f1ac65dc5d5ff294e3562636d55092f40b6f26f5e59f98979c339a525a1d032d"
+          },
           "record_type": "native supplement panel",
           "builder": "scripts/build_supplementary_figure_physical_architecture_native.py"
         },
@@ -4306,11 +4326,19 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-          "source_sha256": "911b7bff06b3a537639dc4137d7da72d74406852ff7ff62f4e64f12058c9e326",
+          "source_sha256": "2f4aa43c2bb19292e9219cadca167a6a3589490f5326f63455fa2947bbc6f575",
           "old_provenance_figure": "figN22",
           "old_provenance_entry_ids": [],
-          "numerical_source_paths": [],
-          "explicit_numerical_source_hashes": {},
+          "numerical_source_paths": [
+            "drafts/dendritic-local-learning/journal/source_data/physical_alignment_dose/combined_seed_outcomes.csv",
+            "drafts/dendritic-local-learning/journal/source_data/physical_alignment_dose/condition_summary.csv",
+            "drafts/dendritic-local-learning/journal/source_data/physical_alignment_dose/paired_contrasts.csv"
+          ],
+          "explicit_numerical_source_hashes": {
+            "source_data/physical_alignment_dose/condition_summary.csv": "4f158992f3a492951741a06e83dc190600df0ca9da21e883884984e6c210dc78",
+            "source_data/physical_alignment_dose/paired_contrasts.csv": "a0458f1c7160a4e380a026ebbeac8609ab07e39da4853540351b59b6ac6b2a32",
+            "source_data/physical_alignment_dose/combined_seed_outcomes.csv": "f1ac65dc5d5ff294e3562636d55092f40b6f26f5e59f98979c339a525a1d032d"
+          },
           "record_type": "native supplement panel",
           "builder": "scripts/build_supplementary_figure_physical_architecture_native.py"
         }
@@ -4320,8 +4348,9 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 475.0,
-      "sha256": "5345516c7913c6ab781327ce3332248c46f68c119e57fd7921b122c1e034dabc",
+      "sha256": "9d70455e24242f797ea3c2b31880315c394ed26acc856945ce925a9ae9130df2",
       "source_data_directories": [
+        "source_data/additional_figure_controls",
         "source_data/physical_alignment_dose",
         "source_data/remaining_physical_experiments",
         "source_data/nonlinear_physical_depth_confirmatory",
@@ -4499,7 +4528,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 313.9000244140625,
-      "sha256": "e3692b5bd839ca937a044a464903ac828e8bb92035b3c436242942cab6a94fa1",
+      "sha256": "3982efab0113a7b9901c931026cc4f702267982bfacc2f4200e0d0f4b55e66e9",
       "source_data_directories": [
         "source_data/nonlinear_physical_depth_accessibility",
         "source_data/nonlinear_physical_depth_boundary",
@@ -4641,7 +4670,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 342.4000244140625,
-      "sha256": "38ac66a6d8d9eae13084fac8d699e4d6e3ba80fbdc7e415d6cc7913e1e5c9f39",
+      "sha256": "3ebdd3b8c854fb0f576ea7166d4d878ecb80ee9456e186d6b9d6d36ad4242270",
       "source_data_directories": [
         "source_data/remaining_physical_experiments",
         "source_data/point_dendrite_credit_controls"
@@ -4822,7 +4851,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 412.2500305175781,
-      "sha256": "59fe0bc1117cb677954cae8e7b67e896a1e0609ec1b0d0e40dd8689c6a11db09",
+      "sha256": "0b7f45489a39cd23c72b22b1c28791098e2e4f04c09e11fcfed1f747541bc0ba",
       "source_data_directories": [
         "source_data/figure3",
         "source_data/microns_v661_replication",
@@ -5048,7 +5077,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 447.0500183105469,
-      "sha256": "e4ebbd0b9adebf9067115efbe8a8a1ed5b7eeefa3f4476948a1ae0c4e04b2d8b",
+      "sha256": "2f4db0f6c33a58095dc058293d8aa27625de363cfd04f74fd4f3d77a74ebf480",
       "source_data_directories": [
         "source_data/microns_inhibitory_routes"
       ]
@@ -5192,7 +5221,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 305.1500244140625,
-      "sha256": "165a4375f8d2069840f675fe245306931136fb593182cb321618cb9667533cbe",
+      "sha256": "15794c01cc88419c6c0f5f6812cd1a2006d6f23184975fe8c5282ccb2346ffed",
       "source_data_directories": [
         "source_data/irregular_tree_wavelets"
       ]
@@ -5480,7 +5509,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 455.760009765625,
-      "sha256": "64b31f37fd57528db1046ccb74ea9e7c3d7eaf85017e5a524e4434c8f7c5019e",
+      "sha256": "58733535e2441e503db634e1206dc11949951adf766a36a14d8ceabd426e4e70",
       "source_data_directories": [
         "source_data/review_morphology_uncertainty"
       ]
@@ -5654,7 +5683,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 489.0,
-      "sha256": "60a19f960af972f696ea9402895983b38618566afc535ced4747779d5f6a0c72",
+      "sha256": "b1e1b490ccb2e33206bfdc0584b463effc37cb435e388861894e688d153335a0",
       "source_data_directories": [
         "source_data/figure4",
         "source_data/focal_selectivity_phase1",
@@ -5804,7 +5833,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 398.20001220703125,
-      "sha256": "689de26636a921427d5ead1fd66981a38007d131d72831e744db4075292522d7",
+      "sha256": "674b897b98416715ca7b58b6e3663dede287bc9eec7ba65eb142eee07c2dd6d6",
       "source_data_directories": [
         "source_data/focal_selectivity_active_ensemble",
         "source_data/focal_selectivity_phase1",
@@ -5936,7 +5965,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 386.6000061035156,
-      "sha256": "f3472f8adb8b54e7fbbdcfe0725c377782508634a2d4ee2cbcd9289e82201a81",
+      "sha256": "d6c282d46fab22b8417fbcb06be9b193d8a38d2213d4c26e445868bc16182861",
       "source_data_directories": [
         "source_data/figure5",
         "source_data/measured_alignment_power",
@@ -6187,7 +6216,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 453.6000061035156,
-      "sha256": "dda0f99918645ea91f3e707061ec055753c66703981bdecd0698fdc25ed210e8",
+      "sha256": "91ea4c74cc93e5be41a4dff9e59bbc2f64ed35b45b6c61e7f070bb20783a3ff9",
       "source_data_directories": [
         "source_data/review_response_baselines"
       ]
@@ -7860,7 +7889,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 490.0,
-      "sha256": "d35423beda8817e5040343158950669a4cd8467a688c12f753c6a4fc1c3dfa97",
+      "sha256": "f5fc3bb15f7b3388aa3eb93cf468bbb629ce9e84d89783d846546c9803befbcf",
       "source_data_directories": [
         "source_data/prospective_morphology_selection"
       ]
@@ -8034,7 +8063,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 453.32000732421875,
-      "sha256": "0ed9af65b1f9b40c7d875b0cafc7c82c55edbe601df1850d6cbfad662412901d",
+      "sha256": "e4b88a4885419c279d5533f6f3fdafe8857be5c1b9cb864759ef56083eb61b4e",
       "source_data_directories": [
         "source_data/morphology_finite_horizon",
         "source_data/prospective_morphology_selection"
@@ -8261,7 +8290,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 493.0,
-      "sha256": "7c19094dd309ade6ba9a9b57d24af239955736ce9f5199366a0e7644234e18c2",
+      "sha256": "b51edc922de31050e7e78546fe735309e8ad4e54fe18fe022241ea2ec99558bd",
       "source_data_directories": [
         "source_data/morphology_calibration"
       ]
@@ -8318,11 +8347,9 @@
     ],
     "S4": [
       {
-        "figure": "S6",
+        "kind": "section",
         "label": "fig:si_image_generalization",
-        "panel": "C",
-        "source_panel": "E",
-        "path": "figures/supplementary/curated/image_generalization.pdf"
+        "note": "Current image comparisons are rendered in N4C; historical CIFAR and fallback-only Fashion outcomes remain archived."
       }
     ],
     "S5": [
@@ -9774,6 +9801,13 @@
         "label": "fig:si_image_generalization",
         "panel": "B",
         "source_panel": "D",
+        "path": "figures/supplementary/curated/image_generalization.pdf"
+      },
+      {
+        "figure": "S6",
+        "label": "fig:si_image_generalization",
+        "panel": "C",
+        "source_panel": "E",
         "path": "figures/supplementary/curated/image_generalization.pdf"
       }
     ],

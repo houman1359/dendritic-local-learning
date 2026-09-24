@@ -459,6 +459,8 @@ def load_h4():
     seed = csv("physical_depth_h4_factorial", "seed_outcomes.csv")
     assert len(h4) == 36 and len(seed) == 360 and seed.seed.nunique() == N_SEEDS
     assert (h4.hierarchy == 4).all() and (h4.n_seeds == N_SEEDS).all()
+    additional = csv("additional_figure_controls", "physical_placement_summary.csv")
+    additional_seeds = csv("additional_figure_controls", "seed_outcomes.csv")
     blocks = {}
     for regime in ("aligned", "rewired_tree"):
         m = np.full((5, 4), np.nan)
@@ -476,11 +478,22 @@ def load_h4():
                 m[i, col] = 100.0 * r.mean_test_accuracy
                 lo[i, col] = 100.0 * r.ci_low
                 hi[i, col] = 100.0 * r.ci_high
+        # Both additive placements come from the paired same-seed follow-up.
+        placement = "aligned" if regime == "aligned" else "reversed"
+        rows = pick(additional, hierarchy=4, placement=placement)
+        assert len(rows) == 4 and (rows.n_seeds == N_SEEDS).all()
+        for r in rows.itertuples():
+            z = pick(additional_seeds, study="physical", hierarchy=4,
+                     placement=placement, depth=int(r.depth)).test_accuracy.to_numpy(float)
+            assert len(z) == N_SEEDS
+            np.testing.assert_allclose(z.mean(), r.mean_test_accuracy, rtol=0, atol=ATOL)
+            col = int(r.depth) - 1
+            m[4, col], lo[4, col], hi[4, col] = 100 * np.array(
+                [r.mean_test_accuracy, r.ci_low, r.ci_high])
         blocks[regime] = (m, lo, hi)
     a, r = blocks["aligned"][0], blocks["rewired_tree"][0]
-    assert np.isfinite(a).all() and np.isfinite(r[:4]).all() and np.isnan(r[4]).all(), \
-        "raw additive ran under aligned placement only"
-    assert np.isfinite(a).sum() + np.isfinite(r).sum() == 36
+    assert np.isfinite(a).all() and np.isfinite(r).all()
+    assert np.isfinite(a).sum() + np.isfinite(r).sum() == 40
     return blocks
 
 
@@ -490,7 +503,7 @@ def panel_h4(ax, cv, blocks):
     combined = np.vstack([aligned, np.full((1, 4), np.nan), rev])     # 11 x 4
     finite = combined[np.isfinite(combined)]
     vmin, vmax = float(np.floor(finite.min())), float(np.ceil(finite.max()))
-    assert vmin == 52.0 and vmax == 87.0, (vmin, vmax)
+    assert vmin == 50.0 and vmax == 87.0, (vmin, vmax)
     norm = Normalize(vmin=vmin, vmax=vmax)
     cmap = SEQ_CMAP.copy()
     cmap.set_bad((0, 0, 0, 0))
@@ -507,11 +520,8 @@ def panel_h4(ax, cv, blocks):
                 lum = 0.2126 * rgba[0] + 0.7152 * rgba[1] + 0.0722 * rgba[2]
                 ax.text(col, row + off, f"{v:.0f}", ha="center", va="center",
                         fontsize=PT_BASE, color="white" if lum < 0.48 else INK, zorder=3)
-            # An outline claims a best depth; as in build_main_figure_06.py it
-            # is drawn for the aligned block only -- the reversed block is
-            # flat by design (its largest lead is the 0.8-point D3 blip of
-            # serial BP, asserted below) and marking it would contradict the
-            # result that reversing sensor order removes the depth benefit.
+            # Retain the aligned-depth outline convention. Reversed placement
+            # has no shunting depth advantage; its additive row can decline.
             if block == "reversed" or len(cols) < 2:
                 continue
             order = cols[np.argsort(m[row, cols])[::-1]]
@@ -534,7 +544,7 @@ def panel_h4(ax, cv, blocks):
     # the unmarked reversed block: the largest best-over-runner-up lead of
     # any of its rows is serial BP D3 over D1, 0.8 points (the caption's number)
     leads = []
-    for row in range(4):                      # the raw-additive row was not run
+    for row in range(4):  # the four original shunting/grouped-point arms
         order = np.argsort(rev[row])[::-1]
         leads.append((float(rev[row, order[0]] - rev[row, order[1]]), row,
                       int(order[0]) + 1, int(order[1]) + 1))
@@ -542,7 +552,6 @@ def panel_h4(ax, cv, blocks):
     assert (row, best, runner) == (0, 3, 1) and abs(lead - 0.8) < 0.05, leads
     print(f"[C] reversed block unmarked; largest lead {lead:.2f} points "
           f"({ARMS[H4_ROWS[row][0]]['label']} D{best} over D{runner})")
-    ax.text(1.5, 10.0, "not run", ha="center", va="center", fontsize=PT_BASE, color=MUTE, zorder=3)
     # block titles: the aligned block's above its first row, the reversed
     # block's in the gap row, both left-aligned on the grid
     ax.text(-0.5, -1.05, "aligned sensors", ha="left", va="center", fontsize=PT_BASE,

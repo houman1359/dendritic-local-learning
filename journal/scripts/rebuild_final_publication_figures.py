@@ -158,8 +158,7 @@ def main() -> None:
         run_script("build_supplementary_figure_s04_native.py",
                    "--output", "figures/supplementary/figure_cifar_ladders_native.pdf",
                    "--confirmatory-analysis-dir", "source_data/cifar10_additive_feedback_ladder_confirmatory",
-                   "--shunting-analysis-dir", "source_data/cifar10_shunting_feedback_ladder_confirmatory",
-                   "--allow-convergence-flags")
+                   "--shunting-analysis-dir", "source_data/cifar10_shunting_stopping_extension")
         run_script("supplement_consolidation/refresh_native_assets.py")
         run_script("supplement_consolidation/build.py")
         run_script("review_completion/checkpoint_figure.py")

@@ -116,18 +116,12 @@
     "old_label": "fig:regular_regimes",
     "original_asset": "figures/supplementary/figure_S04_panels_A-E.pdf",
     "original_sha256": "511ec1ecb37300e9490fd43e5bd63596072e3092eb20d092fbee6cfb024d6969",
-    "primary_destination": "S6",
-    "panels": {
-      "E": {
-        "figure": "S6",
-        "panel": "C",
-        "path": "figures/supplementary/curated/image_generalization.pdf"
-      }
-    },
+    "primary_destination": "fig:si_image_generalization",
+    "panels": {},
     "omitted_panel_status": {
       "A": {
         "content": "Accuracy as nominal dendritic depth increases across \\([9]\\), \\([3,3]\\), \\([3,3,3]\\) and \\([3,3,3,3]\\) trees. This screen changes terminal, compartment and parameter counts with stage count and therefore does not isolate depth at fixed resources. Solid lines are local learning and faint dashed lines are matched backpropagation (BP); colour denotes shunting or normalized-additive architecture. Accuracy generally declines with depth in this screen; the resource-matched, task-aligned experiments of Supplementary Fig.~S31 ask the narrower question this boundary motivates.",
-        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "reason": "Current CIFAR and four-rule Fashion comparisons are rendered in N4C and displayed in S6; the earlier cohorts remain archived.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/condition_summary.csv",
           "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv",
@@ -137,7 +131,7 @@
       },
       "B": {
         "content": "Accuracy after adding zero-mean Gaussian noise with standard deviation $\\sigma$ to the broadcast teaching signal. This stress test is an empirical precursor of the admitted-noise term of the credit-operator theory, not a quantitative validation of it: it does not separately estimate the route operator, signal covariance, or forward-state effects.",
-        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "reason": "Current CIFAR and four-rule Fashion comparisons are rendered in N4C and displayed in S6; the earlier cohorts remain archived.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/condition_summary.csv",
           "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv",
@@ -154,6 +148,11 @@
         "content": "Twenty-seed raw-additive CIFAR feedback ladder.",
         "reason": "Current CIFAR ladders are drawn together from the complete source tables in N4C and displayed in S6A,B; historical inputs remain archived.",
         "numbers_at": "source_data/cifar10_additive_feedback_ladder_confirmatory/"
+      },
+      "E": {
+        "content": "Historical fallback-only Fashion-MNIST comparison.",
+        "reason": "Replaced in the display by the fresh four-rule strict-scalar cohort in N4C E; original numerical outcomes remain available.",
+        "numbers_at": "source_data/fashion_feedback_ladder/"
       }
     }
   },
@@ -3104,7 +3103,7 @@
   "N22": {
     "old_label": "fig:si_physical_architecture",
     "original_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-    "original_sha256": "911b7bff06b3a537639dc4137d7da72d74406852ff7ff62f4e64f12058c9e326",
+    "original_sha256": "2f4aa43c2bb19292e9219cadca167a6a3589490f5326f63455fa2947bbc6f575",
     "primary_destination": "S24",
     "panels": {
       "A": {
@@ -3278,7 +3277,7 @@
   "N4C": {
     "old_label": "fig:si_cifar_ladders",
     "original_asset": "figures/supplementary/figure_cifar_ladders_native.pdf",
-    "original_sha256": "f24e2fd8c5f32955ddd58e15fbc91e4cc73dcb75ab727f48e4855180fc31ff3c",
+    "original_sha256": "c6105a3cae32361304bb0ecdca18f290fa501730be6a0501794f4385d81eab03",
     "primary_destination": "S6",
     "panels": {
       "C": {
@@ -3289,6 +3288,11 @@
       "D": {
         "figure": "S6",
         "panel": "B",
+        "path": "figures/supplementary/curated/image_generalization.pdf"
+      },
+      "E": {
+        "figure": "S6",
+        "panel": "C",
         "path": "figures/supplementary/curated/image_generalization.pdf"
       }
     },
@@ -3302,11 +3306,6 @@
         "content": "Historical regular-tree noise comparison.",
         "reason": "Unchanged supporting panel; only the fresh CIFAR panels C,D of this sheet are selected. Historical artwork remains separately registered.",
         "numbers_at": "source_data/regular_tree_regimes/"
-      },
-      "E": {
-        "content": "Historical Fashion-MNIST feedback ladder.",
-        "reason": "Unchanged supporting panel; only the fresh CIFAR panels C,D of this sheet are selected. Historical artwork remains separately registered.",
-        "numbers_at": "source_data/fashion_feedback_ladder/"
       }
     }
   },

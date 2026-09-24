@@ -1,0 +1,102 @@
+{
+    "definition": "dataset-content-fingerprint-v1",
+    "splits": {
+        "test": {
+            "definition": "dataset-content-fingerprint-v1",
+            "dataset_type": "torch.utils.data.dataset.TensorDataset",
+            "length": 10000,
+            "fields": {
+                "tensors": {
+                    "kind": "sequence",
+                    "items": [
+                        {
+                            "kind": "tensor",
+                            "dtype": "torch.float32",
+                            "shape": [
+                                10000,
+                                784
+                            ],
+                            "numel": 7840000,
+                            "sha256": "c139219da23968f0f5c4c708c00155a381ca34c9309f96936f0ccc318bcd8595"
+                        },
+                        {
+                            "kind": "tensor",
+                            "dtype": "torch.int64",
+                            "shape": [
+                                10000
+                            ],
+                            "numel": 10000,
+                            "sha256": "b1c916c9e23ae2e1f02cba6b2c44b857b5a927bf81d5f4d29c6e7fec9ee931c3"
+                        }
+                    ]
+                }
+            },
+            "content_sha256": "e193d6d9b53126490dbfd0eacf7c0ee00256d8c09e2116786fbc102608cbe94f"
+        },
+        "train": {
+            "definition": "dataset-content-fingerprint-v1",
+            "dataset_type": "torch.utils.data.dataset.TensorDataset",
+            "length": 48000,
+            "fields": {
+                "tensors": {
+                    "kind": "sequence",
+                    "items": [
+                        {
+                            "kind": "tensor",
+                            "dtype": "torch.float32",
+                            "shape": [
+                                48000,
+                                784
+                            ],
+                            "numel": 37632000,
+                            "sha256": "b7c16d98c3b3651e210bdb4a4a9efb4e95bfccddd7bb51ba51e9d3250665265c"
+                        },
+                        {
+                            "kind": "tensor",
+                            "dtype": "torch.int64",
+                            "shape": [
+                                48000
+                            ],
+                            "numel": 48000,
+                            "sha256": "bf9b23bf4eb096116cf7e2f0b2643f0916dab87994c8f8dd0d50c174f15177a9"
+                        }
+                    ]
+                }
+            },
+            "content_sha256": "ef11e19f4c6de2109a5323224f7faae30ce69ae31bf0aab7ca3e89cf504fdd77"
+        },
+        "valid": {
+            "definition": "dataset-content-fingerprint-v1",
+            "dataset_type": "torch.utils.data.dataset.TensorDataset",
+            "length": 12000,
+            "fields": {
+                "tensors": {
+                    "kind": "sequence",
+                    "items": [
+                        {
+                            "kind": "tensor",
+                            "dtype": "torch.float32",
+                            "shape": [
+                                12000,
+                                784
+                            ],
+                            "numel": 9408000,
+                            "sha256": "b021dbb3c0a04b06d7d5acec335570877926971097ce746bf9adf4e17d7ac772"
+                        },
+                        {
+                            "kind": "tensor",
+                            "dtype": "torch.int64",
+                            "shape": [
+                                12000
+                            ],
+                            "numel": 12000,
+                            "sha256": "2eafe436dab08d93aac32762abd36739cb8055f5473839d9460e00cc869906f6"
+                        }
+                    ]
+                }
+            },
+            "content_sha256": "1319740173ad2652705d4fed9ea190375a9a7d1d63ce4bff3a361c6dd045809f"
+        }
+    },
+    "combined_sha256": "2d15d414df9ae0c7d42cca3f33298685babcf9ed3b4fbc6e6d0a174de852fee1"
+}

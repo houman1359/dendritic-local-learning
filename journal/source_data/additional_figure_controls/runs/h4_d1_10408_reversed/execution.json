@@ -1,0 +1,52 @@
+{
+  "status": "complete",
+  "started_unix": 1790257086.127981,
+  "study": "controls",
+  "record": {
+    "hierarchy": 4,
+    "depth": 1,
+    "seed": 10408,
+    "placement": "reversed",
+    "key": "h4_d1_10408_reversed",
+    "config": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/configs/physical/h4_d1_10408_reversed.yaml",
+    "config_sha256": "4b6b7ac7742da45b9e2cedeae587a64f97eddfbe41650bfe8d3fca4daefbea4f",
+    "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d1_10408_reversed",
+    "source": {
+      "path": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/h4-a99c3a7",
+      "commit": "a99c3a777f99913e13dfe673a3f3a28bfe3566af",
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "original": {
+      "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/h4-a99c3a7/physical_depth_h4_runs/journal_h4_aligned_serial_additive_bp_20260819213854/configs/unified_config_8.yaml",
+      "config_sha256": "a89873b5463fd9da181a651895cc5778f714552e1f49f166e3c3407b93c721d2",
+      "reference_test_accuracy": 0.4804999828338623,
+      "reversal_recipe": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/configs/physical_depth_h4_factorial/h4_rewired_tree_serial_shunting_bp.yaml",
+      "reversal_recipe_sha256": "c0f2c363fefd6eb49ab4cceab18d9b42d2213b9bcdb5479856cf9000a2df415b"
+    },
+    "prior_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d1_10408_reversed"
+  },
+  "config_sha256": "c413b6d2e0e4c36ecbe84278f5d99507cca3e6e87087ff2c7f1b5fe0a98a454b",
+  "ancestor_config_sha256": "4b6b7ac7742da45b9e2cedeae587a64f97eddfbe41650bfe8d3fca4daefbea4f",
+  "source": {
+    "path": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/h4-a99c3a7",
+    "commit": "a99c3a777f99913e13dfe673a3f3a28bfe3566af",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "original_config_sha256": "4b6b7ac7742da45b9e2cedeae587a64f97eddfbe41650bfe8d3fca4daefbea4f",
+  "executed_config_sha256": "c413b6d2e0e4c36ecbe84278f5d99507cca3e6e87087ff2c7f1b5fe0a98a454b",
+  "smoke": false,
+  "gpu": "NVIDIA H200",
+  "torch": "2.9.1+cu128",
+  "slurm_job_id": "48162837",
+  "array_task_id": "4",
+  "host": "holygpu8a03601",
+  "resume_checkpoint": null,
+  "resume_sha256": null,
+  "cap": 180,
+  "exit_code": 0,
+  "epochs": 126,
+  "best_epoch": 96,
+  "ordinary_stopping_reached": true,
+  "reached_cap": false,
+  "finished_unix": 1790257110.4243248
+}

@@ -1,0 +1,20 @@
+{
+  "validator_amendment": "20260923_hierarchy_specific_slots",
+  "key": "shunting_22604_exact",
+  "original_config_sha256": "1b17bcc39bb876dbf70f0383d3a3926accb5ec9838b8f844939f70fe64ef7e5e",
+  "executed_config_sha256": "1b17bcc39bb876dbf70f0383d3a3926accb5ec9838b8f844939f70fe64ef7e5e",
+  "source": {
+    "path": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260827/runtime/dendritic-modeling-cifar-e516c7",
+    "commit": "e516c7fec3169253ff8c14bc5f4ab1325469e4f5",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "smoke": false,
+  "slurm_job_id": "48033525",
+  "array_job_id": "47975585",
+  "array_task_id": "4",
+  "node": "holygpu8a03601",
+  "started_unix": 1790200076.4785798,
+  "gpu": "NVIDIA H200, 610.57.04",
+  "exit_code": 0,
+  "finished_unix": 1790200316.8245838
+}

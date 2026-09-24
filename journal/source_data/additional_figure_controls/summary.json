@@ -1,0 +1,62 @@
+{
+  "integrity_valid": true,
+  "manifest_sha256": "4398c529c1b043d3334d3fc505a4d87ce7bf4a11919b3ba9b6dbe45bb8f8e88a",
+  "n_runs": 220,
+  "fashion_directional_criterion": true,
+  "primary_contrasts": [
+    {
+      "contrast": "shunting:neuron_minus_strict_scalar",
+      "family": "fashion",
+      "primary": true,
+      "n": 10,
+      "mean_pp": 5.822999477386475,
+      "ci_low_pp": 5.5699992179870605,
+      "ci_high_pp": 6.087999954819679,
+      "positive_seeds": 10,
+      "negative_seeds": 0,
+      "p_exact": 0.001953125,
+      "p_holm": 0.00390625
+    },
+    {
+      "contrast": "additive:neuron_minus_strict_scalar",
+      "family": "fashion",
+      "primary": true,
+      "n": 10,
+      "mean_pp": 5.522998571395874,
+      "ci_low_pp": 4.968972876667976,
+      "ci_high_pp": 6.11599862575531,
+      "positive_seeds": 10,
+      "negative_seeds": 0,
+      "p_exact": 0.001953125,
+      "p_holm": 0.00390625
+    },
+    {
+      "contrast": "h3:depth_by_placement",
+      "family": "physical",
+      "primary": true,
+      "n": 10,
+      "mean_pp": -2.6480013132095337,
+      "ci_low_pp": -7.634026378393173,
+      "ci_high_pp": 3.17507286369801,
+      "positive_seeds": 4,
+      "negative_seeds": 6,
+      "p_exact": 0.376953125,
+      "p_holm": 0.376953125
+    },
+    {
+      "contrast": "h4:depth_by_placement",
+      "family": "physical",
+      "primary": true,
+      "n": 10,
+      "mean_pp": 8.994998335838318,
+      "ci_low_pp": 5.664972715079784,
+      "ci_high_pp": 12.575024880468847,
+      "positive_seeds": 10,
+      "negative_seeds": 0,
+      "p_exact": 0.001953125,
+      "p_holm": 0.00390625
+    }
+  ],
+  "budget_contact_count": 91,
+  "interpretation": "Inherited finite training budgets; inspect diagnostics before manuscript integration."
+}

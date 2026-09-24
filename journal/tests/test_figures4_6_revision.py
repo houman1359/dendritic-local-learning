@@ -117,10 +117,14 @@ def test_figure4_noise_panel_exports_both_rate_policies(displays):
 def test_figure6_exports_all_drawn_epochs_and_stopping_markers(displays):
     rows, _ = displays[6]
     assert rows.record.notna().all()
+    folder = ROOT / 'source_data/physical_depth_stopping_extension'
+    expected = pd.read_csv(folder / 'condition_trajectory_summary.csv')
+    epochs = set(expected.epoch)
+    assert set(range(1, 601)) <= epochs
     for panel in ('E', 'F'):
         curves = rows[rows.panel.eq(panel) & rows.record.eq('curve summary')]
-        assert len(curves) == 6 * 600
-        assert set(curves.epoch) == set(range(1, 601))
+        assert len(curves) == 6 * len(epochs)
+        assert set(curves.epoch) == epochs
         assert not curves.duplicated(['arm', 'depth', 'metric', 'epoch']).any()
         scale = 100 if panel == 'E' else 1
         np.testing.assert_array_equal(curves.plotted_mean, scale * curves['mean'])
@@ -128,11 +132,14 @@ def test_figure6_exports_all_drawn_epochs_and_stopping_markers(displays):
         np.testing.assert_array_equal(curves.plotted_ci95_high, scale * curves.ci95_high)
     for panel in ('G', 'H'):
         curve = rows[rows.panel.eq(panel) & rows.record.eq('paired curve summary')]
-        assert len(curve) == 600
-        assert set(curve.epoch) == set(range(1, 601))
+        assert len(curve) == len(epochs)
+        assert set(curve.epoch) == epochs
     stops = rows[rows.record.eq('stopping marker')]
-    assert len(stops) == 8 and stops.seed.nunique() == 8
-    assert stops.epoch.min() == 103 and stops.epoch.max() == 590
+    expected_stops = pd.read_csv(folder / 'stopping_by_seed.csv')
+    shallow = expected_stops[expected_stops.depth.eq(1)]
+    assert len(stops) == 10 and stops.seed.nunique() == 10
+    assert set(zip(stops.seed, stops.epoch)) == set(zip(shallow.seed, shallow.epochs_run))
+    assert max(epochs) == expected_stops.epochs_run.max()
 
 
 def test_figure6_moves_generator_to_text_and_limits_the_loss_claim(displays):
@@ -149,23 +156,20 @@ def test_figure6_moves_generator_to_text_and_limits_the_loss_claim(displays):
     assert r'\max\{b_{\rm E}+y\Delta+\epsilon_{\rm E},10^{-4}\}' in source
     assert r'$\Delta=0.80$ and $\sigma_\ell=0.25$' in source
     assert '66,178 trainable parameters and 14,336 active synapses' in source
-    # design pass 2026-09-14: data panels carry no titles; the loss claim is
-    # limited by the sign key drawn on H (`shared soma ahead` at the top of a
-    # loss ordinate, `exact path ahead` at the bottom) and by the two marked
-    # values, not by a title
-    titles = [ax.get_title() for ax in canvas.fig.axes]
-    assert 'Cross-entropy ordering does not flip' not in titles
-    assert not any('Cross-entropy' in title for title in titles)
-    # review pass 2026-09-23: the sign key moved from G and H into the
-    # legend; the two marked values stay on H
-    assert not any(text in ('exact path ahead', 'shared soma ahead') for text in texts)
+    assert not any('Cross-entropy' in ax.get_title() for ax in canvas.fig.axes)
     assert ('positive accuracy and negative cross-entropy differences favour '
             'exact paths') in source
-    assert any(text == '−0.073 nats' for text in texts)
-    assert any(text == '−0.021 nats' for text in texts)
-    loss = rows[rows.panel.eq('H') & rows.record.eq('paired curve summary')]
-    assert (loss[loss.epoch.between(180, 600)]['mean'] < 0).all()
-    assert float(loss[loss.epoch.eq(34)]['mean'].iloc[0]) > 0
+    assert 'All sixty extended fits reached ordinary validation early stopping.' in source
+    # The full stopping extension replaces the obsolete 600-epoch endpoints.
+    # Compare the plotted contrast with the released paired-seed analysis.
+    expected = pd.read_csv(ROOT / 'source_data/physical_depth_stopping_extension/paired_trajectory_summary.csv',
+                           float_precision='round_trip')
+    loss = rows[rows.panel.eq('H') & rows.record.eq('paired curve summary')].sort_values('epoch')
+    expected = expected[expected.metric.eq('test_cross_entropy')].sort_values('epoch')
+    np.testing.assert_array_equal(loss.epoch, expected.epoch)
+    for column in ['mean', 'ci95_low', 'ci95_high', 'n_seeds']:
+        np.testing.assert_array_equal(loss[column], expected[column])
+    assert loss.epoch.max() > 6000
 
 
 def test_oracle_support_drawing_excludes_proximal_and_soma():

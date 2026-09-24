@@ -1,0 +1,52 @@
+{
+  "started_unix": 1790210870.2636423,
+  "index": 0,
+  "record": {
+    "index": 0,
+    "config_index": 0,
+    "seed": 10200,
+    "arm": "broadcast_autograd_bp_recipe",
+    "depth": 3,
+    "config": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/physical_extension/configs/condition_00.yaml",
+    "config_sha256": "589f17b1df853fd2b1b7159616eed1a9d480f377fd796421b6bef3aee184f447",
+    "result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/physical_extension/results/condition_00",
+    "original_config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/physical_depth_budget/extension_configs/condition_00.yaml",
+    "original_config_sha256": "4e9c50a88547f2df734117e924368b38ef0cdaa0d0d6f3509099cdd32b9e0533",
+    "original_results": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/physical_depth_budget/extension_runs/condition_00/credit_depth_budget_00_20260906_091440",
+    "original_device": "cuda"
+  },
+  "smoke": false,
+  "runtime_commit": "a99c3a777f99913e13dfe673a3f3a28bfe3566af",
+  "config_sha256": "589f17b1df853fd2b1b7159616eed1a9d480f377fd796421b6bef3aee184f447",
+  "protocol_sha256": "3663a2a17007ec9679e4678f77aa7d3bfd4d82fae12bbc4c5ea7ce87ea5c86ce",
+  "gpu": "NVIDIA H200",
+  "torch": "2.9.1+cu128",
+  "slurm_job_id": "48063998",
+  "array_task_id": "0",
+  "host": "holygpu8a05303",
+  "status": "complete",
+  "epochs": 3810,
+  "best_epoch": 3780,
+  "patience_stopped": true,
+  "reached_cap": false,
+  "prefix_epochs": 600,
+  "max_abs_validation_replay_drift": 0.005228388905525211,
+  "final_metrics": {
+    "accuracy": {
+      "train": 0.9998999834060669,
+      "valid": 0.9987999796867371,
+      "test": 0.998199999332428
+    },
+    "auc": {
+      "train": 0.9999995231628418,
+      "valid": 0.9998646378517151,
+      "test": 0.9999645352363586
+    },
+    "categorical_loglikelihood": {
+      "train": -0.01991228200495243,
+      "valid": -0.023996368050575256,
+      "test": -0.02387196011841297
+    }
+  },
+  "finished_unix": 1790212104.3914068
+}

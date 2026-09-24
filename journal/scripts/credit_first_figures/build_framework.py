@@ -376,16 +376,16 @@ def cohort_contrasts(paired, seed_diffs):
                 seed_pp=[100 * v for v in fan.to_numpy()],
                 source_table="source_data/mnist_between_within_factorial/"
                              "paired_contrasts.csv", source_contrast=key))
-    fashion = pd.read_csv(SOURCE / "fashion_feedback_ladder/paired_contrasts.csv",
+    fashion = pd.read_csv(SOURCE / "fashion_strict_scalar_control/paired_contrasts.csv",
                           float_precision="round_trip")
-    fs = pd.read_csv(SOURCE / "fashion_feedback_ladder/seed_outcomes.csv",
+    fs = pd.read_csv(SOURCE / "fashion_strict_scalar_control/seed_outcomes.csv",
                      float_precision="round_trip")
     for architecture in ARCHITECTURES:
         piv = fs[fs.architecture.eq(architecture)].pivot(
             index="seed", columns="feedback", values="test_accuracy")
         for kind, key, pair in (
-                ("identity", "neuron indexed - scalar fallback",
-                 ("neuron indexed", "scalar fallback")),
+                ("identity", "neuron indexed - strict scalar",
+                 ("neuron indexed", "strict scalar")),
                 ("exact", "exact path - neuron indexed",
                  ("exact path", "neuron indexed"))):
             r = fashion[fashion.architecture.eq(architecture)
@@ -395,17 +395,18 @@ def cohort_contrasts(paired, seed_diffs):
             assert abs(fan.mean() - r.mean_difference) < 1e-9
             rows.append(dict(
                 cohort="fashion", task="Fashion-MNIST",
-                protocol="matched-width scalar fallback",
+                protocol="fresh strict scalar control",
                 architecture=architecture, kind=kind,
                 mean_pp=100 * r.mean_difference, low_pp=100 * r.ci95_low,
                 high_pp=100 * r.ci95_high, n_seeds=int(r.n_seeds),
                 positive_seeds=int(r.positive_seeds),
                 seed_ids=[int(seed) for seed in fan.index],
                 seed_pp=[100 * v for v in fan.to_numpy()],
-                source_table="source_data/fashion_feedback_ladder/"
+                source_table="source_data/fashion_strict_scalar_control/"
                              "paired_contrasts.csv", source_contrast=key))
     for architecture in ARCHITECTURES:
-        folder = SOURCE / f"cifar10_{architecture}_feedback_ladder_confirmatory"
+        from cifar_display_validation import cifar_source_folder
+        folder = cifar_source_folder(SOURCE, architecture)
         cifar, cifar_pairs, _ = read_cifar_ladder(architecture, allow_convergence_flags=(architecture == "shunting"))
         for kind, key in (("identity", "neuron specific minus strict scalar"),
                           ("exact", "exact path minus neuron specific")):
@@ -436,11 +437,12 @@ def read_cifar_ladder(architecture, *, allow_convergence_flags=False):
     """
     if architecture not in ARCHITECTURES:
         raise ValueError(f"Unknown CIFAR architecture: {architecture}")
-    folder = SOURCE / f"cifar10_{architecture}_feedback_ladder_confirmatory"
+    from cifar_display_validation import cifar_source_folder, validate_protocol_scope
+    folder = cifar_source_folder(SOURCE, architecture)
     summary = json.loads((folder / "summary.json").read_text())
     audit = summary["audit"]
-    if not (summary.get("contract_frozen_before_confirmatory_outcomes") is True
-            and audit.get("integrity_valid") is True
+    validate_protocol_scope(summary)
+    if not (audit.get("integrity_valid") is True
             and audit.get("n_expected") == audit.get("n_results_complete") == 80):
         raise ValueError(f"Unvalidated CIFAR cohort: {architecture}")
     outcomes = pd.read_csv(folder / "seed_outcomes.csv", float_precision="round_trip")
@@ -469,6 +471,7 @@ def read_cifar_ladder(architecture, *, allow_convergence_flags=False):
 
 def read_bp_equivalence():
     """CIFAR exact-minus-BP estimates and prespecified TOST results, both cores."""
+    from cifar_display_validation import cifar_source_folder
     rows = []
     for architecture in ARCHITECTURES:
         cifar, _, summary = read_cifar_ladder(architecture, allow_convergence_flags=(architecture == "shunting"))
@@ -481,7 +484,7 @@ def read_bp_equivalence():
             margin_pp=100 * eq["margin"], p_tost=eq["p_tost"],
             equivalent=bool(eq["equivalent"]),
             audit_passes=bool(summary["decision"]["audit_passes"]),
-            source_table=f"source_data/cifar10_{architecture}_feedback_ladder_confirmatory/paired_contrasts.csv"))
+            source_table=f"source_data/{cifar_source_folder(SOURCE, architecture).name}/paired_contrasts.csv"))
     return rows
 
 
@@ -1011,8 +1014,6 @@ def cohort_forest(canvas, ax, cohorts, kind, *, value_label, xlim, xticks,
     """One half of the cohort comparison, through figure_canvas.forest()."""
     rows, extras = [], []
     for cohort, label in COHORT_ROWS:
-        if cohort == "cifar10":
-            label += "†"
         sub = cohorts[cohorts.cohort.eq(cohort) & cohorts.kind.eq(kind)]
         shunt = sub[sub.architecture.eq("shunting")]
         add = sub[sub.architecture.eq("additive")]
@@ -1333,8 +1334,8 @@ def write_curated(conditions, seeds, paired, within, cohorts, equivalence,
                              "figure_01_input_digit.json"))
     for row in rows:
         if row.get("cohort") == "cifar10" and row.get("architecture") == "shunting":
-            row["inference_status"] = "fixed-budget descriptive; convergence gate failed"
-            row["convergence_flag_seed"] = 22008
+            row["inference_status"] = "post-review stopping extension; original seeds reused"
+            row["convergence_flag_seed"] = None
     frame = pd.DataFrame(rows, columns=[*CURATED_COLUMNS, "inference_status", "convergence_flag_seed",
                                         "pixel_row", "pixel_col"])
     assert set(frame.panel) == {"A", "C", "D", "E", "F", "G"}
@@ -1488,15 +1489,15 @@ def main():
             ("additive", "mnist_fresh", "identity", 7.456),
             ("shunting", "mnist_dfa", "identity", 11.033),
             ("additive", "mnist_dfa", "identity", 10.797),
-            ("shunting", "fashion", "identity", 4.463),
-            ("additive", "fashion", "identity", 3.781),
+            ("shunting", "fashion", "identity", 5.823),
+            ("additive", "fashion", "identity", 5.523),
             ("additive", "cifar10", "identity", 16.393),
             ("shunting", "mnist_fresh", "exact", 0.010),
             ("additive", "mnist_fresh", "exact", 0.182),
             ("shunting", "mnist_dfa", "exact", 0.028),
             ("additive", "mnist_dfa", "exact", 0.087),
-            ("shunting", "fashion", "exact", -0.107),
-            ("additive", "fashion", "exact", 0.132),
+            ("shunting", "fashion", "exact", -0.058),
+            ("additive", "fashion", "exact", 0.236),
             ("additive", "cifar10", "exact", -0.859)):
         row = cohorts[cohorts.architecture.eq(arch) & cohorts.cohort.eq(cohort)
                       & cohorts.kind.eq(kind)].iloc[0]
@@ -1552,12 +1553,12 @@ def main():
                 "delivery_coordinate_capture.csv",
                 "delivery_coordinate_capture_summary.csv"]],
              *[SOURCE / f"{study}/{name}"
-               for study in ("mnist_between_within_factorial", "fashion_feedback_ladder",
+               for study in ("mnist_between_within_factorial", "fashion_strict_scalar_control",
                              "cifar10_additive_feedback_ladder_confirmatory",
-                             "cifar10_shunting_feedback_ladder_confirmatory")
+                             "cifar10_shunting_stopping_extension")
                for name in ("paired_contrasts.csv", "seed_outcomes.csv")],
              SOURCE / "cifar10_additive_feedback_ladder_confirmatory/summary.json",
-             SOURCE / "cifar10_shunting_feedback_ladder_confirmatory/summary.json",
+             SOURCE / "cifar10_shunting_stopping_extension/summary.json",
              *[SOURCE / "image_ladder_controls" / name for name in
                ["protocol.json", "selection.json", "projected_k1/protocol.json",
                 "projected_k1/selection.json"]]]
@@ -1583,11 +1584,11 @@ def main():
         "E": "Per neuron minus each cohort's scalar baseline (pp), means with paired 95% "
              "seed-bootstrap intervals (Student-t for CIFAR) in four task/protocol rows: "
              "fresh MNIST (10 seeds), MNIST DFA (15), Fashion-MNIST (10), "
-             "flattened CIFAR-10 (20 per architecture). Shunting is descriptive after a failed convergence gate; all seeds retained. Architecture recipes differ.",
+             "flattened CIFAR-10 (20 per architecture). Shunting uses the post-review same-seed stopping extension; all seeds retained. Architecture recipes differ.",
         "F": "Exact path minus per neuron (pp) in the same rows; band, the "
              "prespecified +-1 pp equivalence margin against backpropagation; "
              "notes, the CIFAR exact-minus-backprop contrast with its TOST "
-             "result and the fresh-cohort within-tree contrasts. Shunting TOST is nominal only: the convergence gate failed.",
+             "result and the fresh-cohort within-tree contrasts. Shunting uses the post-review stopping extension, not a fresh confirmatory cohort.",
         "G": f"Mean {CAPTURE_COORDINATE}-error capture of D's exact-path "
              "fields by C's dictionaries at K = 1 and K = 3; fresh cohort, 10 "
              "seeds per architecture, trained (filled) and initial (open) "

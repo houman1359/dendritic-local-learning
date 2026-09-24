@@ -1,0 +1,6 @@
+figure,panel,record_type,series,x_label,x,y,ci_low,ci_high,n,inferential_unit,interval_type,endpoint,source_table
+S2,A,source_index,,,,,,,,,,,source_data/figure2/feedback_accuracy_runs.csv
+S2,B,source_index,,,,,,,,,,,source_data/figure2/feedback_accuracy_runs.csv
+S2,C,source_index,,,,,,,,,,,source_data/figure2/backprop_summary.csv
+S2,C,source_index,,,,,,,,,,,source_data/figure2/exact_transport_and_backprop_runs.csv
+S2,C,source_index,,,,,,,,,,,source_data/figure2/exact_transport_factorial_summary.csv

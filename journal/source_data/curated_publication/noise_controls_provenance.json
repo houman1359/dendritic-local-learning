@@ -1,0 +1,206 @@
+{
+  "protocol": {
+    "created_utc": "2026-09-21T03:08:15.552732+00:00",
+    "scope": "Internally specified post-review sensitivity; new paired seeds, inherited rates; not externally preregistered",
+    "seeds": [
+      2026092100,
+      2026092101,
+      2026092102,
+      2026092103,
+      2026092104,
+      2026092105,
+      2026092106,
+      2026092107,
+      2026092108,
+      2026092109,
+      2026092110,
+      2026092111,
+      2026092112,
+      2026092113,
+      2026092114,
+      2026092115,
+      2026092116,
+      2026092117,
+      2026092118,
+      2026092119
+    ],
+    "tasks": [
+      "matching",
+      "quartet"
+    ],
+    "records": [
+      {
+        "noise": "fixed_absolute",
+        "rule": "exact",
+        "rate": 0.003,
+        "selected_rate": true,
+        "common_rate": true
+      },
+      {
+        "noise": "fixed_absolute",
+        "rule": "unit_broadcast",
+        "rate": 0.003,
+        "selected_rate": true,
+        "common_rate": true
+      },
+      {
+        "noise": "fixed_absolute",
+        "rule": "calibrated_broadcast",
+        "rate": 0.003,
+        "selected_rate": false,
+        "common_rate": true
+      },
+      {
+        "noise": "fixed_absolute",
+        "rule": "calibrated_broadcast",
+        "rate": 0.01,
+        "selected_rate": true,
+        "common_rate": false
+      },
+      {
+        "noise": "fixed_absolute",
+        "rule": "sign_broadcast",
+        "rate": 0.003,
+        "selected_rate": false,
+        "common_rate": true
+      },
+      {
+        "noise": "fixed_absolute",
+        "rule": "sign_broadcast",
+        "rate": 0.01,
+        "selected_rate": true,
+        "common_rate": false
+      },
+      {
+        "noise": "noise_free",
+        "rule": "exact",
+        "rate": 0.003,
+        "selected_rate": true,
+        "common_rate": true
+      },
+      {
+        "noise": "noise_free",
+        "rule": "unit_broadcast",
+        "rate": 0.003,
+        "selected_rate": true,
+        "common_rate": true
+      },
+      {
+        "noise": "noise_free",
+        "rule": "calibrated_broadcast",
+        "rate": 0.003,
+        "selected_rate": false,
+        "common_rate": true
+      },
+      {
+        "noise": "noise_free",
+        "rule": "calibrated_broadcast",
+        "rate": 0.01,
+        "selected_rate": true,
+        "common_rate": false
+      },
+      {
+        "noise": "noise_free",
+        "rule": "sign_broadcast",
+        "rate": 0.003,
+        "selected_rate": false,
+        "common_rate": true
+      },
+      {
+        "noise": "noise_free",
+        "rule": "sign_broadcast",
+        "rate": 0.01,
+        "selected_rate": true,
+        "common_rate": false
+      },
+      {
+        "noise": "relative_matched",
+        "rule": "exact",
+        "rate": 0.003,
+        "selected_rate": true,
+        "common_rate": true
+      },
+      {
+        "noise": "relative_matched",
+        "rule": "unit_broadcast",
+        "rate": 0.003,
+        "selected_rate": true,
+        "common_rate": true
+      },
+      {
+        "noise": "relative_matched",
+        "rule": "calibrated_broadcast",
+        "rate": 0.003,
+        "selected_rate": false,
+        "common_rate": true
+      },
+      {
+        "noise": "relative_matched",
+        "rule": "calibrated_broadcast",
+        "rate": 0.01,
+        "selected_rate": true,
+        "common_rate": false
+      },
+      {
+        "noise": "relative_matched",
+        "rule": "sign_broadcast",
+        "rate": 0.003,
+        "selected_rate": false,
+        "common_rate": true
+      },
+      {
+        "noise": "relative_matched",
+        "rule": "sign_broadcast",
+        "rate": 0.01,
+        "selected_rate": true,
+        "common_rate": false
+      }
+    ],
+    "steps": 16384,
+    "checkpoints": [
+      0,
+      1,
+      16,
+      64,
+      256,
+      512,
+      1024,
+      4096,
+      8192,
+      16384
+    ],
+    "training_size": 2048,
+    "validation_size": 1024,
+    "test_size": 4096,
+    "calibration_size": 256,
+    "batch_size": 64,
+    "optimizer": "Adam",
+    "clip": 10.0,
+    "parameter_bound": 2.0,
+    "noise": "fixed_absolute SD=.15; noise_free SD=0; relative_matched SD=.15*sqrt(clean target variance)",
+    "primary": "For each noise condition, (calibrated-exact clean full-domain NMSE on quartet) minus (calibrated-exact on matching), at 16384 updates and inherited selected rates",
+    "secondary": "1024,4096,8192 checkpoints, common rates, noisy test outcomes, all other rules; descriptive paired intervals",
+    "pairing": "Inputs, standardized noise, calibration, initial coefficients, minibatch indices shared across both tasks and all conditions within a seed",
+    "selection": "No fresh test, validation or diagnostic outcome determines hyperparameters; endpoints at fixed budgets",
+    "source_sha256": {
+      "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/scripts/morphology_credit/experiment.py": "11e83f4d7c50bbfa6033fd0f30bd2be22aa23e9e90e053502616f517bb612d81",
+      "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/scripts/review_completion/noise_controls.py": "9568f0f5ab63465eaa7968f6ff7c4e2bce821ac8a9a6cb6a20d845117cee4c8a",
+      "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/scripts/morphology_structure/model.py": "fe89ef9331795a4dbf3f04ff1d7b18dc8f955b9da8119a2fdcce4f5edbd68cf7",
+      "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/credit_rule_bridge/protocol_freeze.json": "eca67103897fc3f4251844479ad99ab04ae61544b3f176389ec82ff0760c01d4",
+      "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/credit_rule_bridge/selection_freeze.json": "c979c9c1bb9264a1d980da8d13c24479967e749f7d6d21212e3a3187268ef2db",
+      "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/scripts/morphology_structure/constructive_dp_v2.py": "1a34d6933706c924eca6458d48940a53e97bff57756ad1a68444585e4b5ac964",
+      "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/scripts/credit_rule_bridge/models.py": "86f3cc539942dd3c858f4fcc2f91e2604220b72e3628e9d463fb86574f1dbf23",
+      "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/scripts/credit_rule_bridge/run.py": "537c18b757e7dbcb56333be5f6da80f0f0440774a894c4fd7187af6bebb2f185",
+      "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/scripts/credit_rule_bridge/test_bridge.py": "49e8770e5fe7901191916455a177990a8b5ee287b46b4f475d2d62a4184ddcab",
+      "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/configs/credit_rule_bridge/protocol.json": "a5bb778898ab8aa2929fccd0eb6367171b91b13fab01520bd5563a6fbad74774",
+      "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/scripts/morphology_structure/constructive.py": "8259af41912cee139998b84dffef9827d44fe8a175a89e6eb91bb1f534303a46",
+      "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/scripts/morphology_conductance/model.py": "0319c1cf13ee702eb8ef460937d14c9a7cddb53cfbfc491c2fe60abb889ad706"
+    }
+  },
+  "maximum_replay_error": 2.220446049250313e-16,
+  "outputs": {
+    "noise_controls_contrasts.csv": "42f325229b533fef5185afc58907e4b89ff4c6bbb7be88f7d093f72d175d9c45",
+    "noise_controls_curves.csv": "70fdaa5fce4e7c31e9e7b2446540ac92ead0105c5d0fee939f137e9a96506173"
+  },
+  "analysis_sha256": "9568f0f5ab63465eaa7968f6ff7c4e2bce821ac8a9a6cb6a20d845117cee4c8a"
+}

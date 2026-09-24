@@ -91,6 +91,7 @@ def save(canvas, number, sources, panels, caption, rows=(), extra=None,
     pd.DataFrame(rows).to_csv(REC/f'figure_{number:02d}_plotted.csv',index=False)
     helpers=[Path(__file__),Path(focused.__file__),J/'scripts/figure_canvas.py',J/'scripts/journal_style.py']
     if number == 4: helpers.append(J/'scripts/review_completion/noise_panels.py')
+    if number == 6: helpers.append(J/'scripts/run_completion/stopping_panels.py')
     provenance=dict(figure=f'Figure {number}',output=str(path.relative_to(J)),
         output_sha256=sha(path),panel_sources=panels,
         source_sha256={str((S/p).relative_to(J)):sha(S/p) for p in sources},
@@ -2040,176 +2041,20 @@ F6_CANVAS_H_PT = 464.0   # review pass 2026-09-23: 22+116+30+108+30+128+30
 
 F6_CAPTION = r'''\caption{\textbf{Serial computation benefits distributed gain correction, while credit-rule accuracy rankings depend on training duration.}
 \textbf{A}, Equal-compartment DendriNet morphologies with matched contacts and parameters: one stage (D1, $[8]$) or three (D3, $[2,1,2]$). Blue, excitatory class-bearing contacts; carmine, inhibitory gain sensors; $\delta_0$, somatic error. D1 receives all gain tiers together; D3 separates them by stage. Bottom, resource-identical grouped-point control.
-\textbf{B}, Nuisance gains multiply the class signal in one global, two coarse and four fine groups, each reported by an inhibitory sensor with fidelity $\alpha$. Strips, three supports for the same product: nested fine/coarse/global groups, flat equal-resolution groups, or local ratios ($\div$) with an excitation-matched inhibitory sensor in each module.
-\textbf{C}, Serial-minus-grouped-point accuracy at fixed D3 under exact BP. Colors distinguish gain-support families; pale dots show ten paired differences at full fidelity; intervals are smaller than markers. Open marker, analytic local-ratio tie, not an empirical null. LocalCA counterpart: Supplementary Fig.~S24C.
-\textbf{D}, Three-tier task across serial depths: exact BP (black), exact-path LocalCA (red-brown), shared-soma LocalCA (amber), additive integration, grouped/reversed resource controls and a point-network reference (99.0\%). Exact BP and exact-path LocalCA use different optimizer recipes. Resource controls are offset horizontally. Most intervals are smaller than symbols; the separate four-tier cohort is not shown.
-\textbf{E}, Validation-selected accuracy for six restarted conditions, up to 600 epochs. Dotted lines, autograd-broadcast variants, one coinciding with shared-soma LocalCA. Thin grey, D1 reference, lightened below eight active fits. Labels identify paired endpoint comparisons.
-\textbf{F}, Best validation loss for the same conditions and line styles; open markers indicate D1 stopping epochs.
-\textbf{G,H}, Paired exact-path-minus-shared-soma accuracy and cross-entropy; positive accuracy and negative cross-entropy differences favour exact paths. Marked values: epoch 180, the accuracy minimum (epoch 486) and epoch 600. Grey span in \textbf{G}, epochs 300--325, where the interval intermittently straddles zero; dashed lines in \textbf{E--H}, original 180-epoch budget.
-Means use ten paired seeds. Bars/bands are descriptive 95\% seed-bootstrap intervals: per-condition in \textbf{D--F} where drawn, paired differences elsewhere, pointwise in \textbf{E--H}. Accuracy endpoints are validation-selected. Source Data: \texttt{source\_data/curated\_publication/figure\_07\_plotted.csv}.}'''
+\textbf{B}, Nuisance gains multiply the class signal in global, coarse and fine groups, reported by inhibitory sensors with fidelity $\alpha$. Strips show nested, flat equal-resolution, or local ratios ($\div$) using matched sensors.
+\textbf{C}, Serial-minus-grouped-point accuracy at fixed D3 under exact BP. Colors distinguish gain-support families; pale dots, ten paired differences at full fidelity. Open marker, analytic local-ratio tie. LocalCA counterpart: Supplementary Fig.~S24C.
+\textbf{D}, Original 180-epoch three-tier comparison: exact BP (black), exact-path LocalCA (red-brown), shared-soma LocalCA (amber), additive integration, grouped/reversed resource controls and a point-network reference. BP and LocalCA use different optimizer recipes. Resource controls are offset horizontally; most intervals are smaller than symbols.
+\textbf{E,F}, Validation-selected accuracy and best validation loss for six conditions rerun on H200 GPUs with the same ten seeds and unchanged recipes and stopping rule. Dotted lines, autograd-broadcast variants under the BP (black) or LocalCA (amber) recipe; dashed black, exact BP; thin grey, D1 reference; other conditions use D3. Open circles in \textbf{F}, D1 stopping epochs. Epoch axes are linear through 180, then logarithmic; \textbf{F}'s ordinate is logarithmic. Stopped states are carried forward, retaining ten seeds per mean.
+\textbf{G,H}, Paired exact-path-minus-shared-soma LocalCA accuracy and cross-entropy; positive accuracy and negative cross-entropy differences favour exact paths. Markers identify epochs 180, 600 and the final comparison; vertical dashed lines mark the original budget.
+Means use ten paired seeds. Bars/bands are descriptive 95\% seed-bootstrap intervals, paired for differences and pointwise for curves. All sixty extended fits reached ordinary validation early stopping. Source Data: \texttt{source\_data/curated\_publication/figure\_07\_plotted.csv}.}'''
 
 
 def figure6():
-    """Figure 6 (`fig:physicaldepth`) -- eight panels, letters abcdefgh.
+    """Main Figure 7: original forward controls and the complete stopping extension.
 
-    CF-1 canvas 518.4 x 490.0 pt, aspect 1.058, height on the 340/415/490
-    ladder.  CF-2 exactly three type sizes 7.0 / 8.0 / 9.0-bold, subscripts
-    through `figure_canvas.token_subscript` and `Frame.subscript`, never
-    mathtext.  CF-3 strokes only 0.55 / 0.70 / 0.85 / 0.95 / 1.25 pt and every
-    area mark a 16 % `journal_style.tint_patch` with a 0.55 pt edge.  CF-4 one
-    ink delta-0 arrow into every soma, with panel B the declared
-    DELTA0_EXEMPTIONS entry (input-side generative model) and A's
-    grouped-point icon a declared soma swatch.  CF-5 zero legend artists --
-    the only sanctioned key in the nine-figure set is Fig 5C's frameless
-    four-entry rule key.  CF-6 Fig 6 uses no forest, recorded (Figs 5 and 6
-    are the two no-forest figures).  CF-7 every reference line dashed mute at
-    LW_REF with its label right-aligned on the line; the 180-epoch rule in
-    E--H is named by the major x tick that sits under it (see
-    `f6_budget_rule`).  CF-8 caption rules and the exact final Source Data
-    sentence.  CF-9 titles sentence case, no terminal period, <= 26 characters
-    at <= 4 modules and <= 42 above; Fig 6 has no recorded title exception.
-    CF-10 schematic area on the B12 formula:
-    sum(schematic slot w_pt x h_pt) / (live_w_pt x live_h_pt) =
-    2 x 134.47 x 116 / (477.4 x 438) = 31,197 / 209,101 = 14.9 % <= 30 %, no
-    waiver claimed.  Margins and vertical gutter depart from the plan's
-    56/15/24/36 + 40 pt: at left 56 no left reserve is locked, the y-label
-    column then runs 7 pt left of the panel letter (audit_letter_alignment)
-    and the page-ink box fills only 90.9 % of the width (strict fill-width
-    floor 92 %); and at vgutter 40 the ink-to-ink row gaps measure 8.4 and
-    5.8 pt against the 8.5 pt (3 mm) floor of audit_row_separation.  Left 26
-    with a declared 20 pt left reserve, top 22 / bottom 30 and vgutter 44 fix
-    all three; the height stays 490 pt (22+116+44+118+44+116+30) and the row
-    weights stay the plan's 116/118/116.  CF-11 `check_matrix_cells` >= 6.0 pt on panel B's family
-    strip.  CF-12 `align_letters()` runs unconditionally inside `save()`; no
-    hand-placed letters.
-
-    Waiver D3: row 1 is three 4-module data panels; D and E share
-    y = test accuracy (%) and E and F share x = epoch, and all three are
-    column-locked.
-
-    Gamma (B10): Fig 6 is not one of the four Gamma-thread figures (1, 2, 5,
-    8); no Gamma token appears in the artwork or the caption.
-
-    Deviations from the plan, recorded (fix round 2026-09-09):
-
-    1. Panel C's `no advantage` label stays at the LEFT end of the zero rule
-       instead of the CF-7 right end.  Measured: the alpha = 1 end of that
-       rule carries the open exact-tie marker at exactly 0.00, its hairline
-       leader at x 2.05-2.11, the ten-seed fan at x 1.90-2.10 and the two-line
-       tie note below; the nested and flat connectors cross y 2.8-5.5 at
-       x 1.07-1.21, so no 42 pt label fits above or below the rule right of
-       x = 1 without striking one of them.  Every other reference label in the
-       figure is right-aligned on its rule.
-    2. WITHDRAWN by the 2026-09-10 visual review (major).  D and E shared
-       y = (18, 110); the 32-point band under the 50 % chance rule existed
-       only to seat D's five-line and E's four-line statistics blocks, which
-       took 39 % of both panels' height and detached the x axis from the
-       data.  Both blocks are deleted and the shared range is now
-       (43, 110): the drawn axis is still the plan's 50-100 (`f6_trim`) and
-       the remaining 7 points hold the `chance` reference label.  Every fact
-       the blocks carried is in the caption and in figure_06_plotted.csv.
-    3. WITHDRAWN with deviation 2.  Panel D's four-tier D4-minus-D3 contrast
-       was the largest text element in the panel and reported a contrast
-       drawn nowhere in the figure (there is no D4 abscissa); it is deleted
-       from the artwork, stays in figure_06_plotted.csv, and moves to the
-       caption.
-    4. The `180-epoch budget` label asked for on E's dotted rule is OMITTED.
-       Seats tried and rejected by measurement: E's top band is taken by the
-       sub-title and the label cannot be right-aligned on a rule 19 pt from
-       the axis origin; G's top band is crossed by the paired curve's 13.15 pp
-       maximum at epoch 147; F's top band carries the stopping-epoch note; H's
-       upper band is fully dealt to four one-per-baseline items.  The rule is
-       named by the major x tick at 180 that sits under it in all four panels
-       and by the caption's closing clause.
-    5. Panel H prints the endpoint tag on one line
-       (`... 9 of 10; decays 3.4x`); the plan's second line
-       `ordering does not reverse` is dropped because it restates the panel
-       title verbatim, and the band above the curve holds one line only (the
-       curve rises to -0.0157 at epoch ~510).
-    6. Panel D palette: see `f6_depth_ladder` -- `highlight` for reversed
-       placement and a second `point_mlp` mark for the point-network reference
-       are outside the AMENDMENTS section 5 role table's listed figures; the
-       hues are kept and the table rows need Fig 6 added (integrator).
-    7. Panel B's squaring exponent is set through the same baseline-shifted
-       token path as the subscripts, at the one permitted size, raised 2.2 pt
-       over a 10.4 pt equation pitch (`f6_formula`); no mathtext, no fourth
-       type size.  The 7.0 pt text floor forbids a smaller glyph, so the
-       clearance is bought with pitch, not with type size.
-    8. Panels E and F seat their direct labels in a right-hand label column
-       and connect each seat to its endpoint with a MUTE LW_HAIR elbow that
-       starts 2.2 pt clear of the endpoint marker (`f6_direct_ends`); the
-       plan's plain leader from the datum in a tint of the series hue read as
-       the curve itself plunging at the last epoch.  E's column moves from
-       2.4 to 10.6 pt right of epoch 600 so the elbow has a horizontal run;
-       F's column stays at 5.9 pt because the right margin caps it there.
-    9. The 600-epoch marks in G and H carry NO leader: any hairline from the
-       note down to the endpoint marker is a 28 pt near-vertical at x = 600
-       that crosses the zero rule and reads as an error bar.  Both notes name
-       their own epoch (`at 600: ...`) and 600 carries the panel's only mark
-       there, so the leader is redundant.
-   10. Panel F's `convergence not established` caveat sits in the lower-left
-       gutter under the 0.1 spine bound, not in the right-hand label column:
-       it applies to all six arms, and on the column's baseline band it read
-       as a second line of the `exact BP (D3)` label.
-   11. Panel E's sub-title reads `600-epoch restarts, same seeds`: the
-       longer wording pushed E's tight bounding box under panel F's letter
-       (canvas letter check), and the `n = 10` clause was dropped on
-       2026-09-10 with every other per-panel repeat of the caption footer.
-       The caption keeps the full sentence.
-
-    Visual-review round 2026-09-10 (main06.json):
-
-   17. Panel E carries y tick labels and the rotated `Test accuracy (%)`
-       title.  It previously carried neither, so no accuracy in it could be
-       read; D and E share the axis and both now name it.
-   18. The D1 reference has ONE dedicated style in E and F: thin solid grey
-       (`'thin'`, LW_REF at ls '-'), the carried-forward segment past the
-       stopping split marked by alpha 0.45.  It used to be dashed in F and
-       solid-then-DOTTED in E, so a dotted curve in E was not a broadcast
-       arm and the same arm changed style between panels; dotted now means
-       the autograd-broadcast variant everywhere, as the caption key says.
-   19. Panel G's three-line cohort footer (`n = 10 paired seeds; pointwise
-       95 % bootstrap; validation-selected states`) is deleted: it repeated
-       the caption footer verbatim and was the largest of the eight
-       annotation elements filling a third of a data-free plot box.  The
-       same duplicated clauses are stripped from C (four of five lines), F
-       (`; n = 10`) and H (a whole note).  C keeps `intervals < markers`.
-   20. Panel D's two resource-matched controls are dodged +-0.08 depth units
-       off the tick: they agree within 0.4 points at every depth and printed
-       as one series carrying two labels.  Plotted values are unchanged.
-   21. Panel F states `arms and styles as in E` in the free band between the
-       D1 reference and the falling bundle: F draws six arms but can seat
-       only three direct labels.
-
-    Residual-QA round 2026-09-10 (TEXT.md section 4, deviations 16-21):
-
-   12. Panel H's sign key is INVERTED with respect to plan section 4 H.  H's
-       ordinate is a loss difference in nats, so the arm that is ahead is the
-       one BELOW zero: `shared soma ahead` seats at the top, `exact path
-       ahead` at the bottom.  The plan copies G's gain-ordinate key, which
-       contradicts H's own `below zero: lower loss with exact-path credit`
-       note, both marked points and the title.  G is unchanged.
-   13. Panel E seats FOUR direct labels, not six: the two broadcast arms end
-       0.48 (BP) and 0.02 (local) points from their partners at 600, so each
-       pair shares one seat, tied by a mute hairline bracket to one elbow.
-       The caption names the coincidence so it reads as the result.
-   14. Panel G's 600-epoch note moves from +6.5 pp (seven points above and
-       200 epochs left of the marker it names) into the gutter under the
-       trough, with the same short shallow mute diagonal the 486 mark uses:
-       from there the leader runs below the curve and never crosses the zero
-       rule, so the error-bar reading behind deviation 9 does not return
-       (deviation 9 still holds for H).  The note states its sign.  The
-       cohort footer moves to the empty band above the zero rule right of the
-       crossing and the negative-end sign key to the bottom LEFT to free that
-       gutter; G's ylim floor drops to -6.95 pp (drawn axis still -5 to 10).
-   15. Panel B's squared term is parenthesised, `- 1/2 Sum (sigma_l)^2`: a
-       7.0 pt token raised 2.2 pt straight after a lowered subscript still
-       read as a separate numeral 2.  The exponent now follows a full-height
-       `)`.  The raise stays 2.2 pt (deviation 7).
-   16. The margin/gutter departure from plan section 0 (left 26 + 20 pt
-       reserve, top 22, bottom 30, vgutter 44) and its CF-10 consequence
-       (14.9 %, not 15.0 %) are now listed as a deviation to QA; plan section
-       0 and section 9 check 2 are amended to match.
+    Preserve the reviewed eight-panel layout and its A-D comparisons. E-H use
+    all sixty uniform-H200 trajectories and the unchanged validation-stopping
+    rule, with validation-best states carried forward after stopping.
     """
     import build_main_figure_06 as depth
     from figure_canvas import enforce_tokens
@@ -2252,55 +2097,22 @@ def figure6():
     f6_style(d)
     f6_depth_ladder(d, conf, remaining, ceiling, contrast, rows)
 
-    curves = read('physical_depth_followup/condition_trajectory_summary.csv')
-    stopping = read('physical_depth_followup/stopping_by_seed.csv')
-    budget = read(
-        'physical_depth_budget/canonical/extension_paired_contrasts.csv')
+    from run_completion.stopping_panels import condition_curves, paired_curve
+    curves = read('physical_depth_stopping_extension/condition_trajectory_summary.csv')
+    stopping = read('physical_depth_stopping_extension/stopping_by_seed.csv')
     e = c.panel('E', 1, 4, 4, sharey=d)
     f6_style(e)
-    f6_accuracy_budget(e, curves, stopping, budget, rows)
+    condition_curves(e, curves, stopping, 'test_accuracy', 'E', rows)
     f = c.panel('F', 1, 8, 4, sharex=e)
     f6_style(f)
-    f6_validation_loss(f, curves, stopping, rows)
-
-    paired = read('physical_depth_followup/paired_trajectory_summary.csv')
+    condition_curves(f, curves, stopping, 'best_validation_loss', 'F', rows)
+    paired = read('physical_depth_stopping_extension/paired_trajectory_summary.csv')
     g = c.panel('G', 2, 0, 8)
     f6_style(g)
-    # QA 2026-09-10: the floor drops from -6.6 to -6.95 so the two-line
-    # 600-epoch note clears the 486 note above it by 0.7 pt and still ends
-    # 0.3 pt clear of the x spine; the drawn axis stays -5 to 10 (`f6_trim`).
-    f6_paired(g, paired, 'test_accuracy', rows, ylim=(-6.95, 13.5),
-              yticks=[-5, 0, 5, 10],
-              ylabel='Exact − shared soma (pp)', band=(300, 325),
-              # Review pass 2026-09-23: the sign key and the zero-rule name
-              # are in the legend; each mark carries its value only.
-              rule_span=(-1.2, 13.5),
-              # Design pass 2026-09-14: each marked epoch carries its value
-              # and nothing else -- the seed counts, the interval and the
-              # unresolved-crossing sentence are in the running text and the
-              # caption (the shaded band IS the unresolved crossing).
-              marks=((180, 205.0, 13.3, 'left', ('+10.86 pp',),
-                      ((186.0, 11.5), (203.0, 12.6))),
-                     # review pass 2026-09-23: the minimum's value sits
-                     # directly under its marker, clear of the grey span
-                     (486, 486.0, -3.55, 'center', ('−2.94 pp',), None),
-                     (600, 600.0, -4.55, 'right', ('−1.52 pp',),
-                      None)),
-              notes=())
+    paired_curve(g, paired, 'test_accuracy', 'G', rows)
     h = c.panel('H', 2, 8, 4, sharex=g)
     f6_style(h)
-    f6_paired(h, paired, 'test_cross_entropy', rows, ylim=(-0.098, 0.026),
-              yticks=[-0.08, -0.04, 0.0],
-              ylabel='Exact − shared soma (nats)',
-              # Review pass 2026-09-23: H's ordinate is a loss difference, so
-              # exact path is ahead BELOW zero; the legend states the sign for
-              # both panels and the marks carry values only.
-              rule_span=(-0.0775, 0.0010),
-              marks=((180, 188.0, -0.0785, 'left', ('−0.073 nats',),
-                      None),
-                     (600, 612.0, 0.01759, 'right', ('−0.021 nats',),
-                      None)),
-              notes=())
+    paired_curve(h, paired, 'test_cross_entropy', 'H', rows)
 
     # 22 pt, not 20: the letters sit 16 pt left of the slots (10 pt from the
     # page edge) and column 0's rotated y titles reach 26 pt out, so 22 pt
@@ -2331,11 +2143,11 @@ def figure6():
                'point_dendrite_credit_controls/condition_summary.csv',
                'physical_depth_h4_factorial/paired_contrasts.csv',
                'physical_depth_h4_factorial/seed_outcomes.csv',
-               'physical_depth_followup/condition_trajectory_summary.csv',
-               'physical_depth_followup/validation_selected_seed_trajectories.csv',
-               'physical_depth_followup/stopping_by_seed.csv',
-               'physical_depth_followup/paired_trajectory_summary.csv',
-               'physical_depth_budget/canonical/extension_paired_contrasts.csv']
+               'physical_depth_stopping_extension/condition_trajectory_summary.csv',
+               'physical_depth_stopping_extension/validation_selected_seed_trajectories.csv',
+               'physical_depth_stopping_extension/stopping_by_seed.csv',
+               'physical_depth_stopping_extension/paired_trajectory_summary.csv',
+               'physical_depth_stopping_extension/paired_contrasts.csv']
     panels = {
         'A': 'Native architecture schematic (no data): D1 [8] and D3 [2,1,2] '
              'over the same eight nonsomatic compartments, the grouped-point '
@@ -2353,15 +2165,10 @@ def figure6():
         'D': 'Frozen three-tier condition summaries, seeds 10200-10209, 180 '
              'epochs, with the parameter-matched point network and the '
              'four-tier D4-D3 paired contrast (seeds 10400-10409).',
-        'E': 'Frozen 600-epoch restart trajectories for six arms, ten seeds '
-             'each, with the archived pointwise intervals and the exact '
-             'per-seed stopping records.',
-        'F': 'Same restarts, best validation loss, with the eight exact-BP D1 '
-             'stopping epochs marked; all fifty D3 fits reach the cap.',
-        'G': 'Frozen paired exact-path-minus-shared-soma accuracy trajectory '
-             'with archived pointwise intervals and sign counts.',
-        'H': 'Same paired states, test cross-entropy difference, with the two '
-             'absolute 600-epoch levels printed.'}
+        'E': 'Complete same-seed uniform-H200 stopping extension: six conditions, ten seeds each; validation-best states retained after ordinary stopping.',
+        'F': 'Same conditions and selected states, best validation loss on a logarithmic ordinate; D1 stopping epochs are marked.',
+        'G': 'Paired exact-path-minus-shared-soma LocalCA accuracy over the full stopping extension; all ten seed differences retained.',
+        'H': 'Same paired selected states, test cross-entropy difference; descriptive pointwise intervals.'}
     for row in rows:
         row.setdefault('record', 'summary')
     live_w = 518.4 - 26 - 15

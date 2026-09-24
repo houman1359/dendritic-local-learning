@@ -1,0 +1,52 @@
+{
+  "status": "complete",
+  "started_unix": 1790257976.7522793,
+  "study": "controls",
+  "record": {
+    "hierarchy": 4,
+    "depth": 3,
+    "seed": 10407,
+    "placement": "aligned",
+    "key": "h4_d3_10407_aligned",
+    "config": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/configs/physical/h4_d3_10407_aligned.yaml",
+    "config_sha256": "24ffcc6d6fb9a0ad39e5359c9e6335dfd353953cdce0d4de440aeb3f59fe7c72",
+    "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d3_10407_aligned",
+    "source": {
+      "path": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/h4-d3-repair",
+      "commit": "e90fb9896daa95df4aad4c0d92acc0cd65bcd750",
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "original": {
+      "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/h4-d3-repair/physical_depth_h4_d3_repair_runs/journal_h4_d3repair_aligned_serial_additive_bp_20260820001713/configs/unified_config_7.yaml",
+      "config_sha256": "23659d2fbef6e7ea844d3d1354cf8c198ca5658aabf2be02a329855ec392e0bd",
+      "reference_test_accuracy": 0.5239999890327454,
+      "reversal_recipe": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/configs/physical_depth_h4_d3_repair/h4_d3repair_rewired_tree_serial_shunting_bp.yaml",
+      "reversal_recipe_sha256": "6db6c9f7ddc4ad9546d51d13d7357b8174293826b3491155744e8f5850709e5d"
+    },
+    "prior_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d3_10407_aligned"
+  },
+  "config_sha256": "c66a6311d758889aac552a0cda07834158ec52e72832eccfcca29001007b8449",
+  "ancestor_config_sha256": "24ffcc6d6fb9a0ad39e5359c9e6335dfd353953cdce0d4de440aeb3f59fe7c72",
+  "source": {
+    "path": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/h4-d3-repair",
+    "commit": "e90fb9896daa95df4aad4c0d92acc0cd65bcd750",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "original_config_sha256": "24ffcc6d6fb9a0ad39e5359c9e6335dfd353953cdce0d4de440aeb3f59fe7c72",
+  "executed_config_sha256": "c66a6311d758889aac552a0cda07834158ec52e72832eccfcca29001007b8449",
+  "smoke": false,
+  "gpu": "NVIDIA H200",
+  "torch": "2.9.1+cu128",
+  "slurm_job_id": "48164147",
+  "array_task_id": "23",
+  "host": "holygpu8a03301",
+  "resume_checkpoint": null,
+  "resume_sha256": null,
+  "cap": 180,
+  "exit_code": 0,
+  "epochs": 43,
+  "best_epoch": 13,
+  "ordinary_stopping_reached": true,
+  "reached_cap": false,
+  "finished_unix": 1790258035.94422
+}

@@ -9,7 +9,7 @@ def test_main_defines_capture_scales_before_interpreting_them():
     text = (JOURNAL / "main.tex").read_text()
     definition = r"$C_{\rm res}=(C-C_0)/(1-C_0)$"
     assert definition in text
-    assert text.index(definition) < text.index("Adding spatial profiles captured substantial structure")
+    assert text.index(definition) < text.index("Eight ancestry profiles captured")
     assert "within each cell before averaging across cells" in text
 
 

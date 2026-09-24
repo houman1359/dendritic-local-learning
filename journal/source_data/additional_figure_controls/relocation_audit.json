@@ -1,0 +1,516 @@
+{
+  "original_manifest_sha256": "31e0a5a1d7879b6b420c374c80b0e060e24080aa522e5d9acec747373753e95c",
+  "repair_protocol_sha256": "68c6a1e5a0a6b8eadcd85d8b557243fd7f00541cf0916cf127588775857234fd",
+  "relocation_count": 72,
+  "scientific_configs_unchanged": true,
+  "all_original_seeds_retained": true,
+  "validator_sha256": "e21973057f5d64404b231153ea246452501c591fc21c5a8d518b4f37859deeef",
+  "analyzer_sha256": "6acacf52b0ef3a0b77e5524114fcefc87105f1d4967d4b1111ded3cae045c8d8",
+  "wrapper_sha256": "0b10e2f7f3f8c22106719c51d87bfdf3226046f49c350d3d8c0ca17bca601925",
+  "relocations": [
+    {
+      "key": "h4_d1_10404_aligned",
+      "original_config_sha256": "34917ecbd64edc10713533779f71f82dc8249c5cd0f4a8e6c765d09ec5488f65",
+      "executed_config_sha256": "0e2cc225d31a8afb69929a3712049616e0481ca3bd72f4b26a34f6ebb20a84f7",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d1_10404_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d1_10404_aligned"
+    },
+    {
+      "key": "h4_d1_10404_reversed",
+      "original_config_sha256": "7e80e49554616da1e6a4d620d6c174be822bc0ac8dad918b6d0f9d4cb14feca4",
+      "executed_config_sha256": "6fd0d25e58e2cf6f192e1991c48928aa67d7e71aebd4a3fe1d010757ed183576",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d1_10404_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d1_10404_reversed"
+    },
+    {
+      "key": "h4_d1_10405_aligned",
+      "original_config_sha256": "00252616d567651ec77944e1cd6fe00faed5ead60a5c6ca33328220a6998647c",
+      "executed_config_sha256": "7f4040193c6f797f5e7d14d051b0ba2cebd7b4ac1ec1ed381a316266846f0144",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d1_10405_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d1_10405_aligned"
+    },
+    {
+      "key": "h4_d1_10405_reversed",
+      "original_config_sha256": "78b798c3dea5cdac7d0f1a22d3dff8f382646733a11ac9deef43c904b9186bda",
+      "executed_config_sha256": "6492cb7ceda950a6361020d74b47f39d548c229d45a3b612ead4cd3e7c674552",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d1_10405_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d1_10405_reversed"
+    },
+    {
+      "key": "h4_d1_10406_aligned",
+      "original_config_sha256": "7ae70a46113914a4dd8c6df6ba116099ed6d26df2c47ef578d636251b14236ac",
+      "executed_config_sha256": "b02a15d0ccf6fc303bd2799fc3bf71f7faf60123f15f4b61b4ffd96615cbfa89",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d1_10406_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d1_10406_aligned"
+    },
+    {
+      "key": "h4_d1_10406_reversed",
+      "original_config_sha256": "402fd6a7cb4047d5d3dcf1703ef73a36e6dc0ea59e67c206c45b0096a8a449c3",
+      "executed_config_sha256": "9f286672cc9aaa5821e6114ac3c9fbd55d89c4ab74359ad6b6bd1e5fe71722fe",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d1_10406_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d1_10406_reversed"
+    },
+    {
+      "key": "h4_d1_10407_aligned",
+      "original_config_sha256": "f2ad5fa14990d3a0b2feeb2839df7c6c2b2e013e1d5664b407b63ecb918ce7bc",
+      "executed_config_sha256": "59a3a4279f2038bc0c615fad0d90899ca8487fa5978aae9017e56bee81c57487",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d1_10407_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d1_10407_aligned"
+    },
+    {
+      "key": "h4_d1_10407_reversed",
+      "original_config_sha256": "9b364891551714d75384d1a2d192ba4b6d6775d80c1f3d213780f5c95c35c8af",
+      "executed_config_sha256": "d96a31f856a7045c1faa0df5549240a61e37dd71552b60422610df2ba6a3b307",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d1_10407_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d1_10407_reversed"
+    },
+    {
+      "key": "h4_d1_10408_aligned",
+      "original_config_sha256": "8fb5021c7d98a8fb9433ec29e7946b6841b407191fa638b8aa0462fb4851041d",
+      "executed_config_sha256": "0ff2fad0ed1c76afe5460a0604557d3e53f53dfda0d5b0926c1c41afccaad9d0",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d1_10408_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d1_10408_aligned"
+    },
+    {
+      "key": "h4_d1_10408_reversed",
+      "original_config_sha256": "4b6b7ac7742da45b9e2cedeae587a64f97eddfbe41650bfe8d3fca4daefbea4f",
+      "executed_config_sha256": "c413b6d2e0e4c36ecbe84278f5d99507cca3e6e87087ff2c7f1b5fe0a98a454b",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d1_10408_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d1_10408_reversed"
+    },
+    {
+      "key": "h4_d1_10409_aligned",
+      "original_config_sha256": "d8364080b51dd8b4caa05aa4d29a14c1f571ee81c3b5bba33e5f5debaa58fb64",
+      "executed_config_sha256": "a7253c154b9e5515576db436e3c8cedefd570e3786c0e5b725fcf05e7f7779bb",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d1_10409_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d1_10409_aligned"
+    },
+    {
+      "key": "h4_d1_10409_reversed",
+      "original_config_sha256": "01a08d6084ee7051339a02a245839964ed949fd48d7c9081acbdbe50f27361e7",
+      "executed_config_sha256": "0bec04f53490c7c9067eaf747fc8bd2ddc6f7615e715a2a09f3530737988807a",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d1_10409_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d1_10409_reversed"
+    },
+    {
+      "key": "h4_d2_10400_aligned",
+      "original_config_sha256": "abb6b61f8e9d2e670d5fa9f8e8ab69d0e12c0e867045f577f469689aa8f105d0",
+      "executed_config_sha256": "f7393b3a7de3de895a5cb541a65d6e0d5feb4e6bc899d90f48eac47b7ddc4a88",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d2_10400_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d2_10400_aligned"
+    },
+    {
+      "key": "h4_d2_10400_reversed",
+      "original_config_sha256": "281a7753b852ba5b75c43e2572eb5ca39216d2af543cdcc5771ef44042d98188",
+      "executed_config_sha256": "84e90a73e29d265751d82b308f97ce9991fea1becc7626fab2a692367e387d12",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d2_10400_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d2_10400_reversed"
+    },
+    {
+      "key": "h4_d2_10401_aligned",
+      "original_config_sha256": "12b724b02fdefd03c4fdd74e3bce1f2e7a92ca1b1315ec8bf18bd3be247efbab",
+      "executed_config_sha256": "24261040e0a6eddbf977c3708c5e29d592966cfa816f1dba3bcfe18849a3a118",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d2_10401_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d2_10401_aligned"
+    },
+    {
+      "key": "h4_d2_10401_reversed",
+      "original_config_sha256": "1f8e0fb92c63fc006a6a2146ae88d95b2a25b66bc039114cf04ebc17bfaebc9e",
+      "executed_config_sha256": "300bd1b2b51f53412e61fe24cc058190634f051a3e45c949691b7c475d00b207",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d2_10401_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d2_10401_reversed"
+    },
+    {
+      "key": "h4_d2_10402_aligned",
+      "original_config_sha256": "ceddcb12b6a56b87671df4fb3b368d372534a9921228fb334e75decd39fec4ab",
+      "executed_config_sha256": "39675df97e6fb754f135dd6d3747f1d0e6beed57d16d6e95d09ae807cd4ed807",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d2_10402_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d2_10402_aligned"
+    },
+    {
+      "key": "h4_d2_10402_reversed",
+      "original_config_sha256": "dcdd1382c32bed9e2ebd8910e6abc45fb2f7fa3425fb360e1c85027714ed5b87",
+      "executed_config_sha256": "b7f9dfc2cee3385b0e183642ab642c0776b3b6d6c49c886f07f996312827140b",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d2_10402_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d2_10402_reversed"
+    },
+    {
+      "key": "h4_d2_10403_aligned",
+      "original_config_sha256": "8ad3c38ed2ad633ca7a61cd6b025d3899f827a8f0cf0acdbafe9b5642e908c7e",
+      "executed_config_sha256": "2d02c106c2b830171b649a31b6bc11d6419223730da71c06de8d218e766130f8",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d2_10403_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d2_10403_aligned"
+    },
+    {
+      "key": "h4_d2_10403_reversed",
+      "original_config_sha256": "fa3c13cfebc5012ed59bc3f1b5972ed375a5e94d24b6b4910b37cf42217ef0cc",
+      "executed_config_sha256": "21c9fd835425c1f39e57c6e6058d1f6ba8fc2ea7b802394d8a556a04e8eb1223",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d2_10403_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d2_10403_reversed"
+    },
+    {
+      "key": "h4_d2_10404_aligned",
+      "original_config_sha256": "132154e9ec9a17f131879e5243883a7a864183b02f2f7f97ad1c42a570558eef",
+      "executed_config_sha256": "3e6b721fdfba778e47f6cc790752b19555e7b20320160f6fb57674f438c0ef5f",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d2_10404_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d2_10404_aligned"
+    },
+    {
+      "key": "h4_d2_10404_reversed",
+      "original_config_sha256": "3bee2e3c5278885b9a7e5f82f301fc5de22a7696f30bdd62da318066c9bfdd7a",
+      "executed_config_sha256": "4f6a9f31784fbd64a3de3b4b86ca266b8519ea2077653fd36763be5577bf5af1",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d2_10404_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d2_10404_reversed"
+    },
+    {
+      "key": "h4_d2_10405_aligned",
+      "original_config_sha256": "a4502f890119fec0824606e8376417735e778e590dffba3094f98ab889dfb5b7",
+      "executed_config_sha256": "af4a4c738cbbd83bf3998ad2d1ca0281b31f76c04d8b17e7a203364dea5370a3",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d2_10405_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d2_10405_aligned"
+    },
+    {
+      "key": "h4_d2_10405_reversed",
+      "original_config_sha256": "5f65476f20114dd5c1b1439918b541bd76c8cdc47ae60bb1b0c8e2fb3e449665",
+      "executed_config_sha256": "5ef08285c725be980499d82b6bc34fbfd9c3604db0a8b19fd171cdbcf766b9d0",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d2_10405_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d2_10405_reversed"
+    },
+    {
+      "key": "h4_d2_10406_aligned",
+      "original_config_sha256": "7448674c05a34e1c6a37665a638471a750ea090b9c47aad3f2301ce14bc3656c",
+      "executed_config_sha256": "732b074b5fb4f7ed48f915f82ed1b641c0430d1eaf83672b9c2458e83de28121",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d2_10406_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d2_10406_aligned"
+    },
+    {
+      "key": "h4_d2_10406_reversed",
+      "original_config_sha256": "9413842b235aad025f9b3b41a2002aac467999415f4f1cc28bb4eb396a8c79ad",
+      "executed_config_sha256": "b343ac04a61654c0dd2649495b103d8c46187708097a8be7d0deca34f3cf4b10",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d2_10406_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d2_10406_reversed"
+    },
+    {
+      "key": "h4_d2_10407_aligned",
+      "original_config_sha256": "d602f3cb30d7fedb38bbe36a37b2c4ac8e7b57c6fc5cfec2d99ca9a0ce058c2e",
+      "executed_config_sha256": "7b4417f71021885da55429d09b5d14c058fab828e071fbb06b53ee2672def8d8",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d2_10407_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d2_10407_aligned"
+    },
+    {
+      "key": "h4_d2_10407_reversed",
+      "original_config_sha256": "4af315a2ae66a7709e428bf02460b1d372b3325ad529397b23a820310844283d",
+      "executed_config_sha256": "dfbbf819b5b24fb981768792fc072995c281292a73bddf42d8c1ef38bf7d9118",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d2_10407_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d2_10407_reversed"
+    },
+    {
+      "key": "h4_d2_10408_aligned",
+      "original_config_sha256": "a52ac38080411a73138d649e967deec5d18b9333561b058f39efd38b3a07bdae",
+      "executed_config_sha256": "e204408a4ccbe1cf7b0e677861c668513ce2a951be28c6ec040f30c538e7c871",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d2_10408_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d2_10408_aligned"
+    },
+    {
+      "key": "h4_d2_10408_reversed",
+      "original_config_sha256": "c64c79e86cf45eedbff7bf3a688b8f5c471878738479a599d5881bd184b588c8",
+      "executed_config_sha256": "de48ee41e6c809a054369243bf93bf0675e5530de58ac6b3fb409ec43095362d",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d2_10408_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d2_10408_reversed"
+    },
+    {
+      "key": "h4_d2_10409_aligned",
+      "original_config_sha256": "070ecbe028ee01c4c5a4e018cd540e6626494dfb769b5d88edbda212bf6af31c",
+      "executed_config_sha256": "5413f960ffbe26637d29a660a956a8200672e15e5dcf31df84bc3ca17c939ade",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d2_10409_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d2_10409_aligned"
+    },
+    {
+      "key": "h4_d2_10409_reversed",
+      "original_config_sha256": "d6a288877b555f66f557e98e973dcdf868540f92848908a45b53bd48c7fde2bf",
+      "executed_config_sha256": "eb13889a180bafa690b55baa778f8110dc24544baf0427dc827d7fade83a8ce7",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d2_10409_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d2_10409_reversed"
+    },
+    {
+      "key": "h4_d3_10400_aligned",
+      "original_config_sha256": "1fe9d7cf2781c19f53917ec587219fa759505364b79e25579d5dbf64c3e8ce2e",
+      "executed_config_sha256": "0e3012b42beed2edad271b04e97b07a1f2765af3580b605b5129a9b5f08de3c1",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d3_10400_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d3_10400_aligned"
+    },
+    {
+      "key": "h4_d3_10400_reversed",
+      "original_config_sha256": "39352962af782f3cfe7d49530b3512715f818c415c88b968f76c1f639b733c92",
+      "executed_config_sha256": "2b80a6846c6f67d0871d2833904bb46563bc18f8f53283bcf112cee690cff4b2",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d3_10400_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d3_10400_reversed"
+    },
+    {
+      "key": "h4_d3_10401_aligned",
+      "original_config_sha256": "4ebc7ba02f5369884a0084c44dbfe73bab712637bb1731b12fe417f948a75e1f",
+      "executed_config_sha256": "d910511aa97bee3222142c35079fece00b59d1467ff60cc76c373d8a726f7dad",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d3_10401_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d3_10401_aligned"
+    },
+    {
+      "key": "h4_d3_10401_reversed",
+      "original_config_sha256": "f949339288e5c8f33391b5c2dca006c0cf90a5f0c313b5f881b7742c96f971b1",
+      "executed_config_sha256": "27656e765db224ed28a0e3b6d5e4802f5f15518e2b26567fa0affdd735273d2c",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d3_10401_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d3_10401_reversed"
+    },
+    {
+      "key": "h4_d3_10402_aligned",
+      "original_config_sha256": "6becd939bae94d974838dfcf4501e255e34f1749ffbfd66f5bc3db1611d01f10",
+      "executed_config_sha256": "e3bc35cae2497fddf416d0d942202d3e6a94dc7f32e5097138c9659ef64f9c80",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d3_10402_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d3_10402_aligned"
+    },
+    {
+      "key": "h4_d3_10402_reversed",
+      "original_config_sha256": "db782ff0f80943bd027132455807c5bce016a37268b180770a259ff07821aea2",
+      "executed_config_sha256": "7f714f06fd87361bb34b09fd5da29c86cf7938520bf3d102886e402c15464c3c",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d3_10402_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d3_10402_reversed"
+    },
+    {
+      "key": "h4_d3_10403_aligned",
+      "original_config_sha256": "89e803fbe3c05cd15f375404f75771087880bfa17f606d700b7e94230c974ae1",
+      "executed_config_sha256": "ad12da9d0ec902ef765b4f4fe59a68a5fb8abe16dd3d136df8d803328e2ae8eb",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d3_10403_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d3_10403_aligned"
+    },
+    {
+      "key": "h4_d3_10403_reversed",
+      "original_config_sha256": "ff5df3091772c94b395a75227b5c1130d6b63403459cce5c94ab4fe6844c16dc",
+      "executed_config_sha256": "482a3f88b44bfec63d43182eb3ec94274e483471a8a6009b3eb6a8c7ac7315a1",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d3_10403_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d3_10403_reversed"
+    },
+    {
+      "key": "h4_d3_10404_aligned",
+      "original_config_sha256": "884c56d8865c6a3671746762e5198c133e8b5db780e3b89110f2ac4023a2fc0b",
+      "executed_config_sha256": "6676c1fcc7fba73f10040bf2426646cb919434b5ace2b7d98b2f73c06539c356",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d3_10404_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d3_10404_aligned"
+    },
+    {
+      "key": "h4_d3_10404_reversed",
+      "original_config_sha256": "0b79bc16bc81448963611892efb205c4529ede6e791f3f63f531694ff29389dd",
+      "executed_config_sha256": "9ebda4735902fb48c74cb25f0b6f1a06774e8484a503b8b4c0dc7237e1cb1951",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d3_10404_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d3_10404_reversed"
+    },
+    {
+      "key": "h4_d3_10405_aligned",
+      "original_config_sha256": "817fa7dd4aaf1698d775fa3fdce1b212b6f3edc1fbaeca217c2d36083e4839a0",
+      "executed_config_sha256": "c34e7cced0fec1fd4c47653f66076df65c09b68606b62a3fa6f3f7df82fbb54b",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d3_10405_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d3_10405_aligned"
+    },
+    {
+      "key": "h4_d3_10405_reversed",
+      "original_config_sha256": "658cca25df5d792c9d58985e34e5e75a95b257eb6248a788c338832ddb755a9b",
+      "executed_config_sha256": "14e17f193a36809cb915beef0494ce1a3ce48462f933698517153719ad49bad8",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d3_10405_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d3_10405_reversed"
+    },
+    {
+      "key": "h4_d3_10406_aligned",
+      "original_config_sha256": "a49af328282e513116e49c873b576de8cbefd1809386abfdc359fa3feb50856a",
+      "executed_config_sha256": "ec7481248b3dbaf5f4987f6250836e84f044066ea58303df38e688cf2b3c53ac",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d3_10406_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d3_10406_aligned"
+    },
+    {
+      "key": "h4_d3_10406_reversed",
+      "original_config_sha256": "5e403f7797c988e24b5c54931976a845f08628e18d4979a4de0a847720c5bef2",
+      "executed_config_sha256": "5ade158501ed1210bb58abe14e989c6849c2b16281396bb658b2dce549997168",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d3_10406_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d3_10406_reversed"
+    },
+    {
+      "key": "h4_d3_10407_aligned",
+      "original_config_sha256": "24ffcc6d6fb9a0ad39e5359c9e6335dfd353953cdce0d4de440aeb3f59fe7c72",
+      "executed_config_sha256": "c66a6311d758889aac552a0cda07834158ec52e72832eccfcca29001007b8449",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d3_10407_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d3_10407_aligned"
+    },
+    {
+      "key": "h4_d3_10407_reversed",
+      "original_config_sha256": "ef7eba7e59e1b9ce2c1c02f2d91e732e33e7cc204efec44dbabf715bf5268f0f",
+      "executed_config_sha256": "e45ac1c2585ca6cbcb440073150ba7de5a42dd5cbd8d437276ecd84bdafe2c91",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d3_10407_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d3_10407_reversed"
+    },
+    {
+      "key": "h4_d3_10408_aligned",
+      "original_config_sha256": "b15be36980db359b4f55a46144845abedfd17664431e5f95a940540b15bd3b35",
+      "executed_config_sha256": "7c74541f67ee284f1831aba1cd01c4c81b9af094232836710f770ed65a5e1997",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d3_10408_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d3_10408_aligned"
+    },
+    {
+      "key": "h4_d3_10408_reversed",
+      "original_config_sha256": "cde154752e709af7e5d57e247cbf76d1de5130716a8ff2c4a3f1651f5dc75f4d",
+      "executed_config_sha256": "f631005e6563bce2bf74d3677c9153b6c5271356a83ea406322b62fb5dd76901",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d3_10408_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d3_10408_reversed"
+    },
+    {
+      "key": "h4_d3_10409_aligned",
+      "original_config_sha256": "ef86154e8ea2a6177b7af6b0a4cb9fea9c930f87df053ea6307711947c99a67e",
+      "executed_config_sha256": "b987a9a734330b8066a4304559b71cadc334fd2a46e624a5042a7c79d93d37f8",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d3_10409_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d3_10409_aligned"
+    },
+    {
+      "key": "h4_d3_10409_reversed",
+      "original_config_sha256": "49673949751cefb3f94c70e210e872ea4688a48faa821f80ffdd8f0127e91422",
+      "executed_config_sha256": "96695967a28dac1a1772fc6e00c1f168b3c73e342991033c860599cd00d13798",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d3_10409_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d3_10409_reversed"
+    },
+    {
+      "key": "h4_d4_10400_aligned",
+      "original_config_sha256": "c948c6d235a0b9492b77e6d2f77618f9a7913646faa22e4c0a151d63bed45e1b",
+      "executed_config_sha256": "75df312a5c597349ca1228ea4b4921f28dab75230035b62e174da1bff51c61e0",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d4_10400_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d4_10400_aligned"
+    },
+    {
+      "key": "h4_d4_10400_reversed",
+      "original_config_sha256": "e825346594d9f8ff4a5bf73051fd5ff8994203bad680d939b611988d678f6a35",
+      "executed_config_sha256": "32c4a196c980a99e8f1a3f362bbab3e6cf106231ee15dd65d538fd2836a30e1d",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d4_10400_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d4_10400_reversed"
+    },
+    {
+      "key": "h4_d4_10401_aligned",
+      "original_config_sha256": "625f8a4b741a5e9639983223e82e9b061fd8545ec53caa30db663ded3c691177",
+      "executed_config_sha256": "a5f70c8510a9ffa6e3c22896051913c97e1787e94a4706eb0bd90e65ac166868",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d4_10401_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d4_10401_aligned"
+    },
+    {
+      "key": "h4_d4_10401_reversed",
+      "original_config_sha256": "1642bda17e68e8a7f5b2f41315e094786266c14c668f7d924537b8ff09702a88",
+      "executed_config_sha256": "8b9ff149da350c8d98b37bf295c8413036e179937a2571d3c975ef83441cf686",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d4_10401_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d4_10401_reversed"
+    },
+    {
+      "key": "h4_d4_10402_aligned",
+      "original_config_sha256": "bbdef8281e6abfdc848097fcb5b8a9ddd4b412c6f9932929104250a2f089dafd",
+      "executed_config_sha256": "29d87b4468cdf7890cc0241ea882799ccf38071500973ef3fb3c5bc4ee8266ea",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d4_10402_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d4_10402_aligned"
+    },
+    {
+      "key": "h4_d4_10402_reversed",
+      "original_config_sha256": "ee3b4e23fe3b1add1bcdbc93844861169b76af34c386b391ce2b2f8dea127165",
+      "executed_config_sha256": "739793d5414f6d690a719948a14cf4ccd40f6a3475911e6eac49afbd5bd2bb44",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d4_10402_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d4_10402_reversed"
+    },
+    {
+      "key": "h4_d4_10403_aligned",
+      "original_config_sha256": "87453a0f2efac0b01e6f2fa62f2cb7c26f79dc3fda1b44bbc614dacb1806c3a2",
+      "executed_config_sha256": "19a4d5a0b88a0a98ac2622df05015eb8878497c61e6c06f1bd44c7d6edb5740e",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d4_10403_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d4_10403_aligned"
+    },
+    {
+      "key": "h4_d4_10403_reversed",
+      "original_config_sha256": "4f30216972331a749e87c3e14cba2a1a58754e242b1d46b5ccba11737b2f8ca1",
+      "executed_config_sha256": "f520775c9697c8108e93209183d8ceeabea52a2201c747867b0ac99d4b237ba7",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d4_10403_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d4_10403_reversed"
+    },
+    {
+      "key": "h4_d4_10404_aligned",
+      "original_config_sha256": "ab1a7efc6751bdcf7fd9943eb2d63c66513de66e6b05ade567b0371a9aae439e",
+      "executed_config_sha256": "667d802970315dc59950c92148dce2b94379ca1b0645c937982afa39419a713c",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d4_10404_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d4_10404_aligned"
+    },
+    {
+      "key": "h4_d4_10404_reversed",
+      "original_config_sha256": "1416de01862ff5f34291eb8c25ae4fa6cf5994ca5cdb825d5ba562172ead4089",
+      "executed_config_sha256": "0d049ebedb71355610786f150cc70dd4d1d18d6d5b16a1ccf30ae49a82e1f690",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d4_10404_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d4_10404_reversed"
+    },
+    {
+      "key": "h4_d4_10405_aligned",
+      "original_config_sha256": "769d0b6f6b67e123a1c279d5e601c6589f38e926544f92bae37b74069717198e",
+      "executed_config_sha256": "2b2851f3022ab56b9ede86e67df6e2ef9a1ee684face28ee60ef3ab0d5901a6d",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d4_10405_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d4_10405_aligned"
+    },
+    {
+      "key": "h4_d4_10405_reversed",
+      "original_config_sha256": "5425f6adf9c693f6d1fa9c0a416979007473e2bf498a09955256e0091248a0ca",
+      "executed_config_sha256": "5eb679cf641a0813f52de936245250a8258d0bbcaa7a41c23bcfd3300db95807",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d4_10405_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d4_10405_reversed"
+    },
+    {
+      "key": "h4_d4_10406_aligned",
+      "original_config_sha256": "ae61bb36fb1e562732bdf1ae9d29b0371e45876f269237bc1a2058ab0cc27fe6",
+      "executed_config_sha256": "7e5697361a89b405acb33568bda8b691a6b52c3ca059333ca606b50d78d6d6c1",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d4_10406_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d4_10406_aligned"
+    },
+    {
+      "key": "h4_d4_10406_reversed",
+      "original_config_sha256": "fa8a5ed1ecb70ea8766d6e72c69040753908916bb6ce0e8a38b8186d94181ba1",
+      "executed_config_sha256": "e4e7ce9bdc49ac1a5fb76b31698245f168064336887929f8217298671ce292eb",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d4_10406_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d4_10406_reversed"
+    },
+    {
+      "key": "h4_d4_10407_aligned",
+      "original_config_sha256": "abe5b641ebcbe5962be885996ff3d0824666bee7996751f3e835a039db42e129",
+      "executed_config_sha256": "d91ad9c6bdcfbf30c85729e57b34aef084fc4aeda54ad6fd1b36ee2e7d9abcaa",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d4_10407_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d4_10407_aligned"
+    },
+    {
+      "key": "h4_d4_10407_reversed",
+      "original_config_sha256": "2046957c1cd5f3c9e2134bca17f5f6ac61ecd7b49fd727cea3bff8160c6d6c39",
+      "executed_config_sha256": "5f118b35aa7ff5dcb42ef658104dc0bee27220935620fa6cf99a16c16344e837",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d4_10407_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d4_10407_reversed"
+    },
+    {
+      "key": "h4_d4_10408_aligned",
+      "original_config_sha256": "ed3e3a3d745869089d13dde52dc13bf0e85bd5931c38c80963f92598cc33fe69",
+      "executed_config_sha256": "ece45c24502325aa0994d783474a81a57ac9bbd2a69b00c19e1b6673e405cf92",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d4_10408_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d4_10408_aligned"
+    },
+    {
+      "key": "h4_d4_10408_reversed",
+      "original_config_sha256": "a6f4088b0c411f5d4e774f5d03d80cce8af6bfab1f507d1d71431035c8cb0ab5",
+      "executed_config_sha256": "fabd4544c17d2d74e7314de690504d0f744c27dd76becf9dd8e3b5ddeb18036c",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d4_10408_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d4_10408_reversed"
+    },
+    {
+      "key": "h4_d4_10409_aligned",
+      "original_config_sha256": "e6a3f6751ed355a66b19b1cedd1a4d89614a057f6787be605f16586c1b6b00e0",
+      "executed_config_sha256": "01df941dcaf9d05c2502a4386b8779e02089db479dad735dc87f35b525b1ccb0",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d4_10409_aligned",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d4_10409_aligned"
+    },
+    {
+      "key": "h4_d4_10409_reversed",
+      "original_config_sha256": "6875af42c89e59cf7359eaba07415b3e7752040dd71956369bc36c80568621b5",
+      "executed_config_sha256": "6de38ff7ef34c214294d5aacca0cfe142aec0c37e74a486909a0fadaa27c299e",
+      "original_result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/additional_figure_controls_20260922/results/physical/h4_d4_10409_reversed",
+      "result_dir": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/paper-completion-20260924/controls/results/h4_d4_10409_reversed"
+    }
+  ]
+}

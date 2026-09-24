@@ -1,0 +1,6 @@
+{
+  "bp_archived_epochs_301_303_exact": true,
+  "local_resumed_losses_and_parameters_exact": true,
+  "scope": "Excluded infrastructure tests",
+  "training_freeze_sha256": "9da645cc9a2c96c27ee78082efa7cc6e8fbc3d227ffa0e6e252375bc91278e24"
+}

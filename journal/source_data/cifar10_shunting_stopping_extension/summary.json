@@ -1,0 +1,98 @@
+{
+  "audit": {
+    "status": "complete_and_validated",
+    "integrity_valid": true,
+    "convergence_valid": true,
+    "n_expected": 80,
+    "n_results_complete": 80,
+    "convergence_flags": [],
+    "all_seeds_retained": true,
+    "matched_replays": 8,
+    "original_early_stops": 72
+  },
+  "decision": {
+    "main_promotion": false,
+    "bandwidth_cross_dataset_promotion": true,
+    "path_resolution_main_promotion": false,
+    "exact_path_recovers_bp_claim": false,
+    "audit_passes": true,
+    "matched_bp_mean_test_accuracy": 0.4912149876356125,
+    "matched_bp_adequacy_threshold": 0.45,
+    "matched_bp_adequacy_passes": true,
+    "neuron_minus_scalar_positive_control_passes": true,
+    "exact_minus_neuron_hierarchical_superiority_passes": false,
+    "exact_vs_bp_equivalence": {
+      "margin": 0.01,
+      "p_lower": 1.3114181027819569e-07,
+      "p_upper": 2.865821787018525e-07,
+      "p_tost": 2.865821787018525e-07,
+      "ci90_low": -0.002018188035107154,
+      "ci90_high": 0.00255818823537876,
+      "equivalent": true
+    },
+    "promotion_gate": {
+      "primary_mean_at_least_1pp": false,
+      "primary_ci95_above_zero": false,
+      "primary_positive_at_least_16_of_20": false,
+      "superiority_holm_and_hierarchy": false,
+      "sign_flip_sensitivity": false,
+      "formal_equivalence_with_bp_within_1pp": true
+    },
+    "if_gate_fails": "Use only the claims whose separate audit, BP-adequacy, bandwidth, path-resolution, and BP-equivalence gates pass; otherwise retain the cohort as a compact Supplementary/talk-backup boundary result."
+  },
+  "extension_protocol_sha256": "9ce7cbba2f3f8f25447aa59f62ef6663f5dd88f2007d49347d9ec7f142a48f51",
+  "original_analyzer_sha256": "6cb0f1b9d16602a26118714433fb3922e79027ff09053f31f7a7c7b48032bcba",
+  "extension_analyzer_sha256": "2da6d3222a83614e395316046494c2282ed9cc1da25b9d73d65da580c01d41ce",
+  "original_design_frozen_before_original_outcomes": true,
+  "extension_frozen_before_extension_outcomes": true,
+  "original_results_already_inspected": true,
+  "scope": "Post-review stopping-limit extension on reused seeds; original 400-epoch records preserved",
+  "replay_diagnostics": [
+    {
+      "index": 0,
+      "prefix_epochs": 122,
+      "max_abs_validation_replay_drift": 0.0
+    },
+    {
+      "index": 1,
+      "prefix_epochs": 166,
+      "max_abs_validation_replay_drift": 0.0
+    },
+    {
+      "index": 2,
+      "prefix_epochs": 238,
+      "max_abs_validation_replay_drift": 0.0
+    },
+    {
+      "index": 3,
+      "prefix_epochs": 400,
+      "max_abs_validation_replay_drift": 0.0
+    },
+    {
+      "index": 4,
+      "prefix_epochs": 151,
+      "max_abs_validation_replay_drift": 0.0
+    },
+    {
+      "index": 5,
+      "prefix_epochs": 144,
+      "max_abs_validation_replay_drift": 0.0
+    },
+    {
+      "index": 6,
+      "prefix_epochs": 221,
+      "max_abs_validation_replay_drift": 0.0
+    },
+    {
+      "index": 7,
+      "prefix_epochs": 400,
+      "max_abs_validation_replay_drift": 0.0
+    }
+  ],
+  "original_analysis_sha256": {
+    "condition_summary.csv": "471c6b74e7282c77f30258e93dfefe1c3fedf0787c260bcbb0e07dbfb0122239",
+    "paired_contrasts.csv": "62cfcdd0e8f25aabda6c9ab270069d30e9027a13320b89ccfda8e3c4cc2f4a48",
+    "seed_outcomes.csv": "3d3d1460b1fca618ec4fc095be1a49a836bbb8e55550cc0952e606b1cb19faae",
+    "summary.json": "6417ed8bdf07b96ed1df3c38524e7ec0d8b4c0ab25256c6f7df53e674fbbb6be"
+  }
+}

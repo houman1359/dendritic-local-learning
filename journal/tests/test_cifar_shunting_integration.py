@@ -100,17 +100,32 @@ def test_failed_audit_is_rejected(tmp_path, monkeypatch):
         F.read_cifar_ladder('shunting')
 
 
-def test_published_shunting_requires_explicit_convergence_disclosure(monkeypatch):
+def test_published_extension_passes_stopping_without_relabeling_fresh_confirmation(monkeypatch):
     monkeypatch.setattr(F, 'SOURCE', J/'source_data')
-    with pytest.raises(ValueError, match='convergence'):
-        F.read_cifar_ladder('shunting')
-    contrasts, pairs, summary = F.read_cifar_ladder('shunting', allow_convergence_flags=True)
-    assert len(pairs) == 20 and not summary['decision']['audit_passes']
+    contrasts, pairs, summary = F.read_cifar_ladder('shunting')
+    assert len(pairs) == 20 and summary['decision']['audit_passes']
+    assert summary['original_results_already_inspected'] is True
+    assert 'contract_frozen_before_confirmatory_outcomes' not in summary
+    original = pd.read_csv(J/'source_data/cifar10_shunting_feedback_ladder_confirmatory/seed_outcomes.csv')
+    current = pd.read_csv(J/'source_data/cifar10_shunting_stopping_extension/seed_outcomes.csv')
+    keys = ['seed', 'feedback']
+    pd.testing.assert_frame_equal(original.set_index(keys)[['test_accuracy', 'validation_accuracy']].sort_index(),
+                                  current.set_index(keys)[['test_accuracy', 'validation_accuracy']].sort_index())
+    assert not current.right_censored.any()
+    # Preserve the original failed stopping audit rather than rewriting history.
     outcomes, audit = S.load_confirmatory_analysis(
         J/'source_data/cifar10_shunting_feedback_ladder_confirmatory',
         architecture='shunting', allow_convergence_flags=True)
     assert len(outcomes) == 80 and outcomes.right_censored.sum() == 1
     assert audit['audit']['convergence_valid'] is False
+
+
+def test_extension_cannot_claim_uninspected_fresh_outcomes():
+    from cifar_display_validation import validate_protocol_scope
+    summary = json.loads((J/'source_data/cifar10_shunting_stopping_extension/summary.json').read_text())
+    summary['contract_frozen_before_confirmatory_outcomes'] = True
+    with pytest.raises(ValueError, match='scope'):
+        validate_protocol_scope(summary)
 
 
 def test_display_opt_in_never_waives_integrity(tmp_path, monkeypatch):

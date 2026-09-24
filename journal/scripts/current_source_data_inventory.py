@@ -19,6 +19,10 @@ COMPRESSED_TABLE_SUFFIXES = ('.csv.gz', '.tsv.gz')
 # keeps unplotted seeds, checkpoints and frozen inputs in the same release even
 # before a freshly added file has a displayed-panel association.
 FOLLOWUP_ASSIGNMENTS = {
+    'cifar10_shunting_stopping_extension': ('Figure 1', 'same-seed stopping verification', '80 records, including eight same-seed replays; no new confirmation'),
+    'fashion_strict_scalar_control': ('Figure 1', 'strict-scalar control', '80 fresh fits, ten paired seeds per architecture'),
+    'additional_figure_controls': ('Supplementary Figure 24', 'complete control evidence', '80 fresh Fashion fits and 140 same-seed physical-placement sensitivities; per-row study labels'),
+    'physical_depth_stopping_extension': ('Figure 7', 'same-seed stopping sensitivity', '60 fits, ten paired seeds per arm, uniform H200 hardware'),
     'conductance_local_gate': ('Figure 5', 'supporting local-gate evidence', '20 paired fresh seed blocks; canaries and historical replay separate'),
     'credit_rule_extension': ('Figure 4', 'supporting balanced-extension evidence', '20 previously observed paired seed blocks; 720 continued trajectories'),
     'measured_alignment_power': ('Figure 10', 'supporting conditional-sensitivity evidence', '4000 global simulated datasets; original 13 scans within 7 target cells'),

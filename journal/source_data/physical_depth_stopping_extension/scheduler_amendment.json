@@ -1,0 +1,6 @@
+{
+  "timestamp": "2026-09-24T15:41:49.428807+00:00",
+  "job_id": 48161721,
+  "max_concurrent_tasks": 16,
+  "scope": "Finish the same 50 declared repair tasks; no added training fits or changes to hardware class, seeds, optimizer or stopping rule."
+}

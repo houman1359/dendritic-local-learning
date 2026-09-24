@@ -1,0 +1,1 @@
+The original 80-fit cohort, with eight same-seed replays to complete ordinary validation early stopping. All original validation-selected accuracies are unchanged. This is a post-review stopping extension, not fresh confirmation.

@@ -226,6 +226,12 @@ def audit_private_paths() -> None:
         re.compile(r"/Users/[A-Za-z0-9._-]+/"),
     )
     suffixes = {".py", ".json", ".yaml", ".yml", ".md", ".tsv", ".csv"}
+    # Original population sources are hash-pinned execution evidence. The
+    # software exporter sanitizes their distributed copies and records both
+    # hashes; editing the originals would break the scientific freeze chain.
+    frozen = ROOT / "code/population_replay/frozen"
+    identity_path = frozen / "identity.json"
+    frozen_hashes = json.loads(identity_path.read_text())["files"] if identity_path.is_file() else {}
     hits: list[str] = []
     for directory in ("code", "configs", "reproducibility"):
         for path in (ROOT / directory).rglob("*"):
@@ -237,6 +243,12 @@ def audit_private_paths() -> None:
                 continue
             text = path.read_text(encoding="utf-8", errors="replace")
             if any(pattern.search(text) for pattern in forbidden):
+                if path.is_relative_to(frozen):
+                    expected = frozen_hashes.get(path.relative_to(frozen).as_posix())
+                    if expected:
+                        if sha256(path) != expected:
+                            raise AssertionError(f"frozen population source changed: {path}")
+                        continue
                 hits.append(str(path.relative_to(ROOT)))
     if hits:
         raise AssertionError(f"private absolute paths remain: {hits}")

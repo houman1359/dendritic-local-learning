@@ -1,9 +1,9 @@
 {
   "figure": "Figure 5",
   "output": "source_data/conductance_local_gate/figures/local_gate_primary.pdf",
-  "output_sha256": "4113265bd696a0fcf29c5ac370f4a4891cbbcd09bfb8a7f6d776c78376e4bb8f",
+  "output_sha256": "3fb98c02bc492fa977ed9d1945c81593d72f92df7c7323203fd2919903935032",
   "plotted_table": "source_data/curated_publication/figure_05_plotted.csv",
-  "plotted_table_sha256": "b92e4be948021f4b6258d365522ab9f9f5dec6298e46357612c7bdf918874b06",
+  "plotted_table_sha256": "4b713a93098075e05d7ae5a3fab18619ccf1e00130c6bdb9c8d742a56d8d21db",
   "panel_sources": {
     "main_5A": {
       "sources": [
@@ -63,7 +63,7 @@
     "source_data/checkpoint_computation/protocol.json": "d7e0c5a4467381f4fa89095385ee5fdc1b32d53c1527d0251a7765795dec64e2",
     "source_data/conductance_local_gate/METHODS.md": "62a713d2c9e60b46fdeaa1d65ce6c93688e30f9f0ce2e3f3251834ec1386f543",
     "source_data/conductance_local_gate/figures/curve_band_source.csv": "0dd58c44591943c6696bf0e27b0486af240c58acec1d801ef7234c0746b50e1c",
-    "source_data/conductance_local_gate/figures/teacher_tuning_source.csv": "26b9ebc985bc662465c9a03af5a9197f54d8443383f44090121ddcf24c4c3086",
+    "source_data/conductance_local_gate/figures/teacher_tuning_source.csv": "0b7c4842375f7e52cf93475b0fdce019717ed2f2078279eef8fb877b20c15863",
     "source_data/conductance_local_gate/summaries/all_curves.csv": "4a24ea4aa1046cb638cc47fabc72b71fb3dbc96bbcb9aea6ebef33e79f3ac456",
     "source_data/conductance_local_gate/summaries/all_endpoints.csv": "7d3f6df93795afe7b752b0b7a239f51dcafe246f851efe158a7b2c3ac30e4d1d",
     "source_data/conductance_local_gate/summaries/condition_means.csv": "e3ed564e0fd24cb7fee0f1fa6fc337a30fc5481f7b29381419991281829e81a5"

@@ -70,7 +70,7 @@
       }
     ],
     "builder": "scripts/build_supplementary_figure_s04_native.py",
-    "sha256": "f24e2fd8c5f32955ddd58e15fbc91e4cc73dcb75ab727f48e4855180fc31ff3c",
+    "sha256": "c6105a3cae32361304bb0ecdca18f290fa501730be6a0501794f4385d81eab03",
     "note": "Current editorial render; the frozen original registry remains unchanged."
   },
   "N9": {
@@ -301,7 +301,7 @@
       }
     ],
     "builder": "scripts/build_supplementary_figure_physical_architecture_native.py",
-    "sha256": "911b7bff06b3a537639dc4137d7da72d74406852ff7ff62f4e64f12058c9e326",
+    "sha256": "2f4aa43c2bb19292e9219cadca167a6a3589490f5326f63455fa2947bbc6f575",
     "note": "Current editorial render; the frozen original registry remains unchanged."
   },
   "N31": {

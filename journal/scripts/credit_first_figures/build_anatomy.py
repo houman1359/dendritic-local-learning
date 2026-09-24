@@ -1258,7 +1258,7 @@ G_FAN_MAX = 95.0
 # Review pass 2026-09-23: all three printed columns sit inside the axes.  The
 # third used to be forest()'s note outside the right spine, and its 20 pt
 # right reserve leaked onto E, which shares G's column-8 boundary.
-G_COLS = ((122.0, "nonzero"), (140.0, "rank"), (160.0, "cells > 0"))
+G_COLS = ((122.0, "nonzero"), (140.0, "rank"), (160.0, "cells\n> 0"))
 G_RIGHT = 8.0             # = RIGHT_R1, so row 1 keeps one axes width
 
 

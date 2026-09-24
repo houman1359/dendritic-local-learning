@@ -1,5 +1,5 @@
 {
-  "main_figure_sha256": "63c36900225978c32e57b6ea0420b7765bf25c5c14ba9677d9025f69faf7c816",
+  "main_figure_sha256": "d122a99dcf421b0a43ceb587d48d27546895fd00c5ac6b730f0cf25e2f7ea5f4",
   "slot_fill_balance": {
     "left_reserve_pt": 28.0,
     "slot_fill_spread": 1.223,
@@ -20,7 +20,7 @@
     "v661_disjoint": 33.43760240516116
   },
   "kappa_unit_dose": 0.3897874146964674,
-  "identity_residual": 1.0408340855860843e-17,
+  "identity_residual": 1.3877787807814457e-17,
   "block_sizes": [
     17,
     5,

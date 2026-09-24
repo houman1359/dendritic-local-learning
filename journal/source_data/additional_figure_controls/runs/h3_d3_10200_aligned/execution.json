@@ -1,0 +1,20 @@
+{
+  "validator_amendment": "20260923_hierarchy_specific_slots",
+  "key": "h3_d3_10200_aligned",
+  "original_config_sha256": "afde48aa051780ff0319fe573d9a44c0141f47a25ff8f229e15d247ee97c97b6",
+  "executed_config_sha256": "afde48aa051780ff0319fe573d9a44c0141f47a25ff8f229e15d247ee97c97b6",
+  "source": {
+    "path": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/h4-a99c3a7",
+    "commit": "a99c3a777f99913e13dfe673a3f3a28bfe3566af",
+    "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "smoke": false,
+  "slurm_job_id": "48070370",
+  "array_job_id": "47975585",
+  "array_task_id": "40",
+  "node": "holygpu8a09601",
+  "started_unix": 1790213375.5533636,
+  "gpu": "NVIDIA H200, 610.57.04",
+  "exit_code": 0,
+  "finished_unix": 1790213461.9035106
+}

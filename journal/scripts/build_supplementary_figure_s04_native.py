@@ -75,7 +75,7 @@ OUT_EXTENDED = ROOT / "figures" / "supplementary" / "figure_S04_panels_A-E.pdf"
 DEPTH_CSV = SRC / "depth_scaling_summary.csv"
 NOISE_CSV = SRC / "broadcast_noise_summary.csv"
 CIFAR_CSV = SRC / "cifar10_control_ladder_runs.csv"
-FASHION_SRC = ROOT / "source_data" / "fashion_feedback_ladder"
+FASHION_SRC = ROOT / "source_data" / "fashion_strict_scalar_control"
 FASHION_RUNS_CSV = FASHION_SRC / "seed_outcomes.csv"
 FASHION_SUMMARY_CSV = FASHION_SRC / "condition_summary.csv"
 
@@ -87,10 +87,10 @@ INK = COLORS["ink"]
 CORE_MARKER = {"dendritic_shunting": "o", "dendritic_additive": "s"}
 CORE_COLOR = {"dendritic_shunting": SHUNT, "dendritic_additive": ADD}
 
-FASHION_ORDER = ("scalar fallback", "neuron indexed", "exact path")
-FASHION_LABELS = ("matched-\nwidth\nfallback", "neuron-\nspecific", "exact\npath")
+FASHION_ORDER = ("strict scalar", "scalar fallback", "neuron indexed", "exact path")
+FASHION_LABELS = ("strict\nscalar", "scalar\nfallback", "per\nneuron", "exact\npath")
 FASHION_ARCHITECTURES = ("shunting", "additive")
-FASHION_SEEDS = set(range(10200, 10210))
+FASHION_SEEDS = set(range(22600, 22610))
 
 
 def _series(ax, x, mean, std, *, color, marker, ls="-", alpha=1.0, z=3):
@@ -270,8 +270,11 @@ def load_confirmatory_analysis(analysis_dir: Path, *, architecture="additive", a
     audit = summary.get("audit", {})
     decision = summary.get("decision", {})
     errors: list[str] = []
-    if summary.get("contract_frozen_before_confirmatory_outcomes") is not True:
-        errors.append("the frozen-before-outcomes contract flag is absent")
+    from cifar_display_validation import validate_protocol_scope
+    try:
+        validate_protocol_scope(summary)
+    except ValueError as exc:
+        errors.append(str(exc))
     if audit.get("status") not in {"complete_and_validated", "complete_with_convergence_flags"}:
         errors.append(f"audit status is {audit.get('status')!r}")
     if audit.get("integrity_valid") is not True:
@@ -429,8 +432,8 @@ def load_fashion_ladder() -> tuple[pd.DataFrame, pd.DataFrame]:
         errors.append("condition_summary.csv lacks required columns")
 
     if outcome_columns.issubset(outcomes.columns):
-        if len(outcomes) != 60:
-            errors.append(f"seed_outcomes.csv has {len(outcomes)} rather than 60 rows")
+        if len(outcomes) != 80:
+            errors.append(f"seed_outcomes.csv has {len(outcomes)} rather than 80 rows")
         if outcomes.duplicated(["architecture", "feedback", "seed"]).any():
             errors.append("seed_outcomes.csv contains duplicate paired outcomes")
         if set(outcomes["architecture"].astype(str)) != set(FASHION_ARCHITECTURES):
@@ -446,7 +449,7 @@ def load_fashion_ladder() -> tuple[pd.DataFrame, pd.DataFrame]:
                 if seeds != FASHION_SEEDS:
                     errors.append(
                         f"{architecture}/{feedback} does not contain the frozen "
-                        "paired seed set 10200--10209"
+                        "paired seed set 22600--22609"
                     )
         values = pd.to_numeric(outcomes["test_accuracy"], errors="coerce")
         if not np.isfinite(values).all() or not values.between(0.0, 1.0).all():
@@ -536,14 +539,14 @@ def panel_fashion(ax, outcomes: pd.DataFrame, summary: pd.DataFrame):
 
     ax.set_xticks(x_base)
     ax.set_xticklabels(FASHION_LABELS)
-    ax.set_xlim(-0.36, 2.36)
-    ax.set_ylim(0.828, 0.893)
-    ax.set_yticks([0.84, 0.86, 0.88])
+    ax.set_xlim(-0.36, 3.36)
+    ax.set_ylim(0.80, 0.895)
+    ax.set_yticks([0.80, 0.84, 0.88])
     ax.set_ylabel("Fashion-MNIST accuracy")
     ax.yaxis.set_major_formatter(PercentFormatter(1.0, decimals=0))
-    ax.text(2.28, 0.842, "shunting", color=SHUNT, fontsize=PT_LEGEND,
+    ax.text(3.28, 0.842, "shunting", color=SHUNT, fontsize=PT_LEGEND,
             ha="right", va="center")
-    ax.text(2.28, 0.8345, "raw additive", color=ADD, fontsize=PT_LEGEND,
+    ax.text(3.28, 0.8245, "raw additive", color=ADD, fontsize=PT_LEGEND,
             ha="right", va="center")
     return ax
 

@@ -1,0 +1,11 @@
+{
+    "seed": 10205,
+    "dataset_seed": 10205,
+    "split_seed": 10205,
+    "model_seed": 10205,
+    "topology_seed": 10205,
+    "loader_seed": 10205,
+    "evaluation_seed": 10205,
+    "probe_seed": 10205,
+    "strict_deterministic": false
+}

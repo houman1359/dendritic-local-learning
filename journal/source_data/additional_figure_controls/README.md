@@ -1,0 +1,1 @@
+Complete 220-fit control study: 80 fresh Fashion-MNIST fits and 140 same-seed additive placement fits. Storage-repaired execution paths are recorded separately. Recompute paired statistics with scripts/run_completion/analyze_controls.py; no test outcome selects a run.

@@ -1,0 +1,17 @@
+{
+    "accuracy": {
+        "train": 1.0,
+        "valid": 1.0,
+        "test": 1.0
+    },
+    "auc": {
+        "train": 1.0,
+        "valid": 1.0,
+        "test": 1.0
+    },
+    "categorical_loglikelihood": {
+        "train": -0.0007940937066450715,
+        "valid": -0.0009871985530480742,
+        "test": -0.0010188365122303367
+    }
+}

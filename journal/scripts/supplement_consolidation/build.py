@@ -401,7 +401,8 @@ def main():
   print(f'S{number:<3d} {ident:<30s} height {output[0].rect.height:7.1f}  scale {scale:.3f}  panels {len(panelmap)}')
  for key in mapping:
   if not mapping[key]:
-   fallback={'S8':('note:credit_images','Historical fixed-budget noise outcomes are archived because the executed generator is unresolved; they are excluded from current task and depth claims.'),
+   fallback={'S4':('fig:si_image_generalization','Current image comparisons are rendered in N4C; historical CIFAR and fallback-only Fashion outcomes remain archived.'),
+             'S8':('note:credit_images','Historical fixed-budget noise outcomes are archived because the executed generator is unresolved; they are excluded from current task and depth claims.'),
              'S17':('tab:animal_credit','Animal-level estimates and inference are retained in the external signed-credit table and Section S11; the redundant descriptive figure remains archived.'),
              'S9':('fig:si_utility_signal_noise','Old S9A and S9C are re-rendered on one dimensionless axis as panel E of the merged utility figure; the remaining panels are recorded in omitted_panel_status.'),
              'S6':('note:conflict_ancestry','Static quadratic interference remains in the derivation; the original numerical illustration is archived.'),

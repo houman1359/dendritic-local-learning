@@ -1,0 +1,21 @@
+{
+  "integrity_valid": true,
+  "n_runs": 80,
+  "n_seeds_per_architecture": 10,
+  "seeds": [
+    22600,
+    22601,
+    22602,
+    22603,
+    22604,
+    22605,
+    22606,
+    22607,
+    22608,
+    22609
+  ],
+  "primary": "neuron indexed minus strict scalar",
+  "scope": "Fresh paired Fashion-MNIST control; same inherited 180-epoch budget and rates; no outcome-based exclusions",
+  "parent_source": "additional_figure_controls/",
+  "analysis_sha256": "065d059bb9074cb17582595b1e42d1975bbd31286d11f8e44a745e29be5fbbb9"
+}

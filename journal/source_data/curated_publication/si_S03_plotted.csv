@@ -1,0 +1,130 @@
+figure,panel,record_type,series,x_label,x,y,ci_low,ci_high,n,inferential_unit,interval_type,endpoint,source_table
+S3,A,source_index,,,,,,,,,,,source_data/credit_phase_theory/depth_training_seed.csv
+S3,A,source_index,,,,,,,,,,,source_data/credit_phase_theory/depth_training_summary.csv
+S3,A,source_index,,,,,,,,,,,source_data/credit_phase_theory/projection_phase_seed.csv
+S3,A,source_index,,,,,,,,,,,source_data/credit_phase_theory/projection_phase_summary.csv
+S3,A,source_index,,,,,,,,,,,source_data/credit_phase_theory/reliability_phase_seed.csv
+S3,A,source_index,,,,,,,,,,,source_data/credit_phase_theory/reliability_phase_summary.csv
+S3,A,source_index,,,,,,,,,,,source_data/credit_phase_theory/spectral_phase_seed.csv
+S3,A,source_index,,,,,,,,,,,source_data/credit_phase_theory/spectral_phase_summary.csv
+S3,A,source_index,,,,,,,,,,,source_data/review_evidence_reanalysis/moment_scores.csv
+S3,B,source_index,,,,,,,,,,,source_data/credit_phase_theory/depth_training_seed.csv
+S3,B,source_index,,,,,,,,,,,source_data/credit_phase_theory/depth_training_summary.csv
+S3,B,source_index,,,,,,,,,,,source_data/credit_phase_theory/projection_phase_seed.csv
+S3,B,source_index,,,,,,,,,,,source_data/credit_phase_theory/projection_phase_summary.csv
+S3,B,source_index,,,,,,,,,,,source_data/credit_phase_theory/reliability_phase_seed.csv
+S3,B,source_index,,,,,,,,,,,source_data/credit_phase_theory/reliability_phase_summary.csv
+S3,B,source_index,,,,,,,,,,,source_data/credit_phase_theory/spectral_phase_seed.csv
+S3,B,source_index,,,,,,,,,,,source_data/credit_phase_theory/spectral_phase_summary.csv
+S3,B,source_index,,,,,,,,,,,source_data/review_evidence_reanalysis/moment_scores.csv
+S3,C,source_index,,,,,,,,,,,source_data/credit_phase_theory/depth_training_seed.csv
+S3,C,source_index,,,,,,,,,,,source_data/credit_phase_theory/depth_training_summary.csv
+S3,C,source_index,,,,,,,,,,,source_data/credit_phase_theory/projection_phase_seed.csv
+S3,C,source_index,,,,,,,,,,,source_data/credit_phase_theory/projection_phase_summary.csv
+S3,C,source_index,,,,,,,,,,,source_data/credit_phase_theory/reliability_phase_seed.csv
+S3,C,source_index,,,,,,,,,,,source_data/credit_phase_theory/reliability_phase_summary.csv
+S3,C,source_index,,,,,,,,,,,source_data/credit_phase_theory/spectral_phase_seed.csv
+S3,C,source_index,,,,,,,,,,,source_data/credit_phase_theory/spectral_phase_summary.csv
+S3,C,source_index,,,,,,,,,,,source_data/review_evidence_reanalysis/moment_scores.csv
+S3,D,source_index,,,,,,,,,,,source_data/credit_phase_theory/depth_training_seed.csv
+S3,D,source_index,,,,,,,,,,,source_data/credit_phase_theory/depth_training_summary.csv
+S3,D,source_index,,,,,,,,,,,source_data/credit_phase_theory/projection_phase_seed.csv
+S3,D,source_index,,,,,,,,,,,source_data/credit_phase_theory/projection_phase_summary.csv
+S3,D,source_index,,,,,,,,,,,source_data/credit_phase_theory/reliability_phase_seed.csv
+S3,D,source_index,,,,,,,,,,,source_data/credit_phase_theory/reliability_phase_summary.csv
+S3,D,source_index,,,,,,,,,,,source_data/credit_phase_theory/spectral_phase_seed.csv
+S3,D,source_index,,,,,,,,,,,source_data/credit_phase_theory/spectral_phase_summary.csv
+S3,D,source_index,,,,,,,,,,,source_data/review_evidence_reanalysis/moment_scores.csv
+S3,E,plotted,strict scalar,gradient cosine,0.0,0.02656833185176828,0.017221455766240533,0.03607145845979405,120,trained checkpoint,"95% checkpoint bootstrap (10,000 draws)","valid trained checkpoint, relative step 1e-5",source_data/prospective_input_validity/mechanism_checkpoint_rows_valid.csv
+S3,E,plotted,per-neuron,gradient cosine,1.0,0.5861189821437018,0.5668942720247696,0.6054870613313654,120,trained checkpoint,"95% checkpoint bootstrap (10,000 draws)","valid trained checkpoint, relative step 1e-5",source_data/prospective_input_validity/mechanism_checkpoint_rows_valid.csv
+S3,E,plotted,exact path,gradient cosine,2.0,0.9999999985741178,0.9999999853209892,1.000000012276419,120,trained checkpoint,"95% checkpoint bootstrap (10,000 draws)","valid trained checkpoint, relative step 1e-5",source_data/prospective_input_validity/mechanism_checkpoint_rows_valid.csv
+S3,E,plotted,strict scalar,one-step progress,3.6,0.012643619747111519,-0.0381412556517623,0.058420973606102156,120,trained checkpoint,"95% checkpoint bootstrap (10,000 draws)","valid trained checkpoint, relative step 1e-5",source_data/prospective_input_validity/mechanism_checkpoint_rows_valid.csv
+S3,E,plotted,per-neuron,one-step progress,4.6,0.6360139966566857,0.6082767007638127,0.6647431521445563,120,trained checkpoint,"95% checkpoint bootstrap (10,000 draws)","valid trained checkpoint, relative step 1e-5",source_data/prospective_input_validity/mechanism_checkpoint_rows_valid.csv
+S3,E,plotted,exact path,one-step progress,5.6,1.0000002254860405,1.0000000153711266,1.0000005860653598,120,trained checkpoint,"95% checkpoint bootstrap (10,000 draws)","valid trained checkpoint, relative step 1e-5",source_data/prospective_input_validity/mechanism_checkpoint_rows_valid.csv
+S3,F,source_index,,,,,,,,,,,source_data/alignment_controlled/alignment_controlled_curves.csv
+S3,F,source_index,,,,,,,,,,,source_data/alignment_controlled/cell_alignment_metrics.csv
+S3,F,source_index,,,,,,,,,,,source_data/alignment_controlled/cell_paired_contrasts.csv
+S3,F,source_index,,,,,,,,,,,source_data/alignment_controlled/dictionary_audit.csv
+S3,F,source_index,,,,,,,,,,,source_data/alignment_controlled/summary.json
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),0.0,0.8000000000000002,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),0.05,0.7529411764705883,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),0.1,0.7111111111111112,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),0.15,0.6736842105263159,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),0.2,0.6400000000000001,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),0.25,0.6095238095238096,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),0.3,0.5818181818181819,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),0.35,0.5565217391304348,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),0.4,0.5333333333333333,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),0.45,0.5120000000000001,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),0.5,0.4923076923076924,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),0.55,0.47407407407407415,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),0.6,0.4571428571428572,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),0.65,0.44137931034482764,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),0.7,0.42666666666666675,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),0.75,0.41290322580645167,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),0.8,0.4000000000000001,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),0.85,0.38787878787878793,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),0.9,0.37647058823529417,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),0.95,0.36571428571428577,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),1.0,0.3555555555555556,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),1.05,0.345945945945946,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),1.1,0.33684210526315794,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),1.15,0.32820512820512826,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),1.2,0.32000000000000006,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),1.25,0.3121951219512196,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),1.3,0.3047619047619048,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),1.35,0.29767441860465116,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),1.4,0.29090909090909095,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),1.45,0.2844444444444445,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),1.5,0.27826086956521745,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),1.55,0.27234042553191495,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),1.6,0.26666666666666666,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),1.65,0.2612244897959184,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),1.7,0.25600000000000006,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),1.75,0.2509803921568628,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),1.8,0.2461538461538462,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),1.85,0.24150943396226415,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),1.9,0.23703703703703707,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),1.95,0.23272727272727278,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 1, q = 0.8",noise variance sigma^2 (arbitrary units),2.0,0.22857142857142862,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),0.0,1.0,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),0.05,0.9090909090909091,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),0.1,0.8333333333333334,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),0.15,0.7692307692307692,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),0.2,0.7142857142857143,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),0.25,0.6666666666666666,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),0.3,0.625,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),0.35,0.588235294117647,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),0.4,0.5555555555555556,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),0.45,0.5263157894736842,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),0.5,0.5,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),0.55,0.47619047619047616,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),0.6,0.45454545454545453,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),0.65,0.4347826086956522,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),0.7,0.41666666666666663,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),0.75,0.4,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),0.8,0.3846153846153846,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),0.85,0.37037037037037035,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),0.9,0.35714285714285715,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),0.95,0.3448275862068965,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),1.0,0.3333333333333333,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),1.05,0.3225806451612903,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),1.1,0.3125,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),1.15,0.303030303030303,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),1.2,0.2941176470588235,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),1.25,0.2857142857142857,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),1.3,0.2777777777777778,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),1.35,0.27027027027027023,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),1.4,0.2631578947368421,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),1.45,0.2564102564102564,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),1.5,0.25,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),1.55,0.24390243902439027,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),1.6,0.23809523809523808,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),1.65,0.2325581395348837,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),1.7,0.22727272727272727,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),1.75,0.2222222222222222,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),1.8,0.2173913043478261,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),1.85,0.2127659574468085,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),1.9,0.20833333333333331,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),1.95,0.2040816326530612,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound
+S3,G,plotted,"K = 2, q = 1",noise variance sigma^2 (arbitrary units),2.0,0.2,,,,"analytic, no data",none,2L x optimized one-step bound q^2/(q + K sigma^2),analytic; scripts/build_si_restored_panels.py::utility_bound

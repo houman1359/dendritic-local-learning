@@ -1,0 +1,622 @@
+{
+  "created_utc": "2026-09-23T16:08:54.346102+00:00",
+  "runtime": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260827/runtime/dendritic-modeling-cifar-e516c7",
+  "runtime_commit": "e516c7fec3169253ff8c14bc5f4ab1325469e4f5",
+  "study": "Existing-seed stopping-limit amendment; original results already inspected",
+  "rationale": "Both cap-limited seeds are selected solely by training length. Replay all four rules in each to retain matched comparisons. The other 18 seed blocks already stopped under the unchanged rule and need no additional epochs.",
+  "changes": "Maximum 400 to 1600 epochs; output paths and names; passive progress/snapshot observer only. Same seed, data, calibration, optimizer, rates and patience 50. No test-based stopping or hyperparameter selection.",
+  "checkpoint_limitation": "Original final_model.pt contains model weights only, so affected seed blocks restart from original seeds; not claimed as exact checkpoint continuation.",
+  "comparison": "Compare original-length loss histories, initial/calibrated states and validation-selected endpoints. Disclose numerical replay drift. Original 400-epoch analysis is immutable; extended analysis has independent provenance.",
+  "stopping": "Require ordinary patience-based stopping for every displayed extended-cohort run. If any run reaches 1600, retain its complete state and investigate before integration; never relabel it converged.",
+  "interpretation": "This is a disclosed post-review budget extension, not a new prospectively unobserved confirmation cohort. Retain the original statistical contrasts and every seed regardless of direction.",
+  "records": [
+    {
+      "index": 0,
+      "config_index": 61,
+      "seed": 22001,
+      "feedback": "backpropagation",
+      "config": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/configs/config_61.yaml",
+      "config_sha256": "9b7443efcd2f50b52b10bb7a450f91e45b0f7e00959221eab17c0696e5fb6a00",
+      "result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_61",
+      "original_config": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_requeue/journal_cifar10_shunting_feedback_ladder_requeue_20260922132348/configs/unified_config_61.yaml",
+      "original_config_sha256": "6e0c49100eef746a71d990720caac1375160d9fa7d2abd317340abe31f471a8b",
+      "original_results": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_requeue/journal_cifar10_shunting_feedback_ladder_requeue_20260922132348/results/config_61"
+    },
+    {
+      "index": 1,
+      "config_index": 41,
+      "seed": 22001,
+      "feedback": "exact path",
+      "config": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/configs/config_41.yaml",
+      "config_sha256": "d7b5e918904ad1f765b02cf3e824359679fa161fd15299d01bc70d30281884fb",
+      "result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_41",
+      "original_config": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_requeue/journal_cifar10_shunting_feedback_ladder_requeue_20260922132348/configs/unified_config_41.yaml",
+      "original_config_sha256": "2b7d6688a2e7a84160ed96c6ceae1bc5cecc91c9deed8bc7b8ddb46be1be6c5f",
+      "original_results": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_requeue/journal_cifar10_shunting_feedback_ladder_requeue_20260922132348/results/config_41"
+    },
+    {
+      "index": 2,
+      "config_index": 21,
+      "seed": 22001,
+      "feedback": "neuron specific",
+      "config": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/configs/config_21.yaml",
+      "config_sha256": "6fad9e5fa891c38fac53359723805997f1490e392ead8d65dc73a818b3d08a1e",
+      "result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_21",
+      "original_config": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_requeue/journal_cifar10_shunting_feedback_ladder_requeue_20260922132348/configs/unified_config_21.yaml",
+      "original_config_sha256": "27f281bdc53548490c82aeb7fb1bf64706fc00cecd9edfceb13a5b191e55deeb",
+      "original_results": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_requeue/journal_cifar10_shunting_feedback_ladder_requeue_20260922132348/results/config_21"
+    },
+    {
+      "index": 3,
+      "config_index": 1,
+      "seed": 22001,
+      "feedback": "strict scalar",
+      "config": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/configs/config_1.yaml",
+      "config_sha256": "34b71385db59585c4cc9038887d61ed7c3a8614c7c4dacfd1c247000aa383ac7",
+      "result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_1",
+      "original_config": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_requeue/journal_cifar10_shunting_feedback_ladder_requeue_20260922132348/configs/unified_config_1.yaml",
+      "original_config_sha256": "0e340d94436c4d6bfc01fa92199d0be378930b31cd4a3fed028e5819ce0b8711",
+      "original_results": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_requeue/journal_cifar10_shunting_feedback_ladder_requeue_20260922132348/results/config_1"
+    },
+    {
+      "index": 4,
+      "config_index": 68,
+      "seed": 22008,
+      "feedback": "backpropagation",
+      "config": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/configs/config_68.yaml",
+      "config_sha256": "50b68d54b640b18ff19ec59a38cf2045307a77f7efe4ab0c0e955ef9cdb5091d",
+      "result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_68",
+      "original_config": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_requeue/journal_cifar10_shunting_feedback_ladder_requeue_20260922132348/configs/unified_config_68.yaml",
+      "original_config_sha256": "289586fd10f93d6f50f8668b78a54c025ffa549ee4e57f1c7568aa79ddbea3cd",
+      "original_results": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_requeue/journal_cifar10_shunting_feedback_ladder_requeue_20260922132348/results/config_68"
+    },
+    {
+      "index": 5,
+      "config_index": 48,
+      "seed": 22008,
+      "feedback": "exact path",
+      "config": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/configs/config_48.yaml",
+      "config_sha256": "8fc5fa5c606ffaa0c1869390092282fac3555b3dd4e45fa3d1bf74bbde21939a",
+      "result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_48",
+      "original_config": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_requeue/journal_cifar10_shunting_feedback_ladder_requeue_20260922132348/configs/unified_config_48.yaml",
+      "original_config_sha256": "a09ea84b1c0768bd9e56b5cd072ce5570f23ecf8fbf9e8b35cd37fad29405094",
+      "original_results": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_requeue/journal_cifar10_shunting_feedback_ladder_requeue_20260922132348/results/config_48"
+    },
+    {
+      "index": 6,
+      "config_index": 28,
+      "seed": 22008,
+      "feedback": "neuron specific",
+      "config": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/configs/config_28.yaml",
+      "config_sha256": "8ff789a1b66cbee3d1ae0800969f489338e6440c9d5c116b362308f80cef19b1",
+      "result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_28",
+      "original_config": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_requeue/journal_cifar10_shunting_feedback_ladder_requeue_20260922132348/configs/unified_config_28.yaml",
+      "original_config_sha256": "c0bdb13c9fee0012eecd1fc3987f4339746bb46864c8459c7167fc9ba58fea18",
+      "original_results": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_requeue/journal_cifar10_shunting_feedback_ladder_requeue_20260922132348/results/config_28"
+    },
+    {
+      "index": 7,
+      "config_index": 8,
+      "seed": 22008,
+      "feedback": "strict scalar",
+      "config": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/configs/config_8.yaml",
+      "config_sha256": "ba38fa50e35c0985867653a7fb6dab8bd46b28416991e660a717e81c463d06c5",
+      "result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_8",
+      "original_config": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_requeue/journal_cifar10_shunting_feedback_ladder_requeue_20260922132348/configs/unified_config_8.yaml",
+      "original_config_sha256": "554cad7f41a0d564136ce8497a38fc407ff403f921ee4bc4b934519adca614d2",
+      "original_results": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_requeue/journal_cifar10_shunting_feedback_ladder_requeue_20260922132348/results/config_8"
+    }
+  ],
+  "carried_early_stopped": [
+    {
+      "seed": 22000,
+      "feedback": "backpropagation",
+      "config_index": 60,
+      "epochs": 149,
+      "best_epoch": 99
+    },
+    {
+      "seed": 22000,
+      "feedback": "exact path",
+      "config_index": 40,
+      "epochs": 154,
+      "best_epoch": 104
+    },
+    {
+      "seed": 22000,
+      "feedback": "neuron specific",
+      "config_index": 20,
+      "epochs": 217,
+      "best_epoch": 167
+    },
+    {
+      "seed": 22000,
+      "feedback": "strict scalar",
+      "config_index": 0,
+      "epochs": 131,
+      "best_epoch": 81
+    },
+    {
+      "seed": 22002,
+      "feedback": "backpropagation",
+      "config_index": 62,
+      "epochs": 142,
+      "best_epoch": 92
+    },
+    {
+      "seed": 22002,
+      "feedback": "exact path",
+      "config_index": 42,
+      "epochs": 147,
+      "best_epoch": 97
+    },
+    {
+      "seed": 22002,
+      "feedback": "neuron specific",
+      "config_index": 22,
+      "epochs": 199,
+      "best_epoch": 149
+    },
+    {
+      "seed": 22002,
+      "feedback": "strict scalar",
+      "config_index": 2,
+      "epochs": 354,
+      "best_epoch": 304
+    },
+    {
+      "seed": 22003,
+      "feedback": "backpropagation",
+      "config_index": 63,
+      "epochs": 129,
+      "best_epoch": 79
+    },
+    {
+      "seed": 22003,
+      "feedback": "exact path",
+      "config_index": 43,
+      "epochs": 129,
+      "best_epoch": 79
+    },
+    {
+      "seed": 22003,
+      "feedback": "neuron specific",
+      "config_index": 23,
+      "epochs": 214,
+      "best_epoch": 164
+    },
+    {
+      "seed": 22003,
+      "feedback": "strict scalar",
+      "config_index": 3,
+      "epochs": 386,
+      "best_epoch": 336
+    },
+    {
+      "seed": 22004,
+      "feedback": "backpropagation",
+      "config_index": 64,
+      "epochs": 141,
+      "best_epoch": 91
+    },
+    {
+      "seed": 22004,
+      "feedback": "exact path",
+      "config_index": 44,
+      "epochs": 145,
+      "best_epoch": 95
+    },
+    {
+      "seed": 22004,
+      "feedback": "neuron specific",
+      "config_index": 24,
+      "epochs": 221,
+      "best_epoch": 171
+    },
+    {
+      "seed": 22004,
+      "feedback": "strict scalar",
+      "config_index": 4,
+      "epochs": 359,
+      "best_epoch": 309
+    },
+    {
+      "seed": 22005,
+      "feedback": "backpropagation",
+      "config_index": 65,
+      "epochs": 137,
+      "best_epoch": 87
+    },
+    {
+      "seed": 22005,
+      "feedback": "exact path",
+      "config_index": 45,
+      "epochs": 145,
+      "best_epoch": 95
+    },
+    {
+      "seed": 22005,
+      "feedback": "neuron specific",
+      "config_index": 25,
+      "epochs": 249,
+      "best_epoch": 199
+    },
+    {
+      "seed": 22005,
+      "feedback": "strict scalar",
+      "config_index": 5,
+      "epochs": 310,
+      "best_epoch": 260
+    },
+    {
+      "seed": 22006,
+      "feedback": "backpropagation",
+      "config_index": 66,
+      "epochs": 127,
+      "best_epoch": 77
+    },
+    {
+      "seed": 22006,
+      "feedback": "exact path",
+      "config_index": 46,
+      "epochs": 139,
+      "best_epoch": 89
+    },
+    {
+      "seed": 22006,
+      "feedback": "neuron specific",
+      "config_index": 26,
+      "epochs": 233,
+      "best_epoch": 183
+    },
+    {
+      "seed": 22006,
+      "feedback": "strict scalar",
+      "config_index": 6,
+      "epochs": 391,
+      "best_epoch": 341
+    },
+    {
+      "seed": 22007,
+      "feedback": "backpropagation",
+      "config_index": 67,
+      "epochs": 137,
+      "best_epoch": 87
+    },
+    {
+      "seed": 22007,
+      "feedback": "exact path",
+      "config_index": 47,
+      "epochs": 136,
+      "best_epoch": 86
+    },
+    {
+      "seed": 22007,
+      "feedback": "neuron specific",
+      "config_index": 27,
+      "epochs": 224,
+      "best_epoch": 174
+    },
+    {
+      "seed": 22007,
+      "feedback": "strict scalar",
+      "config_index": 7,
+      "epochs": 388,
+      "best_epoch": 338
+    },
+    {
+      "seed": 22009,
+      "feedback": "backpropagation",
+      "config_index": 69,
+      "epochs": 155,
+      "best_epoch": 105
+    },
+    {
+      "seed": 22009,
+      "feedback": "exact path",
+      "config_index": 49,
+      "epochs": 136,
+      "best_epoch": 86
+    },
+    {
+      "seed": 22009,
+      "feedback": "neuron specific",
+      "config_index": 29,
+      "epochs": 252,
+      "best_epoch": 202
+    },
+    {
+      "seed": 22009,
+      "feedback": "strict scalar",
+      "config_index": 9,
+      "epochs": 349,
+      "best_epoch": 299
+    },
+    {
+      "seed": 22010,
+      "feedback": "backpropagation",
+      "config_index": 70,
+      "epochs": 144,
+      "best_epoch": 94
+    },
+    {
+      "seed": 22010,
+      "feedback": "exact path",
+      "config_index": 50,
+      "epochs": 144,
+      "best_epoch": 94
+    },
+    {
+      "seed": 22010,
+      "feedback": "neuron specific",
+      "config_index": 30,
+      "epochs": 255,
+      "best_epoch": 205
+    },
+    {
+      "seed": 22010,
+      "feedback": "strict scalar",
+      "config_index": 10,
+      "epochs": 370,
+      "best_epoch": 320
+    },
+    {
+      "seed": 22011,
+      "feedback": "backpropagation",
+      "config_index": 71,
+      "epochs": 144,
+      "best_epoch": 94
+    },
+    {
+      "seed": 22011,
+      "feedback": "exact path",
+      "config_index": 51,
+      "epochs": 149,
+      "best_epoch": 99
+    },
+    {
+      "seed": 22011,
+      "feedback": "neuron specific",
+      "config_index": 31,
+      "epochs": 238,
+      "best_epoch": 188
+    },
+    {
+      "seed": 22011,
+      "feedback": "strict scalar",
+      "config_index": 11,
+      "epochs": 393,
+      "best_epoch": 343
+    },
+    {
+      "seed": 22012,
+      "feedback": "backpropagation",
+      "config_index": 72,
+      "epochs": 160,
+      "best_epoch": 110
+    },
+    {
+      "seed": 22012,
+      "feedback": "exact path",
+      "config_index": 52,
+      "epochs": 148,
+      "best_epoch": 98
+    },
+    {
+      "seed": 22012,
+      "feedback": "neuron specific",
+      "config_index": 32,
+      "epochs": 257,
+      "best_epoch": 207
+    },
+    {
+      "seed": 22012,
+      "feedback": "strict scalar",
+      "config_index": 12,
+      "epochs": 382,
+      "best_epoch": 332
+    },
+    {
+      "seed": 22013,
+      "feedback": "backpropagation",
+      "config_index": 73,
+      "epochs": 143,
+      "best_epoch": 93
+    },
+    {
+      "seed": 22013,
+      "feedback": "exact path",
+      "config_index": 53,
+      "epochs": 143,
+      "best_epoch": 93
+    },
+    {
+      "seed": 22013,
+      "feedback": "neuron specific",
+      "config_index": 33,
+      "epochs": 249,
+      "best_epoch": 199
+    },
+    {
+      "seed": 22013,
+      "feedback": "strict scalar",
+      "config_index": 13,
+      "epochs": 112,
+      "best_epoch": 62
+    },
+    {
+      "seed": 22014,
+      "feedback": "backpropagation",
+      "config_index": 74,
+      "epochs": 127,
+      "best_epoch": 77
+    },
+    {
+      "seed": 22014,
+      "feedback": "exact path",
+      "config_index": 54,
+      "epochs": 139,
+      "best_epoch": 89
+    },
+    {
+      "seed": 22014,
+      "feedback": "neuron specific",
+      "config_index": 34,
+      "epochs": 233,
+      "best_epoch": 183
+    },
+    {
+      "seed": 22014,
+      "feedback": "strict scalar",
+      "config_index": 14,
+      "epochs": 124,
+      "best_epoch": 74
+    },
+    {
+      "seed": 22015,
+      "feedback": "backpropagation",
+      "config_index": 75,
+      "epochs": 148,
+      "best_epoch": 98
+    },
+    {
+      "seed": 22015,
+      "feedback": "exact path",
+      "config_index": 55,
+      "epochs": 147,
+      "best_epoch": 97
+    },
+    {
+      "seed": 22015,
+      "feedback": "neuron specific",
+      "config_index": 35,
+      "epochs": 254,
+      "best_epoch": 204
+    },
+    {
+      "seed": 22015,
+      "feedback": "strict scalar",
+      "config_index": 15,
+      "epochs": 193,
+      "best_epoch": 143
+    },
+    {
+      "seed": 22016,
+      "feedback": "backpropagation",
+      "config_index": 76,
+      "epochs": 134,
+      "best_epoch": 84
+    },
+    {
+      "seed": 22016,
+      "feedback": "exact path",
+      "config_index": 56,
+      "epochs": 150,
+      "best_epoch": 100
+    },
+    {
+      "seed": 22016,
+      "feedback": "neuron specific",
+      "config_index": 36,
+      "epochs": 224,
+      "best_epoch": 174
+    },
+    {
+      "seed": 22016,
+      "feedback": "strict scalar",
+      "config_index": 16,
+      "epochs": 125,
+      "best_epoch": 75
+    },
+    {
+      "seed": 22017,
+      "feedback": "backpropagation",
+      "config_index": 77,
+      "epochs": 150,
+      "best_epoch": 100
+    },
+    {
+      "seed": 22017,
+      "feedback": "exact path",
+      "config_index": 57,
+      "epochs": 123,
+      "best_epoch": 73
+    },
+    {
+      "seed": 22017,
+      "feedback": "neuron specific",
+      "config_index": 37,
+      "epochs": 236,
+      "best_epoch": 186
+    },
+    {
+      "seed": 22017,
+      "feedback": "strict scalar",
+      "config_index": 17,
+      "epochs": 351,
+      "best_epoch": 301
+    },
+    {
+      "seed": 22018,
+      "feedback": "backpropagation",
+      "config_index": 78,
+      "epochs": 139,
+      "best_epoch": 89
+    },
+    {
+      "seed": 22018,
+      "feedback": "exact path",
+      "config_index": 58,
+      "epochs": 149,
+      "best_epoch": 99
+    },
+    {
+      "seed": 22018,
+      "feedback": "neuron specific",
+      "config_index": 38,
+      "epochs": 210,
+      "best_epoch": 160
+    },
+    {
+      "seed": 22018,
+      "feedback": "strict scalar",
+      "config_index": 18,
+      "epochs": 132,
+      "best_epoch": 82
+    },
+    {
+      "seed": 22019,
+      "feedback": "backpropagation",
+      "config_index": 79,
+      "epochs": 140,
+      "best_epoch": 90
+    },
+    {
+      "seed": 22019,
+      "feedback": "exact path",
+      "config_index": 59,
+      "epochs": 140,
+      "best_epoch": 90
+    },
+    {
+      "seed": 22019,
+      "feedback": "neuron specific",
+      "config_index": 39,
+      "epochs": 230,
+      "best_epoch": 180
+    },
+    {
+      "seed": 22019,
+      "feedback": "strict scalar",
+      "config_index": 19,
+      "epochs": 354,
+      "best_epoch": 304
+    }
+  ],
+  "original_analysis": {
+    "condition_summary.csv": "471c6b74e7282c77f30258e93dfefe1c3fedf0787c260bcbb0e07dbfb0122239",
+    "paired_contrasts.csv": "62cfcdd0e8f25aabda6c9ab270069d30e9027a13320b89ccfda8e3c4cc2f4a48",
+    "seed_outcomes.csv": "3d3d1460b1fca618ec4fc095be1a49a836bbb8e55550cc0952e606b1cb19faae",
+    "summary.json": "6417ed8bdf07b96ed1df3c38524e7ec0d8b4c0ab25256c6f7df53e674fbbb6be"
+  }
+}

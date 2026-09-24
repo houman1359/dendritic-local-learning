@@ -1,0 +1,263 @@
+{
+  "panel_sources": {
+    "A": "Schematic, no data: the frozen task configuration (configs/trained_subtree_address/full_factorial_confirmatory.json) drawn on the shared balanced feedback tree; selected +1.00 and sibling / same-half / opposite-half distractor coefficients.",
+    "B": "Schematic, no data: ancestry dictionaries A (8 x K) from grouped_routes(correct_ancestry_subtrees) with the card footers the raw group sums of figure_03_coefficient_prediction.csv, and the delivered support of b3's credit under the four matched controls at K = 4 (figure_03_control_supports.csv, rng seed 0). The control heatmap shows signed delivered fields \u03a6[c, b] divided by the maximum absolute value within each row; the source table retains the signed, unit-norm field values.",
+    "C": "condition_summary.csv means with 95% seed-bootstrap intervals (dendritic_tree under correct ancestry and under derangement) and the per-seed post-training maximum over the four matched controls from seed_outcomes.csv.",
+    "D": "condition_summary.csv means with 95% intervals for dendritic_tree versus degree_depth_matched_rewired_tree under ancestry feedback; paired differences and 20,000-draw seed bootstrap (seed 70000) from seed_outcomes.csv.",
+    "E": "review_evidence_reanalysis/ancestry_k4_control_contrasts.csv means, 95% intervals, positive-seed counts and Holm-adjusted P for five controls (the deranged row off scale, printed as its value); the seed fan is ancestry_control_paired_differences.csv at K = 4.",
+    "F": "review_coefficient_encoder and review_coefficient_hard_readout condition_summary.csv over the calibration x cue-noise grid at cue delay 0, with render-time 95% seed-bootstrap bands from trajectories.csv at epoch 80 (soft and hard facets); the right facet draws the paired_contrasts.csv learned-minus-oracle means and 95% intervals over the per-seed differences recomputed from trajectories.csv (the hard readout is exploratory)."
+  },
+  "source_sha256": {
+    "configs/trained_subtree_address/full_factorial_confirmatory.json": "8684f7c30886e7aede7eaa71550033ad84605fcfb45220d32a2d91d2627f23b2",
+    "configs/review_completion/coefficient_encoder.json": "dd3042208dda2e8b656be4c59b71914a9588d7d61f35a85ffc06a49f6da0b252",
+    "source_data/trained_subtree_address_full_factorial/seed_outcomes.csv": "2f2cc0d6a21fd7bd46a5437e031e69ae31626ef6650c6cced0be1d2a0861303c",
+    "source_data/trained_subtree_address_full_factorial/condition_summary.csv": "97358de3f0bfb7a91ba2aa6f164705d1a6e6d5c1b4e35b266c5e5a9fc03afb20",
+    "source_data/trained_subtree_address_full_factorial/paired_contrasts.csv": "442cf50ee7019ab0ccb8126fff2d0378dc3c88ff323ff863c045caa607793755",
+    "source_data/review_evidence_reanalysis/ancestry_k4_control_contrasts.csv": "aed995858ac591ddea7f8f0314d018e4ad4b51a810a032e99f3f1dff2b131e2a",
+    "source_data/review_evidence_reanalysis/ancestry_control_paired_differences.csv": "3746a2e477c9e6c734ffb8247745b7027288cfed33367cd04887b86457d11b22",
+    "source_data/review_coefficient_encoder/condition_summary.csv": "2a1f9a8d771e1dedd3eed0879b1baae3ae0504d7d9742fa12c587dfdd425fda3",
+    "source_data/review_coefficient_encoder/trajectories.csv": "2c3cb8e8ab35d60f07ca8351741d6f8cabd35c3f96716db52f7a9a10b1a6772f",
+    "source_data/review_coefficient_encoder/paired_contrasts.csv": "b4b7e009e271d9d7a812f9d318f9b20dd5187404bbf388dc5887ffe07904be1f",
+    "source_data/review_coefficient_hard_readout/condition_summary.csv": "6cdc699bbf1faafeb719e45d0b75ecfa0b2fc897c49747a22a5370d5eaf37b36",
+    "source_data/review_coefficient_hard_readout/trajectories.csv": "74e4818f4d8bab92ab7c1e9d6e4fb2817cb432f164c5d0d7f6163ea643219781",
+    "source_data/review_coefficient_hard_readout/paired_contrasts.csv": "46b214de8efef2e8640cce199a1cbb032477ec0e9ec62fdbc727e471705751e1"
+  },
+  "layout_findings": [
+    "TEXT-ON-DATA '+1.27 pp'",
+    "TEXT-ON-DATA '256'",
+    "TEXT-ON-DATA '16'"
+  ],
+  "forest_gutter_pt": 76.8,
+  "gap_gutter_pt": 84.48,
+  "schematic_area_fraction": 0.2989,
+  "g4_waiver": "G4 waiver recorded for Fig 3 at the superseded 31.6 % measure; on the B12 formula the figure is 29.9 % and the waiver is dormant",
+  "derived_numbers": {
+    "group_sums": {
+      "1": -3.05,
+      "2": -0.05000000000000004,
+      "4": 0.85,
+      "8": 1.0
+    },
+    "normalized_group_sums": {
+      "1": -1.0783378413094848,
+      "2": -0.02500000000000002,
+      "4": 0.6010407640085653,
+      "8": 1.0
+    },
+    "accuracy_by_K": {
+      "ancestry": [
+        18.66455078,
+        44.86328125,
+        80.10498047,
+        81.00097656
+      ],
+      "best": [
+        54.497070311499996,
+        60.263671875500016,
+        78.837890625,
+        81.000976563
+      ],
+      "deranged": [
+        18.66455078,
+        18.46923828,
+        19.04785156,
+        25.12939453
+      ]
+    },
+    "rewiring_pp": {
+      "1": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "2": [
+        23.149414061,
+        21.032653804412497,
+        25.317382811025002
+      ],
+      "4": [
+        5.017089844,
+        4.1894531255,
+        5.935058593012499
+      ],
+      "8": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "k4_contrasts_pp": {
+      "best_matched_nonanatomical_oracle": [
+        1.26708984375,
+        0.59326171875,
+        1.94580078125,
+        15,
+        20,
+        0.0101404298927
+      ],
+      "random_rank_k": [
+        2.314453125,
+        1.0009765625,
+        3.90869140625,
+        15,
+        20,
+        0.00338014329755
+      ],
+      "random_sparse_matched": [
+        3.76708984375,
+        2.890625,
+        4.74127197266,
+        20,
+        20,
+        0.000176647717262
+      ],
+      "depth_interleaved_bins": [
+        7.11181640625,
+        6.1865234375,
+        8.02978515625,
+        20,
+        20,
+        7.62939453125e-06
+      ],
+      "within_neuron_route_derangement": [
+        61.0571289062,
+        60.1293945312,
+        62.0166015625,
+        20,
+        20,
+        7.62939453125e-06
+      ]
+    },
+    "cue_grid": {
+      "soft": {
+        "('soft', 16)": [
+          19.3921,
+          19.1553,
+          19.0674
+        ],
+        "('soft', 64)": [
+          75.061,
+          21.3892,
+          19.2993
+        ],
+        "('soft', 256)": [
+          79.978,
+          25.8252,
+          19.27
+        ]
+      },
+      "hard": {
+        "('hard', 16)": [
+          80.2905,
+          32.4072,
+          20.8105
+        ],
+        "('hard', 64)": [
+          80.2905,
+          54.2236,
+          22.2974
+        ],
+        "('hard', 256)": [
+          80.2905,
+          64.0308,
+          23.4399
+        ]
+      },
+      "oracle": 80.2905273437,
+      "frozen": 18.6694335938,
+      "mismatched": [
+        18.5791015625,
+        18.8916015625
+      ],
+      "soft_256_noise0_vs_oracle": [
+        -0.3125,
+        -0.42236328125,
+        -0.1953125
+      ],
+      "soft_16_noise0_vs_oracle": [
+        -60.8984375,
+        -61.6088867188,
+        -60.1953125
+      ],
+      "soft_256_noise05_vs_oracle": [
+        -54.4653320312,
+        -55.4467773438,
+        -53.5400390625
+      ],
+      "soft_256_noise05_vs_frozen": [
+        7.15576171875,
+        6.25732421875,
+        8.06890869141
+      ],
+      "hard_256_noise05_vs_oracle": [
+        -16.259765625,
+        -17.8295898438,
+        -14.8291015625
+      ]
+    },
+    "cue_gaps": {
+      "soft_256_noise0_vs_oracle": [
+        -0.3125,
+        -0.42236328125,
+        -0.1953125,
+        3,
+        20
+      ],
+      "soft_16_noise0_vs_oracle": [
+        -60.8984375,
+        -61.6088867188,
+        -60.1953125,
+        0,
+        20
+      ],
+      "hard_256_noise0_vs_oracle": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        20
+      ],
+      "soft_256_noise0.5_vs_oracle": [
+        -54.4653320312,
+        -55.4467773438,
+        -53.5400390625,
+        0,
+        20
+      ],
+      "hard_256_noise0.5_vs_oracle": [
+        -16.259765625,
+        -17.8295898438,
+        -14.8291015625,
+        0,
+        20
+      ]
+    }
+  },
+  "coefficient_scope": "Raw group sums; implemented route rows divide by sqrt(group size). Signs follow from the generator and are not a new prospective prediction.",
+  "caption_word_count": 323,
+  "deviations_from_plan": [
+    "row weights 124/113/113 at a 44 pt vertical gutter and margins 44/12/20/32, not the plan's 112/121/121 at 42 pt with margins 52/14.  FILL_W_MIN 0.92 makes left + right <= 57.5 pt a hard constraint (52 + 14 fills only 90.3 % of the page width and fails the strict audit's fill-width check); at a 112 pt row 0 the eight-module panel B has axes aspect 2.64, above PANEL_ASPECT_MAX 2.40, which DECISIONS G4 forbids relaxing, and 124 pt is the shortest row 0 that clears it; a 42 pt gutter leaves 7.2 pt between rows 1 and 2 against audit_row_separation.py's 8.5 pt floor, 44 pt measures 9.4 pt.  The two data rows gain 6 pt against the previous build and the schematic fraction falls to 26.0 %",
+    "E uses lock=False plus a measured private left inset instead of declare_reserve(left=66): a declared reserve locks the whole grid column and C starts in column 0, so C and D would differ in width",
+    "E draws its per-row wins / Holm notes inside the axes above each seed fan; forest(note=...) writes into the gutter shared with F",
+    "E prints Holm P as 1.8 x 10^-4 / 7.6 x 10^-6 with the exponent set by token_subscript at a NEGATIVE drop, i.e. a real 7.0 pt raised span: Nimbus Sans has no U+207B and CF-2 forbids mathtext, so the raised group is right-aligned by measuring the drawn chain",
+    "A's four coefficient tiers are one contiguous band in spatial order with per-block tier names and hairline connectors to their terminal groups, and tint per cent 13/22/34/46 so the ORDINAL_RAMP reads light-to-dark: a 19.5 pt coefficient cannot be centred on a 12.5 pt terminal pitch, so the band is a partition, not four terminal-aligned patches; the tier gloss is the spatial order and drops 'nonsibling' for width",
+    "A drops the 'junctions define feedback supports only' footer into the caption -- the plan's stated fallback",
+    "B draws no tree in the ancestry cards, so the subtree entry arrow comes from the private _delivery_arrow rather than credit_delivery",
+    "B's control support table is 4 x 10 pt rows by 8 x 7 pt columns, not 6 x 6 pt: a 7 pt row label cannot sit on a 6 pt row",
+    "DELIBERATE, SOURCED: D's paired intervals use one 20,000-draw bootstrap seeded 70000 over the frozen seed_outcomes.csv; K = 2 gives [21.03, 25.32] against the plan's quoted [21.05, 25.32].  Same estimator, same data, same mean (+23.149 pp); only the resampling draw differs and the plan's RNG state is unrecorded, so the caption prints the endpoint this builder computes",
+    "C and F carry shortened forms of the plan's long annotations; the full wording is in the caption",
+    "D's rewired label is direct-labelled on its own series under the K = 1-2 segment with the 'control' badge inline, not parked over the y-tick cluster",
+    "A's context double ring is dropped 4.6 pt down its own branch so the ring rim and the b3 terminal label clear each other",
+    "C's K = 8 tie tag names the two families that actually tie (ancestry = best matched control, 81.00 %): the deranged square is at 25.13 % at K = 8, so the plan's 'all families tie' is false",
+    "C's tie tags print 18.66 %, not the plan's 18.67 %: the frozen condition_summary gives 18.6646 % for both arms at K = 1, which is also what the plan's own deranged row rounds to",
+    "E runs to xlim (-2, 14) instead of (-2, 11) so the +13.13 dense rank-4 seed is drawn rather than clipped, and the off-scale note names it in its planned second clause; the note is set on two lines and the right-aligned column moved from x = 13.7 to 12.85 to keep audit_panel_gaps.py's 6 pt floor against F",
+    "VISUAL REVIEW 2026-09-10: C and D run on ylim (-4, 100), not (-20, 100); C drops its 'below chance' line; D carries y tick labels and the y title, a one-line rewired label, the title 'Rewiring costs 23 and 5 pp at K = 2, 4' and no K = 4 span; F drops its n line and three of four contrast lines, marks the three sampled doses (filled soft, open hard), draws the frozen floor dashed at LW_REF and its oracle rule in CF-7 mute rather than violet; B lists its controls in E's order (dense rank-4, random-sparse, depth-interleaved, deranged) while the rng draw order is unchanged, so every support value is the shipped one",
+    "F direct-labels the three dashed hard-readout curves 256 / 64 / 16 at their noise-0.5 vertices (64.03 / 54.22 / 32.41 %) with a 'hard readout' tag and the 'exploratory' badge, and runs on the plan's ylim (10, 90) so the 18.67 % frozen floor clears the bottom spine by 11 pt; the plan's three long annotations are reduced to the panel's own claim, the -54.47 pp gap at noise 0.5, on two 7 pt lines in the one mark-free wedge",
+    "F carries the plan's ylim (10, 90); the +7.16 pp vs frozen contrast, the noise-0 gaps (-0.31 / -60.90 pp), the n / interval / epoch statement, the seed range 52000-52019 and the cue-delay clause are carried by the caption and the running text because the window leaves no band for them",
+    "B's control-table column headers are the digits 1..8 under one b_i tag, not eight subscripted b_j strings: a literal Unicode subscript is not in Nimbus Sans and mathtext is banned by CF-2",
+    "B's |A| scale-bar tag is plain text, not Frame.subscript",
+    "F's oracle rule is labelled 'oracle 80.3 %' with no 'oracle' badge (the panel already carries the 'exploratory' badge; a second chip on the same rule would sit on the dashed hard-readout curves)",
+    "private helpers _badge (ceiling, exploratory), _delivery_arrow, _gap_span",
+    "DESIGN PASS 2026-09-14: 450 pt tall on rows 126/96/110 at a 28 pt horizontal and 30 pt vertical gutter; C and D are three-module panels sharing one y axis (D keeps its tick labels, drops the title); E is a five-row forest at six modules with the row name over its wins / Holm P in the label column and the deranged control as an off-scale arrow with its value; F is three facets (soft, hard, paired accuracy minus oracle) under one letter; no data panel carries a title or an n / interval / epoch line; C's tie tags, D's 'exact tie' line, E's off-scale prose and F's contrast prose are gone (caption, concentric marks and the new facet carry them); the mismatched-encoder range is asserted but not printed"
+  ]
+}

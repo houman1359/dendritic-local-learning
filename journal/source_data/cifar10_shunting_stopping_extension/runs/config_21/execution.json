@@ -1,0 +1,45 @@
+{
+  "started_unix": 1790209679.9133034,
+  "index": 2,
+  "record": {
+    "index": 2,
+    "config_index": 21,
+    "seed": 22001,
+    "feedback": "neuron specific",
+    "config": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/configs/config_21.yaml",
+    "config_sha256": "6fad9e5fa891c38fac53359723805997f1490e392ead8d65dc73a818b3d08a1e",
+    "result_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/run_completion_revision_20260923/cifar_extension/results/config_21",
+    "original_config": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_requeue/journal_cifar10_shunting_feedback_ladder_requeue_20260922132348/configs/unified_config_21.yaml",
+    "original_config_sha256": "27f281bdc53548490c82aeb7fb1bf64706fc00cecd9edfceb13a5b191e55deeb",
+    "original_results": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/cifar_shunting_revision_20260922/sweep_runs/cifar10_shunting_feedback_ladder_requeue/journal_cifar10_shunting_feedback_ladder_requeue_20260922132348/results/config_21"
+  },
+  "smoke": false,
+  "runtime_commit": "e516c7fec3169253ff8c14bc5f4ab1325469e4f5",
+  "config_sha256": "6fad9e5fa891c38fac53359723805997f1490e392ead8d65dc73a818b3d08a1e",
+  "protocol_sha256": "9ce7cbba2f3f8f25447aa59f62ef6663f5dd88f2007d49347d9ec7f142a48f51",
+  "gpu": "NVIDIA H200",
+  "torch": "2.9.1+cu128",
+  "slurm_job_id": "48057840",
+  "array_task_id": "2",
+  "host": "holygpu8a03202",
+  "status": "complete",
+  "epochs": 238,
+  "best_epoch": 188,
+  "patience_stopped": true,
+  "reached_cap": false,
+  "prefix_epochs": 238,
+  "max_abs_validation_replay_drift": 0.0,
+  "final_metrics": {
+    "accuracy": {
+      "train": 0.5696889162063599,
+      "valid": 0.48240000009536743,
+      "test": 0.49059998989105225
+    },
+    "categorical_loglikelihood": {
+      "train": -1.2130321264266968,
+      "valid": -1.474738597869873,
+      "test": -1.4630446434020996
+    }
+  },
+  "finished_unix": 1790210170.5635235
+}

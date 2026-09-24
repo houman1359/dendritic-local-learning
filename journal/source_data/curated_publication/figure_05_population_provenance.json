@@ -1,0 +1,14 @@
+{
+  "output": "figures/main/figure_05_population.pdf",
+  "output_sha256": "7a63471390fa33789ea95b5e45b78d83dcb7f9c066e58e61bebb55a0471c44de",
+  "sources": {
+    "inhibitory_selection_endpoints.csv": "0563587108aad93a2e819ac4d40c2a6d43205e81a7d3035ef8d6897f1af952bc",
+    "inhibitory_selection_summary.csv": "f320b15d3c354e349d9aac340c2d068ae7878a9d4faa3a4ef22be80ec2e1693c",
+    "inhibitory_selection_rate_sensitivity.csv": "6913095603e681ed70cbdeae2a78afb30d01ad582950b3b57c7c0685797aef22",
+    "inhibitory_rescue_endpoints.csv": "a172ebed83cd40f1f962fd5bd2a98db317955c4c63f435988a99888317b92b55",
+    "inhibitory_rescue_common_endpoints.csv": "53e6394e2b24002321ef3739396a77ed3dfe9256cf0dc5593a7a0df08997c7cb"
+  },
+  "table_sha256": "ad15753ca69f268be02e82b6ed21d99b7cf9d8b63e69c23390330c69fd403260",
+  "layout_findings": [],
+  "scope": "Figure 5 continuation H-M; original selection and new rescue cohorts are distinct; common-rate panels reuse their respective seeds"
+}

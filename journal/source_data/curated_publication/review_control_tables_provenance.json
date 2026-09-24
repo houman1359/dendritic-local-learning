@@ -1,0 +1,12 @@
+{
+  "source_sha256": {
+    "source_data/curated_publication/noise_controls_contrasts.csv": "42f325229b533fef5185afc58907e4b89ff4c6bbb7be88f7d093f72d175d9c45",
+    "source_data/curated_publication/nonlinear_separable_endpoints.csv": "c00b3518494410e18af97f28a642173dc47972331653d24bd8a77e769574dd7a",
+    "source_data/curated_publication/context_alignment_summary.csv": "0ac0bba02b3e27031d1a558998bf09caa8e6ae18f0f70e7d995cabacdbe25373"
+  },
+  "builder_sha256": {
+    "scripts/review_completion/build_tables.py": "56fc0ee03f8a8fa91a05d5dcceb8e83209df0ddc24f69383f676cae3e0be7787"
+  },
+  "output": "supplementary/curated/si_review_control_tables.tex",
+  "output_sha256": "9d731994677556bf77d5d8b781fb39b96393f662bf10ee05ec73da833c1f58dd"
+}

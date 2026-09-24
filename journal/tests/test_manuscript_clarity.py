@@ -2,8 +2,10 @@
 import ast
 from pathlib import Path
 import re
+import sys
 
 J = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(J / "scripts"))
 
 
 def function_source(path, name):
@@ -43,9 +45,9 @@ def test_tasks_are_defined_before_population_outcomes():
     source = (J / "main.tex").read_text()
     target = source.index(r"y_{\rm sep}=\sum_{b=0}^3c_b(-1)^b")
     interaction = source.index(r"y_{\rm int}=y_{\rm sep}")
-    severity = source.index("Distractor stress amplified only the unselected streams")
-    gate = source.index("input resistance relative to its value without inhibition")
-    result = source.index("Resistance gating helped most under strong distractors.")
+    severity = source.index("Distractor severity $s$ multiplied only unselected latent features")
+    gate = source.index("input resistance relative to its uninhibited value")
+    result = source.index("Resistance gating improved ordinary-test NMSE")
     assert target < interaction < severity < gate < result
     assert "parent nonlinearity and target changed together" in source
 

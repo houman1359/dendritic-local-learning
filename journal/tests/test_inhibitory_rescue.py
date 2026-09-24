@@ -93,6 +93,6 @@ def test_supplement_includes_rescue_and_preserves_original_failure():
     assert r"\input{curated/si_05_parent_sensitivity}" in si
     assert r"\input{curated/si_parent_sensitivity_table}" in si
     assert "gate gave slightly higher mean ordinary-test error than broadcast" in main.casefold()
-    assert "while fixing the nonlinear task and forward model" in main
+    assert "Holding the nonlinear task and forward model fixed" in main
     assert "Supplementary Table~S15" in main
     assert "not a biological mechanism for transmitting it" in main

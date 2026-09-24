@@ -1,0 +1,222 @@
+{
+  "figure": "fig9",
+  "label": "fig:boundary",
+  "panels": "a-f",
+  "plotted_panel_mapping": {
+    "B": "selected-target estimate and values; descriptive all-scan values",
+    "C": "four all-scan target-level topology measures",
+    "D": "detection probability and the observed-estimate rug",
+    "D-inset": "all repeat reliabilities, with histogram inclusion flagged",
+    "E": "representative mapped-input by route support matrix",
+    "F": "mapped-input coverage in every eligible scan"
+  },
+  "canvas": {
+    "width_pt": 518.4,
+    "height_pt": 448.0,
+    "schematic_fraction": 0.2359,
+    "schematic_formula": "sum(schematic slot w_pt * h_pt) / (live_w_pt * live_h_pt)"
+  },
+  "delta0_exemption": {
+    "panel": "A",
+    "reason": "stimulus recording; no credit is delivered in this experiment"
+  },
+  "forest_panels": [
+    "B",
+    "C"
+  ],
+  "scan_rug_offset_rows": 0.45,
+  "scan_rug_note": "descriptive within-row distribution rug, not the CF-6 +0.22 second-arm offset",
+  "representative": {
+    "target_root_id": 864691135810666525,
+    "session": 4,
+    "scan_idx": 10
+  },
+  "selection": "Median mapped-input count, identifier ties; no outcome selection",
+  "coordinate_definition": "Rows are mapped partner inputs; multiple inputs can share a physical segment. Legacy n_sites and sites_per_route keys count these input coordinates.",
+  "ancestry_placement": {
+    "shared_subtree": [
+      1,
+      3,
+      8
+    ],
+    "own_branch": [
+      2,
+      4,
+      5,
+      6,
+      7,
+      9
+    ],
+    "rule": "deepest shared ancestor of the mapped input segments; schematic placement only"
+  },
+  "n_targets": 7,
+  "n_scans": 13,
+  "selected_scan_partners": 69,
+  "partners_per_scan": [
+    5,
+    17
+  ],
+  "panel_b": {
+    "Selected scans": {
+      "mean": -0.0694614452169,
+      "ci95": [
+        -0.250817828682,
+        0.105545551658
+      ],
+      "note": "3/7 +"
+    },
+    "All 13 scans": {
+      "mean": -0.0484970176243,
+      "ci95": [
+        -0.223969809949,
+        0.118289595519
+      ],
+      "note": "3/7 +"
+    }
+  },
+  "panel_b_drawn": [
+    "Selected scans"
+  ],
+  "panel_b_note": "the all-scan cohort is computed and recorded here but no longer redrawn in B: the same estimate is drawn once, as C's green top row",
+  "panel_c": {
+    "Partial rank r": {
+      "mean": -0.04849701761886205,
+      "ci95": [
+        -0.22373056261648766,
+        0.11828959552287029
+      ],
+      "note": "3/7 +"
+    },
+    "Shared path r": {
+      "mean": -0.024520633376814573,
+      "ci95": [
+        -0.21422908414853892,
+        0.14663073250473316
+      ],
+      "note": "4/7 +"
+    },
+    "Tree distance r": {
+      "mean": -0.017467355157629434,
+      "ci95": [
+        -0.12974366689062516,
+        0.10157870142979739
+      ],
+      "note": "3/7 +"
+    },
+    "Same major branch \u0394": {
+      "mean": -0.002740132626662263,
+      "ci95": [
+        -0.08334458508704276,
+        0.06994787383577945
+      ],
+      "note": "4/7 +"
+    }
+  },
+  "panel_d": {
+    "threshold_measured": 0.24866696631980761,
+    "threshold_perfect": 0.24799524297263034,
+    "lambda_mc_respecting": 0.65,
+    "false_detection": 0.02475,
+    "mc_halfwidth_max": 0.01548334775785229,
+    "n_replicates": 4000,
+    "inset_bins": [
+      1,
+      1,
+      17,
+      33,
+      40,
+      22,
+      9,
+      2
+    ],
+    "inset_bin_edges": [
+      -0.2,
+      -0.1,
+      0.0,
+      0.10000000000000003,
+      0.2,
+      0.3,
+      0.4000000000000001,
+      0.5,
+      0.6
+    ],
+    "inset_records": 125,
+    "inset_records_drawn": 125,
+    "inset_negative_records": 2,
+    "inset_partners": 102
+  },
+  "panel_f": {
+    "mean_coverage_pct": 47.972467452105455,
+    "all_one_site_scans": 6,
+    "scans_below_k_over_n": 2,
+    "scans_above_k_over_n": 3,
+    "above_rows": [
+      {
+        "target_root_id": 864691135739661169,
+        "session": 7,
+        "scan_idx": 3,
+        "n_sites": 6,
+        "sites_per_route": 1.75,
+        "coverage_pct": 83.3
+      },
+      {
+        "target_root_id": 864691135196576298,
+        "session": 7,
+        "scan_idx": 3,
+        "n_sites": 9,
+        "sites_per_route": 2.0,
+        "coverage_pct": 66.7
+      },
+      {
+        "target_root_id": 864691135810666525,
+        "session": 7,
+        "scan_idx": 4,
+        "n_sites": 11,
+        "sites_per_route": 1.25,
+        "coverage_pct": 45.5
+      }
+    ],
+    "below_rows": [
+      {
+        "target_root_id": 864691135810666525,
+        "session": 6,
+        "scan_idx": 4,
+        "n_sites": 6,
+        "coverage_pct": 50.0
+      },
+      {
+        "target_root_id": 864691135277186789,
+        "session": 4,
+        "scan_idx": 7,
+        "n_sites": 12,
+        "coverage_pct": 25.0
+      }
+    ]
+  },
+  "observed_selected_scan": {
+    "mean": -0.0694614452169,
+    "ci95_low": -0.250817828682,
+    "ci95_high": 0.105545551658
+  },
+  "source_sha256": {
+    "scripts/credit_first_figures/build_measured.py": "89284f6fb415496cb95b04f75774434d1180ef37fc1023f3521ff4d3a77e4b22",
+    "source_data/figure3/segment_metrics.csv": "7829c298c4e5b3209b758fb88b92b55f070420c00b383436e5d4e1601e7ff1cf",
+    "source_data/fulltree_boundary/output/dictionary_and_validation_metadata.jsonl": "12bd1392df9c3db14b9746f042786dcabbc9fd7f8acc99926277217b55554c7f",
+    "source_data/curated_publication/figure_10_plotted.csv": "7098adb82676058355aee0dbb315a50db47dd54ba28db9abd151d894c16b6c3d",
+    "source_data/review_evidence_reanalysis/functional_native_contrasts.csv": "c7352f39853bb27f8dcb19b9b8baec0e3442634998c6abeae7ad0e6398dbf72d",
+    "source_data/review_evidence_reanalysis/functional_native_target_effects.csv": "ef15a48beb64b0f20e79990ee354ea3a2206532bc767e3b0ebf7aa8ef63c4af7",
+    "source_data/functional_topology_all_scans/scan_metrics.csv": "b0817d6b33a0af971f8cc6a61533c7830b90d881877293f7d87dfecee6572386",
+    "source_data/functional_topology_all_scans/cell_metrics.csv": "d8cab044c6d792c072e39ac1c02344f20d8ca09e9fbf4548a7bfff94e7f2ec7b",
+    "source_data/functional_topology_all_scans/summary.json": "8f32fddca4017365228ba77599b1a0f9c0b451967717636d9a06be59a3397550",
+    "source_data/figure5/functional_target_metrics.csv": "7ac04ba59e6f948a75eac9c3e82c5e6849fe835352bdca7a3ce0b51a1fdbbb89",
+    "source_data/measured_alignment_power/power_summary.csv": "071538da525eeb31a148ef4d3775fb29003646d4541c26ae82c52afea323e187",
+    "source_data/measured_alignment_power/reliability_calibration_audit.csv": "77c52fcbfc6cba0bd97eff5758b4ef9f914ad31495a17bf1b678c4ba220f915f",
+    "source_data/measured_alignment_power/RESULTS.json": "c4e5d721eabc86c8697e43663ebac9122a3968fd97e9f37f27a4889c6eb53ea9",
+    "source_data/measured_alignment_power/inputs/partner_index.csv": "27a73c097eb017f4f9e3d9839c0d27b3e487fa235fd4f978c43b4fd1415f8775",
+    "scripts/credit_first_figures/source_data_export.py": "140262b3750a3fbe56fe9d92323788b05553dbb7cb24bb56ca75dce8b7501ee6"
+  },
+  "layout_findings": [
+    "TEXT-ON-DATA '3/7 +'",
+    "TEXT-ON-DATA 'perfect reliability'"
+  ]
+}

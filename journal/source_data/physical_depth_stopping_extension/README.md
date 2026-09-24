@@ -1,0 +1,9 @@
+# Physical-depth stopping extension
+
+All six original conditions and ten paired seeds are retained. Runs use the frozen `a99c3a7` implementation on H200 GPUs and the unchanged thirty-epoch validation-loss patience, optimizer recipes and checkpoint-selection rule. This is a post-review same-seed extension, not fresh confirmation or a proof of global convergence. The original 180- and 600-epoch outcomes remain in their historical directories.
+
+Ten already stopped H200 fits were retained. The other fifty fits resumed verified model/optimizer/global-and-loader-RNG states where available, or restarted the original seed after a launch/storage failure. Only storage locations and the nonbinding safety cap changed. Every final run stopped normally before its actual cap. The protocol records actual execution paths and the separate scheduled-resource amendment.
+
+`checkpoint_audit.csv` records the tensor, configuration, RNG-state and validation-selection checks against retained raw checkpoints; those large checkpoint files are kept in the production archive, rather than duplicated here. `compact_records.json` authenticates the distributed run records. `observed_training_histories.csv` retains every observed training epoch. `selected_metric_audit.csv` gives metrics and raw-file hashes for each state used in the display. Stopped validation-best states are carried forward so each displayed mean always uses the same ten seeds.
+
+Run `python scripts/run_completion/analyze_stopping.py --output NEW_DIRECTORY` after restoring Source Data to reproduce validation-only selection and all paired trajectory statistics from these compact numerical records. Intervals use 10,000 whole-seed bootstrap draws and are descriptive and pointwise. No statistical significance or stopping decision is based on the test split.
