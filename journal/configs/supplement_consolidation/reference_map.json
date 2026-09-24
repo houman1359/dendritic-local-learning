@@ -3277,7 +3277,7 @@
   "N4C": {
     "old_label": "fig:si_cifar_ladders",
     "original_asset": "figures/supplementary/figure_cifar_ladders_native.pdf",
-    "original_sha256": "c6105a3cae32361304bb0ecdca18f290fa501730be6a0501794f4385d81eab03",
+    "original_sha256": "ff0f56b125cf4493ee5c05d4d8d01d6a1062da62f3c6589f3a5a311308fbf78b",
     "primary_destination": "S6",
     "panels": {
       "C": {

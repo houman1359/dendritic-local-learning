@@ -86,7 +86,10 @@ def test_morphology_endpoint_and_alignment_scope(captions):
     cap = captions["physical_architecture"]
     assert "secant of 5.84" in cap and "all five levels" in cap and "final jump" in cap
     cap = captions["physical_optimizer"]
-    assert "restarted from the original seeds" in cap and "continuations" not in cap
+    assert "same-seed stopping extension" in cap
+    assert "All sixty extended fits reached the unchanged validation-stopping criterion" in cap
+    assert "temporary LocalCA accuracy reversal" in cap
+    assert "small exact-path advantage and lower cross-entropy at ordinary stopping" in cap
 
 
 def test_s24_palette_matches_s22_arm_roles():

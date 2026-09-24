@@ -811,7 +811,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_cifar_ladders_native.pdf",
-          "source_sha256": "c6105a3cae32361304bb0ecdca18f290fa501730be6a0501794f4385d81eab03",
+          "source_sha256": "ff0f56b125cf4493ee5c05d4d8d01d6a1062da62f3c6589f3a5a311308fbf78b",
           "old_provenance_figure": "figN4C",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [
@@ -849,7 +849,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_cifar_ladders_native.pdf",
-          "source_sha256": "c6105a3cae32361304bb0ecdca18f290fa501730be6a0501794f4385d81eab03",
+          "source_sha256": "ff0f56b125cf4493ee5c05d4d8d01d6a1062da62f3c6589f3a5a311308fbf78b",
           "old_provenance_figure": "figN4C",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [
@@ -887,7 +887,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_cifar_ladders_native.pdf",
-          "source_sha256": "c6105a3cae32361304bb0ecdca18f290fa501730be6a0501794f4385d81eab03",
+          "source_sha256": "ff0f56b125cf4493ee5c05d4d8d01d6a1062da62f3c6589f3a5a311308fbf78b",
           "old_provenance_figure": "figN4C",
           "old_provenance_entry_ids": [],
           "numerical_source_paths": [
@@ -977,7 +977,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 320.9000244140625,
-      "sha256": "4d1e6e4f7fc2bee3f0ac1b4838c33dc9265e0fa43c68f0e4e387d0be950b062b",
+      "sha256": "8a7139eaff881a652d3524e1b7410170b7d115de63523aa8551fcbbbb26c0bd9",
       "source_data_directories": [
         "source_data/cifar10_shunting_stopping_extension",
         "source_data/cifar10_additive_feedback_ladder_confirmatory",

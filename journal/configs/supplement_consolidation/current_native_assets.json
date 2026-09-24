@@ -70,7 +70,7 @@
       }
     ],
     "builder": "scripts/build_supplementary_figure_s04_native.py",
-    "sha256": "c6105a3cae32361304bb0ecdca18f290fa501730be6a0501794f4385d81eab03",
+    "sha256": "ff0f56b125cf4493ee5c05d4d8d01d6a1062da62f3c6589f3a5a311308fbf78b",
     "note": "Current editorial render; the frozen original registry remains unchanged."
   },
   "N9": {

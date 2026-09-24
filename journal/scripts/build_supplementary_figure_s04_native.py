@@ -184,7 +184,7 @@ CIFAR_Y_TICKS = (0.25, 0.30, 0.35, 0.40, 0.45, 0.50)
 
 CONFIRMATORY_SPECS = (
     ("strict scalar", "strict\nscalar", COLORS["scalar"], "o"),
-    ("neuron specific", "neuron-\nspecific", COLORS["per_soma"], "s"),
+    ("neuron specific", "per\nneuron", COLORS["per_soma"], "s"),
     ("exact path", "exact\npath", COLORS["oracle"], "^"),
     ("backpropagation", "BP", COLORS["bp"], "D"),
 )
