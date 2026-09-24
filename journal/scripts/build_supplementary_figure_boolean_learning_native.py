@@ -12,8 +12,8 @@ same plotted quantities on the paper's :class:`figure_canvas.NativeCanvas`:
        rates (``condition_summary.csv``; the means are recomputed from the
        2,240 per-seed endpoints of ``selected_endpoints.csv``).  Cells are
        vector rectangles with white hairline separators; ONE colour key
-       stands in the right margin beside the whole 2 x 2 block, so the four
-       maps share one axes width and B registers with D.
+       (rail plus label) stands in the right margin beside the whole 2 x 2
+       block, so the four maps share one axes width and B registers with D.
 * E    the two prespecified Adam XOR-of-AND contrasts
        (``paired_primary_contrasts.csv``, ``primary_contrasts.csv``): twenty
        paired seed differences as a fan, the mean as a short rule with the
@@ -21,8 +21,9 @@ same plotted quantities on the paper's :class:`figure_canvas.NativeCanvas`:
        subpanel has a broken y axis: a labelled strip at the foot carries 0
        and the 0.01 margin, the upper segment 0.50-0.68 carries the data.
 * F    accuracy and balanced accuracy versus NMSE for the 112 conditions,
-       axes tight to the data, the ceiling population counted in-panel, the
-       AND/OR constant-majority references from ``target_normalization.csv``.
+       axes tight to the data, the ceiling population asserted (and stated
+       in the caption), the AND/OR constant-majority references from
+       ``target_normalization.csv``.
 * G    same-rate broadcast-minus-exact contrasts
        (``paired_same_rate_contrasts.csv``, ``same_rate_contrast_summary.csv``)
        on a logarithmic rate axis with every seed drawn; the SGD subpanel is
@@ -41,6 +42,10 @@ F); grey = accuracy and blue = balanced accuracy in F; mute = zero.  Line
 style and marker fill name the optimizer in H (solid filled Adam, dashed
 open SGD).  Every printed or plotted number is asserted against the table it
 comes from.
+
+2026-09-23 clarity pass: the F and H headlines, the in-plot notes ('own y
+scale', 'symlog y axis', 'cosine 1', the F ceiling count) and E's verdict
+tick labels moved to the caption; axis labels in sentence case.
 """
 from __future__ import annotations
 
@@ -224,11 +229,25 @@ def heatmaps(cv, axes, summary, endpoints, rates):
 
 
 def colour_rail(cv, mesh, top_ax, bottom_ax):
-    """One key for A-D in the right outer margin, spanning the 2 x 2 block."""
+    """One key for A-D in the right outer margin, spanning the 2 x 2 block.
+
+    The rail and its label together span the block: the label's foot sits on
+    the bottom maps' axes bottom and the rail runs from just above the label
+    to the top maps' axes top, so the rail's middle tick label stands beside
+    the top row rather than level with the bottom row's letter band.
+    """
     top = top_ax.get_position()
     bottom = bottom_ax.get_position()
     x0 = top.x1 + 3.0 / cv.width_pt
-    cax = cv.fig.add_axes([x0, bottom.y0, 4.5 / cv.width_pt, top.y1 - bottom.y0])
+    label = cv.fig.text(x0 - 1.0 / cv.width_pt, bottom.y0, "Clean\nNMSE", ha="left",
+                        va="bottom", fontsize=PT_BASE, color=INK, linespacing=1.1)
+    cv.fig.canvas.draw()
+    label_h = (label.get_window_extent(cv.fig.canvas.get_renderer()).height
+               / cv.fig.dpi * 72.0)
+    # 5 pt: the bottom tick label hangs 3.5 pt below the rail, and must
+    # clear the label
+    y0 = bottom.y0 + (label_h + 5.0) / cv.height_pt
+    cax = cv.fig.add_axes([x0, y0, 4.5 / cv.width_pt, top.y1 - y0])
     cbar = cv.fig.colorbar(mesh, cax=cax)
     cbar.outline.set_linewidth(LW_EDGE)
     cbar.outline.set_edgecolor(EDGE)
@@ -237,10 +256,6 @@ def colour_rail(cv, mesh, top_ax, bottom_ax):
     cbar.minorticks_off()
     cbar.ax.tick_params(labelsize=PT_BASE, width=LW_EDGE, length=2.2, pad=1.2,
                         color=EDGE, labelcolor=INK)
-    cbar.ax.annotate("clean\nNMSE", xy=(0.0, 0.0), xycoords="axes fraction",
-                     xytext=(-1.0, -3.0), textcoords="offset points",
-                     ha="left", va="top", fontsize=PT_BASE, color=INK,
-                     linespacing=1.1, annotation_clip=False)
     return cax
 
 
@@ -293,8 +308,7 @@ def panel_e(ax_group, ax_credit, primary, pairs):
                 fontsize=PT_BASE, color=REF)
     ticks = [0.0, 0.50, 0.55, 0.60, 0.65]
     ax.set_yticks(list(e_map(ticks)), ["0", "0.50", "0.55", "0.60", "0.65"])
-    ax.set_xticks([0.0], ["passes"])
-    ax.tick_params(axis="x", length=0)
+    ax.set_xticks([])          # the verdict ('passes') is stated in the caption
     ax.set_ylabel("NMSE difference")
     print(f"[E] grouping: mean {r.mean_difference:.6f} "
           f"[{r.ci975_low:.6f}, {r.ci975_high:.6f}] seeds {seeds.min():.4f}-{seeds.max():.4f}")
@@ -314,11 +328,8 @@ def panel_e(ax_group, ax_credit, primary, pairs):
     ax.annotate("0.01 margin", xy=(1.0, MARGIN), xycoords=("axes fraction", "data"),
                 xytext=(-1.5, 1.0), textcoords="offset points", ha="right",
                 va="bottom", fontsize=PT_BASE, color=REF)
-    ax.text(-0.28, ylim[1], "own y scale", ha="left", va="top",
-            fontsize=PT_BASE, color=MUTE, zorder=5)
     ax.set_yticks([0.0, 0.005, 0.010], ["0.000", "0.005", "0.010"])
-    ax.set_xticks([0.0], ["below margin"])
-    ax.tick_params(axis="x", length=0)
+    ax.set_xticks([])          # own y range and verdict: stated in the caption
     print(f"[E] credit: mean {r.mean_difference:.6f} "
           f"[{r.ci975_low:.6f}, {r.ci975_high:.6f}] seeds {seeds.min():.5f}-{seeds.max():.5f}")
 
@@ -353,14 +364,12 @@ def panel_f(ax, summary, normalization):
     ax.set_xticks([1e-3, 1e-2, 1e-1, 1.0], ["0.001", "0.01", "0.1", "1"])
     ax.xaxis.set_minor_locator(NullLocator())
     ax.set_yticks([0.5, 0.75, 1.0], ["0.50", "0.75", "1.00"])
-    ax.set_xlabel("clean population NMSE")
-    ax.set_ylabel("threshold performance")
-    # the middle column of the NMSE axis holds no condition: the key and the
-    # ceiling count go there, clear of every mark
+    ax.set_xlabel("Clean population NMSE")
+    ax.set_ylabel("Threshold performance")
+    # the middle column of the NMSE axis holds no condition: the key goes
+    # there, clear of every mark (the ceiling count is in the caption)
     free = (x > 0.012) & (x < 0.125)
     assert not free.any()
-    ax.text(0.014, 0.985, f"{ceiling}/112 at 1.00\non both metrics", ha="left",
-            va="top", fontsize=PT_BASE, color=INK, linespacing=1.1, zorder=6)
     ax.text(0.014, 0.80, "accuracy", ha="left", va="top", fontsize=PT_BASE,
             color=ACC, zorder=6)
     ax.text(0.014, 0.735, "balanced\naccuracy", ha="left", va="top",
@@ -411,21 +420,18 @@ def panel_g(ax_adam, ax_sgd, same, paired):
         reference(ax, MARGIN)
         ax.set_xticks(RATES, ["0.003", "0.01", "0.03"])
         ax.xaxis.set_minor_locator(NullLocator())
-        ax.set_xlabel("common rate")
+        ax.set_xlabel("Common rate")
         if opt == "adam":
             ax.set_ylim(*G_ADAM_YLIM)
             ax.set_yticks([0.0, 0.01, 0.02], ["0.00", "0.01", "0.02"])
-            ax.set_ylabel("broadcast − exact NMSE")
+            ax.set_ylabel("Broadcast − exact NMSE")
         else:
             ax.set_yscale("symlog", linthresh=G_LINTHRESH, linscale=1.0)
             ax.set_ylim(*G_SGD_YLIM)
             ax.set_yticks([-1, -0.1, -0.01, 0, 0.01, 0.1, 1],
                           ["−1", "−0.1", "−0.01", "0", "0.01", "0.1", "1"])
             ax.yaxis.set_minor_locator(NullLocator())
-            # the note sits over the 0.01 and 0.03 columns, whose seeds stay
-            # below 0.016; the 0.003 column on the left reaches 0.61
-            ax.text(1.0, 1.0, "symlog y axis", transform=ax.transAxes, ha="right",
-                    va="top", fontsize=PT_BASE, color=MUTE, zorder=5)
+            # the symmetric-log scale is stated in the caption
 
 
 # ── H: broadcast gradient cosine along training ───────────────────────────
@@ -486,17 +492,14 @@ def panel_h(ax, trajectory, per_seed):
     ax.set_xticks([64, 512, 1024], minor=True)
     ax.xaxis.set_minor_formatter(NullFormatter())
     ax.set_yticks([0.0, 0.5, 1.0], ["0.0", "0.5", "1.0"])
-    ax.set_xlabel("training update")
-    ax.set_ylabel("population-gradient cosine")
+    ax.set_xlabel("Training update")
+    ax.set_ylabel("Population-gradient cosine")
     # keys: family by hue (top left, clear of every band), optimizer by line
     # style and fill (bottom right, below the lowest parity band)
     ax.text(1.05, 0.985, "XOR(AND)", ha="left", va="top", fontsize=PT_BASE,
             color=XOR, zorder=6)
     ax.text(1.05, 0.90, "parity", ha="left", va="top", fontsize=PT_BASE,
             color=PARITY, zorder=6)
-    ax.annotate("cosine 1", xy=(1.0, 1.0), xycoords=("axes fraction", "data"),
-                xytext=(-1.5, 1.0), textcoords="offset points", ha="right",
-                va="bottom", fontsize=PT_BASE, color=REF)
     for y, label, ls, face in ((0.19, "Adam", "-", INK), (0.09, "SGD", "--", "white")):
         ax.plot([300.0, 700.0], [y, y], color=INK, lw=LW_DATA, ls=ls,
                 dashes=(None, None) if ls == "-" else (3.2, 1.8), marker="o", ms=3.4,
@@ -537,10 +540,10 @@ def build(path: Path = OUT, *, png=False):
     d = cv.panel("D", 1, 6, 6)
     e1 = cv.panel("E", 2, 0, 3, title="Grouping contrast", grid="y")
     e2 = cv.panel("E_credit", 2, 3, 3, letter="", title="Credit contrast", grid="y")
-    f = cv.panel("F", 2, 6, 6, title="Classification versus regression", grid="y")
+    f = cv.panel("F", 2, 6, 6, grid="y")
     g1 = cv.panel("G", 3, 0, 3, title="Adam", grid="y")
     g2 = cv.panel("G_sgd", 3, 3, 3, letter="", title="SGD", grid="y")
-    h = cv.panel("H", 3, 6, 6, title="Broadcast gradients at own trained states", grid="y")
+    h = cv.panel("H", 3, 6, 6, grid="y")
     for name in "ABCD":
         cv.declare_reserve(name, left=HEAT_RESERVE_PT)
     # the audit wants same-span panels of one row at one width: the second

@@ -263,64 +263,66 @@ def morphology():
     missing=pd.read_csv(source/"label_missingness.csv")
     cell=pd.read_csv(source/"cell_sensitivity_means.csv")
     comp=pd.read_csv(source/"compression_geometry_audit.csv")
-    fig,axs=plt.subplots(3,2,figsize=(FIG_W,7.0))
-    fig.subplots_adjust(left=.115,right=.98,bottom=.075,top=.94,wspace=.38,hspace=.68)
-    ax=axs[0,0];panel(ax,"A","Direct / proxy label disagreement")
+    # 2026-09-23 clarity pass: the panel titles, B's pooled-count tick lines and
+    # the C/E/F notes moved to the caption.  The sheet is 48 pt shorter so the
+    # rows keep their previous ~28 pt blank gutter, and the axes grid keeps the
+    # height it had on the 7.0 in sheet, so every axes box is unchanged in size.
+    height=6.33;grid=(.94-.075)*7.0/height
+    fig,axs=plt.subplots(3,2,figsize=(FIG_W,height))
+    fig.subplots_adjust(left=.115,right=.98,bottom=(1-grid)/2,top=(1+grid)/2,wspace=.38,hspace=.68)
+    ax=axs[0,0]
     fraction=confusion.to_numpy()/confusion.sum(axis=1).to_numpy()[:,None]
     im=ax.imshow(100*fraction,vmin=0,vmax=100,cmap="Blues",aspect="auto")
     for i in range(2):
         for j in range(2):ax.text(j,i,f"{int(confusion.iloc[i,j]):,}\n({fraction[i,j]*100:.1f}%)",ha="center",va="center",color="white" if fraction[i,j]>.6 else "black")
     ax.set(xticks=[0,1],xticklabels=["E","I"],yticks=[0,1],yticklabels=["E","I"],xlabel="Target-proxy label",ylabel="Direct label")
     cb=fig.colorbar(im,ax=ax,fraction=.06,pad=.05,ticks=[0,50,100]);cb.set_label("Row (%)");cb.outline.set_visible(False)
-    ax=axs[0,1];panel(ax,"B","Direct-label coverage is uneven")
+    # The bar sits 4.5 pt from the heatmap (was 9.4 pt; the heatmap box is
+    # unchanged), so its label stays left of the B/D/F letter column that the
+    # supplement's panel partition cuts at, now that no title lifts the letters.
+    cb.ax.set_position(cb.ax.get_position(original=True).translated(-4.9/(FIG_W*72),0))
+    ax=axs[0,1]
     f=missing[missing.grouping.eq("compartment")];labels=[]
     for i,name in enumerate(["soma","internal","terminal"]):
         g=f[f.stratum.eq(name)];v=100*g.direct_fraction.to_numpy();m,lo,hi=interval(v)
         ax.scatter(np.linspace(-.1,.1,len(v))+i,v,s=14,color=MORPH_INK["primary"],alpha=.65)
         ax.errorbar(i,m,yerr=[[m-lo],[hi-m]],fmt="D",color="#333333",capsize=3,ms=4)
-        labels.append(f"{name.capitalize()}\n$n$ = {int(g.n_contacts.sum()):,}")
-    ax.set(xticks=[0,1,2],xticklabels=labels,ylabel="Directly typed contacts (%)",xlabel="Compartment (pooled contacts)")
-    ax=axs[1,0];panel(ax,"C","Mapping and label choices alter routes")
+        labels.append(name.capitalize())
+    ax.set(xticks=[0,1,2],xticklabels=labels,ylabel="Directly typed contacts (%)",xlabel="Compartment")
+    ax=axs[1,0]
     positions={2:0,5:1,10:2}
     for mode,color,dodge in [("hybrid",MORPH_INK["primary"],-.17),("direct_only",MORPH_INK["secondary"],.17)]:
         f=cell[cell.label_mode.eq(mode)&cell.radius_log_sd.eq(0)&cell.axial_mode.eq("mean_radius")]
         cell_series(ax,f,"mapping_threshold_um","selected_nominal_jaccard",color,mode.replace("_"," "),positions,dodge=dodge,
                     reference=5 if mode=="hybrid" else None)
-    ax.annotate("reference dictionary\n(Jaccard = 1 by definition)",xy=(1-.17,1),xytext=(1.05,.72),ha="center",va="top",fontsize=PT_BASE,color="#555555",
-                arrowprops={"arrowstyle":"-","color":"#999999","lw":LW_HAIR,"shrinkB":4})
     ax.set(xlabel="Maximum mapping distance (µm)",ylabel="Selected-route Jaccard",ylim=(-.05,1.05),xlim=(-.5,2.5))
     ax.set_xticks([0,1,2],["2","5","10"]);ax.legend(frameon=False,loc="center",bbox_to_anchor=(.5,.42))
-    ax=axs[1,1];panel(ax,"D","Radius sensitivity on a fixed probe")
+    ax=axs[1,1]
     positions={0:0,.25:1,.5:2}
     for mode,color,dodge in [("hybrid",MORPH_INK["primary"],-.06),("direct_only",MORPH_INK["secondary"],.06)]:
         f=cell[cell.label_mode.eq(mode)&cell.mapping_threshold_um.eq(5)&cell.axial_mode.eq("mean_radius")]
         cell_series(ax,f,"radius_log_sd","fixed_nominal_field_capture",color,mode.replace("_"," "),positions,dodge=dodge,paired_lines=True)
     ax.set(xlabel="Log-radius perturbation SD",ylabel="Nominal-field capture",ylim=(.05,.6),xlim=(-.5,2.5))
     ax.set_xticks([0,1,2],["0","0.25","0.5"]);ax.legend(frameon=False,loc="upper right")
-    ax=axs[2,0];panel(ax,"E","Axial resistance after compression")
+    ax=axs[2,0]
     # Ratio on a log x axis (0.1-log-unit bins) and a log count axis: the
     # dominant equal-resistance bin no longer hides the 0.003-0.9 tail.
     ratio=np.log10((1+comp.relative_axial_resistance_error).clip(lower=1e-6))
-    if ratio.max()>1e-9:raise ValueError("a compressed segment exceeds its series resistance; the annotation assumes none does")
+    if ratio.max()>1e-9:raise ValueError("a compressed segment exceeds its series resistance; the caption states none does")
     edges=np.arange(np.floor(ratio.min()*10)/10,.1+1e-9,.1)
     ax.hist(10**ratio,bins=10**edges,color="#808080",edgecolor="white",lw=LW_HAIR)
     ax.set_xscale("log");ax.set_yscale("log");ax.set_ylim(.7,1500);ax.set_xlim(10**(edges[0]-.05),10**(edges[-1]+.05))
     ax.set_xticks([1e-3,1e-2,1e-1,1],["0.001","0.01","0.1","1"]);ax.set_yticks([1,10,100,1000],["1","10","100","1,000"])
     ax.tick_params(which="minor",width=LW_HAIR,length=1.8)
-    tail=int((ratio<-.05).sum())
-    ax.text(.03,.95,f"{tail} of {len(ratio)} segments ({comp.root_id.nunique()} cells)\nbelow 0.89 (0.05 log units);\nworst case {10**ratio.min():.3f}",
-            transform=ax.transAxes,ha="left",va="top",fontsize=PT_BASE,color="#555555")
     ax.set(xlabel="Compressed / series axial resistance",ylabel="Cable segments")
-    ax=axs[2,1];panel(ax,"F","Series-resistance sensitivity")
+    ax=axs[2,1]
     f=cell[cell.label_mode.eq("hybrid")&cell.mapping_threshold_um.eq(5)&cell.radius_log_sd.eq(0)]
     wide=f.pivot(index="root_id",columns="axial_mode",values="fixed_nominal_field_capture")
     diff=wide.series_resistance-wide.mean_radius;mean=(wide.series_resistance+wide.mean_radius)/2
     ax.axhline(0,color="#999999",ls="--",lw=LW_REF,zorder=1)
     ax.scatter(mean,diff,s=23,color=MORPH_INK["primary"],edgecolor="white",linewidth=LW_HAIR,zorder=3)
     same=int(np.isclose(diff,0,atol=1e-9).sum())
-    for x_,d_ in zip(mean[~np.isclose(diff,0,atol=1e-9)],diff[~np.isclose(diff,0,atol=1e-9)]):
-        ax.annotate(f"{d_:+.3f}",xy=(x_,d_),xytext=(4,0),textcoords="offset points",ha="left",va="center",fontsize=PT_BASE,color="#555555")
-    ax.text(.03,.05,f"{same} of {len(diff)} cells identical",transform=ax.transAxes,ha="left",va="bottom",fontsize=PT_BASE,color="#555555")
+    ax.text(.03,.05,f"{same}/{len(diff)} identical",transform=ax.transAxes,ha="left",va="bottom",fontsize=PT_BASE,color="#555555")
     ax.set(xlabel="Mean of the two captures",ylabel="Series-resistance minus\nmean-radius capture",xlim=(.1,.6),ylim=(-.06,.06))
     ax.set_yticks([-.06,-.03,0,.03,.06])
     centre_grid(fig,axs,margin_pt=6.)

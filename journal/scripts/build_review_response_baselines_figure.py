@@ -5,8 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from journal_style import (apply_neurips_style, COLORS, LW_DATA, LW_EDGE,
-                           LW_ERR, LW_HAIR, LW_REF, PT_BASE, panel_title,
-                           style_axis)
+                           LW_ERR, LW_HAIR, LW_REF, PT_BASE, style_axis)
 from neurips_style import FIG_W
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -52,9 +51,18 @@ def main():
     targets = pd.read_csv(SOURCE / "target_metrics.csv").pivot(
         index="target_root_id", columns="method", values="nmse")
     contrast = pd.read_csv(SOURCE / "paired_ridge_contrasts.csv").set_index("comparator")
-    fig = plt.figure(figsize=(FIG_W, 6.6))
-    grid = fig.add_gridspec(2, 2, left=.14, right=.98, bottom=.11, top=.92,
-                           wspace=.48, hspace=.5)
+    # 2026-09-23 clarity pass: the four panel titles moved to the caption.  The
+    # sheet is 0.3 in shorter and the rows 10.8 pt (0.15 in) closer, so the
+    # blank bands above each row of letters keep their previous height, while
+    # both axes rows keep the height they had on the 6.6 in sheet.
+    sheet_h = 6.3
+    row_h = (.92 - .11) * 6.6 / 2.5         # axes-row height, inches
+    row_gap = .5 * row_h - .15              # inches
+    bottom = .11 * 6.6 / sheet_h
+    fig = plt.figure(figsize=(FIG_W, sheet_h))
+    grid = fig.add_gridspec(2, 2, left=.14, right=.98, bottom=bottom,
+                           top=bottom + (2 * row_h + row_gap) / sheet_h,
+                           wspace=.48, hspace=row_gap / row_h)
     ag = grid[0, 0].subgridspec(2, 1, height_ratios=[1.4, 2.7], hspace=.6)
     a, ac = fig.add_subplot(ag[0]), fig.add_subplot(ag[1])
     b, c, d = [fig.add_subplot(grid[i, j]) for i, j in [(0, 1), (1, 0), (1, 1)]]
@@ -77,7 +85,6 @@ def main():
     a.set(yticks=np.arange(len(methods)), yticklabels=labels, xlim=NMSE_LIM,
           ylim=(len(methods)-.5, -.5), xlabel="Held-out normalized MSE")
     a.tick_params(axis="y", labelsize=PT_BASE, length=0)
-    panel_title(a, "A", "Prediction baselines")
     style_axis(a, grid="x")
 
     # Paired differences from nested ridge, one row per comparator, per target.
@@ -135,13 +142,11 @@ def main():
     b.set_xlim(-.4, manual_x + .4)
     b.set_xlabel("Retained observed presynaptic inputs")
     b.tick_params(axis="x", labelsize=PT_BASE)
-    panel_title(b, "B", "Observed-input sensitivity")
     sequence(c, ["ridge_all", "noise_0.25", "noise_0.5", "noise_1"],
              [0, .25, .5, 1], RIDGE)
     c.set_xticks([0, .25, .5, 1])
     c.set_xlabel("Added predictor noise (training feature SD)")
     c.xaxis.label.set_size(PT_BASE)
-    panel_title(c, "C", "Measurement-noise sensitivity")
     keys = ["ridge_all", "training_reliability_ge_0", "training_reliability_ge_0.1",
             "training_reliability_ge_0.2"]
     sequence(d, keys, np.arange(4), RIDGE)
@@ -149,7 +154,6 @@ def main():
     d.set_xticks(range(4), [f"{label}\n({summary.loc[key].mean_features:.1f})"
                           for label, key in zip(labels, keys)])
     d.set_xlabel("Training repeat reliability\n(mean retained partner count)")
-    panel_title(d, "D", "Training-only partner filtering")
     DEST.parent.mkdir(parents=True, exist_ok=True)
     _token_weights(fig)
     from panel_letter_layout import finish_panel_letters

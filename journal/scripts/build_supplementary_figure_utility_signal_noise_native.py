@@ -69,6 +69,14 @@ mixed_S3.json), panel by panel:
   scalar) and per-neuron salmon in E; exact path dark red as the reference
   rule in E; the ordinal teal ramp in C; the diverging journal ramp in B
   and D.  No colour carries a second meaning on the sheet.
+
+2026-09-23 clarity pass (analysis/figure_visual_review_20260910/
+review_20260923/si_pass/ledger/utility_signal_noise.md): the panel titles,
+the method tags above B-G, the "exact path = 1" and "full gradient = 1" rule
+labels and G's crossing callout moved to the caption; axis labels are in
+sentence case, the "(= full rank)" notes left the B and C axis labels and G's
+y label reads "2L × optimized bound", the caption's wording.
+Every plotted mark, scale and colour is unchanged.
 """
 from __future__ import annotations
 
@@ -96,7 +104,6 @@ from figure_canvas import (  # noqa: E402
     LW_REF,
     MARKER_MS,
     PT_BASE,
-    PT_EMPH,
     SEED_ALPHA,
     SEED_MS,
     Margins,
@@ -192,12 +199,6 @@ def csv(path):
     return pd.read_csv(path)
 
 
-def tag(ax, text, *, ha="right", x=1.0, dy=2.0, color=MUTE):
-    return ax.annotate(text, xy=(x, 1.0), xycoords="axes fraction", xytext=(0.0, dy),
-                       textcoords="offset points", ha=ha, va="bottom", fontsize=PT_BASE,
-                       color=color, annotation_clip=False)
-
-
 def fan(ax, x, values, color, *, half=0.12, ms=SEED_MS * 0.6, alpha=SEED_ALPHA * 0.7,
         zorder=2.0, seed=None):
     """Per-seed (or per-cell) values as a jittered fan behind the mean; the
@@ -244,8 +245,8 @@ def panel_spectral(ax, spectral, spectral_seed):
     assert all(s == "0.00" for s in (r[-1] for r in printed))
     signed_heatmap(ax, matrix, [str(v) for v in advantage.columns],
                    [f"{v:.2f}" for v in advantage.index])
-    ax.set_xlabel("route budget K   (16 = full rank)", labelpad=2.0)
-    ax.set_ylabel("covariance mixture ρ", labelpad=1.5)
+    ax.set_xlabel("Route budget K", labelpad=2.0)
+    ax.set_ylabel("Covariance mixture ρ", labelpad=1.5)
     print("[B] subtree − random spectral capture, rows rho 0..1, cols K 1..16:")
     for lab, row in zip(advantage.index, printed):
         print(f"      rho {lab:.2f}: " + "  ".join(row))
@@ -299,8 +300,8 @@ def panel_depth(ax, depth, depth_seed):
     ax.yaxis.set_minor_locator(NullLocator())
     ax.set_xlim(0.6, 4.4)
     ax.set_xticks([1, 2, 3, 4])
-    ax.set_xlabel("route resolution (4 = full rank)")
-    ax.set_ylabel("final loss")
+    ax.set_xlabel("Route resolution")
+    ax.set_ylabel("Final loss")
     ax.legend(handles=handles, loc="upper left", ncol=2, frameon=False, fontsize=PT_BASE,
               handlelength=1.6, handletextpad=0.5, labelspacing=0.25, columnspacing=1.0,
               borderaxespad=0.2, borderpad=0.0)
@@ -383,8 +384,8 @@ def panel_projection(ax, projection, projection_seed):
     ax.set_ylim(ye[0], ye[-1])
     ax.set_xticks(xs, [f"{v:.2f}" for v in xs])
     ax.set_yticks(ys, [f"{v:.2f}" for v in ys])
-    ax.set_xlabel("retained signal fraction", labelpad=2.0)
-    ax.set_ylabel("retained noise fraction", labelpad=1.5)
+    ax.set_xlabel("Retained signal fraction", labelpad=2.0)
+    ax.set_ylabel("Retained noise fraction", labelpad=1.5)
     print("[D] (f_noise − f_sig)/2, rows f_noise 0.10..1.00, cols f_sig 0.25..1.00:")
     for lab, row in zip(ys, printed):
         print(f"      f_noise {lab:.2f}: " + "  ".join(row))
@@ -452,17 +453,14 @@ def panel_checkpoints(ax, rows, feedback_summary):
     ax.axhline(0, color=MUTE, ls="--", lw=LW_REF, zorder=1)
     # unity: the exact-path value of both quantities, by construction
     ax.plot([-0.45, 4.25], [1.0, 1.0], color=COLORS["bp"], lw=LW_REF, dashes=(2.6, 2.0), zorder=1)
-    ax.annotate("exact path = 1 by construction", xy=(-0.42, 1.0), xycoords="data",
-                xytext=(0.0, 2.0), textcoords="offset points", ha="left", va="bottom",
-                fontsize=PT_BASE, color=COLORS["bp"])
     ax.set_xticks(positions, [lab for _, lab, _ in FAMILIES_E] * 2)
     ax.tick_params(axis="x", length=0.0, pad=2.0)
     ax.set_yticks([-0.5, 0.0, 0.5, 1.0], ["−0.5", "0", "0.5", "1.0"])
-    ax.set_ylabel("dimensionless value")
+    ax.set_ylabel("Dimensionless value")
     ax.set_ylim(y_lo, y_hi)
     ax.set_xlim(-0.45, 4.25)
     ax.axvline(1.8 + 0.5 * ci_dx, color=COLORS["grid"], lw=LW_HAIR, zorder=0.5)
-    for x, label in ((0.5 + 0.5 * ci_dx, "gradient cosine"), (3.1 + 0.5 * ci_dx, "one-step progress")):
+    for x, label in ((0.5 + 0.5 * ci_dx, "Gradient cosine"), (3.1 + 0.5 * ci_dx, "One-step progress")):
         ax.annotate(label, xy=(x, 0.0), xycoords=("data", "axes fraction"), xytext=(0.0, -21.0),
                     textcoords="offset points", ha="center", va="top", fontsize=PT_BASE, color=INK,
                     annotation_clip=False)
@@ -547,12 +545,10 @@ def panel_arbors(ax, cells, curves):
     ax.set_xticks([0, 20, 40, 60, 80, 100])
     ax.set_ylim(-0.03, 1.09)
     ax.set_yticks([0.0, 0.25, 0.5, 0.75, 1.0], ["0", "0.25", "0.50", "0.75", "1.00"])
-    ax.set_xlabel("credit aligned to routes (%)")
-    ax.set_ylabel("relative 20-step progress")
-    # the full-gradient sequence is 1 by definition
+    ax.set_xlabel("Credit aligned to routes (%)")
+    ax.set_ylabel("Relative 20-step progress")
+    # the full-gradient sequence is 1 by definition (the caption names the rule)
     ax.plot([-6.0, 106.0], [1.0, 1.0], color=MUTE, lw=LW_REF, dashes=(2.6, 2.0), zorder=1.0)
-    ax.annotate("full gradient = 1", xy=(106.0, 1.0), xycoords="data", xytext=(0.0, 2.0),
-                textcoords="offset points", ha="right", va="bottom", fontsize=PT_BASE, color=MUTE)
     ax.legend(handles=handles, loc="upper left", bbox_to_anchor=(-0.01, 0.905), ncol=1,
               frameon=False, fontsize=PT_BASE, handlelength=1.6, handletextpad=0.5,
               labelspacing=0.25, borderaxespad=0.0, borderpad=0.0)
@@ -575,12 +571,11 @@ def panel_bound(ax):
     lo, hi = values
     assert (lo[sigma2 < cross] < hi[sigma2 < cross]).all() and (lo[sigma2 > cross] > hi[sigma2 > cross]).all()
     ax.fill_between(sigma2, lo, hi, color=COLORS["grid"], alpha=0.85, lw=0, zorder=1)
-    ax.annotate("sign change at\nσ² = 4/7 ≈ 0.571", xy=(cross, y_cross), xytext=(1.2, 0.66),
-                ha="center", va="center", fontsize=PT_BASE, color=INK, linespacing=1.25,
-                arrowprops=dict(arrowstyle="-", lw=LW_HAIR, color=MUTE, shrinkA=1.0, shrinkB=2.0))
     print(f"[G] analytic q²/(q + Kσ²); curves cross at σ² = 4/7 = {cross:.4f}, value {y_cross:.4f}")
-    ax.set_xlabel("noise variance σ² (arbitrary units)")
-    ax.set_ylabel("2L × optimized one-step bound")
+    ax.set_xlabel("Noise variance σ² (arbitrary units)")
+    # 2026-09-23: the caption's own wording; the 110 pt "... one-step bound"
+    # outran the 95 pt axes and rose above G's letter
+    ax.set_ylabel("2L × optimized bound")
     ax.set_xlim(0, 2.0)
     ax.set_ylim(0, 1.05)
     ax.set_xticks([0, 0.5, 1.0, 1.5, 2.0], ["0", "0.5", "1.0", "1.5", "2.0"])
@@ -590,13 +585,18 @@ def panel_bound(ax):
 
 
 # ── the canvas ───────────────────────────────────────────────────────────
-CANVAS_H_PT = 490.0
-ROW_PT = [104.0, 120.0, 116.0]
+# 2026-09-23: with the titles and tags gone the canvas keeps every axes box
+# (A/B 104 pt, C/D 120 pt, E-G 95.2 pt tall) and drops only the title bands:
+# the top margin and the vertical gutter now hold the letter band (13 pt) plus
+# the lock's 8 pt pad, and row 2's weight carries the 2.2 pt the lock still
+# carves above it.  One more point of left margin lets column 0 take the same
+# 6 pt declared reserve as columns 4, 6 and 8, so equal spans have equal
+# axes widths (the 0.9 pt row-alignment spread is gone).
+CANVAS_H_PT = 458.4
+ROW_PT = [104.0, 120.0, 97.4]
 HGUTTER_PT = 30.0
-VGUTTER_PT = 44.0
-MARGINS = Margins(left=40.0, right=10.0, top=26.0, bottom=36.0)
-TITLE_PAD = 12.0
-TITLE_PAD_TWO = 21.0
+VGUTTER_PT = 40.0
+MARGINS = Margins(left=41.0, right=10.0, top=21.0, bottom=36.0)
 
 
 def build(path: Path = OUT):
@@ -618,33 +618,24 @@ def build(path: Path = OUT):
 
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 3, row_weights=ROW_PT, hgutter_pt=HGUTTER_PT,
                       vgutter_pt=VGUTTER_PT, margins=MARGINS, letter_clearance=True)
-    ax_a = cv.panel("A", 0, 0, 6, schematic=True, title="Fixed-operator special case")
-    ax_b = cv.panel("B", 0, 6, 6, title="Spectral capture advantage: subtree − random")
-    ax_c = cv.panel("C", 1, 0, 6, grid="y", title="Hierarchy × resolution")
-    ax_d = cv.panel("D", 1, 6, 6, title="Projection boundary: Δ loss")
-    ax_e = cv.panel("E", 2, 0, 4, grid="y", title="Trained checkpoints,\none held-out batch")
-    ax_f = cv.panel("F", 2, 4, 4, grid="y", title="Iterative learning, eight arbors")
-    ax_g = cv.panel("G", 2, 8, 4, grid="y", title="Rank–noise trade-off (analytic)")
-    for ax in (ax_b, ax_c, ax_d):
-        ax.set_title(ax.get_title(), fontsize=PT_EMPH, color=INK, pad=TITLE_PAD, fontweight="normal")
-    for ax in (ax_e, ax_f, ax_g):      # E carries a two-line tag; one title height per row
-        ax.set_title(ax.get_title(), fontsize=PT_EMPH, color=INK, pad=TITLE_PAD_TWO, fontweight="normal")
+    # 2026-09-23 clarity pass: no panel titles or method tags on the artwork;
+    # what they said is in the caption (ledger si_pass/ledger/utility_signal_noise.md)
+    ax_a = cv.panel("A", 0, 0, 6, schematic=True)
+    ax_b = cv.panel("B", 0, 6, 6)
+    ax_c = cv.panel("C", 1, 0, 6, grid="y")
+    ax_d = cv.panel("D", 1, 6, 6)
+    ax_e = cv.panel("E", 2, 0, 4, grid="y")
+    ax_f = cv.panel("F", 2, 4, 4, grid="y")
+    ax_g = cv.panel("G", 2, 8, 4, grid="y")
     for name in "ABCDEFG":
         cv.declare_reserve(name, left=6.0, right=6.0)
 
     panel_spectral(ax_b, spectral, spectral_seed)
-    tag(ax_b, f"mean of {N_SEEDS} paired seeds per cell", dy=2.0)
     panel_depth(ax_c, depth, depth_seed)
-    tag(ax_c, f"{N_SEEDS} paired seeds per point; mean, 95 % CI within marker", dy=2.0)
     panel_projection(ax_d, projection, projection_seed)
-    tag(ax_d, "cells span midpoints between the sampled fractions", dy=2.0)
     panel_checkpoints(ax_e, rows, feedback_summary)
-    tag(ax_e, f"n = {N_CHECKPOINTS}; box: median, quartiles, 1.5 IQR", dy=11.0)
-    tag(ax_e, "diamond: mean, 95 % CI narrower than marker", dy=2.0)
     panel_arbors(ax_f, cells, curves)
-    tag(ax_f, f"n = {N_CELLS} arbors per point; mean, 95 % CI", dy=2.0)
     panel_bound(ax_g)
-    tag(ax_g, "q² / (q + Kσ²), no data", dy=2.0)
     cv.lock_reserves()              # settle the boxes before drawing A in points
     operator_schematic(ax_a)
     style_direct_color_labels(cv.fig)

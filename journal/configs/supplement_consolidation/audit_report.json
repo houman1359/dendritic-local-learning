@@ -89,8 +89,9 @@
     },
     "image_generalization": {
       "figure": "S6",
-      "violations": 1,
+      "violations": 2,
       "by_kind": {
+        "canvas-aspect": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": []
@@ -140,9 +141,8 @@
     },
     "scalar_tree_capacity": {
       "figure": "S12",
-      "violations": 2,
+      "violations": 1,
       "by_kind": {
-        "edge-clearance": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": []
@@ -213,9 +213,8 @@
     },
     "local_gate_controls": {
       "figure": "S21",
-      "violations": 2,
+      "violations": 1,
       "by_kind": {
-        "edge-clearance": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": []
@@ -230,8 +229,10 @@
     },
     "physical_calibration": {
       "figure": "S25",
-      "violations": 1,
+      "violations": 3,
       "by_kind": {
+        "canvas-aspect": 1,
+        "fill-width": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": []
@@ -263,18 +264,18 @@
     },
     "coarse_energy": {
       "figure": "S29",
-      "violations": 2,
+      "violations": 3,
       "by_kind": {
         "canvas-aspect": 1,
+        "fill-width": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": []
     },
     "anatomy_preprocessing": {
       "figure": "S30",
-      "violations": 3,
+      "violations": 2,
       "by_kind": {
-        "canvas-aspect": 1,
         "edge-clearance": 1,
         "manifest-missing": 1
       },

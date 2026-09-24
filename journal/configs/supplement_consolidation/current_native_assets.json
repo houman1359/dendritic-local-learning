@@ -1,296 +1,4 @@
 {
-  "N9": {
-    "path": "figures/supplementary/figure_input_coverage_mnist_native.pdf",
-    "old_label": "fig:si_input_coverage_mnist",
-    "letters": [
-      {
-        "letter": "A",
-        "bbox": [
-          18.739999771118164,
-          12.939000129699707,
-          25.238000869750977,
-          21.93899917602539
-        ],
-        "origin": [
-          18.739999771118164,
-          19.5
-        ]
-      }
-    ],
-    "builder": "scripts/build_supplementary_figure_input_coverage_mnist_native.py",
-    "sha256": "de123d5520b37fe5933c6ca292700a67c4419288a8e03e2693a60b8abe82a3ad",
-    "note": "Current editorial render; the frozen original registry remains unchanged."
-  },
-  "N7": {
-    "path": "figures/supplementary/figure_mnist_dictionary_geometry_native.pdf",
-    "old_label": "fig:si_mnist_dictionary_geometry",
-    "letters": [
-      {
-        "letter": "A",
-        "bbox": [
-          15.779999732971191,
-          6.759007453918457,
-          22.277999877929688,
-          15.759007453918457
-        ],
-        "origin": [
-          15.779999732971191,
-          13.32000732421875
-        ]
-      },
-      {
-        "letter": "B",
-        "bbox": [
-          271.13751220703125,
-          6.759007453918457,
-          277.635498046875,
-          15.759007453918457
-        ],
-        "origin": [
-          271.13751220703125,
-          13.32000732421875
-        ]
-      },
-      {
-        "letter": "C",
-        "bbox": [
-          15.779999732971191,
-          184.75900268554688,
-          22.277999877929688,
-          193.75900268554688
-        ],
-        "origin": [
-          15.779999732971191,
-          191.32000732421875
-        ]
-      }
-    ],
-    "builder": "scripts/build_supplementary_figure_mnist_dictionary_geometry_native.py",
-    "sha256": "9e39f04cfd1ddc09bbea24e416a280789ff378e75cab5f1bbc6449216987667a",
-    "note": "Current editorial render; the frozen original registry remains unchanged."
-  },
-  "N21": {
-    "path": "figures/supplementary/figure_local_gate_controls_native.pdf",
-    "old_label": "fig:si_local_gate_controls",
-    "letters": [
-      {
-        "letter": "A",
-        "bbox": [
-          2.5,
-          7.759007453918457,
-          8.998001098632812,
-          16.75900650024414
-        ],
-        "origin": [
-          2.5,
-          14.32000732421875
-        ]
-      },
-      {
-        "letter": "B",
-        "bbox": [
-          301.8999938964844,
-          7.759007453918457,
-          308.3979797363281,
-          16.75900650024414
-        ],
-        "origin": [
-          301.8999938964844,
-          14.32000732421875
-        ]
-      },
-      {
-        "letter": "C",
-        "bbox": [
-          2.5,
-          229.75900268554688,
-          8.998001098632812,
-          238.75900268554688
-        ],
-        "origin": [
-          2.5,
-          236.32000732421875
-        ]
-      },
-      {
-        "letter": "D",
-        "bbox": [
-          301.8999938964844,
-          229.75900268554688,
-          308.3979797363281,
-          238.75900268554688
-        ],
-        "origin": [
-          301.8999938964844,
-          236.32000732421875
-        ]
-      }
-    ],
-    "builder": "scripts/build_supplementary_figure_local_gate_controls_native.py",
-    "sha256": "31d1d07812deef3fd15bb75fd676a1dc152dfa44cb38bf019d69d91657eee21e",
-    "note": "Current editorial render; the frozen original registry remains unchanged."
-  },
-  "N22": {
-    "path": "figures/supplementary/figure_physical_architecture_native.pdf",
-    "old_label": "fig:si_physical_architecture",
-    "letters": [
-      {
-        "letter": "A",
-        "bbox": [
-          10.0,
-          6.759007453918457,
-          16.498001098632812,
-          15.759007453918457
-        ],
-        "origin": [
-          10.0,
-          13.32000732421875
-        ]
-      },
-      {
-        "letter": "B",
-        "bbox": [
-          244.36000061035156,
-          6.759007453918457,
-          250.85800170898438,
-          15.759007453918457
-        ],
-        "origin": [
-          244.36000061035156,
-          13.32000732421875
-        ]
-      },
-      {
-        "letter": "C",
-        "bbox": [
-          10.0,
-          183.75900268554688,
-          16.498001098632812,
-          192.75900268554688
-        ],
-        "origin": [
-          10.0,
-          190.32000732421875
-        ]
-      },
-      {
-        "letter": "D",
-        "bbox": [
-          162.4600067138672,
-          183.75900268554688,
-          168.9580078125,
-          192.75900268554688
-        ],
-        "origin": [
-          162.4600067138672,
-          190.32000732421875
-        ]
-      },
-      {
-        "letter": "E",
-        "bbox": [
-          335.6000061035156,
-          183.75900268554688,
-          341.6029968261719,
-          192.75900268554688
-        ],
-        "origin": [
-          335.6000061035156,
-          190.32000732421875
-        ]
-      },
-      {
-        "letter": "F",
-        "bbox": [
-          10.0,
-          330.03900146484375,
-          15.499000549316406,
-          339.03900146484375
-        ],
-        "origin": [
-          10.0,
-          336.6000061035156
-        ]
-      },
-      {
-        "letter": "G",
-        "bbox": [
-          244.36000061035156,
-          330.03900146484375,
-          251.36199951171875,
-          339.03900146484375
-        ],
-        "origin": [
-          244.36000061035156,
-          336.6000061035156
-        ]
-      }
-    ],
-    "builder": "scripts/build_supplementary_figure_physical_architecture_native.py",
-    "sha256": "cd4e1f0183cebd004218cd6e12591845ceebf424a8ecbc12c3dc1c1c90239844",
-    "note": "Current editorial render; the frozen original registry remains unchanged."
-  },
-  "N31": {
-    "path": "figures/supplementary/figure_measured_transfer_geometry_native.pdf",
-    "old_label": "fig:si_measured_transfer_geometry",
-    "letters": [
-      {
-        "letter": "A",
-        "bbox": [
-          7.059999942779541,
-          2.518986701965332,
-          13.558000564575195,
-          11.518986701965332
-        ],
-        "origin": [
-          7.059999942779541,
-          9.079986572265625
-        ]
-      },
-      {
-        "letter": "B",
-        "bbox": [
-          264.20001220703125,
-          2.518986701965332,
-          270.697998046875,
-          11.518986701965332
-        ],
-        "origin": [
-          264.20001220703125,
-          9.079986572265625
-        ]
-      },
-      {
-        "letter": "C",
-        "bbox": [
-          7.059999942779541,
-          188.55099487304688,
-          13.558000564575195,
-          197.55099487304688
-        ],
-        "origin": [
-          7.059999942779541,
-          195.11199951171875
-        ]
-      },
-      {
-        "letter": "D",
-        "bbox": [
-          264.20001220703125,
-          188.55099487304688,
-          270.697998046875,
-          197.55099487304688
-        ],
-        "origin": [
-          264.20001220703125,
-          195.11199951171875
-        ]
-      }
-    ],
-    "builder": "scripts/build_supplementary_figure_measured_transfer_geometry_native.py",
-    "sha256": "13c9a4f277ee888ca55f9cdab3a87a33c5d40545cb46901360788905cab14c85",
-    "note": "Current editorial render; the frozen original registry remains unchanged."
-  },
   "N4C": {
     "path": "figures/supplementary/figure_cifar_ladders_native.pdf",
     "old_label": "fig:si_cifar_ladders",
@@ -363,6 +71,298 @@
     ],
     "builder": "scripts/build_supplementary_figure_s04_native.py",
     "sha256": "f24e2fd8c5f32955ddd58e15fbc91e4cc73dcb75ab727f48e4855180fc31ff3c",
-    "note": "Complete CIFAR ladders; shunting is explicitly descriptive after the failed convergence gate. Only C and D are selected for S6."
+    "note": "Current editorial render; the frozen original registry remains unchanged."
+  },
+  "N9": {
+    "path": "figures/supplementary/figure_input_coverage_mnist_native.pdf",
+    "old_label": "fig:si_input_coverage_mnist",
+    "letters": [
+      {
+        "letter": "A",
+        "bbox": [
+          18.739999771118164,
+          12.939000129699707,
+          25.238000869750977,
+          21.93899917602539
+        ],
+        "origin": [
+          18.739999771118164,
+          19.5
+        ]
+      }
+    ],
+    "builder": "scripts/build_supplementary_figure_input_coverage_mnist_native.py",
+    "sha256": "de123d5520b37fe5933c6ca292700a67c4419288a8e03e2693a60b8abe82a3ad",
+    "note": "Current editorial render; the frozen original registry remains unchanged."
+  },
+  "N7": {
+    "path": "figures/supplementary/figure_mnist_dictionary_geometry_native.pdf",
+    "old_label": "fig:si_mnist_dictionary_geometry",
+    "letters": [
+      {
+        "letter": "A",
+        "bbox": [
+          15.779999732971191,
+          6.759007453918457,
+          22.277999877929688,
+          15.759007453918457
+        ],
+        "origin": [
+          15.779999732971191,
+          13.32000732421875
+        ]
+      },
+      {
+        "letter": "B",
+        "bbox": [
+          271.13751220703125,
+          6.759007453918457,
+          277.635498046875,
+          15.759007453918457
+        ],
+        "origin": [
+          271.13751220703125,
+          13.32000732421875
+        ]
+      },
+      {
+        "letter": "C",
+        "bbox": [
+          15.779999732971191,
+          180.0349884033203,
+          22.277999877929688,
+          189.0349884033203
+        ],
+        "origin": [
+          15.779999732971191,
+          186.5959930419922
+        ]
+      }
+    ],
+    "builder": "scripts/build_supplementary_figure_mnist_dictionary_geometry_native.py",
+    "sha256": "c4cb8f9c8bf3dfdc4ece79821791b9738bf382af65a8fc331618e71f0ca5c43f",
+    "note": "Current editorial render; the frozen original registry remains unchanged."
+  },
+  "N21": {
+    "path": "figures/supplementary/figure_local_gate_controls_native.pdf",
+    "old_label": "fig:si_local_gate_controls",
+    "letters": [
+      {
+        "letter": "A",
+        "bbox": [
+          2.5,
+          7.759007453918457,
+          8.998001098632812,
+          16.75900650024414
+        ],
+        "origin": [
+          2.5,
+          14.32000732421875
+        ]
+      },
+      {
+        "letter": "B",
+        "bbox": [
+          301.8999938964844,
+          7.759007453918457,
+          308.3979797363281,
+          16.75900650024414
+        ],
+        "origin": [
+          301.8999938964844,
+          14.32000732421875
+        ]
+      },
+      {
+        "letter": "C",
+        "bbox": [
+          2.5,
+          229.75900268554688,
+          8.998001098632812,
+          238.75900268554688
+        ],
+        "origin": [
+          2.5,
+          236.32000732421875
+        ]
+      },
+      {
+        "letter": "D",
+        "bbox": [
+          301.8999938964844,
+          229.75900268554688,
+          308.3979797363281,
+          238.75900268554688
+        ],
+        "origin": [
+          301.8999938964844,
+          236.32000732421875
+        ]
+      }
+    ],
+    "builder": "scripts/build_supplementary_figure_local_gate_controls_native.py",
+    "sha256": "5d5d1ed12908ee68157a4fd78a022cf97d6b589c97af3dba5aa4605af2f1ebf9",
+    "note": "Current editorial render; the frozen original registry remains unchanged."
+  },
+  "N22": {
+    "path": "figures/supplementary/figure_physical_architecture_native.pdf",
+    "old_label": "fig:si_physical_architecture",
+    "letters": [
+      {
+        "letter": "A",
+        "bbox": [
+          10.0,
+          11.939000129699707,
+          16.498001098632812,
+          20.93899917602539
+        ],
+        "origin": [
+          10.0,
+          18.5
+        ]
+      },
+      {
+        "letter": "B",
+        "bbox": [
+          244.36000061035156,
+          11.939000129699707,
+          250.85800170898438,
+          20.93899917602539
+        ],
+        "origin": [
+          244.36000061035156,
+          18.5
+        ]
+      },
+      {
+        "letter": "C",
+        "bbox": [
+          10.0,
+          188.93899536132812,
+          16.498001098632812,
+          197.93899536132812
+        ],
+        "origin": [
+          10.0,
+          195.5
+        ]
+      },
+      {
+        "letter": "D",
+        "bbox": [
+          162.4600067138672,
+          188.93899536132812,
+          168.9580078125,
+          197.93899536132812
+        ],
+        "origin": [
+          162.4600067138672,
+          195.5
+        ]
+      },
+      {
+        "letter": "E",
+        "bbox": [
+          335.6000061035156,
+          188.93899536132812,
+          341.6029968261719,
+          197.93899536132812
+        ],
+        "origin": [
+          335.6000061035156,
+          195.5
+        ]
+      },
+      {
+        "letter": "F",
+        "bbox": [
+          10.0,
+          335.218994140625,
+          15.499000549316406,
+          344.218994140625
+        ],
+        "origin": [
+          10.0,
+          341.7799987792969
+        ]
+      },
+      {
+        "letter": "G",
+        "bbox": [
+          244.36000061035156,
+          335.218994140625,
+          251.36199951171875,
+          344.218994140625
+        ],
+        "origin": [
+          244.36000061035156,
+          341.7799987792969
+        ]
+      }
+    ],
+    "builder": "scripts/build_supplementary_figure_physical_architecture_native.py",
+    "sha256": "911b7bff06b3a537639dc4137d7da72d74406852ff7ff62f4e64f12058c9e326",
+    "note": "Current editorial render; the frozen original registry remains unchanged."
+  },
+  "N31": {
+    "path": "figures/supplementary/figure_measured_transfer_geometry_native.pdf",
+    "old_label": "fig:si_measured_transfer_geometry",
+    "letters": [
+      {
+        "letter": "A",
+        "bbox": [
+          7.059999942779541,
+          11.939000129699707,
+          13.558000564575195,
+          20.93899917602539
+        ],
+        "origin": [
+          7.059999942779541,
+          18.5
+        ]
+      },
+      {
+        "letter": "B",
+        "bbox": [
+          264.20001220703125,
+          11.939000129699707,
+          270.697998046875,
+          20.93899917602539
+        ],
+        "origin": [
+          264.20001220703125,
+          18.5
+        ]
+      },
+      {
+        "letter": "C",
+        "bbox": [
+          7.059999942779541,
+          185.33900451660156,
+          13.558000564575195,
+          194.33900451660156
+        ],
+        "origin": [
+          7.059999942779541,
+          191.90000915527344
+        ]
+      },
+      {
+        "letter": "D",
+        "bbox": [
+          264.20001220703125,
+          185.33900451660156,
+          270.697998046875,
+          194.33900451660156
+        ],
+        "origin": [
+          264.20001220703125,
+          191.90000915527344
+        ]
+      }
+    ],
+    "builder": "scripts/build_supplementary_figure_measured_transfer_geometry_native.py",
+    "sha256": "2f81dadccc66e2fe1ded42e1fd7e441ae6f2469ed1e7905348abd7088be78cb6",
+    "note": "Current editorial render; the frozen original registry remains unchanged."
   }
 }

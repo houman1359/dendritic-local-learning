@@ -131,15 +131,12 @@ def candidate_panel(ax,manifest):
         for n in cut:
             ax.plot(*pts[n],"o",color=ink,ms=3.2,zorder=3)
         ax.text(x0+w/2,.03,f"K = {k}",ha="center",va="bottom",fontsize=PT_ANNOT,color=ink)
-    x0=4*(slot_w+gap)+.012
-    ax.text(x0,.24,"filled nodes: the K\nfeedback channels\n(one subtree each);\n5 trees × 4 budgets",
-            ha="left",va="center",fontsize=PT_SMALL,color=ink,linespacing=1.25)
 
 
 def protocol_panel(ax):
-    boxes=[(.02,.69,.96,.25,"Development tasks\nfit score-to-loss scale"),
-           (.02,.36,.96,.25,"Independent calibration samples\nseal all candidate scores and choices"),
-           (.02,.03,.96,.25,"Held-out tasks / 20 new seeds\ntrain every candidate, then assess regret")]
+    boxes=[(.02,.69,.96,.25,"Development tasks\nscore-to-loss scale"),
+           (.02,.36,.96,.25,"Calibration samples\nsealed scores and choices"),
+           (.02,.03,.96,.25,"Held-out tasks\ntraining and regret")]
     for x,y,w,h,label in boxes:
         ax.add_patch(Rectangle((x,y),w,h,facecolor=COLORS["panel_bg"],edgecolor=COLORS["edge"],lw=LW_HAIR))
         ax.text(x+w/2,y+h/2,label,ha="center",va="center",fontsize=PT_ANNOT,linespacing=1.3)
@@ -169,7 +166,7 @@ def regret_panel(ax,summary,seeds):
     ax.tick_params(axis="y",length=0)
     ax.set_ylim(len(POLICIES)-.5,-.5)
     ax.set_xlim(-.004,.15);ax.set_xticks(np.arange(0,.151,.025))
-    ax.set_xlabel("test loss + cost regret (excess over best trained candidate)",fontsize=PT_LABEL)
+    ax.set_xlabel("Test loss + cost regret (excess over best trained candidate)",fontsize=PT_LABEL)
     ax.legend(loc="upper right",frameon=False,fontsize=PT_SMALL,handletextpad=.4,
               title=None,borderaxespad=.2)
 
@@ -183,8 +180,6 @@ def budget_panel(ax,policies):
     assert (selected.oracle_budget_k==selected["rank"]).all()
     xs=np.arange(len(ranks))
     ax.plot(xs,ranks,color=COLORS["point_mlp"],lw=LW_REF,ls="--",zorder=2)
-    ax.text(.32,.42,"retrospectively best: K = rank",fontsize=PT_SMALL,color=COLORS["mute"],
-            ha="left",va="bottom",zorder=4)
     for arm,color,offset in zip(ARMS,ARM_COLORS,[-.17,.17]):
         frame=selected[selected.arm.eq(arm)]
         per_seed=frame.groupby(["rank","seed"]).budget_k.mean()
@@ -203,7 +198,7 @@ def budget_panel(ax,policies):
                 color=color,lw=LW_DATA,zorder=5)
     ax.set_xticks(xs,[str(r) for r in ranks]);ax.set_yticks(range(1,9))
     ax.set_ylim(.3,8.5);ax.set_xlim(-.5,len(ranks)-.5)
-    ax.set_xlabel("task rank");ax.set_ylabel("route budget K of selected candidate")
+    ax.set_xlabel("Task rank");ax.set_ylabel("Route budget K of selected candidate")
 
 
 def horizon_panel(ax):
@@ -230,7 +225,7 @@ def horizon_panel(ax):
                     color=color,marker="o",ms=4.2,mfc="white",mec=color,mew=LW_DATA,
                     lw=LW_DATA,capsize=2,zorder=5)
     ax.set_xticks([0,1],["first-step test-loss\ndecrease","final test-loss\nranking"])
-    ax.set_ylabel("mean within-task Spearman ρ")
+    ax.set_ylabel("Mean within-task Spearman ρ")
     ax.set_yticks(np.arange(.5,1.01,.1))
     ax.set_ylim(.5,1.01);ax.set_xlim(-.4,1.4)
 
@@ -244,11 +239,11 @@ def build():
     canvas=NativeCanvas(490/72,3,row_weights=[118,118,128],
                         hgutter_pt=34,vgutter_pt=32,
                         margins=Margins(left=43,right=12,top=20,bottom=35))
-    a=canvas.panel("A",0,0,7,schematic=True,title="Explicit morphology / routing candidates")
-    b=canvas.panel("B",0,7,5,schematic=True,title="Selection is sealed before training")
-    c=canvas.panel("C",1,0,12,title="Strong baselines beat the moment selector in both arms",grid="x")
-    d=canvas.panel("D",2,0,7,title="Selected budgets differ from the best",grid="y")
-    e=canvas.panel("E",2,7,5,title="Local agreement is stronger",grid="y")
+    a=canvas.panel("A",0,0,7,schematic=True)
+    b=canvas.panel("B",0,7,5,schematic=True)
+    c=canvas.panel("C",1,0,12,grid="x")
+    d=canvas.panel("D",2,0,7,grid="y")
+    e=canvas.panel("E",2,7,5,grid="y")
     candidate_panel(a,manifest);protocol_panel(b)
     regret_panel(c,summary,seeds)
     budget_panel(d,policies);horizon_panel(e)

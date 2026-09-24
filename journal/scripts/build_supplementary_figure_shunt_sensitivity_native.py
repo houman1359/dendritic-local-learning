@@ -49,6 +49,11 @@ of 2026-09-11 are preserved verbatim in the values and in the design):
 * A and B share one axes-box top and one baseline by construction (one canvas,
   one row), and every gutter on the sheet is the canvas's single 26 pt
   horizontal gutter.
+
+2026-09-23 clarity pass (review_20260923/si_pass): no panel titles, no
+reference-rule names ("S_k = 1", "reference interval") and no legend title in
+C; sign counts are compact ("8/8 > 0"); axis labels are in sentence case.
+Plotted values, limits and colours are unchanged.
 """
 from __future__ import annotations
 
@@ -79,7 +84,6 @@ from figure_canvas import (  # noqa: E402
     Margins,
     NativeCanvas,
     tint_patch,
-    token_subscript,
 )
 
 ROOT = SCRIPT_DIR.parent
@@ -109,8 +113,8 @@ DOSES = (0.05, 0.5, 5.0)
 LINTHRESH = 1e-3
 RM_DODGE = {300.0: -0.24, 1000.0: 0.0, 15000.0: 0.24}
 
-CONTRAST_LABEL = "shunt − current-injection\nlocalization"
-CONTRAST_LABEL_1 = "shunt − current-injection localization"
+CONTRAST_LABEL = "Shunt − current-injection\nlocalization"
+CONTRAST_LABEL_1 = "Shunt − current-injection localization"
 CENTRAL = dict(rm=1000.0, bg=1.0)   # the census condition of panel D
 
 
@@ -211,7 +215,7 @@ def panel_dose(ax, contrasts, percell):
           for g in range(len(BG_LEVELS)) for i in range(group_w)]
     ax.set_xticks(xt, [f"{d:g}" for d in DOSES] * len(BG_LEVELS))
     ax.set_xlim(-0.85, xt[-1] + 0.85)
-    ax.set_xlabel("fixed shunt conductance (nS)", labelpad=12.0)
+    ax.set_xlabel("Fixed shunt conductance (nS)", labelpad=12.0)
     ax.set_ylabel(CONTRAST_LABEL)
     handles = [Line2D([], [], color=RM_COLOR[rm], marker=RM_MARKER[rm],
                       dashes=RM_DASH[rm], lw=LW_DATA, ms=MARKER_MS - 1.4,
@@ -247,7 +251,7 @@ def panel_controls(ax, primary, summary):
     ax.set_xlim(-.5, 2.85)
     ax.set_ylim(-0.004, 0.152)
     ax.set_yticks([0, 0.05, 0.10, 0.15], ["0", "0.05", "0.10", "0.15"])
-    ax.set_ylabel("localization index")
+    ax.set_ylabel("Localization index")
     print(f"[B] shunt {stats[0][0]:.4f} [{stats[0][1]:.4f}, {stats[0][2]:.4f}], "
           f"injection {stats[1][0]:.4f} [{stats[1][1]:.4f}, {stats[1][2]:.4f}], "
           f"reassigned {stats[2][0]:.4f} [{stats[2][1]:.4f}, {stats[2][2]:.4f}]")
@@ -296,15 +300,12 @@ def panel_selectivity(ax, rows):
     ax.set_xticklabels(["1", "100", "10,000"])
     ax.set_ylim(-0.03, 0.73)
     ax.set_yticks([0, 0.2, 0.4, 0.6])
-    ax.set_xlabel("transport selectivity S")
+    ax.set_xlabel("Transport selectivity S")
     ax.annotate("k", xy=(1.0, 0.0), xycoords=ax.xaxis.label, xytext=(0.4, -1.6),
                 textcoords="offset points", fontsize=PT_BASE, color=INK,
                 ha="left", va="baseline", annotation_clip=False)
-    ax.set_ylabel("localization index")
-    # the reference is named at the axis, outside the point cloud
-    token_subscript(ax, 1.0, 1.0, "S", "k", " = 1", size=PT_BASE, color=MUTE,
-                    ha="left", va="bottom",
-                    transform=ax.get_xaxis_transform(), clip_on=False)
+    ax.set_ylabel("Localization index")
+    # the dotted S_k = 1 rule is named in the legend text, not in the artwork
     handles = [
         Line2D([], [], ls="none", marker="o", color=MUTE, ms=BG_KEY_MS,
                label="background ×0"),
@@ -314,11 +315,10 @@ def panel_selectivity(ax, rows):
         Line2D([], [], ls="none", marker="+", color=MUTE,
                markeredgewidth=LW_ERR, ms=BG_KEY_MS + 0.8, label="×4"),
     ]
-    leg = ax.legend(handles=handles, loc="lower right", frameon=False,
-                    bbox_to_anchor=(1.0, 0.04), fontsize=PT_BASE, handlelength=1.0,
-                    handletextpad=0.5, labelspacing=0.22, borderaxespad=0.3)
-    leg.set_title("colour: Rm as in A", prop={"size": PT_BASE})
-    leg.get_title().set_color(MUTE)
+    # colour is R_m as in A: the legend text says so, the key names markers only
+    ax.legend(handles=handles, loc="lower right", frameon=False,
+              bbox_to_anchor=(1.0, 0.04), fontsize=PT_BASE, handlelength=1.0,
+              handletextpad=0.5, labelspacing=0.22, borderaxespad=0.3)
     stratum = sites.groupby(["membrane_resistance_ohm_cm2",
                              "background_leak_multiplier"])
     print(f"[C] {len(sites)} site-regime points, 101 per stratum; "
@@ -367,7 +367,7 @@ def panel_census(ax, summary, rows):
                         color=colour, alpha=1.0 if value else 0.75)
     ax.set_xticks(range(3), ["attenuated", "enhanced", "sign flip"])
     ax.set_xlim(-0.62, 2.62)
-    ax.set_ylabel("descendant-gradient fraction")
+    ax.set_ylabel("Descendant-gradient fraction")
     ax.set_ylim(0, 1.30)
     ax.set_yticks([0, 0.5, 1.0], ["0", "0.5", "1"])
     ax.legend(loc="upper center", frameon=False, fontsize=PT_BASE,
@@ -400,7 +400,7 @@ def panel_contacts(ax, primary, direct, summary, direct_summary):
     ax.set_ylim(-0.006, 0.188)
     ax.set_yticks([0, 0.05, 0.10, 0.15], ["0", "0.05", "0.10", "0.15"])
     ax.set_ylabel(CONTRAST_LABEL)
-    ax.annotate(f"{rises}/{len(cells)} cells increase", xy=(0.03, 0.97),
+    ax.annotate(f"{rises}/{len(cells)} increase", xy=(0.03, 0.97),
                 xycoords="axes fraction", ha="left", va="top",
                 fontsize=PT_BASE, color=MUTE)
     print(f"[E] all mapped {stats[0][0]:.4f} [{stats[0][1]:.4f}, {stats[0][2]:.4f}], "
@@ -443,7 +443,9 @@ def panel_sensitivity(ax, cv):
     xlo = -0.012
     xhi = 1.05 * max(r["hi"] for r in rows)
     assert xhi > max(r["hi"] for r in rows)          # every cap inside the axis
-    ytop, ybot = -1.30, rows[-1]["y"] + 0.62
+    # the band's label is gone (the legend names the reference interval), so
+    # the rows keep the same 0.62 of headroom above as below
+    ytop, ybot = -0.62, rows[-1]["y"] + 0.62
     ax.set_xlim(xlo, xhi)
     ax.set_ylim(ybot, ytop)
     ax.set_yticks([])
@@ -452,9 +454,6 @@ def panel_sensitivity(ax, cv):
     tint_patch(ax, ("rect", ref["lo"], ytop, ref["hi"] - ref["lo"], ybot - ytop),
                color=SHUNT, pct=14, edge=False, radius_pt=0.0, zorder=0.3,
                clip_on=True)
-    ax.annotate("reference interval", xy=(ref["lo"], -0.80), xycoords="data",
-                xytext=(-2.5, 0.0), textcoords="offset points", ha="right",
-                va="center", fontsize=PT_BASE, color=MUTE)
     ax.axvline(0, color=MUTE, ls="--", lw=LW_REF, zorder=1)
     for r in rows:
         y = r["y"]
@@ -470,14 +469,16 @@ def panel_sensitivity(ax, cv):
                     xytext=(-4.0, 0.0), textcoords="offset points", ha="right",
                     va="center", fontsize=PT_BASE, color=INK, linespacing=1.15,
                     annotation_clip=False)
-        ax.annotate(f"{r['positive']}/{r['n']} cells", xy=(1.0, y),
+        ax.annotate(f"{r['positive']}/{r['n']} > 0", xy=(1.0, y),
                     xycoords=("axes fraction", "data"), xytext=(3.0, 0.0),
                     textcoords="offset points", ha="left", va="center",
                     fontsize=PT_BASE, color=MUTE, annotation_clip=False)
     ax.set_xticks([0, .03, .06, .09], ["0", "0.03", "0.06", "0.09"])
     ax.set_xlabel(CONTRAST_LABEL_1)
     ax.tick_params(axis="y", length=0)
-    cv.declare_reserve("F", left=44.0, right=33.0)
+    # the "8/8 > 0" column (21.6 pt + 3 pt offset) fits a 26 pt reserve; the
+    # reserve is locked on the whole right column edge, so B and D share it
+    cv.declare_reserve("F", left=44.0, right=26.0)
     print("[F] " + "; ".join(
         f"{r['label'].replace(chr(10), ' ')} {r['mean']:.4f} "
         f"[{r['lo']:.4f}, {r['hi']:.4f}] {r['positive']}/{r['n']}"
@@ -572,13 +573,13 @@ def build(path: Path = OUT):
 
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 3, hgutter_pt=HGUTTER_PT,
                       vgutter_pt=VGUTTER_PT, margins=MARGINS)
-    ax_a = cv.panel("A", 0, 0, 7, grid="y", title="Dose, cable and background")
-    ax_b = cv.panel("B", 0, 7, 5, grid="y", title="Within-cell controls")
-    ax_c = cv.panel("C", 1, 0, 7, grid="none", title="Cable selectivity")
-    ax_d = cv.panel("D", 1, 7, 5, grid="y", title="Signed outcomes")
-    ax_e = cv.panel("E", 2, 0, 5, grid="y", title="Direct presynaptic types")
-    ax_f = cv.panel("F", 2, 5, 7, grid="x",
-                    title="Synaptic scales and reversal")
+    # 2026-09-23 clarity pass: no panel titles; what they said is in the legend
+    ax_a = cv.panel("A", 0, 0, 7, grid="y")
+    ax_b = cv.panel("B", 0, 7, 5, grid="y")
+    ax_c = cv.panel("C", 1, 0, 7, grid="none")
+    ax_d = cv.panel("D", 1, 7, 5, grid="y")
+    ax_e = cv.panel("E", 2, 0, 5, grid="y")
+    ax_f = cv.panel("F", 2, 5, 7, grid="x")
     for name in "ABCDE":
         cv.declare_reserve(name, left=14.0, right=9.0)
 

@@ -1294,7 +1294,7 @@
   "S32": {
     "old_label": "fig:supp_local_context_encoder",
     "original_asset": "figures/supplementary/figure_S32_panels_A-F.pdf",
-    "original_sha256": "8492fcce878910fa2b1bfea8cfda6b615fd1f0ba59f4d213c55c2b8170acfaf3",
+    "original_sha256": "00bf25798f43b28b6ad706d3219672253373629489e510ae9d4c689f0e907be2",
     "primary_destination": "S11",
     "panels": {
       "C": {
@@ -1334,7 +1334,7 @@
   "S33": {
     "old_label": "fig:supp_morphology_uncertainty",
     "original_asset": "figures/supplementary/figure_S33_panels_A-F.pdf",
-    "original_sha256": "3a6ad356326371787c68b40b6f68a0ce03927e9893c5f061cef505ad099392a1",
+    "original_sha256": "01751e054120416556f8888dfa506d4205826bb79b235827fde28ce60f3f9c64",
     "primary_destination": "S30",
     "panels": {
       "A": {
@@ -1373,7 +1373,7 @@
   "S34": {
     "old_label": "fig:supp_response_baselines",
     "original_asset": "figures/supplementary/figure_S34_panels_A-D.pdf",
-    "original_sha256": "6d04a5f2fdc938954d54b7b7cc6884e028abe1c4a06c620f6690606bca797593",
+    "original_sha256": "eb090e4f8926f649b42e605f6e19de2b93918d6bbb04255b122537d7b55f5c31",
     "primary_destination": "S34",
     "panels": {
       "A": {
@@ -1402,7 +1402,7 @@
   "S35": {
     "old_label": "fig:supp_original_prospective_selection",
     "original_asset": "figures/supplementary/figure_S35_panels_A-F.pdf",
-    "original_sha256": "f97defa94f4dc010c45ae73a211c0195dd2f8996dabbe09b08f1efadf28d720c",
+    "original_sha256": "4c43767a701e405fd6f94c3d54ca9ae7466083daa5fe502567c4be9157093028",
     "primary_destination": "S35",
     "panels": {
       "A": {
@@ -2559,7 +2559,7 @@
   "N14": {
     "old_label": "fig:si_boolean_capacity",
     "original_asset": "figures/supplementary/figure_boolean_capacity_native.pdf",
-    "original_sha256": "613407dd274ba81bc77342e06f419c66bca3311577b2bf372a464d1d5805048e",
+    "original_sha256": "bc3054d28860a99d2e6dd4e96d3fd9584dce0bdb805650adf1c63ba94b9e1c95",
     "primary_destination": "S14",
     "panels": {
       "A": {
@@ -2598,7 +2598,7 @@
   "N15": {
     "old_label": "fig:si_boolean_learning",
     "original_asset": "figures/supplementary/figure_boolean_learning_native.pdf",
-    "original_sha256": "c908da0b1b0dbbbced89a564f602f8bfa9430be4fa5618986d8cb95d5a2cca9f",
+    "original_sha256": "6a2d0cff8b1847726ced81f85f133ea1dee8bbc727b934c852b8f219d7f178e4",
     "primary_destination": "S15",
     "panels": {
       "A": {
@@ -2647,7 +2647,7 @@
   "N18": {
     "old_label": "fig:si_conductance_grouping",
     "original_asset": "figures/supplementary/figure_conductance_grouping_native.pdf",
-    "original_sha256": "67062a920cfd48c0eea9fe59691741a8ba9dc2e9b51b700adbb85fc33a60b651",
+    "original_sha256": "42d001ea534d656919821b649874b0986bb05c2697037c0207d57e1e556d3067",
     "primary_destination": "S18",
     "panels": {
       "A": {
@@ -2686,7 +2686,7 @@
   "N7": {
     "old_label": "fig:si_mnist_dictionary_geometry",
     "original_asset": "figures/supplementary/figure_mnist_dictionary_geometry_native.pdf",
-    "original_sha256": "9e39f04cfd1ddc09bbea24e416a280789ff378e75cab5f1bbc6449216987667a",
+    "original_sha256": "c4cb8f9c8bf3dfdc4ece79821791b9738bf382af65a8fc331618e71f0ca5c43f",
     "primary_destination": "S7",
     "panels": {
       "A": {
@@ -2710,7 +2710,7 @@
   "N8": {
     "old_label": "fig:si_error_field_geometry",
     "original_asset": "figures/supplementary/figure_error_field_geometry_native.pdf",
-    "original_sha256": "19ecb97cbe77e26d05d1a8f8935b1aa3befdf85f33942d25cd56719158ffa6e6",
+    "original_sha256": "10321a6bb3278523a047941783c1fb02b1692cedb842775f464100a3866f4637",
     "primary_destination": "S8",
     "panels": {
       "A": {
@@ -2734,7 +2734,7 @@
   "N12": {
     "old_label": "fig:si_scalar_tree_capacity",
     "original_asset": "figures/supplementary/figure_scalar_tree_capacity_native.pdf",
-    "original_sha256": "a6f10ed7c3e250a2bfc6c89f7f03b54f81ecfd3cc9a7aed370c235853df80c41",
+    "original_sha256": "1f53135a2973329450c4742c77906cfc73f1adc513272daa7dd878b80e8b138f",
     "primary_destination": "S12",
     "panels": {
       "A": {
@@ -2773,7 +2773,7 @@
   "N13": {
     "old_label": "fig:si_oracle_profile_credit",
     "original_asset": "figures/supplementary/figure_oracle_profile_credit_native.pdf",
-    "original_sha256": "992dd2dec2079a955dbceb3a2fec752c759f9f36c6e768862172f91182adaeff",
+    "original_sha256": "cc7289737ba862d706828240390ebb46ebc5fdfbc61aedbe91ca7b292a1007a4",
     "primary_destination": "S13",
     "panels": {
       "A": {
@@ -2812,7 +2812,7 @@
   "N16": {
     "old_label": "fig:si_fixed_profile_budget",
     "original_asset": "figures/supplementary/figure_fixed_profile_budget_native.pdf",
-    "original_sha256": "703c18620bb20b716fa400e53fe89232799dc781ca20c00c39d118e250c9713f",
+    "original_sha256": "b8c7ac4be994162251528567b933ce109460a374ad90f71afae0e69c9dd68a12",
     "primary_destination": "S16",
     "panels": {
       "A": {
@@ -2851,7 +2851,7 @@
   "N17": {
     "old_label": "fig:si_credit_optimizer_controls",
     "original_asset": "figures/supplementary/figure_credit_optimizer_controls_native.pdf",
-    "original_sha256": "193cf1d65c9fc6bb42cd40c51b658b32277cf94c02d8c149985c1d17c2a5e8f7",
+    "original_sha256": "80d1f4725c4e0ff24aa9549a66e2295627190439077241bdfd4594b9aa983b15",
     "primary_destination": "S17",
     "panels": {
       "A": {
@@ -2880,7 +2880,7 @@
   "N19": {
     "old_label": "fig:si_conductance_precision",
     "original_asset": "figures/supplementary/figure_conductance_precision_native.pdf",
-    "original_sha256": "5b54316d76e494380b1c7797c696f56084d444250f6457201708041d6a4535d2",
+    "original_sha256": "3c38c61bcaf8deede94d2089d38d2c873427e0fde9cbb6e59b99cc6f3abca9ae",
     "primary_destination": "S19",
     "panels": {
       "A": {
@@ -2909,7 +2909,7 @@
   "N20": {
     "old_label": "fig:si_conductance_optimization",
     "original_asset": "figures/supplementary/figure_conductance_optimization_native.pdf",
-    "original_sha256": "7472557cd667e2991d970a2824b96ebe42a24773525330bf2679c0e4353d6173",
+    "original_sha256": "eb686c12d10324726febb11dd5fd2617a887782d53654a831de7c11a64712df3",
     "primary_destination": "S20",
     "panels": {
       "A": {
@@ -2943,7 +2943,7 @@
   "N21": {
     "old_label": "fig:si_local_gate_controls",
     "original_asset": "figures/supplementary/figure_local_gate_controls_native.pdf",
-    "original_sha256": "31d1d07812deef3fd15bb75fd676a1dc152dfa44cb38bf019d69d91657eee21e",
+    "original_sha256": "5d5d1ed12908ee68157a4fd78a022cf97d6b589c97af3dba5aa4605af2f1ebf9",
     "primary_destination": "S21",
     "panels": {
       "A": {
@@ -2972,7 +2972,7 @@
   "N35": {
     "old_label": "fig:si_finite_horizon",
     "original_asset": "figures/supplementary/figure_finite_horizon_native.pdf",
-    "original_sha256": "a43d67fd9bd3ea2bfe6c4fba1555c35c3d24efe114669ae545f3f1b0f0651f98",
+    "original_sha256": "1d7f741102a46f5bdc44f0c2062548854f0a3139bd84eb39d8b8af9d337a4906",
     "primary_destination": "S36",
     "panels": {
       "A": {
@@ -3011,7 +3011,7 @@
   "N36": {
     "old_label": "fig:si_morphology_estimation",
     "original_asset": "figures/supplementary/figure_morphology_estimation_native.pdf",
-    "original_sha256": "06f874cbb45f43a3c6b7902038c3b3c25f88e2bf2b0a4a6319270bbf7cc780f3",
+    "original_sha256": "48c4a42f8936aab206bd035f27eb46545fbc43117ae9dabcb110c3b195c37a01",
     "primary_destination": "S37",
     "panels": {
       "A": {
@@ -3060,7 +3060,7 @@
   "N3": {
     "old_label": "fig:si_utility_signal_noise",
     "original_asset": "figures/supplementary/figure_utility_signal_noise_native.pdf",
-    "original_sha256": "d18b9c71d7dff0aef2bac50609a1b7d45733851e1eca64a66e09732f2c5f1508",
+    "original_sha256": "2a2a928c27e3dd03d52213cd78f54ae346427336b5610154a0647661131914c3",
     "primary_destination": "S3",
     "panels": {
       "A": {
@@ -3104,7 +3104,7 @@
   "N22": {
     "old_label": "fig:si_physical_architecture",
     "original_asset": "figures/supplementary/figure_physical_architecture_native.pdf",
-    "original_sha256": "cd4e1f0183cebd004218cd6e12591845ceebf424a8ecbc12c3dc1c1c90239844",
+    "original_sha256": "911b7bff06b3a537639dc4137d7da72d74406852ff7ff62f4e64f12058c9e326",
     "primary_destination": "S24",
     "panels": {
       "A": {
@@ -3148,7 +3148,7 @@
   "N30": {
     "old_label": "fig:si_shunt_replication",
     "original_asset": "figures/supplementary/figure_shunt_replication_native.pdf",
-    "original_sha256": "99a77f980e0ad8aff168fe199023c5864e16dd684ace7ce81e02f0e7bd6d72c3",
+    "original_sha256": "c6ad28410a72c088f9a92e1b0cd4a365c84270e5cd47e6af096bfd4cea953b25",
     "primary_destination": "S32",
     "panels": {
       "A": {
@@ -3182,7 +3182,7 @@
   "N31": {
     "old_label": "fig:si_measured_transfer_geometry",
     "original_asset": "figures/supplementary/figure_measured_transfer_geometry_native.pdf",
-    "original_sha256": "13c9a4f277ee888ca55f9cdab3a87a33c5d40545cb46901360788905cab14c85",
+    "original_sha256": "2f81dadccc66e2fe1ded42e1fd7e441ae6f2469ed1e7905348abd7088be78cb6",
     "primary_destination": "S33",
     "panels": {
       "A": {
@@ -3211,7 +3211,7 @@
   "N29": {
     "old_label": "fig:si_shunt_sensitivity",
     "original_asset": "figures/supplementary/figure_shunt_sensitivity_native.pdf",
-    "original_sha256": "84a4e4a8ed1e2f0e3c2503d4453ec4a75a839e931d0cdc4ff06b115b763c5afc",
+    "original_sha256": "40620b74ab2b756ba43559b51eb50f8583def9e27648fb6f2c1f5f5965c2d6db",
     "primary_destination": "S31",
     "panels": {
       "A": {
@@ -3275,20 +3275,6 @@
       }
     }
   },
-  "N9": {
-    "old_label": "fig:si_input_coverage_mnist",
-    "original_asset": "figures/supplementary/figure_input_coverage_mnist_native.pdf",
-    "original_sha256": "de123d5520b37fe5933c6ca292700a67c4419288a8e03e2693a60b8abe82a3ad",
-    "primary_destination": "S9",
-    "panels": {
-      "A": {
-        "figure": "S9",
-        "panel": "D",
-        "path": "figures/supplementary/curated/input_coverage_depth.pdf"
-      }
-    },
-    "omitted_panel_status": {}
-  },
   "N4C": {
     "old_label": "fig:si_cifar_ladders",
     "original_asset": "figures/supplementary/figure_cifar_ladders_native.pdf",
@@ -3323,5 +3309,19 @@
         "numbers_at": "source_data/fashion_feedback_ladder/"
       }
     }
+  },
+  "N9": {
+    "old_label": "fig:si_input_coverage_mnist",
+    "original_asset": "figures/supplementary/figure_input_coverage_mnist_native.pdf",
+    "original_sha256": "de123d5520b37fe5933c6ca292700a67c4419288a8e03e2693a60b8abe82a3ad",
+    "primary_destination": "S9",
+    "panels": {
+      "A": {
+        "figure": "S9",
+        "panel": "D",
+        "path": "figures/supplementary/curated/input_coverage_depth.pdf"
+      }
+    },
+    "omitted_panel_status": {}
   }
 }

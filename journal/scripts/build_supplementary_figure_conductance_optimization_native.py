@@ -50,6 +50,17 @@ frozen_S20.json), panel by panel:
   hue is the rule whose deficit against exact path is drawn; in B it is the
   calibrated-broadcast gap.  No colour carries a second meaning anywhere on
   the sheet, and one key at the foot serves C-E (A keys its own groups).
+
+2026-09-23 clarity pass (analysis/figure_visual_review_20260910/
+review_20260923/si_pass/ledger/conductance_optimization.md): the artwork keeps
+axis labels, tick labels, the rule labels of A, A's per-row sign counts, the
+short C-E condition titles, the 'selected rate' rule label and the key.  The
+finding titles of A and B, the statistics notes ('n = ... seeds ...'), the
+zero-rule labels ('no interaction', 'no gap'), B's 20/20 count, A's oracle
+footnote and D's coincidence note moved to the legend; the assertions behind
+them still run.  Axis labels are in sentence case.  The key is laid out on the
+panel-letter grid so that no key mark falls in the strip beside a row-1 letter
+where the supplement's whole-sheet paste assigns it to that letter's panel.
 """
 from __future__ import annotations
 
@@ -94,7 +105,7 @@ DASHED = (0, (2.6, 1.8))
 DOTTED = (0, (0.9, 1.6))
 SERIES_MS = MARKER_MS * 0.78
 LOG_TICK_PAD_PT = 11.0          # room for the raised exponent between "10" and the spine
-TITLE_PAD_PT = 11.0             # the n tag sits between the title and the axes
+TITLE_PAD_PT = 4.0              # condition title to axes top (no n tag since 2026-09-23)
 
 # credit rules: (table key, key label, colour, line style, marker).  The two
 # control rules are dashed AND hollow, so a control mean that lands on a
@@ -253,14 +264,10 @@ def panel_interaction(ax, contrasts, seed_contrasts, sheet):
                         fontsize=PT_BASE, color=MUTE, annotation_clip=False)
             printed.append(f"{rule} {label}: {m:.6f} [{lo:.6f}, {hi:.6f}] {n_pos}/20 > 0; "
                            f"seeds {v.min():.6f}-{v.max():.6f}")
+    # the oracle rows: means and intervals inside +/-0.000005 of zero -- too
+    # narrow to draw; the legend states it (2026-09-23), the check stays here
     assert oracle_extreme < ORACLE_BAND, oracle_extreme
     print("[A] " + "\n    ".join(printed))
-    # the oracle rows: means and intervals inside +/-0.000005 of zero -- an
-    # interval too narrow to draw is stated, not stubbed
-    y_or = 2 * pitch + 2.5
-    ax.annotate("means and 95 % CIs all within\n±0.000005 of zero (not drawable)",
-                xy=(0.09, y_or), xycoords="data", ha="left", va="center", fontsize=PT_BASE,
-                color=MUTE, linespacing=1.15, zorder=5.0)
     n_rows = len(groups) * pitch - (pitch - 5)
     ax.set_ylim(n_rows - 0.4, -0.7)
     ax.set_yticks([y for y, _ in labels], [lab for _, lab in labels])
@@ -270,13 +277,7 @@ def panel_interaction(ax, contrasts, seed_contrasts, sheet):
     assert fan_max < 1.06
     ax.set_xticks([0.0, 0.25, 0.5, 0.75, 1.0], ["0", "0.25", "0.5", "0.75", "1"])
     ax.axvline(0.0, color=MUTE, lw=LW_REF, zorder=1.0, dashes=(2.6, 2.0))
-    ax.annotate("no interaction", xy=(0.0, 1.0), xycoords=("data", "axes fraction"),
-                xytext=(2.5, 2.5), textcoords="offset points", ha="left", va="bottom",
-                fontsize=PT_BASE, color=MUTE, annotation_clip=False)
-    ax.annotate("n = 20 paired seeds per row; mean [95 % CI]", xy=(1.0, 1.0),
-                xycoords="axes fraction", xytext=(0.0, 2.5), textcoords="offset points",
-                ha="right", va="bottom", fontsize=PT_BASE, color=MUTE, annotation_clip=False)
-    ax.set_xlabel("task-by-credit interaction: opposed − aligned\ndifference in (rule − exact path) test NMSE")
+    ax.set_xlabel("Task-by-credit interaction: opposed − aligned\ndifference in (rule − exact path) test NMSE")
     ax.tick_params(axis="y", length=0, pad=4.0)
 
 
@@ -317,14 +318,8 @@ def panel_precontact(ax, gaps, first, sheet):
     assert y.max() < 1.06
     ax.set_yticks([0.0, 0.25, 0.5, 0.75, 1.0], ["0", "0.25", "0.5", "0.75", "1"])
     ax.axhline(0.0, color=MUTE, lw=LW_REF, zorder=1.0, dashes=(2.6, 2.0))
-    ax.annotate("no gap", xy=(1.0, 0.0), xycoords=("axes fraction", "data"), xytext=(-2.0, 2.5),
-                textcoords="offset points", ha="right", va="bottom", fontsize=PT_BASE,
-                color=MUTE)
-    ax.annotate("20/20 gaps > 0 (n = 20 seeds)", xy=(1.0, 1.0), xycoords="axes fraction",
-                xytext=(0.0, 2.5), textcoords="offset points", ha="right", va="bottom",
-                fontsize=PT_BASE, color=MUTE, annotation_clip=False)
-    ax.set_xlabel("update of first bound contact (Adam)")
-    ax.set_ylabel("calibrated broadcast − exact path\ntest NMSE, last checkpoint before contact")
+    ax.set_xlabel("Update of first bound contact (Adam)")
+    ax.set_ylabel("Calibrated broadcast − exact path\ntest NMSE, last checkpoint before contact")
 
 
 # ── C: every development regime under Adam ───────────────────────────────
@@ -373,11 +368,8 @@ def panel_regimes(ax, selection, endpoints, sheet):
         ax.annotate(name, xy=((i0 + i1) / 2.0, 0.0), xycoords=("data", "axes fraction"),
                     xytext=(0.0, -GROUP_ROW_PT), textcoords="offset points", ha="center",
                     va="top", fontsize=PT_BASE, color=INK, annotation_clip=False)
-    ax.set_xlabel("gating regime (best of three rates)", labelpad=GROUP_ROW_PT - 2.0)
-    ax.set_ylabel("development validation NMSE")
-    ax.annotate("n = 3 seeds; symbol = mean", xy=(1.0, 1.0),
-                xycoords="axes fraction", xytext=(0.0, 2.5), textcoords="offset points",
-                ha="right", va="bottom", fontsize=PT_BASE, color=MUTE, annotation_clip=False)
+    ax.set_xlabel("Gating regime", labelpad=GROUP_ROW_PT - 2.0)
+    ax.set_ylabel("Development validation NMSE")
 
 
 # ── D, E: six-rate opposed-tuning sweeps ─────────────────────────────────
@@ -435,25 +427,82 @@ def panel_rates(ax, source, endpoints, protocol, optimizer, selected_rate, *, no
                 xytext=(2.5 if note_side == "right" else -2.5, 0.0), textcoords="offset points",
                 ha="left" if note_side == "right" else "right", va="center",
                 fontsize=PT_BASE, color=MUTE, linespacing=1.15, zorder=5.0)
-    if note:
+    if note:        # the legend states the coincidence (0.03 %); the check stays
         assert pair.max() < 3e-4
-        ax.annotate("unit and calibrated\nbroadcast coincide\n(within 0.03 %)",
-                    xy=(rates[-1], 0.12), xycoords="data", ha="right", va="top",
-                    fontsize=PT_BASE, color=MUTE, linespacing=1.15, zorder=5.0)
-    ax.annotate("n = 3 seeds; symbol = mean", xy=(1.0, 1.0), xycoords="axes fraction",
-                xytext=(0.0, 2.5), textcoords="offset points", ha="right", va="bottom",
-                fontsize=PT_BASE, color=MUTE, annotation_clip=False)
-    ax.set_xlabel("learning rate")
-    ax.set_ylabel("development validation NMSE")
+    ax.set_xlabel("Learning rate")
+    ax.set_ylabel("Development validation NMSE")
     return pair.max(), ratio_max
 
 
+# ── the shared key ───────────────────────────────────────────────────────
+KEY_HANDLE_PT = 2.0 * PT_BASE   # handle length, pad and entry spacing in em of
+KEY_PAD_PT = 0.5 * PT_BASE      # the 7 pt key type, as a legend would set them
+KEY_SPACE_PT = 1.2 * PT_BASE
+KEY_LETTER_GAP_PT = 6.0         # the left pair ends this far short of letter E
+
+
+def rule_key(cv, ax_c, ax_e):
+    """The credit-rule key, drawn as two pairs on the foot line of row 1.
+
+    The supplement pastes this sheet whole and gives each row-1 panel the
+    strip that starts 3 pt left of its letter, so a key mark between letter
+    E and E's y label would count as E's leftmost ink and the letter could
+    not clear it.  The first pair (exact path, three-profile oracle) therefore
+    ends ``KEY_LETTER_GAP_PT`` before letter E and the second pair (calibrated
+    and unit broadcast) starts at E's y label, the panel's own leftmost mark.
+    The key sits level with C's axis label, on the line D and E leave free
+    under their x labels.  Called after the letters have their final place.
+    """
+    fig = cv.fig
+    W, H = cv.width_pt, cv.height_pt
+    cv.lock_reserves()
+    cv.reserve_letter_clearance()
+    cv.align_letters()
+    renderer = fig.canvas.get_renderer()
+    s = 72.0 / fig.dpi
+    letter = {it["letter"]: it["art"].get_window_extent(renderer) for it in cv._letters}
+    le, ld = letter["E"], letter["D"]
+    ylab = ax_e.yaxis.label.get_window_extent(renderer)
+    xlab = ax_c.xaxis.label.get_window_extent(renderer)
+    y = 0.5 * (xlab.y0 + xlab.y1) * s                      # points from the foot
+    entries = []
+    for key, label, color, ls, marker in RULES:
+        text = fig.text(0.0, y / H, label, fontsize=PT_BASE, color=INK, ha="left",
+                        va="center_baseline")
+        width = text.get_window_extent(renderer).width * s
+        entries.append((key, color, ls, marker, text,
+                        KEY_HANDLE_PT + KEY_PAD_PT + width))
+
+    def place(pair, x):
+        for key, color, ls, marker, text, width in pair:
+            fig.add_artist(Line2D([x / W, (x + KEY_HANDLE_PT) / W], [y / H, y / H],
+                                  transform=fig.transFigure, color=color, lw=LW_DATA, ls=ls))
+            fig.add_artist(Line2D([(x + 0.5 * KEY_HANDLE_PT) / W], [y / H],
+                                  transform=fig.transFigure, linestyle="none", marker=marker,
+                                  ms=SERIES_MS, color=color, **mean_marker_kw(key, color)))
+            text.set_x((x + KEY_HANDLE_PT + KEY_PAD_PT) / W)
+            x += width + KEY_SPACE_PT
+        return x - KEY_SPACE_PT
+
+    first, second = entries[:2], entries[2:]
+    first_w = sum(e[-1] for e in first) + KEY_SPACE_PT
+    x_first = le.x0 * s - KEY_LETTER_GAP_PT - first_w
+    x_second = max(ylab.x0 * s, le.x1 * s + 3.6)
+    place(first, x_first)
+    end = place(second, x_second)
+    # both pairs stay clear of the strips beside letters D and E, and on the page
+    assert x_first > ld.x1 * s + 3.6, (x_first, ld.x1 * s)
+    assert end < W - 4.0, (end, W)
+    print(f"[key] pairs at {x_first:.1f}-{x_first + first_w:.1f} and {x_second:.1f}-{end:.1f} pt; "
+          f"letter E {le.x0 * s:.1f}-{le.x1 * s:.1f} pt")
+
+
 # ── the canvas ───────────────────────────────────────────────────────────
-CANVAS_H_PT = 492.0             # the 1.05 canvas-aspect floor at 518.4 pt
-ROW_PT = [210.0, 166.0]
+CANVAS_H_PT = 486.0             # 2026-09-23: 6 pt shorter once the titles and notes left
+ROW_PT = [216.0, 160.0]         # C-E keep an axes aspect near the 0.74 they had
 HGUTTER_PT = 20.0
-VGUTTER_PT = 44.0
-MARGINS = Margins(left=40.0, right=6.0, top=18.0, bottom=58.0)
+VGUTTER_PT = 56.0               # A's two-line x label stays nearer A than row 1's titles
+MARGINS = Margins(left=40.0, right=6.0, top=10.0, bottom=44.0)
 
 
 def build(path: Path = OUT):
@@ -481,13 +530,15 @@ def build(path: Path = OUT):
 
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 2, row_weights=ROW_PT, hgutter_pt=HGUTTER_PT,
                       vgutter_pt=VGUTTER_PT, margins=MARGINS)
-    ax_a = cv.panel("A", 0, 0, 7, grid="x", title="Wider conductance bounds retain the gap")
-    ax_b = cv.panel("B", 0, 7, 5, grid="both", title="The gap precedes bound contact")
+    # A and B carry no title (their findings are the legend's); C-E keep the
+    # short condition labels that tell the three otherwise-identical panels apart
+    ax_a = cv.panel("A", 0, 0, 7, grid="x")
+    ax_b = cv.panel("B", 0, 7, 5, grid="both")
     ax_c = cv.panel("C", 1, 0, 4, grid="y", title="Adam, 4,096 updates")
     ax_d = cv.panel("D", 1, 4, 4, grid="y", title="Adam, opposed, 16,384 updates")
     ax_e = cv.panel("E", 1, 8, 4, grid="y", title="SGD, opposed, 16,384 updates")
 
-    for ax in (ax_a, ax_b, ax_c, ax_d, ax_e):      # the n tag sits under the title
+    for ax in (ax_c, ax_d, ax_e):
         ax.set_title(ax.get_title(), fontsize=PT_EMPH, color=INK, pad=TITLE_PAD_PT,
                      fontweight="normal")
     panel_interaction(ax_a, contrasts, seed_contrasts, sheet)
@@ -520,13 +571,8 @@ def build(path: Path = OUT):
     widths = [boxes[k].width * cv.width_pt for k in "CDE"]
     assert max(widths) - min(widths) < 0.5, widths
 
-    # one shared key for the credit rules of C-E, below the panels
-    handles = [Line2D([], [], color=c, lw=LW_DATA, ls=ls, marker=mk, ms=SERIES_MS, label=lab,
-                      **mean_marker_kw(key, c))
-               for key, lab, c, ls, mk in RULES]
-    cv.fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.53, 0.0),
-                  ncol=4, frameon=False, fontsize=PT_BASE, handlelength=2.6,
-                  columnspacing=1.6, handletextpad=0.6, borderaxespad=0.4)
+    # one shared key for the credit rules, on the foot line beside C's axis label
+    rule_key(cv, ax_c, ax_e)
     problems = cv.save(path, name="figure_conductance_optimization_native", png=False)
     for problem in problems:
         print(f"    {problem}")

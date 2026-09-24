@@ -43,8 +43,8 @@ What changed in the drawing (finding -> fix):
      projection energy, the exact value printed beside each dot, exact zeros
      as open rings), columns grouped ``aligned`` (ab, cd) / ``crossed``; no
      connecting lines; the axis is named ``input pair``; the quantity is
-     named on the left edge (``projection energy``) and the area encoding
-     has a one-line key (``dot area = energy``) in the raised band.
+     named on the left edge (``projection energy``); the area encoding is
+     stated in the caption.
 * F  the three canonical derivatives are drawn from the 101-point grids in
      ``gate_credit_fields.csv`` in the same three gate colours as C and
      labelled directly at their right ends; the zero rule spans the axis;
@@ -52,6 +52,9 @@ What changed in the drawing (finding -> fix):
 * Colour registers on this sheet: green / amber / violet = AND / OR / XOR
   gates only (C, F); the blue sequential ramp = NMSE lower bound only (B);
   slate = truth value 1 (A); ink marks in D and E carry no colour meaning.
+* 2026-09-23 clarity pass: the six headline panel titles and E's key line
+  moved to the caption; axis labels in sentence case; the freed title bands
+  went to the rows (axes 100 -> 110.7 pt at the same canvas height).
 
 Run from the journal directory::
 
@@ -85,7 +88,6 @@ from figure_canvas import (  # noqa: E402
     LW_REF,
     MARKER_MS,
     PT_BASE,
-    PT_TITLE,
     SEQ_CMAP,
     Margins,
     NativeCanvas,
@@ -123,13 +125,8 @@ BALANCED = ["T10", "T11", "T12"]
 PAIR_ORDER = ["ab", "cd", "ac", "ad", "bc", "bd"]     # aligned, then crossed
 ALIGNED = ["ab", "cd"]
 
-TITLE_PAD = 16.0        # one raised title band for every row (group labels,
-                        # column headers and keys live in it)
-TITLE_PAD_KEYED = 25.0  # row 2's band carries a third line (E's dot key)
-                        # between the group labels and the title
 BAND_RULE_PT = 3.0      # bracket rule height above the axes top, in points
 BAND_TEXT_PT = 5.5      # bracket label baseline above the axes top
-BAND_KEY_PT = 15.0      # key-line baseline above the axes top (row 2)
 
 NMSE_VMAX = 2.0 / 3.0   # largest bound in tree_capacity.csv (asserted)
 NMSE_GAMMA = 0.6        # power mapping: 0.2/0.667 -> 0.49 of the ramp
@@ -243,7 +240,7 @@ def panel_truth_tables(ax, truth):
             lw=LW_HAIR, zorder=3, clip_on=False)
     category_axes(ax, [FAMILY_LABEL[f] for f in FAMILIES], patterns,
                   col_rotation=90)
-    ax.set_xlabel("input pattern abcd")
+    ax.set_xlabel("Input pattern abcd")
     # The two-swatch key sits in the raised title band, right of the title.
     handles = [Patch(facecolor=TRUTH_ONE, edgecolor=EDGE, linewidth=LW_HAIR),
                Patch(facecolor=TRUTH_ZERO, edgecolor=EDGE, linewidth=LW_HAIR)]
@@ -322,7 +319,7 @@ def panel_tree_capacity(canvas, ax, capacity, depth_summary):
     column_divider(ax, len(BALANCED) - 0.5, n_rows)
     category_axes(ax, [FAMILY_LABEL[f] for f in FAMILIES],
                   [t.lstrip("T").lstrip("0") for t in TREE_ORDER])
-    ax.set_xlabel("labeled binary tree, T index")
+    ax.set_xlabel("Labeled binary tree, T index")
     group_labels(ax, [(0, len(BALANCED) - 1, "balanced"),
                       (len(BALANCED), n_cols - 1, "comb")])
     # Row maxima at the right edge: legible without reading colour.
@@ -501,7 +498,7 @@ def panel_depth_strip(ax, depth_summary, target_summary, capacity):
     ax.set_yticks(ys, [FAMILY_LABEL[f] for f in FAMILIES])
     ax.tick_params(axis="y", length=0, pad=2.0)
     ax.spines["left"].set_visible(False)
-    ax.set_xlabel("minimum exact depth")
+    ax.set_xlabel("Minimum exact depth")
     # Two aligned count columns outside the box; headers in the title band.
     # Each count is printed with its denominator (15 trees; 3 balanced
     # trees), as the old sheet's ``15/15`` / ``1/15``.
@@ -585,17 +582,13 @@ def panel_projection_energy(ax, energy, posthoc):
                     fontsize=PT_BASE, color=INK, zorder=5)
     column_divider(ax, len(ALIGNED) - 0.5, n_rows)
     category_axes(ax, [FAMILY_LABEL[f] for f in FAMILIES], PAIR_ORDER)
-    ax.set_xlabel("input pair")
+    ax.set_xlabel("Input pair")
     # The plotted quantity is named on the left edge (the old sheet's y-axis
-    # label, shortened to fit the axes height); the area encoding has its
-    # own one-line key in the raised band, above the group labels.
-    ax.set_ylabel("projection energy", labelpad=2.0)
+    # label, shortened to fit the axes height); the area encoding is stated
+    # in the caption.
+    ax.set_ylabel("Projection energy", labelpad=2.0)
     group_labels(ax, [(0, len(ALIGNED) - 1, "aligned"),
                       (len(ALIGNED), n_cols - 1, "crossed")])
-    ax.annotate("dot area = energy", xy=(1.0, 1.0), xycoords="axes fraction",
-                xytext=(0.0, BAND_KEY_PT), textcoords="offset points",
-                ha="right", va="baseline", fontsize=PT_BASE, color=INK,
-                annotation_clip=False)
     print("[E] pair energies (rows AND..nested; cols " + " ".join(PAIR_ORDER)
           + "):\n" + "\n".join("     " + " ".join(f"{v:.3f}" for v in row)
                                for row in values))
@@ -638,20 +631,24 @@ def panel_gate_derivatives(ax, fields, corners):
     ax.set_ylim(-1.06, 1.06)
     ax.set_xticks([0.0, 0.5, 1.0], ["0", "0.5", "1"])
     ax.set_yticks([-1.0, 0.0, 1.0], ["−1", "0", "1"])
-    ax.set_xlabel("other branch output v")
+    ax.set_xlabel("Other branch output v")
     ax.set_ylabel("∂F/∂u")
     print(f"[F] dF/du at v = 1: " + ", ".join(f"{g} {y:+.0f}"
                                               for g, y in ends.items()))
 
 
 # ── the canvas ───────────────────────────────────────────────────────────
-CANVAS_H_PT = 493.0     # 484 + the 9 pt of row 2's taller band; the audit
-                        # caps the page at aspect 1.05 (493.7 pt)
+CANVAS_H_PT = 493.0     # the audit caps the page at aspect 1.05 (493.7 pt)
 HGUTTER_PT = 38.0
-VGUTTER_PT = 64.5       # keeps every row's axes box at 100 pt
+# 2026-09-23: with the panel titles gone the band above each row holds only
+# the group labels / keys (12.7 pt) and the letter, so the gutter and the top
+# margin shrink and every row's axes box grows from 100 to 110.7 pt; the
+# bottom margin still covers row 2's x labels (21.5 pt + 8 pt pad) without a
+# bottom reserve, so the three rows keep one axes height.
+VGUTTER_PT = 54.0
 # left: the family tick labels (36.6 pt) + E's rotated axis label + pad,
 # so the column lock leaves column 0 its full module width.
-MARGINS = Margins(left=55.0, right=10.0, top=32.0, bottom=32.0)
+MARGINS = Margins(left=55.0, right=10.0, top=23.0, bottom=30.0)
 
 
 def build(path: Path = OUT):
@@ -672,23 +669,15 @@ def build(path: Path = OUT):
 
     canvas = NativeCanvas(CANVAS_H_PT / 72.0, 3, hgutter_pt=HGUTTER_PT,
                           vgutter_pt=VGUTTER_PT, margins=MARGINS, letter_clearance=True)
-    ax_a = canvas.panel("A", 0, 0, 5, title="Seven exact Boolean truth tables")
-    ax_b = canvas.panel("B", 0, 5, 7, title="All trees: regression obstruction")
-    ax_c = canvas.panel("C", 1, 0, 5, schematic=True,
-                        title="Equal resources; different minimum depth")
-    ax_d = canvas.panel("D", 1, 5, 7, title="Associative gates are structure controls")
-    ax_e = canvas.panel("E", 2, 0, 5, title="Post hoc: target information in a pair")
-    ax_f = canvas.panel("F", 2, 5, 7, grid="y", title="Canonical conditional credit")
-    # One raised title band for every row: group labels, column headers and
-    # the swatch / marker keys live between the axes top and the title.
-    for ax in (ax_a, ax_b, ax_c, ax_d):
-        ax.set_title(ax.get_title(), fontsize=PT_TITLE, color=INK,
-                     pad=TITLE_PAD, fontweight="normal")
-    # Row 2's band has a third line (E's ``dot area = energy`` key between
-    # the group labels and the title); F shares the row's title height.
-    for ax in (ax_e, ax_f):
-        ax.set_title(ax.get_title(), fontsize=PT_TITLE, color=INK,
-                     pad=TITLE_PAD_KEYED, fontweight="normal")
+    # No panel titles (2026-09-23 clarity pass: the six headlines moved to
+    # the caption); the raised band above each row keeps only the group
+    # labels, column headers and the swatch / marker keys.
+    ax_a = canvas.panel("A", 0, 0, 5)
+    ax_b = canvas.panel("B", 0, 5, 7)
+    ax_c = canvas.panel("C", 1, 0, 5, schematic=True)
+    ax_d = canvas.panel("D", 1, 5, 7)
+    ax_e = canvas.panel("E", 2, 0, 5)
+    ax_f = canvas.panel("F", 2, 5, 7, grid="y")
     # D's count columns and F's right-end labels are drawn as artists.
     canvas.declare_reserve("D", right=58.0)
     canvas.declare_reserve("F", right=20.0)

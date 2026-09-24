@@ -21,3 +21,21 @@ Baseline: paper commit e264c1f; builders snapshotted in `before/`.
    as 7 pt token spans on a common baseline (mathtext is banned by the canvas audit).
 4. **Gates.** Strict canvas audit, `letter_ink_audit.py`, row separation, panel gaps,
    letter geometry, legend word limit (350), caption-constant tests, full test suite.
+
+## Supplementary pass (same rules, 37 sheets)
+
+- **Native sheets.** 23 builder scripts edited (titles, footers, counts and
+  reference-line names removed; keys compacted; letter clashes fixed at source).
+  N20 (conductance_optimization) and N36 (morphology_estimation) were redrawn so no
+  sheet-wide title or key sits above a letter row. The 25 ledgers in `si_pass/ledger/`
+  list every removed string and where the legend states it.
+- **Frozen sources.** Registered renders that cannot be rebuilt keep their bytes; the
+  consolidation build removes or rewords their panel text through
+  `PANEL_TEXT_EDITS` in `scripts/supplement_consolidation/specification.py` (21 sheets).
+- **Letters.** `letter_relocation.py` runs on every consolidated sheet; whole-source
+  sheets use the native manifest's letter boxes (`native_regions`). After this pass it
+  moves nothing: `letter_ink_audit.py` reports 0 problems on all compiled sheets.
+- **Legends.** About fifty legend edits carry the removed facts. Three legends then
+  overflowed their pages (S14 by 10.9 pt, S18 by 1.9 pt, S37 by 35.0 pt); they were
+  shortened by removing phrases that repeat axis titles, tick labels or keys, keeping
+  every fact the ledgers required. `audit_latex_layout.py` passes.

@@ -16,21 +16,23 @@ asserted against the table it comes from before it is drawn.
 Panels (same letters and content as the curated sheet):
 
 * A  the two exhaustive target families and the nested-prefix control, each
-     with its count, its mark (the sheet's family key) and its definition;
-     the shared input-gradient second moment and the tree budget are stated
-     once (``protocol.json``, ``constructive/constructed_trees.json``,
-     ``constructive/adaptive_constructions.csv``).
+     with its mark (the sheet's family key), its name and its defining
+     formula, spread over the cell; the counts, the shared input-gradient
+     second moment and the tree budget are asserted here
+     (``protocol.json``, ``constructive/constructed_trees.json``,
+     ``constructive/adaptive_constructions.csv``) and stated in the caption.
 * B  the full rank-two and centered rank-one cut-tail lower bounds versus
      the best fitted population NMSE of all 1,680 candidate fits
      (``candidate_outcomes.csv``), aggregated on their 8 and 9 distinct
      points: mark area proportional to the number of fits, every count
-     printed beside its mark, a mark-area key, the origin marks at a
+     printed beside its mark (so no mark-area key), the origin marks at a
      legible floor.  Two families at ONE point never leave it on the
      quantitative axes: unequal marks are superposed (the smaller on top,
      white hairline edge) and the two equal floor-size origin marks are
      dodged along the equality rule, with one ``n + n`` label per point.
-     The pair carries the curated sheet's interpretive super-title, "The
-     centered constraint is stronger", one line above its two panel titles.
+     The two panel titles name the bound; the curated sheet's interpretive
+     super-title, the equality label and the fit census moved to the caption
+     (2026-09-23 clarity pass).
 * C  mean excess NMSE above the best of the twelve fixed candidates for all
      SEVEN selection policies of ``policy_summary.csv`` (the fixed balanced
      candidate is now drawn), with the 105 matching and 35 quartic
@@ -46,8 +48,11 @@ Panels (same letters and content as the curated sheet):
      binary trees at depth limits 3, 4 and 5
      (``design/constructive_depth_certificate.csv``) on an ordinal axis with
      no connecting segments, the three families offset side by side at each
-     limit so the coincident zeros are all visible, the one non-zero value
-     printed, and the per-family n stated.
+     limit so the coincident zeros are all visible; the one non-zero value
+     (0.146) and the per-family n are given in the caption.
+
+2026-09-23 clarity pass: headline titles (A, C-F), explanatory lines and
+restated numbers moved to the caption; axis labels in sentence case.
 
 Colour and shape carry ONE meaning each across the sheet: green circle =
 matching targets, purple triangle = quartic targets, amber square = nested-
@@ -69,8 +74,8 @@ if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 from figure_canvas import (  # noqa: E402
-    COLORS, LW_EDGE, LW_HAIR, LW_REF, MARKER_MS, PT_BASE, PT_EMPH, PT_TITLE,
-    SEED_ALPHA, Margins, NativeCanvas)
+    COLORS, LW_EDGE, LW_HAIR, LW_REF, MARKER_MS, PT_BASE, SEED_ALPHA, Margins,
+    NativeCanvas)
 
 ROOT = SCRIPT_DIR.parent
 SOURCE = ROOT / "source_data" / "morphology_structure"
@@ -93,6 +98,7 @@ PRIMARY = ("quadratic_matching", "quartic_partition")
 DASHED = (2.6, 2.0)
 FAN_MS = 2.0                  # per-target dot diameter, pt
 SUB_DROP_PT = 1.6             # baseline drop of a subscript span
+A_FOOT_PT = 3.0               # A: last subscript baseline above the axes bottom
 
 
 def csv(name):
@@ -189,40 +195,28 @@ def panel_a(ax, protocol, trees, constructions):
     x_mark = 3.0
     x_text = 10.0
     line = 9.2                       # baseline pitch, pt
-    # three blocks of (family line, definition), spread over the cell
+    # three key entries of (family name, defining formula); the counts, the
+    # shared spectra and the tree budget are stated in the caption
     blocks = [
-        ("quadratic_matching", [("105 perfect matchings M of x", 0), ("1", 1), (" … x", 0), ("8", 1)],
+        ("quadratic_matching", [("perfect matchings M of x", 0), ("1", 1), (" … x", 0), ("8", 1)],
          [("f", 0), ("M", 1), (" = ½ Σ", 0), ("(i, j) ∈ M", 1), (" x", 0), ("i", 1), (" x", 0), ("j", 1)]),
-        ("quartic_partition", [("35 four-plus-four partitions A | A′", 0)],
+        ("quartic_partition", [("four-plus-four partitions A | A′", 0)],
          [("f", 0), ("A", 1), (" = ½ (Π", 0), ("i ∈ A", 1), (" x", 0), ("i", 1),
           (" + Π", 0), ("i ∉ A", 1), (" x", 0), ("i", 1), (")", 0)]),
-        ("nested_prefix_control", [("24 nested-prefix controls (D–F)", 0)],
-         [("½ × products of the first 2, 4, 6, 8", 0)]),
+        ("nested_prefix_control", [("nested-prefix controls", 0)],
+         [("f", 0), ("π", 1), (" = ½ Σ", 0), ("k ∈ {2, 4, 6, 8}", 1), (" Π", 0), ("j ≤ k", 1),
+          (" x", 0), ("π(j)", 1)]),
     ]
-    y = H - 6.0
-    for fam, name, parts in blocks:
+    # the entries spread over the whole cell: the first name line's cap
+    # height at the axes top, the last formula's subscript foot A_FOOT_PT
+    # above the axes bottom (a schematic cell must be filled by its ink)
+    y_first = H - 6.0
+    pitch = (y_first - line - SUB_DROP_PT - A_FOOT_PT) / (len(blocks) - 1)
+    for k, (fam, name, parts) in enumerate(blocks):
+        y = y_first - k * pitch
         key_mark(ax, x_mark, y + 2.4, fam, ms=MARKER_MS * 0.95)
         chain(ax, x_text, y, name, size=PT_BASE, color=FAMILIES[fam]["color"])
-        y -= line
-        chain(ax, x_text, y, parts, size=PT_BASE, color=INK)
-        if fam == "nested_prefix_control":
-            y -= line
-            ax.text(x_text, y, "inputs of a seeded permutation", fontsize=PT_BASE,
-                    color=INK, ha="left", va="baseline", zorder=6)
-        y -= line * 1.35
-    # what the families share and what every tree spends
-    y = 3.0 + 5 * line
-    for k, text in enumerate(("matching, quartic: input-gradient", None,
-                              "nested: anisotropic spectrum", "(¼, ¼, ½, ½, ¾, ¾, 1, 1)",
-                              "every tree: 7 multi-affine nodes,",
-                              "28 coefficients, 14 edges, root readout")):
-        if text is None:
-            chain(ax, 0.0, y, [("second moment I", 0), ("8", 1), (" / 4, rank 8", 0)],
-                  size=PT_BASE, color=INK)
-        else:
-            ax.text(0.0, y, text, fontsize=PT_BASE, color=INK, ha="left", va="baseline",
-                    zorder=6)
-        y -= line
+        chain(ax, x_text, y - line, parts, size=PT_BASE, color=INK)
     print("[A] families 105 / 35 / 24; spectra I8/4 x 140 and anisotropic x 24; "
           "28 coefficients and 14 edges in all 164 constructions")
 
@@ -231,7 +225,6 @@ def panel_a(ax, protocol, trees, constructions):
 B_LIM = (-0.085, 0.93)
 B_DMAX_PT = 15.0              # diameter of the n = 725 mark
 B_DFLOOR_PT = 3.2             # a mark is never drawn smaller than this (n <= 18)
-B_KEY_N = (30, 100, 700)
 EXPECTED = {
     "full_cut_bound": {(0.0, 0.0, "quadratic_matching"): 4, (0.0, 0.0, "quartic_partition"): 4,
                        (0.0, 0.5, "quartic_partition"): 416, (0.25, 0.25, "quadratic_matching"): 52,
@@ -324,29 +317,9 @@ def panel_b(axes, outcomes):
                 zorder=1.0, solid_capstyle="butt")
         print(f"[B] {column}: {len(points)} distinct points, counts "
               f"{sorted(points.values())}")
-    axes[0].set_ylabel("best fitted population NMSE")
-    # equality label, on the rule's upper end where no mark sits
-    axes[0].text(0.92, 0.42, "bound = NMSE", ha="right", va="top", fontsize=PT_BASE,
-                 color=MUTE, zorder=6)
-    # the fit count, in the empty lower-right triangle of the full-cut panel
-    axes[0].text(0.90, 0.02, "1,680 fits:\n140 targets\n× 12 candidates", ha="right",
-                 va="bottom", fontsize=PT_BASE, color=INK, linespacing=1.15, zorder=6)
-    # mark-area key in the empty lower-right triangle of the centered panel
-    ax = axes[1]
-    sx, sy = pt_per_unit(ax)
-    x_key = 0.86
-    y = 0.02
-    for n in B_KEY_N:
-        d = diameter_pt(n)
-        yc = y + d / 2.0 / sy
-        ax.scatter([x_key - d / 2.0 / sx], [yc], s=d ** 2, marker="o", color=MUTE,
-                   edgecolors="white", linewidths=LW_HAIR, zorder=3)
-        ax.annotate(f"{n}", xy=(x_key - d / sx, yc), xycoords="data", xytext=(-2.0, 0.0),
-                    textcoords="offset points", ha="right", va="center", fontsize=PT_BASE,
-                    color=MUTE, zorder=6)
-        y += (d + 3.0) / sy
-    ax.text(x_key, y + 1.0 / sy, "fits per mark", ha="right", va="bottom", fontsize=PT_BASE,
-            color=INK, zorder=6)
+    axes[0].set_ylabel("Best fitted population NMSE")
+    # every mark carries its fit count, so no mark-area key is drawn; the
+    # area scaling, the equality rule and the fit census are in the caption
 
 
 def setup_b(ax):
@@ -426,7 +399,7 @@ def panel_c(ax, outcomes, summary):
                 xytext=(4.0, 2.0), textcoords="offset points", ha="left", va="bottom",
                 fontsize=PT_BASE, color=MUTE, annotation_clip=False)
     ax.set_xticks([0, 0.25, 0.5, 0.75], ["0", "0.25", "0.5", "0.75"])
-    ax.set_xlabel("excess population NMSE above the best of the twelve candidates")
+    ax.set_xlabel("Excess population NMSE above the best of the twelve candidates")
 
 
 # ── D, E: the constructed trees ───────────────────────────────────────────
@@ -533,14 +506,11 @@ def panel_f(ax, cert, constructions):
             ax.plot([i + off], [v], linestyle="none", marker=f["marker"], markersize=MARKER_MS,
                     markerfacecolor=f["color"], markeredgecolor="white",
                     markeredgewidth=LW_HAIR, zorder=4)
-    # the one non-zero value: nested controls at depth limit 3
+    # the one non-zero value: nested controls at depth limit 3 (0.146, given
+    # in the caption rather than printed beside the mark)
     for (fam, d), v in values.items():
         if fam == "nested_prefix_control" and d == 3:
             assert 0.1464 < v < 0.1465
-            ax.annotate(f"{v:.3f}", xy=(0 + F_OFF[2], v), xycoords="data",
-                        xytext=(MARKER_MS / 2.0 + 2.5, 0.0), textcoords="offset points",
-                        ha="left", va="center", fontsize=PT_BASE, color=FAMILIES[fam]["color"],
-                        zorder=6)
         else:
             assert v == 0.0, (fam, d, v)
     # the constructed depths agree with the certificate: the minimum depth
@@ -552,9 +522,9 @@ def panel_f(ax, cert, constructions):
     ax.set_xticks(range(3), [str(d) for d in F_DEPTHS])
     ax.xaxis.set_minor_locator(NullLocator())
     ax.set_yticks([0, 0.05, 0.10, 0.15], ["0", "0.05", "0.10", "0.15"])
-    ax.set_xlabel("depth limit (root-to-leaf edges)")
-    ax.set_ylabel("minimum cut bound (NMSE)")
-    # family key with the n, in the empty upper right
+    ax.set_xlabel("Depth limit (root-to-leaf edges)")
+    ax.set_ylabel("Minimum cut bound (NMSE)")
+    # family key in the empty upper right (the per-family n is in the caption)
     kx, ky = 0.95, 0.118
     for k, fam in enumerate(FAMILIES):
         f = FAMILIES[fam]
@@ -562,7 +532,7 @@ def panel_f(ax, cert, constructions):
         ax.plot([kx], [yk], linestyle="none", marker=f["marker"], markersize=MARKER_MS,
                 markerfacecolor=f["color"], markeredgecolor="white", markeredgewidth=LW_HAIR,
                 zorder=6)
-        ax.text(kx + 0.16, yk, f"{f['short']}, n = {f['n']}", ha="left", va="center",
+        ax.text(kx + 0.16, yk, f["short"], ha="left", va="center",
                 fontsize=PT_BASE, color=INK, zorder=6)
     print(f"[F] nested at depth 3: {values[('nested_prefix_control', 3)]:.9f}; "
           f"all other cells 0")
@@ -576,13 +546,8 @@ VGUTTER_PT = 40.0
 MARGINS = Margins(left=34.0, right=12.0, top=16.0, bottom=26.0)
 C_LEFT_PT = 84.0              # the row-label gutter of C (inside its slot)
 C_RIGHT_PT = 54.0             # the zero-count column of C
-C_TOP_PT = 10.0               # the title band C does not get from the row lock
-# B's interpretive super-title: figure text one line above the two panel
-# titles, spanning the pair, with its baseline this far above the row-0
-# axes top (the panel titles sit at 3 pt; the letter B shares the super-
-# title's baseline, so it stays the highest and leftmost mark of its panel)
-B_SUPER_TITLE = "The centered constraint is stronger"
-B_SUPER_DY_PT = 12.0
+C_TOP_PT = 10.0               # the count-column header band C does not get
+                              # from the row lock
 
 
 def build(path: Path = OUT, *, png=False):
@@ -606,20 +571,17 @@ def build(path: Path = OUT, *, png=False):
 
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 3, row_weights=ROW_PT, hgutter_pt=HGUTTER_PT,
                       vgutter_pt=VGUTTER_PT, margins=MARGINS, letter_clearance=True)
-    a = cv.panel("A", 0, 0, 4, schematic=True, title="Fixed spectrum; different interactions")
-    b1 = cv.panel("B", 0, 4, 4, letter="", grid="both", title="Full-cut bound, rank ≤ 2")
+    # panel titles only where they name the condition that tells two
+    # otherwise identical panels apart (the two bounds of B)
+    a = cv.panel("A", 0, 0, 4, schematic=True)
+    b1 = cv.panel("B", 0, 4, 4, letter="B", grid="both", title="Full-cut bound, rank ≤ 2")
     b2 = cv.panel("B_centered", 0, 8, 4, letter="", grid="both",
                   title="Centered-cut bound, rank ≤ 1")
-    # the letter B is lifted onto the super-title's baseline (letters "C"
-    # onward are named, as the manual letter does not advance the counter)
-    cv.add_letter("B", b1, dy_pt=B_SUPER_DY_PT)
     c = cv.panel("C", 1, 0, 12, letter="C", lock=False,
-                 inset_pt=(C_LEFT_PT, C_RIGHT_PT, C_TOP_PT, 0.0),
-                 title="Selection within the twelve fixed candidates", grid="x")
-    d = cv.panel("D", 2, 0, 4, letter="D", schematic=True, title="Parallel: minimum depth 3")
-    e = cv.panel("E", 2, 4, 4, letter="E", schematic=True, title="Nested: minimum depth 4")
-    f = cv.panel("F", 2, 8, 4, letter="F", grid="y",
-                 title="Depth constraint over all labeled trees")
+                 inset_pt=(C_LEFT_PT, C_RIGHT_PT, C_TOP_PT, 0.0), grid="x")
+    d = cv.panel("D", 2, 0, 4, letter="D", schematic=True)
+    e = cv.panel("E", 2, 4, 4, letter="E", schematic=True)
+    f = cv.panel("F", 2, 8, 4, letter="F", grid="y")
     for ax in (b1, b2):
         setup_b(ax)
     # one declared reserve on every four-module panel: the column lock then
@@ -629,11 +591,11 @@ def build(path: Path = OUT, *, png=False):
     # decorations first, so the column lock measures them; data drawn in
     # points afterwards
     panel_c(c, policy_outcomes, policy_summary)
-    b1.set_ylabel("best fitted population NMSE")
+    b1.set_ylabel("Best fitted population NMSE")
     for ax in (b1, b2):
-        ax.set_xlabel("cut-tail lower bound / target variance")
-    f.set_ylabel("minimum cut bound (NMSE)")
-    f.set_xlabel("depth limit (root-to-leaf edges)")
+        ax.set_xlabel("Cut-tail lower bound / target variance")
+    f.set_ylabel("Minimum cut bound (NMSE)")
+    f.set_xlabel("Depth limit (root-to-leaf edges)")
     cv.lock_reserves()
     panel_a(a, protocol, trees, constructions)
     panel_b([b1, b2], outcomes)
@@ -649,17 +611,6 @@ def build(path: Path = OUT, *, png=False):
                       pitch_pt=pitch, leaf_pt=leaf)
     assert lv_d == [1, 2, 3, 4, 5, 6, 7, 8] and lv_e == [1, 6, 2, 5, 4, 7, 3, 8]
     panel_f(f, cert, constructions)
-    # B's super-title over the pair, centred on the union of the two axes,
-    # on the (now final) row-0 axes top; figure text, so neither panel's
-    # measured reserve grows and the row keeps its height
-    x_mid = (b1.get_position().x0 + b2.get_position().x1) / 2.0
-    y_top = max(ax.get_position().y1 for ax in (b1, b2)) * CANVAS_H_PT
-    from matplotlib.transforms import blended_transform_factory
-    b1.text(x_mid, 1+B_SUPER_DY_PT/(b1.get_position().height*CANVAS_H_PT),
-            B_SUPER_TITLE, transform=blended_transform_factory(cv.fig.transFigure,
-                                                              b1.transAxes),
-            ha="center", va="baseline", fontsize=PT_TITLE, color=INK,
-            clip_on=False, zorder=6)
     problems = cv.save(path, name="figure_scalar_tree_capacity_native", png=png)
     for problem in problems:
         print(f"    {problem}")

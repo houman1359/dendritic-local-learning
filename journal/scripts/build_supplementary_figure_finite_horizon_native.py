@@ -52,6 +52,12 @@ frozen_S35.json), panel by panel:
   violet; empirical full-batch (D only) salmon; the privileged population
   oracle is ink, HOLLOW, dashed wherever a line is drawn.  Hexagon fills are
   the journal sequential ramp.  No colour carries a second meaning.
+
+2026-09-23 clarity pass (review_20260923/si_pass): A/B keep only the arm and
+E/F only the forecast as short condition labels; the n/interval tags, the
+"zero regret" and "equality" rule names, the A coincidence note and the
+"(reference)" / "(E, F)" qualifiers are in the legend text.  The freed title
+bands leave the canvas (axes boxes, and so E/F's equal-scale limits, unchanged).
 """
 from __future__ import annotations
 
@@ -128,8 +134,9 @@ ROWS_D = ("observed_count_cheapest", "gaussian_plugin_fullbatch",
           "gaussian_plugin_sgd")
 REFERENCE_D = "candidate_training"
 RANKS = (1, 2, 4, 8)
-FORECASTS_EF = (("E", "original_scalar", "Feedback only: original scalar forecast"),
-                ("F", "gaussian_plugin_sgd", "Feedback only: Gaussian SGD forecast"))
+# (panel, method, condition label): E and F differ only in the forecast
+FORECASTS_EF = (("E", "original_scalar", "Original scalar"),
+                ("F", "gaussian_plugin_sgd", "Gaussian SGD"))
 
 
 def bootstrap(values, draws=10000):
@@ -226,12 +233,6 @@ def row_label(ax, y, key, *, glyph_dx=-5.5, text_dx=-11.0):
                        linespacing=0.95, annotation_clip=False)
 
 
-def tag(ax, text, *, ha="right", x=1.0, dy=2.0):
-    return ax.annotate(text, xy=(x, 1.0), xycoords="axes fraction", xytext=(0.0, dy),
-                       textcoords="offset points", ha=ha, va="bottom", fontsize=PT_BASE,
-                       color=MUTE, annotation_clip=False)
-
-
 def row_bands(ax, keys, x0, x1):
     """6 % tint band per row, as a fill (a patch would read as a bar to the
     live text-over-data audit, which cannot tell a band from a datum)."""
@@ -265,12 +266,9 @@ def panel_regret(ax, policies, summary, arm, *, note_row=None, note=None):
     regret_scale(ax, "x")
     ax.set_xlim(x0, x1)
     ax.set_xticks([0.0, 0.01, 0.1, 1.0, 10.0, 100.0], ["0", "0.01", "0.1", "1", "10", "100"])
-    ax.set_xlabel("test loss + cost regret (×1,000)")
+    ax.set_xlabel("Test loss + cost regret (×1,000)")
     ax.tick_params(axis="y", length=0)
-    tag(ax, f"n = {N_SEEDS} seed blocks; mean [95 % CI]", dy=11.0)
-    ax.annotate("zero regret", xy=(0.0, 1.0), xycoords=("data", "axes fraction"),
-                xytext=(2.5, 2.0), textcoords="offset points", ha="left", va="bottom",
-                fontsize=PT_BASE, color=MUTE, annotation_clip=False)
+    # n, the interval and the zero-regret rule are named in the legend text
     if note_row is not None:
         y = ROWS_AB.index(note_row)
         art = ax.annotate(note, xy=(1.0, y), xycoords=("axes fraction", "data"),
@@ -333,8 +331,8 @@ def panel_by_rank(ax, policies, summary):
     ax.set_yticks([0.0, 0.01, 0.1, 1.0], ["0", "0.01", "0.1", "1"])
     ax.set_xlim(-0.55, len(RANKS) - 0.45)
     ax.set_xticks(xs, [str(r) for r in RANKS])
-    ax.set_xlabel("generating rank")
-    ax.set_ylabel("test loss + cost\nregret (×1,000)")
+    ax.set_xlabel("Generating rank")
+    ax.set_ylabel("Test loss + cost\nregret (×1,000)")
     ax.axhline(0.0, color=MUTE, lw=LW_REF, zorder=1.0, dashes=(2.6, 2.0))
     ax.legend(handles=handles, loc="lower left", bbox_to_anchor=(-0.02, 1.0), ncol=2,
               frameon=False, fontsize=PT_BASE, handlelength=2.4, columnspacing=1.2,
@@ -376,6 +374,7 @@ def panel_cost(ax, timings, observed, cost):
     assert [t[0] for t in order] == list(ROWS_D), [t[0] for t in order]
     assert all(t[1] < ref[2] for t in order), "every method is cheaper than full training"
     ns = sorted({t[4] for t in rows} | {ref[4]})
+    assert ns == [320, 640, 1280], ns          # the legend's timing-draw counts
     print("[D] " + "; ".join(f"{k} median {m:.5f} IQR {a:.5f}-{b:.5f} n={n}"
                              for k, m, a, b, n in order + [ref]))
     x0, x1 = 0.0011, 0.25
@@ -390,7 +389,7 @@ def panel_cost(ax, timings, observed, cost):
     tint_patch(ax, ("rect", ref[2], -0.6, ref[3] - ref[2], len(order) + 0.2), color=MUTE,
                pct=16, edge=False, radius_pt=0.0, zorder=0.3, clip_on=True)
     ax.axvline(ref[1], color=MUTE, lw=LW_REF, zorder=1.0, dashes=(2.6, 2.0))
-    ax.annotate("all 256-update fits (reference)", xy=(ref[1], 1.0),
+    ax.annotate("all 256-update fits", xy=(ref[1], 1.0),
                 xycoords=("data", "axes fraction"), xytext=(-2.5, 2.0),
                 textcoords="offset points", ha="right", va="bottom", fontsize=PT_BASE,
                 color=MUTE, annotation_clip=False)
@@ -402,9 +401,9 @@ def panel_cost(ax, timings, observed, cost):
         labels.append(row_label(ax, y, key))
     ax.xaxis.set_minor_locator(NullLocator())
     ax.set_xticks([0.001, 0.01, 0.1], ["0.001", "0.01", "0.1"])
-    ax.set_xlabel("seconds per 20-candidate decision")
+    ax.set_xlabel("Seconds per 20-candidate decision")
     ax.tick_params(axis="y", length=0)
-    tag(ax, f"median [IQR] of {ns[0]:,}–{ns[-1]:,} timing draws per row", dy=11.0)
+    # the 320-1,280 timing draws per row and median [IQR]: in the legend text
     return labels
 
 
@@ -447,7 +446,6 @@ def panel_forecast(ax, z, method, prediction_summary, *, extent, gridsize, cmap,
           f"RMSE {rmse:.5f}; {len(counts)} occupied hexagons, max {int(counts.max())} per hexagon")
     ax.annotate(f"RMSE {rmse:.3f}", xy=(0.03, 0.97), xycoords="axes fraction", ha="left",
                 va="top", fontsize=PT_BASE, color=INK)
-    tag(ax, f"n = {FITS_PER_PANEL:,} candidate fits", ha="left", x=0.0)
     return hb, rmse
 
 
@@ -464,13 +462,19 @@ def equal_scale_limits(ax, *, xmin, ymin, ymax, x_need):
 
 
 # ── the canvas ───────────────────────────────────────────────────────────
-CANVAS_H_PT = 476.0
-ROW_PT = [138.0, 112.0, 110.0]
+# 2026-09-23 clarity pass: only the short condition labels of A/B (arm) and
+# E/F (forecast) remain above the axes.  Each slot is the axes box it had
+# with titles (116.24, 91.04, 100.04 pt) plus that row's top reserve: row 0 the
+# measured letter band (7.0 pt), row 1 C's two-row key + letter, row 2 the
+# condition label + letter (declared below)
+ROW1_TOP_PT = 14.0
+ROW2_TOP_PT = 9.0
+ROW_PT = [116.24 + 7.0, 91.04 + ROW1_TOP_PT, 100.04 + ROW2_TOP_PT]
 HGUTTER_PT = 30.0
 VGUTTER_PT = 36.0
 MARGINS = Margins(left=30.0, right=10.0, top=14.0, bottom=30.0)
-TITLE_PAD = 11.0
-TITLE_PAD_KEYED = 22.0
+CANVAS_H_PT = MARGINS.top + sum(ROW_PT) + 2 * VGUTTER_PT + MARGINS.bottom   # 453.32 (476.0 before)
+CONDITION_PAD = 4.0
 
 
 def build(path: Path = OUT):
@@ -494,20 +498,23 @@ def build(path: Path = OUT):
 
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 3, row_weights=ROW_PT, hgutter_pt=HGUTTER_PT,
                       vgutter_pt=VGUTTER_PT, margins=MARGINS)
-    ax_a = cv.panel("A", 0, 0, 6, title="Feedback only: final selection")
-    ax_b = cv.panel("B", 0, 6, 6, title="Joint transfer: final selection")
-    ax_c = cv.panel("C", 1, 0, 6, grid="y", title="Strong baselines in the joint arm")
-    ax_d = cv.panel("D", 1, 6, 6, title="Measured single-CPU cost")
-    ax_e = cv.panel("E", 2, 0, 5, title=FORECASTS_EF[0][2])
-    ax_f = cv.panel("F", 2, 6, 5, title=FORECASTS_EF[1][2])
-    for ax in (ax_e, ax_f):
-        ax.set_title(ax.get_title(), fontsize=PT_EMPH, color=INK, pad=TITLE_PAD, fontweight="normal")
-    for ax in (ax_a, ax_b, ax_c, ax_d):
-        ax.set_title(ax.get_title(), fontsize=PT_EMPH, color=INK, pad=TITLE_PAD_KEYED, fontweight="normal")
+    ax_a = cv.panel("A", 0, 0, 6)
+    ax_b = cv.panel("B", 0, 6, 6)
+    ax_c = cv.panel("C", 1, 0, 6, grid="y")
+    ax_d = cv.panel("D", 1, 6, 6)
+    ax_e = cv.panel("E", 2, 0, 5)
+    ax_f = cv.panel("F", 2, 6, 5)
+    # condition labels only where two panels are otherwise identical
+    for ax, text in ((ax_a, ARM_TITLE["feedback_only"]),
+                     (ax_b, ARM_TITLE["joint_forward_feedback"]),
+                     (ax_e, FORECASTS_EF[0][2]), (ax_f, FORECASTS_EF[1][2])):
+        ax.set_title(text, fontsize=PT_EMPH, color=INK, pad=CONDITION_PAD, fontweight="normal")
+    cv.declare_reserve("C", top=ROW1_TOP_PT)
+    cv.declare_reserve("E", top=ROW2_TOP_PT)
 
-    labels = panel_regret(ax_a, policies, summary, "feedback_only",
-                          note_row="observed_count_cheapest",
-                          note=f"= Gaussian full-batch\n({same_a}/{N_TASKS} tasks)")
+    # the full-batch / context-count coincidence of A (320/320 tasks) is
+    # stated in the legend text, not printed on the row
+    labels = panel_regret(ax_a, policies, summary, "feedback_only")
     labels += panel_regret(ax_b, policies, summary, "joint_forward_feedback")
     panel_by_rank(ax_c, policies, summary)
     labels += panel_cost(ax_d, timings, observed, cost)
@@ -558,12 +565,10 @@ def build(path: Path = OUT):
                                               x_need=x_need)
         ax.set_xticks([0.0, 0.2, 0.4, 0.6, 0.8], ["0", "0.2", "0.4", "0.6", "0.8"])
         ax.set_yticks([0.0, 0.2, 0.4, 0.6, 0.8], ["0", "0.2", "0.4", "0.6", "0.8"])
-        ax.set_xlabel("predicted final half-MSE")
-        ax.set_ylabel("observed test half-MSE")
+        ax.set_xlabel("Predicted final half-MSE")
+        ax.set_ylabel("Observed test half-MSE")
+        # the equality line is named in the legend text
         ax.plot([0.0, 0.80], [0.0, 0.80], color=MUTE, lw=LW_REF, dashes=(2.6, 2.0), zorder=3.0)
-        ax.annotate("equality", xy=(0.80, 0.80), xycoords="data", xytext=(2.0, 1.5),
-                    textcoords="offset points", ha="left", va="bottom", fontsize=PT_BASE,
-                    color=MUTE, annotation_clip=False)
     print(f"[E,F] box {w_pt:.1f} x {h_pt:.1f} pt; x {ax_e.get_xlim()[0]:.3f}..{xmax:.3f}, y {ymin:.3f}..{ymax:.3f}; "
           f"grid {nx} x {ny} (cell {(ext_x[1] - ext_x[0]) / nx:.4f} x {sy:.4f}); colour 1..{int(vmax)}")
     # the shared colour bar, in the empty sixth module right of F
@@ -579,7 +584,7 @@ def build(path: Path = OUT):
     cbar.ax.set_yticklabels(["1", "10", "100", "1,000"])
     cbar.ax.tick_params(labelsize=PT_BASE, width=LW_HAIR, length=2.2, pad=1.5,
                         color=COLORS["edge"], labelcolor=INK)
-    cbar.set_label("fits per hexagon (E, F)", fontsize=PT_BASE, labelpad=2.5, color=INK)
+    cbar.set_label("Fits per hexagon", fontsize=PT_BASE, labelpad=2.5, color=INK)
 
     problems = cv.save(path, name="figure_finite_horizon_native", png=False)
     for problem in problems:

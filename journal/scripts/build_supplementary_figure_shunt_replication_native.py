@@ -64,6 +64,11 @@ mixed_S30.json), panel by panel:
   this control), the reassigned relation the rose permutation-control slot
   (``highlight``), cell classes on ``ORDINAL_RAMP`` + ink.  No colour
   carries a second meaning anywhere on the sheet.
+
+2026-09-23 clarity pass (review_20260923/si_pass): no panel titles, no effect
+sentences under D's direct labels, no "no effect" rule label, no class counts
+in C's key; sign counts are compact ("45/45 > 0"); axis labels are in
+sentence case.  The freed title bands leave the canvas (axes boxes unchanged).
 """
 from __future__ import annotations
 
@@ -88,7 +93,6 @@ from figure_canvas import (  # noqa: E402
     LW_REF,
     MARKER_MS,
     PT_BASE,
-    PT_EMPH,
     SEED_ALPHA,
     SEED_MS,
     Margins,
@@ -113,8 +117,8 @@ M_SHUNT, M_INJECT, M_CONTRAST = "o", "s", "D"
 MEAN_MS = MARKER_MS + 0.6
 DOSES = (0.25, 1.0, 4.0)
 DOSE_LABELS = ("0.25", "1", "4")
-DOSE_AXIS = "dose / local input conductance"
-LOCAL_LABEL = "localization index"
+DOSE_AXIS = "Dose / local input conductance"
+LOCAL_LABEL = "Localization index"
 # The passive reference of the frozen S47 sheet: the phase-1 passive matrix
 # at the active ensemble's own electrical calibration (main Fig. 8 E).
 PASSIVE_CALIBRATION = {
@@ -127,8 +131,6 @@ CLASS_STYLE = (("L2IT", ORDINAL_RAMP[1], "o"), ("L3IT", ORDINAL_RAMP[2], "s"),
                ("L4IT", ORDINAL_RAMP[3], "^"), ("L5ET", INK, "D"))
 SITE_CAP = 16
 E_XMAX = 1.25                       # E's axis end (the dose-4 fan tops out at 1.12)
-TITLE_PAD_KEYED = 24.0              # row-1 titles lifted over the two-row key / count band
-TITLE_PAD_BAND = 14.0               # row-2 titles lifted over E's one-line count band
 LABEL_CLEAR_PT = 2.0                # a printed label keeps this from every rule and mark
 
 
@@ -214,7 +216,7 @@ def panel_matched(ax, focal, summary, intervals):
                                summary["focal_primary_dose_one"]["mean_shunt_localization"], rtol=0, atol=1e-12)
     np.testing.assert_allclose(paired.matched_additive_localization.mean(),
                                summary["focal_primary_dose_one"]["mean_additive_localization"], rtol=0, atol=1e-12)
-    band_text(ax, f"{direct['cells_positive']}/{direct['n_cells']} cells positive", color=SHUNT)
+    band_text(ax, f"{direct['cells_positive']}/{direct['n_cells']} > 0", color=SHUNT)
     print(f"[A] n = {len(paired)} cells, {int(sites.sum())} sites; shunt {paired.focal_shunt_localization.min():.4f}-"
           f"{paired.focal_shunt_localization.max():.4f}, injection {paired.matched_additive_localization.min():.4f}-"
           f"{paired.matched_additive_localization.max():.4f}; shunt - injection {diff.mean():.4f}, positive "
@@ -240,8 +242,8 @@ def panel_relation(ax, focal, summary, paired_a, intervals):
     assert set(paired.index) <= set(paired_a.index)
     np.testing.assert_allclose(paired.focal_shunt_localization.to_numpy(float),
                                paired_a.loc[paired.index, "focal_shunt_localization"].to_numpy(float), rtol=0, atol=0)
-    band_text(ax, f"{topology['cells_positive']} positive, {topology['cells_tied_within_tolerance']} tie / "
-                  f"{topology['n_cells']} cells", color=SHUNT)
+    band_text(ax, f"{topology['cells_positive']}/{topology['n_cells']} > 0, "
+                  f"{topology['cells_tied_within_tolerance']} tie", color=SHUNT)
     print(f"[B] n = {len(paired)} cells, {int(sites.sum())} sites; reassigned {paired.shunt_depth_shuffled_localization.min():.4f}-"
           f"{paired.shunt_depth_shuffled_localization.max():.4f}; true - reassigned {diff.mean():.4f}, positive "
           f"{int((diff > tol).sum())}/{len(diff)}, ties {int((np.abs(diff) <= tol).sum())}")
@@ -272,14 +274,14 @@ def panel_coverage(ax, cohort):
                 markeredgecolor="white", markeredgewidth=LW_HAIR, alpha=0.9, zorder=3)
         handles.append(Line2D([], [], linestyle="none", marker=marker, markersize=MARKER_MS * 0.85,
                               markerfacecolor=color, markeredgecolor="white", markeredgewidth=LW_HAIR,
-                              label=f"{cell_type} ({counts[cell_type]})"))
+                              label=cell_type))            # class counts: in the legend text
     x = 100.0 * included.direct_type_coverage
     ax.set_xlim(2.0, 10.6)
     ax.set_xticks([4, 6, 8, 10])
     ax.set_ylim(-0.9, SITE_CAP + 1.2)
     ax.set_yticks([0, 5, 10, 15])
-    ax.set_xlabel("direct E/I labels (% inputs)")
-    ax.set_ylabel(f"selected focal sites (max {SITE_CAP})")
+    ax.set_xlabel("Direct E/I labels (% inputs)")
+    ax.set_ylabel("Selected focal sites")         # the cap of 16: in the legend text
     ax.legend(handles=handles, loc="lower left", bbox_to_anchor=(-0.02, 1.0), ncol=2,
               frameon=False, fontsize=PT_BASE, handlelength=1.0, columnspacing=0.9,
               handletextpad=0.35, borderaxespad=0.0, borderpad=0.0, labelspacing=0.15)
@@ -358,14 +360,12 @@ def panel_dose(ax, summary, cells, passive_summary, passive_cells, intervals):
     ax.set_xlabel(DOSE_AXIS)
     ax.set_ylabel(LOCAL_LABEL)
     # direct labels in the series colour, in clear whitespace beside each
-    # curve, each with the direction of the effect (the old panel's tags)
-    # in mute ink beneath it; ``label_checks`` measures their clearance from
-    # every line, fan, whisker and rule once the reserve lock has settled
+    # curve (the direction of each effect is stated in the legend text);
+    # ``label_checks`` measures their clearance from every line, fan, whisker
+    # and rule once the reserve lock has settled
     labels = [
         ax.text(2.9, 1.33, "focal shunt", color=SHUNT, fontsize=PT_BASE, ha="right", va="bottom", zorder=6),
-        ax.text(2.9, 1.24, "attenuates descendants", color=MUTE, fontsize=PT_BASE, ha="right", va="bottom", zorder=6),
         ax.text(3.5, 0.635, "current injection", color=INJECT, fontsize=PT_BASE, ha="right", va="bottom", zorder=6),
-        ax.text(3.5, 0.545, "enhances descendants", color=MUTE, fontsize=PT_BASE, ha="right", va="bottom", zorder=6),
     ]
 
     # inset: active minus passive per cell, on its own scale
@@ -392,8 +392,8 @@ def panel_dose(ax, summary, cells, passive_summary, passive_cells, intervals):
     sub.set_yticks([0.0, 0.10], ["0", "0.10"])
     sub.set_yticks([0.05], minor=True)
     sub.tick_params(axis="both", labelsize=PT_BASE, pad=1.5, length=2.2)
-    sub.set_xlabel("dose", fontsize=PT_BASE, labelpad=1.5)
-    labels.append(ax.annotate("active − passive localization,\nper cell", xy=(0.15, 0.53 + 0.33),
+    sub.set_xlabel("Dose", fontsize=PT_BASE, labelpad=1.5)
+    labels.append(ax.annotate("Active − passive localization", xy=(0.15, 0.53 + 0.33),
                               xycoords="axes fraction", xytext=(-14.0, 3.0), textcoords="offset points",
                               ha="left", va="bottom", fontsize=PT_BASE, color=INK, linespacing=1.15,
                               annotation_clip=False))
@@ -431,19 +431,15 @@ def panel_contrast(ax, contrasts, cells, intervals):
     # the paired count, once for the three rows (asserted 8/8 in each above),
     # in the band above the axes as in A and B rather than in the data field
     assert (rows.cells_positive == 8).all() and (rows.n_cells == 8).all()
-    band_text(ax, "8/8 cells positive at every dose", color=SHUNT)
-    ax.axvline(0.0, color=MUTE, ls=DASHED, lw=LW_REF, zorder=1.0)
+    band_text(ax, "8/8 > 0 at each dose", color=SHUNT)
+    ax.axvline(0.0, color=MUTE, ls=DASHED, lw=LW_REF, zorder=1.0)   # zero: named in the legend text
     ax.set_ylim(-0.5, len(DOSES) - 0.5)
-    # the rule's label sits inside the box beside the rule, above the top
-    # row's fan (which spans y = 2 +/- 0.2 and starts at x = 0.72)
-    ax.annotate("no effect", xy=(0.0, len(DOSES) - 0.5), xycoords="data", xytext=(2.5, -1.5),
-                textcoords="offset points", ha="left", va="top", fontsize=PT_BASE, color=MUTE, zorder=6)
     ax.set_yticks(range(len(DOSES)), list(DOSE_LABELS))
     ax.tick_params(axis="y", length=0, pad=2.5)
     ax.set_xlim(-0.05, E_XMAX)
     ax.set_xticks([0.0, 0.5, 1.0], ["0", "0.5", "1.0"])
     ax.set_ylabel(DOSE_AXIS)
-    ax.set_xlabel("shunt − current-injection localization")
+    ax.set_xlabel("Shunt − current-injection localization")
     return widths
 
 
@@ -539,9 +535,10 @@ def label_checks(cv, ax, sub, labels, clear_pt=LABEL_CLEAR_PT):
 
 
 # ── the canvas ───────────────────────────────────────────────────────────
-ROW_PT = [150.0, 158.0]
+ROW0_TOP_PT = 8.0                   # row 0: key band above the axes, inside the slot
+ROW_PT = [132.2 + ROW0_TOP_PT, 158.0]   # axes boxes as before the title removal
 HGUTTER_PT = 30.0
-VGUTTER_PT = 50.0
+VGUTTER_PT = 44.0                   # 50 before the row-1 titles left the gutter
 MARGINS = Margins(left=44.0, right=6.0, top=20.0, bottom=36.0)
 CANVAS_H_PT = MARGINS.top + sum(ROW_PT) + VGUTTER_PT + MARGINS.bottom
 
@@ -561,17 +558,17 @@ def build(path: Path = OUT):
 
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 2, row_weights=ROW_PT, hgutter_pt=HGUTTER_PT,
                       vgutter_pt=VGUTTER_PT, margins=MARGINS)
-    ax_a = cv.panel("A", 0, 0, 4, grid="y", title="Matched perturbations")
-    ax_b = cv.panel("B", 0, 4, 4, grid="y", title="True versus reassigned relation")
-    ax_c = cv.panel("C", 0, 8, 4, grid="y", title="Direct-label coverage")
-    ax_d = cv.panel("D", 1, 0, 7, grid="y", title="Weak-channel linearization versus passive")
-    ax_e = cv.panel("E", 1, 7, 5, title="Weak-channel localization contrasts")
-    for ax in (ax_a, ax_b, ax_c):
-        ax.set_title(ax.get_title(), fontsize=PT_EMPH, color=INK, pad=TITLE_PAD_KEYED, fontweight="normal")
-    for ax in (ax_d, ax_e):
-        ax.set_title(ax.get_title(), fontsize=PT_EMPH, color=INK, pad=TITLE_PAD_BAND, fontweight="normal")
+    # 2026-09-23 clarity pass: no panel titles (their content is in the
+    # legend text).  Row 0 still carries C's two-row class key and the A/B
+    # count lines above the axes, so it declares that band as a top reserve
+    ax_a = cv.panel("A", 0, 0, 4, grid="y")
+    ax_b = cv.panel("B", 0, 4, 4, grid="y")
+    ax_c = cv.panel("C", 0, 8, 4, grid="y")
+    ax_d = cv.panel("D", 1, 0, 7, grid="y")
+    ax_e = cv.panel("E", 1, 7, 5)
     for name in "ABCDE":
         cv.declare_reserve(name, left=14.0, right=6.0)
+    cv.declare_reserve("C", top=ROW0_TOP_PT)
 
     intervals = []                           # (panel, label, axis, lo, hi) for the marker check
     paired_a = panel_matched(ax_a, focal, summary, intervals)

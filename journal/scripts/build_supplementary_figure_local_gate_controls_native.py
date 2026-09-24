@@ -49,6 +49,16 @@ frozen_S21.json), sheet-wide:
 * An interval narrower than the mean marker is not drawn as a stub under
   it; the count of such intervals, with its denominator, is printed in the
   key band.
+
+2026-09-23 clarity pass (analysis/figure_visual_review_20260910/
+review_20260923/si_pass/ledger/local_gate_controls.md): the two-line key of
+sentences became one compact line of rate-strip markers ('rate 0.01', '0.03',
+'0.1'); what the sentences said (seed dots, 95 % bootstrap intervals, the
+count of intervals hidden under their marker) is the legend's, and the count
+is still computed and printed here.  The x label is in sentence case.  The
+key ends short of letter D, so no key mark falls in the strip beside a
+row-1 letter that the supplement's whole-sheet paste gives to that letter's
+panel, and the bottom band is one key line shorter.
 """
 from __future__ import annotations
 
@@ -364,16 +374,57 @@ def draw_panel(ax, cells, task, budget, *, xlim, labels, ticklabels, pt_per_deca
     ax.grid(True, axis="x", zorder=0, linewidth=LW_HAIR, alpha=0.9, color=COLORS["grid"])
     ax.set_axisbelow(True)
     if ticklabels:
-        ax.set_xlabel("test NMSE at the validation-selected checkpoint")
+        ax.set_xlabel("Test NMSE at the validation-selected checkpoint")
     return hidden, drawn
 
 
 # ── the canvas ───────────────────────────────────────────────────────────
-CANVAS_H_PT = 492.0
+CANVAS_H_PT = 478.0             # 2026-09-23: one key line (14 pt) shorter
 HGUTTER_PT = 24.0
 VGUTTER_PT = 26.0
-MARGINS = Margins(left=8.0, right=10.0, top=22.0, bottom=52.0)
+MARGINS = Margins(left=8.0, right=10.0, top=22.0, bottom=38.0)
 LEFT_SPAN, RIGHT_SPAN = 7, 5
+KEY_LETTER_GAP_PT = 6.0         # the key ends this far short of letter D
+KEY_DROP_PT = 4.0               # key top below the C/D axis labels
+
+
+def rate_key(cv, ax_c):
+    """The rate-strip key: one line of mean markers under the x labels.
+
+    The supplement pastes this sheet whole and gives each row-1 panel the
+    strip that starts 3 pt left of its letter, so a key mark beside letter D
+    would count as D's leftmost ink.  The key therefore ends
+    ``KEY_LETTER_GAP_PT`` before letter D, as near the page centre as that
+    allows.  Called after the letters have their final place.
+    """
+    fig = cv.fig
+    W, H = cv.width_pt, cv.height_pt
+    cv.lock_reserves()
+    cv.reserve_letter_clearance()
+    cv.align_letters()
+    renderer = fig.canvas.get_renderer()
+    s = 72.0 / fig.dpi
+    ld = next(it["art"] for it in cv._letters if it["letter"] == "D").get_window_extent(renderer)
+    lc = next(it["art"] for it in cv._letters if it["letter"] == "C").get_window_extent(renderer)
+    xlab = ax_c.xaxis.label.get_window_extent(renderer)
+    marks = [Line2D([], [], linestyle="none", marker=marker, ms=MEAN_MS, mfc=INK, mec="white",
+                    mew=LW_HAIR, label=label)
+             for (_, marker), label in zip(RATES, ("rate 0.01", "0.03", "0.1"))]
+    top = xlab.y0 * s - KEY_DROP_PT                      # points from the foot
+    key = fig.legend(handles=marks, loc="upper center", bbox_to_anchor=(0.5, top / H), ncol=3,
+                     frameon=False, fontsize=PT_BASE, handlelength=1.0, handletextpad=0.4,
+                     columnspacing=1.6, borderaxespad=0.0, borderpad=0.0, labelcolor=INK)
+    fig.canvas.draw()
+    box = key.get_window_extent(renderer)
+    shift = min(0.0, (ld.x0 * s - KEY_LETTER_GAP_PT) - box.x1 * s)   # pt, <= 0
+    key.set_bbox_to_anchor((0.5 + shift / W, top / H), transform=fig.transFigure)
+    fig.canvas.draw()
+    box = key.get_window_extent(renderer)
+    assert box.x1 * s <= ld.x0 * s - KEY_LETTER_GAP_PT + 0.05, (box.x1 * s, ld.x0 * s)
+    assert box.x0 * s > lc.x1 * s + 3.6, (box.x0 * s, lc.x1 * s)
+    print(f"[key] {box.x0 * s:.1f}-{box.x1 * s:.1f} pt (page centre {W / 2:.1f}); "
+          f"letter D at {ld.x0 * s:.1f} pt")
+    return key
 
 
 def build(path: Path = OUT):
@@ -426,30 +477,12 @@ def build(path: Path = OUT):
     hidden = sum(v[0] for v in stats.values())
     total = sum(v[0] + v[1] for v in stats.values())
     assert total == 96
+    # the legend states this count (it left the key band 2026-09-23)
+    print(f"[intervals] {hidden} of {total} 95 % intervals ({BOOT_DRAWS:,} whole-seed "
+          f"bootstrap draws) lie entirely under their marker and are not drawn")
 
-    # the key, in the bottom margin: rate strips by marker and the seed fan
-    # on one line, the interval and the hidden-interval count on the next
-    marks = [
-        Line2D([], [], linestyle="none", marker="^", ms=MEAN_MS, mfc=INK, mec="white",
-               mew=LW_HAIR, label="mean at Adam rate 0.01 (top strip of a rule)"),
-        Line2D([], [], linestyle="none", marker="D", ms=MEAN_MS, mfc=INK, mec="white",
-               mew=LW_HAIR, label="mean at 0.03, the primary rate (middle strip)"),
-        Line2D([], [], linestyle="none", marker="v", ms=MEAN_MS, mfc=INK, mec="white",
-               mew=LW_HAIR, label="mean at 0.1 (bottom strip)"),
-        Line2D([], [], linestyle="none", marker="o", ms=SEED_MS, mfc=INK, mec="none",
-               alpha=SEED_ALPHA, label=f"one seed ({N_SEEDS} per strip)"),
-    ]
-    interval = [
-        Line2D([], [], color=INK, lw=LW_ERR, marker="|", ms=4.0, mew=LW_ERR,
-               label=f"95 % CI of the mean ({BOOT_DRAWS:,} whole-seed bootstrap draws); "
-                     f"{hidden} of {total} CIs lie entirely under their marker and are not drawn"),
-    ]
-    common = dict(frameon=False, fontsize=PT_BASE, handlelength=1.6, columnspacing=1.4,
-                  handletextpad=0.5, borderaxespad=0.0, labelcolor=INK)
-    cv.fig.legend(handles=marks, loc="lower center", bbox_to_anchor=(0.5, 13.0 / cv.height_pt),
-                  ncol=4, **common)
-    cv.fig.legend(handles=interval, loc="lower center", bbox_to_anchor=(0.5, 2.0 / cv.height_pt),
-                  ncol=1, numpoints=2, **common)
+    # the key, under the x labels: which strip of a rule is which Adam rate
+    rate_key(cv, axes["C"])
     problems = cv.save(path, name="figure_local_gate_controls_native", png=False)
     for problem in problems:
         print(f"    {problem}")

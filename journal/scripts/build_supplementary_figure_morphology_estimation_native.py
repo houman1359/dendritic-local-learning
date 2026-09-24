@@ -59,6 +59,14 @@ compared; H's three heterogeneous contrasts are drawn in neutral ink.
 Marker fill in G names the credit rule (filled exact, open broadcast); line
 style in C names the label noise (solid SD 0.5, dashed noiseless).  Every
 printed or plotted number is asserted against the table it comes from.
+
+2026-09-23 clarity pass (review_20260923/si_pass): no panel titles and no
+in-panel notes; what they said (marks, intervals, n, the 0.01 margin, the
+oracle comparators, the learning rates) is in the legend text.  A's boxes carry
+terse labels, C and G keep compact glyph keys (line style = label noise; fill
+= credit rule), the axis labels lose their interval notes and the sheet's
+colour key is one compact row under the bottom panels instead of over the A/B
+letters.  Plotted values, limits and colours are unchanged.
 """
 from __future__ import annotations
 
@@ -175,41 +183,11 @@ def reference(ax, y, *, style="solid", color=MUTE, zorder=1.0):
     ax.plot([x0, x1], [y, y], **kw)
 
 
-def note(ax, text, *, corner="tl", color=INK, dx=3.0, dy=-2.5):
-    """In-panel note in a free corner, offset a few points from the frame."""
-    xa, ha = (0.0, "left") if corner[1] == "l" else (1.0, "right")
-    ya, va = (1.0, "top") if corner[0] == "t" else (0.0, "bottom")
-    if corner[1] == "r":
-        dx = -dx
-    if corner[0] == "b":
-        dy = -dy
-    return ax.annotate(text, xy=(xa, ya), xycoords="axes fraction", xytext=(dx, dy),
-                       textcoords="offset points", ha=ha, va=va, fontsize=PT_BASE,
-                       color=color, linespacing=1.15, zorder=6)
-
-
-def note_lines(ax, lines, *, corner="tr", color=INK, dx=3.0, dy=-2.5):
-    """A top-corner note drawn one line per artist.
-
-    Both overlap audits (the live one in ``save`` and the compiled-page one)
-    then see each line's own box, so a ragged block can stand beside a
-    column of data where the rectangle spanning its widest line could not.
-    The line pitch is measured from a two-line probe at the note's own
-    ``linespacing``, so the block lays out exactly as one :func:`note`.
-    """
-    assert corner[0] == "t", corner
-    fig = ax.figure
-    fig.canvas.draw()
-    renderer = fig.canvas.get_renderer()
-    heights = []
-    for probe_text in ("lp", "lp\nlp"):
-        probe = note(ax, probe_text, corner=corner, color=color, dx=dx, dy=dy)
-        heights.append(probe.get_window_extent(renderer).height * 72.0 / fig.dpi)
-        probe.remove()
-    pitch = heights[1] - heights[0]
-    assert 0.9 * PT_BASE < pitch < 1.4 * PT_BASE, pitch
-    return [note(ax, line, corner=corner, color=color, dx=dx, dy=dy - i * pitch)
-            for i, line in enumerate(lines)]
+def glyph_key(ax, handles, *, loc, ncol=1, handlelength=2.0):
+    """A compact in-panel symbol key (glyph + a few words, no sentences)."""
+    return ax.legend(handles=handles, loc=loc, ncol=ncol, frameon=False, fontsize=PT_BASE,
+                     handlelength=handlelength, handletextpad=0.5, labelspacing=0.25,
+                     columnspacing=1.0, borderaxespad=0.3, borderpad=0.0)
 
 
 # ── A: the sealed protocol ───────────────────────────────────────────────
@@ -244,10 +222,10 @@ def panel_a(ax, protocol, e2e_protocol):
                linespacing=1.1)
 
     # geometry in points from the bottom-left of the axes box
-    head_h = 8.5                 # the "256 labels" line
+    head_h = 8.5                 # the "256 noisy labels" line
     bar_h = 10.0
     gap = 5.0
-    box1_h = 17.0
+    box1_h = 11.0                # one-line terse labels (two lines before 2026-09-23)
     box2_h = 11.0
     final_h = 11.0
     used = head_h + bar_h + gap + box1_h + gap + box2_h + gap + final_h
@@ -259,24 +237,23 @@ def panel_a(ax, protocol, e2e_protocol):
     y_box1 = y_box2 + box2_h + gap
     y_bar = y_box1 + box1_h + gap
     y_head = y_bar + bar_h + head_h / 2.0
-    f.text((X(W / 2.0), Y(y_head)), f"{n_rows} noisy labels (noise SD {PRIMARY[1]:g})",
-           size=PT_BASE, color=INK)
+    # 2026-09-23: terse box labels; the noise SD, the Lasso over 255 Walsh
+    # terms, the two pilot sweeps and the sealed retraining are in the legend
+    f.text((X(W / 2.0), Y(y_head)), f"{n_rows} noisy labels", size=PT_BASE, color=INK)
     # the label bar, split in proportion 192 : 64
     fit_w = W * n_fit / n_rows
-    box(0.0, y_bar, fit_w, bar_h, "mute", 12, f"{n_fit} labels: fit the estimator or the pilots")
+    box(0.0, y_bar, fit_w, bar_h, "mute", 12, f"{n_fit}: fit")
     box(fit_w, y_bar, W - fit_w, bar_h, "mute", 30, f"{n_gate}: gate")
     # two branches
     col_gap = 9.0
     col_w = (W - col_gap) / 2.0
     xl, xr = 0.0, col_w + col_gap
     rail = 8.0                   # the 64-label rail down the right edge
-    box(xl, y_box1, col_w, box1_h, "shunting", 16,
-        f"estimate interactions\n(Lasso, {n_terms} Walsh terms)")
-    box(xl, y_box2, col_w, box2_h, "shunting", 16, f"score the {n_cand} candidate cuts")
-    box(xr, y_box1, col_w - rail, box1_h, "local", 16,
-        f"fit the {n_cand} pilots\n({pilot_sweeps} sweeps each)")
-    box(xr, y_box2, col_w - rail, box2_h, "local", 16, f"gate on the {n_gate} held-out")
-    box(0.0, y_final, W, final_h, "mute", 12, "seal choices; reset; train every candidate afresh")
+    box(xl, y_box1, col_w, box1_h, "shunting", 16, "estimate interactions")
+    box(xl, y_box2, col_w, box2_h, "shunting", 16, f"score {n_cand} cuts")
+    box(xr, y_box1, col_w - rail, box1_h, "local", 16, f"fit {n_cand} pilots")
+    box(xr, y_box2, col_w - rail, box2_h, "local", 16, f"gate on {n_gate}")
+    box(0.0, y_final, W, final_h, "mute", 12, "seal; reset; train afresh")
     # arrows: 192 -> both branches, 64 -> the gate (down the rail), both -> seal
     P = lambda x, y: (X(x), Y(y))  # noqa: E731
     head = 3.2
@@ -367,9 +344,8 @@ def panel_b(ax, primary, outcomes, summary):
               f"family means {np.array2string(fam, precision=3)}")
     reference(ax, 0.0, style="solid")
     # the 0.01 meaningful margin is narrower than the zero rule on this axis
-    # (a second rule at 0.01 would fuse with it), so the criterion is stated:
-    # the note stands right of the pilot column (x > 1.26 holds no datum),
-    # its two longer lines above the column's highest task (0.669 at x 0.91)
+    # (a second rule at 0.01 would fuse with it), so the criterion and both
+    # lower bounds are stated in the legend text, not drawn
     h_pt = ax.get_window_extent().height * 72.0 / ax.figure.dpi
     margin_pt = MARGIN / (B_YLIM[1] - B_YLIM[0]) * h_pt
     assert margin_pt < LW_REF, (margin_pt, LW_REF)
@@ -377,9 +353,7 @@ def panel_b(ax, primary, outcomes, summary):
     ax.set_xticks([0, 1], [row[1] for row in B_ROWS])
     ax.tick_params(axis="x", length=0)
     ax.set_yticks([-0.25, 0.0, 0.25, 0.5, 0.75], ["−0.25", "0.00", "0.25", "0.50", "0.75"])
-    ax.set_ylabel("baseline − estimated regret\n(mean; Bonferroni 97.5% CI)")
-    note(ax, "dots: 80 tasks per column\nopen: family means (n = 4)", corner="tl")
-    note_lines(ax, ["lower bounds", f"> {MARGIN:g} NMSE"], corner="tr")
+    ax.set_ylabel("Baseline −\nestimated regret")
     print(f"[B] margin {MARGIN:g} NMSE = {margin_pt:.2f} pt on the axis (< LW_REF {LW_REF} pt): "
           f"stated, not drawn; lower bounds {lower_bounds[0]:.3f}, {lower_bounds[1]:.3f}")
 
@@ -441,13 +415,18 @@ def panel_c(ax, summary, outcomes):
     ax.set_xticks(SIZES, [f"{s} labels" for s in SIZES])
     ax.xaxis.set_minor_locator(NullLocator())
     ax.set_yticks([0.0, 0.1, 0.2], ["0.0", "0.1", "0.2"])
-    ax.set_ylabel("pooled menu regret (NMSE)")
-    # every datum stays below the note band
+    ax.set_ylabel("Pooled menu\nregret (NMSE)")
+    # every datum stays below the key band
     band_top = C_YLIM[1] - 26.0 / (ax.get_window_extent().height * 72.0 / ax.figure.dpi) * C_YLIM[1]
     assert top < band_top, (top, band_top)
-    note(ax, "solid: noise SD 0.5; dashed: noiseless\n"
-             f"bands: 95% seed bootstrap (n = {N_SEEDS} seeds)\n"
-             "grey fixed baseline: one curve, both noise levels", corner="tr")
+    # line style = label noise, as a glyph key; the bands and the single grey
+    # curve are described in the legend text
+    glyph_key(ax, [Line2D([], [], color=INK, lw=LW_DATA, marker="o", ms=MARKER_MS * 0.7,
+                          markerfacecolor=INK, markeredgecolor=INK, markeredgewidth=LW_ERR,
+                          label=f"noise SD {PRIMARY[1]:g}"),
+                   Line2D([], [], color=INK, lw=LW_DATA, dashes=LINE_DASH, marker="o",
+                          ms=MARKER_MS * 0.7, markerfacecolor="white", markeredgecolor=INK,
+                          markeredgewidth=LW_ERR, label="noiseless")], loc="upper right")
 
 
 # ── D: family differences at the primary condition ───────────────────────
@@ -490,10 +469,8 @@ def panel_d(ax, summary, outcomes):
     ax.set_xticks(range(4), FAMILY_NAMES)
     ax.tick_params(axis="x", length=0)
     ax.set_yticks([0.0, 0.3, 0.6, 0.9], ["0.0", "0.3", "0.6", "0.9"])
-    ax.set_ylabel("menu regret (NMSE)")
-    note(ax, f"dots: {N_SEEDS} tasks per mark; whisker 95%\n"
-             f"green quartic CI {narrow[1]:.4f}–{narrow[2]:.4f}\n"
-             "is narrower than the rule", corner="tl")
+    ax.set_ylabel("Menu regret (NMSE)")
+    # the marks and the one interval narrower than its rule: legend text
 
 
 # ── E: secondary adaptive construction ───────────────────────────────────
@@ -530,18 +507,8 @@ def panel_e(ax, absolute, outcomes):
     ax.tick_params(axis="x", length=0)
     ax.set_yticks([1e-3, 1e-2, 1e-1, 1.0], ["0.001", "0.01", "0.1", "1"])
     ax.yaxis.set_minor_locator(NullLocator())
-    ax.set_ylabel("clean-test NMSE")
-    # the 0.003-0.05 band holds no datum in any of the four families: the
-    # note (three lines, 22.8 pt of the band's 32.7 pt) sits in it, naming
-    # both comparators as the retrospective oracles they are
-    struct = prim[prim.family.isin(FAMILIES[:3]) & prim.policy.isin([s[0] for s in E_SERIES])].test_nmse
-    assert not ((struct > 0.0026) & (struct < 0.055)).any()
-    every = prim[prim.family.isin(FAMILIES) & prim.policy.isin([s[0] for s in E_SERIES])].test_nmse
-    assert len(every) == 240 and not ((every > 0.0026) & (every < 0.055)).any()
-    ax.text(-0.45, 0.012, f"dots: {N_SEEDS} tasks per mark; whisker: 95% seed bootstrap\n"
-                          "grey: best trained of twelve (oracle)\n"
-                          "purple: target-informed tree (oracle)",
-            ha="left", va="center", fontsize=PT_BASE, color=INK, linespacing=1.15, zorder=6)
+    ax.set_ylabel("Clean-test NMSE")
+    # the marks and the two retrospective-oracle comparators: legend text
 
 
 # ── F: selection cost ────────────────────────────────────────────────────
@@ -573,8 +540,8 @@ def panel_f(ax, records, timing):
     ax.set_xticks([0, 1], [a[0] for a in arms])
     ax.tick_params(axis="x", length=0)
     ax.set_yticks([0.0, 0.02, 0.04, 0.06, 0.08], ["0.00", "0.02", "0.04", "0.06", "0.08"])
-    ax.set_ylabel("elapsed time on one CPU (s)")
-    note(ax, "dots: 80 tasks per arm\nrule: median; whisker: IQR", corner="tl")
+    ax.set_ylabel("Elapsed time on\none CPU (s)")
+    # dots, median rule and IQR whisker: legend text
 
 
 # ── G: the fresh Adam cohort, all six conditions ─────────────────────────
@@ -622,19 +589,26 @@ def panel_g(ax, summary, endpoints, protocol):
     ax.set_xticks(range(4), FAMILY_NAMES)
     ax.tick_params(axis="x", length=0)
     ax.set_yticks([0.0, 0.5, 1.0, 1.5], ["0.0", "0.5", "1.0", "1.5"])
-    ax.set_ylabel(f"noisy-test NMSE\n({N_SEEDS} seeds per mark; 95% CI)")
-    # the note band (top ~30 pt) holds only the one 1.76 outlier, at nested
+    ax.set_ylabel("Noisy-test NMSE")
+    # the key is one row in the top-left band above the 1.5 grid rule, which
+    # holds no datum left of the nested column (the one value above 1.1 is
+    # the 1.76 outlier at nested); the learning rates and the dashed noise
+    # floor are stated in the legend text
     high = endpoints[endpoints.test_nmse > 1.1]
     assert len(high) == 1 and high.family.iloc[0] == "nested_prefix"
-    note(ax, f"filled: exact credit ({rates['exact']:g})\n"
-             f"open: root broadcast ({rates['broadcast']:g})\n"
-             f"dashed: noise floor {floor:g}", corner="tl")
+    glyph_key(ax, [Line2D([], [], linestyle="none", marker="o", ms=MARKER_MS * 0.72,
+                          markerfacecolor=INK, markeredgecolor=INK, markeredgewidth=LW_ERR,
+                          label="exact"),
+                   Line2D([], [], linestyle="none", marker="o", ms=MARKER_MS * 0.72,
+                          markerfacecolor="white", markeredgecolor=INK, markeredgewidth=LW_ERR,
+                          label="broadcast")], loc="upper left", ncol=2, handlelength=1.0)
 
 
 # ── H: pooled paired contrasts of the fresh cohort ───────────────────────
-H_ROWS = [("fixed_exact_minus_estimated_exact", "fixed − estimated\n(exact credit)\n97.5% CI", 0.975),
-          ("estimated_broadcast_minus_exact", "broadcast − exact\n(estimated tree)\n97.5% CI", 0.975),
-          ("estimated_exact_minus_oracle_exact", "estimated −\ntarget-informed\n(exact) 95% CI", 0.95)]
+# category labels name the contrast; its interval coverage is in the legend text
+H_ROWS = [("fixed_exact_minus_estimated_exact", "fixed − estimated\n(exact credit)", 0.975),
+          ("estimated_broadcast_minus_exact", "broadcast − exact\n(estimated tree)", 0.975),
+          ("estimated_exact_minus_oracle_exact", "estimated −\ntarget-informed\n(exact)", 0.95)]
 H_YLIM = (-0.2, 1.40)
 
 
@@ -682,22 +656,22 @@ def panel_h(ax, contrasts, paired):
     ax.set_xticks(range(3), [row[1] for row in H_ROWS])
     ax.tick_params(axis="x", length=0)
     ax.set_yticks([0.0, 0.5, 1.0], ["0.0", "0.5", "1.0"])
-    ax.set_ylabel("paired noisy-test NMSE\ndifference (mean; CI as labelled)")
-    note(ax, f"dots: {N_SEEDS} seed means (4 families averaged)\nopen: family means (n = 4)",
-         corner="tr")
+    ax.set_ylabel("Paired noisy-test\nNMSE difference")
 
 
 # ── the sheet key ────────────────────────────────────────────────────────
 def sheet_key(cv):
+    """The sheet's colour key: one compact row centred under the bottom
+    panels (2026-09-23; it ran across the top, above the A/B letters)."""
     handles = [
         Line2D([], [], linestyle="none", marker="o", ms=MARKER_MS * 0.8, color=c,
                markeredgecolor="none", label=label)
-        for c, label in ((EST, "estimated interactions / tree"),
-                         (FIXED, "fixed / estimated-rank tree (menu of twelve)"),
+        for c, label in ((EST, "estimated"),
+                         (FIXED, "fixed menu tree"),
                          (PILOT, "two-sweep pilot"),
-                         (TARGET, "target-informed tree (oracle)"))
+                         (TARGET, "target-informed tree"))
     ]
-    cv.fig.legend(handles=handles, loc="upper center", bbox_to_anchor=(0.5, 1.0 - 3.0 / cv.height_pt),
+    cv.fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, KEY_Y_PT / cv.height_pt),
                   ncol=len(handles), frameon=False, fontsize=PT_BASE, handlelength=1.2,
                   handletextpad=0.4, columnspacing=1.4, borderaxespad=0.0)
 
@@ -705,8 +679,13 @@ def sheet_key(cv):
 # ── the canvas ────────────────────────────────────────────────────────────
 CANVAS_H_PT = 493.0           # the supplement's 540 pt cap and the audit's 1.05 aspect floor
 HGUTTER_PT = 30.0
-VGUTTER_PT = 36.0
-MARGINS = Margins(left=40.0, right=8.0, top=34.0, bottom=38.0)
+# 2026-09-23 clarity pass: no titles in the gutters and no key over the top
+# row, so the top margin is the letter band alone and the row gutter holds
+# only the x tick labels and the next row's letters; the colour key sits in
+# a band added to the bottom margin, under H's three-line category labels
+VGUTTER_PT = 34.0             # 36 before
+KEY_Y_PT = 3.0                # the key's bottom edge above the canvas bottom
+MARGINS = Margins(left=40.0, right=8.0, top=21.0, bottom=42.0)   # top 34, bottom 38 before
 RESERVE = dict(left=32.0)     # one declared reserve on every panel: same width by construction
 
 
@@ -728,14 +707,15 @@ def build(path: Path = OUT, *, png=False):
 
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 4, hgutter_pt=HGUTTER_PT, vgutter_pt=VGUTTER_PT,
                       margins=MARGINS)
-    a = cv.panel("A", 0, 0, 6, schematic=True, title="Sealed calibration protocol")
-    b = cv.panel("B", 0, 6, 6, grid="y", title="Two prespecified pooled comparisons")
-    c = cv.panel("C", 1, 0, 6, grid="y", title="Regret by calibration labels and label noise")
-    d = cv.panel("D", 1, 6, 6, grid="y", title="Primary condition: regret by family")
-    e = cv.panel("E", 2, 0, 6, grid="y", title="Secondary adaptive construction (ALS fits)")
-    f = cv.panel("F", 2, 6, 6, grid="y", title="Selection cost before final training")
-    g = cv.panel("G", 3, 0, 6, grid="y", title="Fresh Adam cohort: all six conditions")
-    h = cv.panel("H", 3, 6, 6, grid="y", title="Fresh Adam cohort: pooled paired contrasts")
+    # no panel titles: what they said is in the legend text
+    a = cv.panel("A", 0, 0, 6, schematic=True)
+    b = cv.panel("B", 0, 6, 6, grid="y")
+    c = cv.panel("C", 1, 0, 6, grid="y")
+    d = cv.panel("D", 1, 6, 6, grid="y")
+    e = cv.panel("E", 2, 0, 6, grid="y")
+    f = cv.panel("F", 2, 6, 6, grid="y")
+    g = cv.panel("G", 3, 0, 6, grid="y")
+    h = cv.panel("H", 3, 6, 6, grid="y")
     for name in "ABCDEFGH":
         cv.declare_reserve(name, **RESERVE)
     cv.lock_reserves()               # settle the boxes before drawing in points

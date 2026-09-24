@@ -45,6 +45,13 @@ frozen_S18.json), panel by panel:
   purple (``oracle``) and the one-profile oracle control the neutral grey
   control series (``point_mlp``).  Oracle controls are dashed wherever a
   line is drawn.  No colour carries a second meaning anywhere on the sheet.
+
+2026-09-23 clarity pass (analysis/figure_visual_review_20260910/review_20260923/
+si_pass/ledger/conductance_grouping.md): the headline titles of A, B, E and F,
+B's zero-bound note, F's "= 1 by construction" reference label, the band
+label's "(all four rules)" and the contact counts of A's glyph key left the
+artwork for the legend; C and D keep the optimizer as a short condition label
+and the axis labels are in sentence case.  No data mark changed.
 """
 from __future__ import annotations
 
@@ -200,11 +207,13 @@ def panel_groupings(ax, protocol, curves):
         f.soma(P(soma))
         f.error_in(P(soma), side="right")
     f.require_delta0()
-    # glyph key: one line, three entries
+    # glyph key: one line, three entries (the counts -- four excitatory and
+    # six inhibitory contacts, six couplings, asserted above -- are in the
+    # caption)
     ky = 3.5
-    entries = (("exc", f"excitatory contact ×{protocol['excitatory_contacts']}"),
-               ("inh", f"inhibitory contact ×{protocol['inhibitory_contacts']}"),
-               ("edge", f"coupling ×{protocol['couplings']}"))
+    entries = (("exc", "excitatory contact"),
+               ("inh", "inhibitory contact"),
+               ("edge", "coupling"))
     x = 4.0
     for kind, label in entries:
         if kind == "edge":
@@ -253,16 +262,15 @@ def panel_bound(ax, bounds, seed_summary, report):
     fan(ax, 1.0, zero, INK, half=0.13)
     ax.plot([1.0], [0.0], marker="o", ms=MARKER_MS, color=INK, markeredgecolor="white",
             markeredgewidth=LW_HAIR, linestyle="none", zorder=4.0)
-    ax.annotate("0 exactly,\nall 20 seeds", xy=(1.0, 0.0), xycoords="data",
-                xytext=(0.0, 9.0), textcoords="offset points", ha="center", va="bottom",
-                fontsize=PT_BASE, color=MUTE, linespacing=1.1)
+    # the compatible column is exactly zero in all 20 seeds (asserted above;
+    # stated in the caption, not printed on the panel)
     ax.set_xlim(-0.55, 1.55)
     ax.set_xticks([0, 1], ["incompatible", "compatible"])
     top = 1.06 * pairs.max()
     ax.set_ylim(-0.0009, top)
     ax.set_yticks([0.0, 0.005, 0.010, 0.015, 0.020], ["0", "0.005", "0.010", "0.015", "0.020"])
-    ax.set_xlabel("student grouping vs task")
-    ax.set_ylabel("population NMSE\nlower bound (quadrature)")
+    ax.set_xlabel("Student grouping vs task")
+    ax.set_ylabel("Population NMSE\nlower bound (quadrature)")
 
 
 # ── C, D: learning trajectories under each optimizer ─────────────────────
@@ -315,10 +323,11 @@ def panel_learning(ax, summary, optimizer):
     ax.yaxis.set_minor_locator(NullLocator())
     ax.set_xlim(-0.45, 4.45)
     ax.set_xticks(xs, [str(s) for s in STEPS])
-    ax.set_xlabel("training update")
-    ax.set_ylabel("test NMSE")
+    ax.set_xlabel("Training update")
+    ax.set_ylabel("Test NMSE")
     # direct labels: the band above its flat tail, the curves below theirs
-    ax.annotate("incompatible\n(all four rules)", xy=(4.0, hi[-1]), xycoords="data",
+    # (that the band pools all four rules is stated in the caption)
+    ax.annotate("incompatible", xy=(4.0, hi[-1]), xycoords="data",
                 xytext=(0.0, 7.0), textcoords="offset points", ha="right", va="bottom",
                 fontsize=PT_BASE, color=MUTE, linespacing=1.1)
     ax.annotate("compatible", xy=(4.18, 2.0e-5), xycoords="data", xytext=(0.0, 1.5),
@@ -362,7 +371,7 @@ def panel_contrasts(ax, contrasts, seed_contrasts):
                   [lab for _, lab in OPTIMIZERS])
     ax.tick_params(axis="x", length=0)
     ax.set_yticks([0.0, 0.001, 0.002], ["0", "0.001", "0.002"])
-    ax.set_ylabel("credit rule − exact path\ntest NMSE")
+    ax.set_ylabel("Credit rule − exact path\ntest NMSE")
 
 
 # ── F: gradient alignment at common exact-trained states ─────────────────
@@ -403,17 +412,15 @@ def panel_alignment(ax, diagnostics, geometry):
     print(f"[F] record minimum {record_lo:.4f}, seed-mean minimum {seed_lo:.4f}; fixed broadcast vs "
           f"one oracle profile |gap| per checkpoint {np.array2string(gap, precision=4)}")
     assert record_lo > 0.785 and gap.max() < 0.0065
-    # exact path: 1 by construction -> a labelled reference, not a series
+    # exact path: 1 by construction -> a dashed reference in its own colour,
+    # not a series (the caption says so; no label on the panel)
     ax.set_xlim(-0.5, 4.5)
     ax.plot([-0.5, 4.5], [1.0, 1.0], color=COLORS["bp"], lw=LW_REF, dashes=(2.6, 2.0), zorder=1.0)
-    ax.annotate("exact path = 1 by construction", xy=(4.5, 1.0), xycoords="data",
-                xytext=(0.0, 2.0), textcoords="offset points", ha="right", va="bottom",
-                fontsize=PT_BASE, color=COLORS["bp"], annotation_clip=False)
     ax.set_ylim(0.81, 1.005)
     ax.set_yticks([0.85, 0.90, 0.95, 1.00], ["0.85", "0.90", "0.95", "1.00"])
     ax.set_xticks(xs, [str(s) for s in STEPS])
-    ax.set_xlabel("training update")
-    ax.set_ylabel("calibration-gradient\ncosine")
+    ax.set_xlabel("Training update")
+    ax.set_ylabel("Calibration-gradient\ncosine")
 
 
 # ── the canvas ───────────────────────────────────────────────────────────
@@ -444,19 +451,18 @@ def build(path: Path = OUT):
 
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 3, row_weights=ROW_PT, hgutter_pt=HGUTTER_PT,
                       vgutter_pt=VGUTTER_PT, margins=MARGINS, letter_clearance=True)
-    ax_a = cv.panel("A", 0, 0, 7, schematic=True, title="Fixed physical shape; three input groupings")
-    ax_b = cv.panel("B", 0, 7, 5, grid="y", title="Interaction bound")
-    ax_c = cv.panel("C", 1, 0, 6, grid="y", title="Adam: test error by credit rule")
-    ax_d = cv.panel("D", 1, 6, 6, grid="y", title="SGD: test error by credit rule")
-    ax_e = cv.panel("E", 2, 0, 6, grid="y", title="Compatible trees: paired credit effect")
-    ax_f = cv.panel("F", 2, 6, 6, grid="y", title="Adam: common-state gradient alignment")
+    # C and D share one axis design, so the optimizer stays on them as a
+    # short condition label; A, B, E and F carry no title
+    ax_a = cv.panel("A", 0, 0, 7, schematic=True)
+    ax_b = cv.panel("B", 0, 7, 5, grid="y")
+    ax_c = cv.panel("C", 1, 0, 6, grid="y", title="Adam")
+    ax_d = cv.panel("D", 1, 6, 6, grid="y", title="SGD")
+    ax_e = cv.panel("E", 2, 0, 6, grid="y")
+    ax_f = cv.panel("F", 2, 6, 6, grid="y")
     # one declared reserve on every panel: the column lock then gives every
     # same-span pair one axes width by construction (the S21 precedent)
     for name in "ABCDEF":
         cv.declare_reserve(name, left=15.0, right=8.0)
-    # F's reference label sits above its axis top: lift the row-2 titles
-    for ax in (ax_e, ax_f):
-        ax.set_title(ax.get_title(), fontsize=PT_EMPH, color=INK, pad=11.0, fontweight="normal")
 
     panel_bound(ax_b, bounds, seed_summary, report)
     panel_learning(ax_c, summary, "adam")

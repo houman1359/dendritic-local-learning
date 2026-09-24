@@ -57,10 +57,30 @@ def _groups(items, key):
     return groups
 
 
-def relocate_letters(page, panelmap, fontfile, *, zoom=4.0):
-    """Move offending letters on ``page``; return one record per moved glyph."""
+def native_regions(source_layout):
+    """Exact panel content boxes of a native-canvas sheet pasted whole.
+
+    The manifest's ``letter_content_bbox`` is each panel's axes plus its own
+    labels (top-left coordinates), which excludes sheet-wide keys that the
+    letter-derived crop rectangles swallow.
+    """
+    if not source_layout or source_layout.get("schema") != "native-canvas/1":
+        return {}
+    return {p["letter"]: p["letter_content_bbox"]
+            for p in source_layout.get("panels", [])
+            if p.get("letter") and p.get("letter_content_bbox")}
+
+
+def relocate_letters(page, panelmap, fontfile, *, zoom=4.0, regions=None):
+    """Move offending letters on ``page``; return one record per moved glyph.
+
+    ``regions`` (letter -> rect) replaces a panel's crop rectangle with its
+    exact content box when the source is a native sheet pasted whole.
+    """
     recs = [r for r in panelmap if r.get("panel")]
-    rects = [fitz.Rect(r["target_rect"]) & page.rect for r in recs]
+    regions = regions or {}
+    rects = [fitz.Rect(regions.get(r["panel"], r["target_rect"])) & page.rect
+             for r in recs]
     glyphs = _letters(page)
     pix = page.get_pixmap(matrix=fitz.Matrix(zoom, zoom),
                           colorspace=fitz.csGRAY, alpha=False)
@@ -74,8 +94,8 @@ def relocate_letters(page, panelmap, fontfile, *, zoom=4.0):
     need = []
     for rec, box in zip(recs, rects):
         name = rec["panel"]
-        owned = sorted((s for s in glyphs if s["text"].strip() == name
-                        and _gap(fitz.Rect(s["bbox"]), box) <= REACH_PT),
+        # a sheet carries each panel letter once; distance only breaks ties
+        owned = sorted((s for s in glyphs if s["text"].strip() == name),
                        key=lambda s: _gap(fitz.Rect(s["bbox"]), box))
         if not owned or box.is_empty:
             continue

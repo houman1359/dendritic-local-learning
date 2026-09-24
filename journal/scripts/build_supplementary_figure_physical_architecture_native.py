@@ -73,6 +73,19 @@ mixed_S22.json), panel by panel:
   controls) so no hue or glyph on the sheet carries two meanings (the
   ordinal ramp names task families in D, as it does in main Fig. 6C).
 * All accuracies on the sheet are in per cent; all differences in points.
+
+2026-09-23 clarity pass (analysis/figure_visual_review_20260910/
+review_20260923/si_pass/ledger/physical_architecture.md): the seven panel
+titles ('Architectures compared', 'Four-tier task', 'Exact path at D3',
+'Serial vs star, BP', 'Flexible point controls', 'Alignment dose, serial BP',
+'Depth benefit versus alignment') and the foot key of estimate glyphs ('one
+seed (10 per condition)', 'mean and 95 % seed-bootstrap interval', 'derived
+difference of two rows (D)') moved to the legend, which already states them;
+axis labels are in sentence case.  The schematic's own labels and glyph key,
+B's block labels and 'not run', C's family key and the direct labels stay.
+The axes boxes are unchanged; the canvas lost the key line (9 pt), and B's
+depth label is set 11.5 pt below the grid (was 14) so it stays nearer B than
+E's axes top (the letter audit assigns ink to the nearest axes box).
 """
 from __future__ import annotations
 
@@ -81,9 +94,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from matplotlib.collections import LineCollection
 from matplotlib.colors import Normalize
-from matplotlib.container import ErrorbarContainer
 from matplotlib.lines import Line2D
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -153,7 +164,7 @@ FAMILIES = (  # main Fig. 6C register: ordinal ramp + markers
 )
 DEPTH_STYLE = {1: ("D1", DOTTED, "o", True), 2: ("D2", DASHED, "s", True),
                3: ("D3", "-", "^", True)}   # all filled: open = derived (E)
-ALPHA_LABEL = "task–sensor alignment α"
+ALPHA_LABEL = "Task–sensor alignment α"
 DODGE_B = {"serial_bp": -0.16, "path": -0.08, "shared": 0.0, "grouped": 0.08, "additive": 0.16}
 
 
@@ -172,20 +183,20 @@ def pick(frame, **filters):
 
 
 def depth_axis_label(ax, *, drop_pt=14.0):
-    """'serial physical depth D' + a token-size subscript p, centred under
+    """'Serial physical depth D' + a token-size subscript p, centred under
     the axis (mathtext and the precomposed subscript glyph are both off the
     journal face)."""
     from figure_canvas import token_subscript
     ax.figure.canvas.draw()
     renderer = ax.figure.canvas.get_renderer()
-    probe = ax.text(0.0, 0.0, "serial physical depth D", fontsize=PT_EMPH, transform=ax.transAxes)
+    probe = ax.text(0.0, 0.0, "Serial physical depth D", fontsize=PT_EMPH, transform=ax.transAxes)
     w = _text_width_pt(probe, renderer)
     probe.remove()
     ext = ax.get_window_extent(renderer)
     axes_w = ext.width * 72.0 / ax.figure.dpi
     axes_h = ext.height * 72.0 / ax.figure.dpi
     x = 0.5 - (w + 4.0) / (2.0 * axes_w)
-    token_subscript(ax, x, -drop_pt / axes_h, "serial physical depth D", "p", size=PT_EMPH,
+    token_subscript(ax, x, -drop_pt / axes_h, "Serial physical depth D", "p", size=PT_EMPH,
                     sub_size=PT_BASE, color=INK, ha="left", va="top", transform=ax.transAxes,
                     clip_on=False)
 
@@ -406,7 +417,7 @@ def panel_ladder(ax, series, ceiling):
     lo_seed = min(float(z.min()) for s in series.values() for z in s["seeds"])
     ax.set_ylim(min(lo_seed - 1.6, 48.0), ceiling["m"] + 6.0)
     ax.set_yticks([50, 60, 70, 80, 90, 100])
-    ax.set_ylabel("test accuracy (%)")
+    ax.set_ylabel("Test accuracy (%)")
     depth_axis_label(ax)
     handles = [Line2D([], [], color=spec["color"], lw=LW_DATA, ls=spec["ls"], marker=spec["marker"],
                       ms=MARKER_MS * 0.9,
@@ -549,7 +560,9 @@ def panel_h4(ax, cv, blocks):
     ax.tick_params(axis="both", length=0, pad=2.0)
     for spine in ax.spines.values():
         spine.set_visible(False)
-    depth_axis_label(ax)
+    # 11.5 pt (was 14): the label sits nearer B's grid than E's axes top once
+    # the row-1 titles are gone (the letter audit gives ink to the nearest box)
+    depth_axis_label(ax, drop_pt=11.5)
     return image
 
 
@@ -569,7 +582,7 @@ def colour_rail(cv, ax, image):
     cbar.ax.set_yticklabels(["55", "65", "75", "85"])
     cbar.ax.tick_params(labelsize=PT_BASE, width=LW_HAIR, length=2.2, pad=1.5,
                         color=COLORS["edge"], labelcolor=INK)
-    cbar.set_label("test accuracy (%)", fontsize=PT_BASE, labelpad=2.0, color=INK)
+    cbar.set_label("Test accuracy (%)", fontsize=PT_BASE, labelpad=2.0, color=INK)
     return cbar
 
 
@@ -621,7 +634,7 @@ def panel_families(ax):
     ax.set_ylim(ymin - pad, ymax + pad)
     ax.set_yticks([-10, 0, 10, 20, 30])
     ax.set_xlabel(ALPHA_LABEL)
-    ax.set_ylabel("serial − grouped point (pp)")
+    ax.set_ylabel("Serial − grouped point (pp)")
     ax.legend(handles=handles, loc="upper left", frameon=False, fontsize=PT_BASE,
               handlelength=2.0, handletextpad=0.5, borderaxespad=0.2, labelspacing=0.35)
 
@@ -721,7 +734,7 @@ def panel_star(ax, cv):
         assert any(lo <= row["lo"] and row["hi"] <= hi for lo, hi in segments), row["label"]
     print("[E] " + "; ".join(f"{r['label'].replace(chr(10), ' ')}: {r['mean']:.2f} [{r['lo']:.2f}, {r['hi']:.2f}] "
                              f"seeds {min(r['seeds']):.2f}-{max(r['seeds']):.2f}" for r in rows))
-    segs = seed_forest(ax, segments, rows, xlabel="serial − all-active star (pp)",
+    segs = seed_forest(ax, segments, rows, xlabel="Serial − all-active star (pp)",
                        ticks=[[0, 5], [30]])
     host_row_labels(ax, segs, rows)
     ax.xaxis.set_label_coords(0.5, -0.20)
@@ -760,7 +773,7 @@ def panel_point_controls(ax):
     ax.set_xlim(-0.6, 2.6)
     ax.set_ylim(min(lo_all) - 0.6, 100.4)
     ax.set_yticks([90, 92, 94, 96, 98, 100])
-    ax.set_ylabel("test accuracy (%)")
+    ax.set_ylabel("Test accuracy (%)")
     style_axis(ax, grid="y")
 
 
@@ -816,7 +829,7 @@ def panel_dose(ax, dose, wide):
     ax.set_ylim(min(lo_all) - 1.5, max(hi_all) + 1.5)
     ax.set_yticks([60, 70, 80, 90])
     ax.set_xlabel(ALPHA_LABEL)
-    ax.set_ylabel("test accuracy (%)")
+    ax.set_ylabel("Test accuracy (%)")
     style_axis(ax, grid="y")
     # direct labels at alpha = 1 (D1 and D2 end 6.6 points apart, one line)
     for depth, dy in ((1, -1.3), (2, 1.3), (3, 0.0)):
@@ -853,11 +866,11 @@ def panel_depth_benefit(ax, cv, wide, dc):
 
 
 # ── the canvas ───────────────────────────────────────────────────────────
-CANVAS_H_PT = 484.0
+CANVAS_H_PT = 475.0             # 2026-09-23: 9 pt shorter without the foot key
 ROW_PT = [136.0, 98.0, 102.0]
 HGUTTER_PT = 26.0
 VGUTTER_PT = 42.0
-MARGINS = Margins(left=24.0, right=32.0, top=20.0, bottom=44.0)
+MARGINS = Margins(left=24.0, right=32.0, top=20.0, bottom=35.0)
 # one declared reserve on every panel: the column lock then gives every
 # panel of a row one axes width by construction (the S21 precedent).  The
 # left value is what the widest measured label column needs beyond the gutter
@@ -872,13 +885,14 @@ def build(path: Path = OUT):
 
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 3, row_weights=ROW_PT, hgutter_pt=HGUTTER_PT,
                       vgutter_pt=VGUTTER_PT, margins=MARGINS)
-    ax_a = cv.panel("A", 0, 0, 6, schematic=True, title="Architectures compared")
-    ax_b = cv.panel("B", 0, 6, 6, title="Four-tier task")
-    ax_c = cv.panel("C", 1, 0, 4, grid="y", title="Exact path at D3")
-    ax_d = cv.panel("D", 1, 4, 4, title="Serial vs star, BP")
-    ax_e = cv.panel("E", 1, 8, 4, title="Flexible point controls")
-    ax_f = cv.panel("F", 2, 0, 6, grid="y", title="Alignment dose, serial BP")
-    ax_g = cv.panel("G", 2, 6, 6, title="Depth benefit versus alignment")
+    # no panel titles (2026-09-23): each named what the legend already says
+    ax_a = cv.panel("A", 0, 0, 6, schematic=True)
+    ax_b = cv.panel("B", 0, 6, 6)
+    ax_c = cv.panel("C", 1, 0, 4, grid="y")
+    ax_d = cv.panel("D", 1, 4, 4)
+    ax_e = cv.panel("E", 1, 8, 4)
+    ax_f = cv.panel("F", 2, 0, 6, grid="y")
+    ax_g = cv.panel("G", 2, 6, 6)
     for name in "ABCDEFG":
         cv.declare_reserve(name, **RESERVE)
     image = panel_h4(ax_b, cv, blocks)
@@ -891,22 +905,8 @@ def build(path: Path = OUT):
     colour_rail(cv, ax_b, image)
     panel_architectures(ax_a)
 
-    # one key for the estimate glyphs used on every data panel
-    seed_h = Line2D([], [], linestyle="none", marker="o", markersize=SEED_MS, markerfacecolor=INK,
-                    markeredgecolor="none", alpha=SEED_ALPHA, label="one seed (10 per condition)")
-    mean_line = Line2D([], [], linestyle="none", marker="o", markersize=MARKER_MS,
-                       markerfacecolor=INK, markeredgecolor="white", markeredgewidth=LW_EDGE)
-    cap = Line2D([], [], linestyle="none", marker="|", markersize=ERR_CAPSIZE * 2.0,
-                 markeredgewidth=LW_ERR, color=INK)
-    bar = LineCollection([], colors=INK, linewidths=LW_ERR)
-    mean_h = ErrorbarContainer((mean_line, (cap,), (bar,)), has_xerr=True,
-                               label="mean and 95 % seed-bootstrap interval")
-    open_h = Line2D([], [], linestyle="none", marker="o", markersize=MARKER_MS,
-                    markerfacecolor="white", markeredgecolor=INK, markeredgewidth=LW_ERR,
-                    label="derived difference of two rows (D)")
-    cv.fig.legend(handles=[seed_h, mean_h, open_h], loc="lower center",
-                  bbox_to_anchor=(0.53, 0.0), ncol=3, frameon=False, fontsize=PT_BASE,
-                  handlelength=2.2, columnspacing=1.8, handletextpad=0.6, borderaxespad=0.5)
+    # the foot key of estimate glyphs (seed dot, mean and interval, open
+    # derived mean) left the sheet 2026-09-23: the legend states all three
     style_direct_color_labels(cv.fig)
     problems = cv.save(path, name="figure_physical_architecture_native", png=False)
     for problem in problems:

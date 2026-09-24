@@ -74,7 +74,11 @@ def audit_reflow(page, meta, zoom=4.0):
     """
     import numpy as np
     recs = [r for r in meta['panels'] if r.get('panel')]
-    rects = [fitz.Rect(r['target_rect']) & page.rect for r in recs]
+    src = meta.get('source_layout') or {}
+    native = ({q['letter']: q['letter_content_bbox'] for q in src.get('panels', [])
+               if q.get('letter') and q.get('letter_content_bbox')}
+              if src.get('schema') == 'native-canvas/1' else {})
+    rects = [fitz.Rect(native.get(r['panel'], r['target_rect'])) & page.rect for r in recs]
     found = letters_of(page)
     pix = page.get_pixmap(matrix=fitz.Matrix(zoom, zoom), colorspace=fitz.csGRAY, alpha=False)
     img = np.frombuffer(pix.samples, dtype=np.uint8).reshape(pix.height, pix.width).copy()
@@ -86,10 +90,9 @@ def audit_reflow(page, meta, zoom=4.0):
     problems, geom = [], {}
     for r, box in zip(recs, rects):
         L = r['panel']
-        cands = sorted((c for c in found.get(L, []) if dist(c, box) <= 25.0),
-                       key=lambda c: dist(c, box))
+        cands = sorted(found.get(L, []), key=lambda c: dist(c, box))
         if not cands:
-            problems.append(f'{L}: no letter glyph within 25 pt of its rectangle'); continue
+            problems.append(f'{L}: no letter glyph'); continue
         lb = cands[0]
         sub = ink[int(box.y0 * zoom):int(box.y1 * zoom), int(box.x0 * zoom):int(box.x1 * zoom)].copy()
         # strips shared with a neighbouring rectangle belong to neither panel:

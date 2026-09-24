@@ -53,6 +53,14 @@ frozen_S8.json), panel by panel:
   = 95 % seed-bootstrap interval (10,000 whole-seed draws), dashed mute
   rule = reference constant.  Grey (``mute``) means a reference constant
   and nothing else on the sheet.
+
+2026-09-23 clarity pass (analysis/figure_visual_review_20260910/
+review_20260923/si_pass/ledger/error_field_geometry.md): the panel titles,
+the "0 = no alignment" and "soma = 1 by normalization" rule labels, B's
+interval note, the key heading, the whisker / dashed-rule key entries, the
+seed count and the cohort paragraph moved to the caption; the key keeps the
+three glyph kinds; axis labels are in sentence case ("Feedback field",
+"Batch-RMS ratio to soma").  Every plotted mark is unchanged.
 """
 from __future__ import annotations
 
@@ -186,13 +194,12 @@ def whisker_extent_pt(ax, stats, *, skip=()):
     return max(lengths), min(lengths)
 
 
-def reference_rule(ax, y, label, *, x0, x1, dashes=DASHES, xytext=(0.0, 2.0), ha="left",
-                   x_label=None):
+def reference_rule(ax, y, *, x0, x1, dashes=DASHES):
+    """A dashed mute reference constant.  2026-09-23: unlabelled on the
+    artwork; the caption names each rule (cosine zero in A, the soma
+    normalization in B)."""
     ax.plot([x0, x1], [y, y], color=MUTE, lw=LW_REF, dashes=dashes, zorder=1.0,
             solid_capstyle="butt")
-    ax.annotate(label, xy=(x0 if x_label is None else x_label, y), xycoords="data",
-                xytext=xytext, textcoords="offset points", ha=ha, va="bottom",
-                fontsize=PT_BASE, color=MUTE, annotation_clip=False)
 
 
 # ── A: branch-gradient cosine at common checkpoints ──────────────────────
@@ -229,13 +236,12 @@ def panel_gradient_cosine(ax, grad):
     assert abs(sh - 0.708) < 5e-4, sh
     assert -0.10 < lo_all and hi_all < 0.80, (lo_all, hi_all)
     ax.set_xlim(-0.55, 1.55)
-    reference_rule(ax, 0.0, "0 = no alignment", x0=-0.55, x1=1.55, x_label=1.55, ha="right",
-                   xytext=(0.0, 3.5))
+    reference_rule(ax, 0.0, x0=-0.55, x1=1.55)
     ax.set_ylim(-0.10, 0.80)
     ax.set_yticks([0.0, 0.2, 0.4, 0.6, 0.8], ["0", "0.2", "0.4", "0.6", "0.8"])
     ax.set_xticks(xs, [lab for _, lab in FIELDS])
-    ax.set_xlabel("feedback field at common checkpoints")
-    ax.set_ylabel("branch-gradient cosine\nto exact gradient")
+    ax.set_xlabel("Feedback field")
+    ax.set_ylabel("Branch-gradient cosine\nto exact gradient")
     return stats
 
 
@@ -270,22 +276,17 @@ def panel_transport_profile(ax, disp):
     assert half < 0.08, half
     # every 95 % interval on this log axis is narrower than the mean symbol
     # (asserted in ``build`` once the axes box is final), so none is drawn as
-    # a hidden stub; the panel says so instead.
-    ax.annotate(f"95% seed-bootstrap intervals\n\u2264 {half:.2f} ratio units: within\nthe mean symbols, not drawn",
-                xy=(0.0, 1.0), xycoords="axes fraction", xytext=(4.0, -3.0),
-                textcoords="offset points", ha="left", va="top", fontsize=PT_BASE, color=MUTE,
-                linespacing=1.1)
+    # a hidden stub; the caption says so (2026-09-23: no longer on the panel).
     ax.set_xlim(-0.35, 2.35)
     ax.set_yscale("log")
     ax.set_ylim(0.18, 6.4)
     ax.set_yticks([0.2, 0.5, 1.0, 2.0, 5.0], ["0.2", "0.5", "1", "2", "5"])
     ax.set_yticks([0.3, 0.4, 0.6, 0.7, 0.8, 0.9, 3.0, 4.0, 6.0], minor=True)
     ax.yaxis.set_minor_formatter(NullFormatter())
-    reference_rule(ax, 1.0, "soma = 1 by normalization", x0=-0.35, x1=2.35, x_label=-0.35,
-                   xytext=(1.0, 3.5))
+    reference_rule(ax, 1.0, x0=-0.35, x1=2.35)
     ax.set_xticks(xs, ["soma", "mid", "distal"])
-    ax.set_xlabel("depth")
-    ax.set_ylabel("batch-RMS ratio, soma = 1")
+    ax.set_xlabel("Depth")
+    ax.set_ylabel("Batch-RMS ratio to soma")
     return stats
 
 
@@ -321,15 +322,17 @@ def panel_path_specific_energy(ax, disp):
     ax.set_ylim(14.0, 62.0)
     ax.set_yticks([20, 30, 40, 50, 60], ["20", "30", "40", "50", "60"])
     ax.set_xticks(xs, ["mid", "distal"])
-    ax.set_xlabel("depth")
-    ax.set_ylabel("path-specific error energy (%)")
+    ax.set_xlabel("Depth")
+    ax.set_ylabel("Path-specific error energy (%)")
     return stats
 
 
 # ── the canvas ───────────────────────────────────────────────────────────
 # The canvas audit admits only a 1.05-1.55 page aspect, so the three ladders
-# share a 2 x 2 module grid: A and B on the top row, C and the sheet's key
-# (with the cohort statement) on the bottom row.
+# share a 2 x 2 module grid: A and B on the top row, C and the sheet's key on
+# the bottom row.  2026-09-23: the gutter keeps its 54 pt after C's title
+# went: A's two-line tick labels and x label hang 29 pt below A, and a
+# narrower gutter would set that x label as close to C's axes as to A's.
 CANVAS_H_PT = 364.0
 HGUTTER_PT = 30.0
 VGUTTER_PT = 54.0
@@ -345,17 +348,19 @@ def build(path: Path = OUT):
     assert (disp.n_soma == 128).all() and (disp.compartments_per_neuron == 12).all()
     # the same fifteen seeds in both tables and both architectures
     assert set(grad.seed) == set(disp.seed)
-    n_soma = int(disp.n_soma.iloc[0])
-    # the key cell's cohort statement, checked against the run records
+    # the caption's cohort statement (formerly printed in the key cell),
+    # checked against the run records
     assert grad.run_dir.str.contains("mnist").all() and disp.run_dir.str.contains("mnist").all()
     assert disp.run_dir.str.contains("exact_path").all()
     assert (grad.trained_broadcast_mode.isin(["per_soma", "per_soma_shared"])).all()
 
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 2, hgutter_pt=HGUTTER_PT, vgutter_pt=VGUTTER_PT,
                       margins=MARGINS, letter_clearance=True)
-    ax_a = cv.panel("A", 0, 0, 6, grid="y", title="Direction: gradient cosine")
-    ax_b = cv.panel("B", 0, 6, 6, grid="y", title="Amplitude: transport by depth")
-    ax_c = cv.panel("C", 1, 0, 6, grid="y", title="Variation: within-depth residual")
+    # 2026-09-23 clarity pass: no panel titles; the caption names each panel's
+    # quantity (ledger si_pass/ledger/error_field_geometry.md)
+    ax_a = cv.panel("A", 0, 0, 6, grid="y")
+    ax_b = cv.panel("B", 0, 6, 6, grid="y")
+    ax_c = cv.panel("C", 1, 0, 6, grid="y")
     for name in "ABC":
         cv.declare_reserve(name, left=15.0, right=8.0)
 
@@ -382,35 +387,23 @@ def build(path: Path = OUT):
           f"B {ext_b[1]:.1f}-{ext_b[0]:.1f} pt (not drawn), C {ext_c[1]:.1f}-{ext_c[0]:.1f} pt; "
           f"mean-symbol radius {radius:.1f} pt")
 
-    # the key cell (row 1, modules 6-12): every glyph on the sheet with its n,
-    # then the cohort statement
+    # the key cell (row 1, modules 6-12): the three glyph kinds only.
+    # 2026-09-23 clarity pass: the "Key" heading, the whisker and dashed-rule
+    # entries, the seed count and the cohort paragraph moved to the caption.
     handles = [
         Line2D([], [], color=c, lw=LW_DATA, marker=mk, ms=MEAN_MS, markeredgecolor="white",
                markeredgewidth=LW_HAIR, label=f"{lab}: seed mean")
         for _, _, lab, c, mk in ARCHS
     ] + [
-        Line2D([], [], color=INK, lw=LW_ERR, marker="|", ms=ERR_CAPSIZE * 2.0,
-               markeredgewidth=LW_ERR, label="whisker: 95% seed-bootstrap interval\n"
-               f"of the mean ({BOOT_DRAWS:,} whole-seed draws)"),
         Line2D([], [], color=INK, lw=LW_HAIR, alpha=LINE_ALPHA + 0.25, marker="o", ms=FAN_MS,
-               markerfacecolor=INK, markeredgecolor="none",
-               label=f"thin line, small mark: one seed\n({N_SEEDS} paired seeds per architecture)"),
-        Line2D([], [], color=MUTE, lw=LW_REF, dashes=DASHES, label="dashed rule: reference constant"),
+               markerfacecolor=INK, markeredgecolor="none", label="one seed"),
     ]
     x0, y_top, w, h = cv.slot_pt(1, 6, 6)
     fx = lambda x: x / cv.width_pt  # noqa: E731
     fy = lambda y: 1.0 - y / cv.height_pt  # noqa: E731
-    cv.fig.text(fx(x0 + 15.0), fy(y_top - 2.0), "Key", fontsize=PT_BASE + 1.0, color=INK,
-                ha="left", va="bottom")
     cv.fig.legend(handles=handles, loc="upper left", bbox_to_anchor=(fx(x0 + 15.0), fy(y_top + 2.0)),
                   ncol=1, frameon=False, fontsize=PT_BASE, handlelength=2.4, labelspacing=0.75,
                   handletextpad=0.7, borderaxespad=0.0)
-    cohort = (f"Cohort: {n_soma} directed [3,3] trees per network, {N_SEEDS} paired seeds\n"
-              "per architecture, flattened MNIST; A at checkpoints trained with\n"
-              "per-neuron feedback, B and C at exact-path checkpoints.\n"
-              "Exact-path cosine in A is 1 by construction and is not drawn.")
-    cv.fig.text(fx(x0 + 15.0), fy(y_top + h), cohort, fontsize=PT_BASE, color=INK, ha="left",
-                va="bottom", linespacing=1.25)
     problems = cv.save(path, name="figure_error_field_geometry_native", png=False)
     for problem in problems:
         print(f"    {problem}")

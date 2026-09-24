@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """Current presentation: The September 21 revision retains A-C and shows capture once in main Figure 1G.
+2026-09-23 clarity pass: A and B are titled by architecture only, C has no
+title, and the axis labels are in sentence case; plotted marks are unchanged.
 
 Historical construction notes follow.
 
@@ -193,7 +195,7 @@ def panel_ladder(ax, rows, summary, arch, color):
     print(f"[{arch}] seed range {100 * lo_all:.2f}-{100 * hi_all:.2f} %; " + "; ".join(printed))
     ax.set_xlim(-0.6, len(ARMS) - 0.4)
     ax.set_xticks(range(len(ARMS)), [lab for _, lab in ARMS])
-    ax.set_ylabel("test accuracy (%)")
+    ax.set_ylabel("Test accuracy (%)")
     return lo_all, hi_all
 
 
@@ -257,7 +259,7 @@ def panel_contrasts(ax, contrasts, seed_contrasts, rows):
     corridor = (xs[3] + xs[4]) / 2.0            # the blank unit between the groups
     ax.annotate("seeds > 0", xy=(corridor, count_y), xycoords="data", ha="center", va="center",
                 fontsize=PT_BASE, color=MUTE)
-    ax.set_ylabel("paired accuracy difference (pp)")
+    ax.set_ylabel("Paired accuracy difference (pp)")
 
 
 # ── D: dictionary capture at initialization and after exact-path training ─
@@ -305,9 +307,13 @@ def panel_capture(ax, capture, capture_summary):
 
 
 # ── the canvas ───────────────────────────────────────────────────────────
-CANVAS_H_PT = 392.0
+# 2026-09-23: C lost its title, so the vertical gutter only has to hold A/B's
+# two-line tick labels plus C's letter band (13 pt) and the lock's 8 pt pad;
+# the ten points the title used come off the gutter and the canvas, and every
+# axes box keeps its size.
+CANVAS_H_PT = 382.0
 HGUTTER_PT = 26.0
-VGUTTER_PT = 50.0
+VGUTTER_PT = 40.0
 MARGINS = Margins(left=40.0, right=6.0, top=18.0, bottom=62.0)
 
 
@@ -323,9 +329,12 @@ def build(path: Path = OUT):
 
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 2, hgutter_pt=HGUTTER_PT, vgutter_pt=VGUTTER_PT,
                       margins=MARGINS, letter_clearance=True)
-    ax_a = cv.panel("A", 0, 0, 6, grid="y", title="Shunting: ten fresh paired seeds")
-    ax_b = cv.panel("B", 0, 6, 6, grid="y", title="Raw additive: ten fresh paired seeds")
-    ax_c = cv.panel("C", 1, 0, 12, grid="y", title="Added within-tree resolution")
+    # 2026-09-23 clarity pass: A and B keep only the condition that tells the
+    # two otherwise identical panels apart; the seed count and C's headline
+    # title are in the caption (ledger si_pass/ledger/mnist_dictionary_geometry.md)
+    ax_a = cv.panel("A", 0, 0, 6, grid="y", title="Shunting")
+    ax_b = cv.panel("B", 0, 6, 6, grid="y", title="Raw additive")
+    ax_c = cv.panel("C", 1, 0, 12, grid="y")
     for name in "ABC":
         cv.declare_reserve(name, left=15.0, right=8.0)
 

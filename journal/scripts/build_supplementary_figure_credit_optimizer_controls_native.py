@@ -48,6 +48,15 @@ frozen_S17.json), panel by panel:
   one seed; grey solid is the noise floor and mute dashed the 1,024 cap.
 * Titles name task, optimizer and rate view on all four panels; the
   vertical axes are log and tight to the data of each panel.
+
+2026-09-23 clarity pass (analysis/figure_visual_review_20260910/review_20260923/
+si_pass/ledger/credit_optimizer_controls.md): the in-panel statements (the A
+and C coincidence notes, the B and D seed counts, D's pointer to C) and the
+printed floor values left the artwork for the legend; the titles are short
+condition labels, the key entries are compact and the axis labels are in
+sentence case.  Every count and range those notes printed is still computed
+and asserted below.  Axis limits, including the floor-label strip under the
+noise rule of A-C, are unchanged, so no data mark moves.
 """
 from __future__ import annotations
 
@@ -90,7 +99,7 @@ CAP_DASH = (2.6, 2.0)
 RULES = (
     ("exact", "exact path", COLORS["bp"], None),
     ("unit_broadcast", "unit broadcast", COLORS["local"], DASHED),
-    ("calibrated_broadcast", "initial profile (calibrated broadcast)", COLORS["additive"], None),
+    ("calibrated_broadcast", "initial profile", COLORS["additive"], None),
     ("sign_broadcast", "initial-sign broadcast", INK, DOTTED),
 )
 RULE = {key: (label, colour, dash) for key, label, colour, dash in RULES}
@@ -102,11 +111,13 @@ PANELS = {
     "C": ("quartet", "sgd", "selected_rate"),
     "D": ("quartet", "sgd", "common_rate"),
 }
+# short condition labels (task, optimizer, rate view): the four panels share
+# one axis design, so these are what tells them apart
 TITLES = {
-    "A": "Nested targets, Adam, selected rates",
-    "B": "Pairwise targets, SGD, common rate 0.03",
-    "C": "Quartic targets, SGD, selected rates",
-    "D": "Quartic targets, SGD, common rate 0.03",
+    "A": "Nested, Adam, selected rates",
+    "B": "Pairwise, SGD, common rate 0.03",
+    "C": "Quartic, SGD, selected rates",
+    "D": "Quartic, SGD, common rate 0.03",
 }
 # the rate every rule uses in every panel (protocol_freeze.json records)
 RATES = {
@@ -174,23 +185,15 @@ def draw_series(ax, steps, seeds, mean, lo, hi, rule, *, zorder):
         ax.plot(x, mean, color=colour, lw=LW_DATA, dashes=dash, zorder=zorder)
 
 
-def floor_rule(ax, floor, xlim, *, dy_pt):
+def floor_rule(ax, floor, xlim):
     """The noise-only NMSE as a light grey solid rule over the whole update
-    range, its value printed under its left end (``dy_pt`` below the rule)."""
+    range (its value is given in the caption, not printed on the panel)."""
     ax.plot(list(xlim), [floor, floor], color=FLOOR_GREY, lw=LW_REF, zorder=1.0,
             solid_capstyle="butt")
-    ax.annotate(f"noise-only NMSE {floor:g}", xy=(xlim[0] * 1.06, floor), xycoords="data",
-                xytext=(0.0, -dy_pt), textcoords="offset points", ha="left", va="top",
-                fontsize=PT_BASE, color=FLOOR_GREY, zorder=5)
 
 
 def cap_rule(ax, ylim):
     ax.plot([CAP, CAP], list(ylim), color=MUTE, lw=LW_REF, dashes=CAP_DASH, zorder=1.0)
-
-
-def note(ax, x, y, text, colour, *, ha="left", va="top"):
-    ax.annotate(text, xy=(x, y), xycoords="data", ha=ha, va=va, fontsize=PT_BASE,
-                color=colour, linespacing=1.15, zorder=6)
 
 
 def style_axes(ax, ylim, yticks, ylabels):
@@ -204,8 +207,8 @@ def style_axes(ax, ylim, yticks, ylabels):
     assert ax.get_ylim() == ylim and all(ylim[0] < t < ylim[1] for t in yticks), (ylim, yticks)
     ax.xaxis.set_minor_locator(NullLocator())
     ax.yaxis.set_minor_locator(NullLocator())
-    ax.set_xlabel("training updates")
-    ax.set_ylabel("test NMSE")
+    ax.set_xlabel("Training updates")
+    ax.set_ylabel("Test NMSE")
 
 
 def build(path: Path = OUT):
@@ -304,8 +307,8 @@ def build(path: Path = OUT):
     ylim = {}
     for panel in "ABC":
         assert lim[panel][0] > floor[panel] / 1.06                 # seeds sit at the floor
-        # room for the floor label below (under the 0.02 grid rule in A and B)
-        # and, in C, for the control note above
+        # the limits that once made room for the floor label below and, in
+        # C, for the control note above: kept (2026-09-23) so no mark moves
         ylim[panel] = (floor[panel] / (1.42 if panel == "C" else 1.62),
                        lim[panel][1] * (1.32 if panel == "C" else 1.25))
     assert lim["D"][0] > 0.3 and lim["D"][1] < 90.0, lim["D"]
@@ -330,28 +333,19 @@ def build(path: Path = OUT):
         style_axes(ax, ylim[panel], *yt[panel])
         cap_rule(ax, ylim[panel])
         if panel != "D":
-            floor_rule(ax, floor[panel], XLIM, dy_pt=3.0 if panel == "C" else 7.5)
+            floor_rule(ax, floor[panel], XLIM)
         # draw order: the sign series last so its dots sit over the blue it coincides with
         for z, rule in enumerate(DRAWN[panel]):
             draw_series(ax, steps, *data[(panel, rule)], rule, zorder=3.0 + 0.1 * z)
 
-    # ── in-panel statements (each a count with its denominator or a range) ──
-    a, b, c, d = (axes[p] for p in "ABCD")
-    note(a, 1350.0, 0.30, f"3 broadcast controls within {100 * spread_a:.0f} %\nafter {CAP:,} updates",
-         MUTE)
-    # B's and D's notes stand left of the 1,024 cap, above every seed trace
-    note(b, 72.0, ylim["B"][1] / 1.10, f"unit broadcast:\n{n_unit_div}/20 seeds end above 1",
-         COLORS["local"])
-    note(b, 72.0, ylim["B"][1] / 2.05, f"initial profile:\n{n_cal_high}/20 seeds end above 0.05",
-         COLORS["additive"])
-    # C's note sits left of the 1,024 cap and above the controls' seed fans
-    note(c, 76.0, ylim["C"][1] / 1.05, f"3 broadcast controls\n{means_c.min():.2f}–{means_c.max():.2f}, none diverges",
-         MUTE)
-    note(d, 72.0, ylim["D"][1] / 1.10, f"unit broadcast:\n{n_unit_d}/20 seeds end above 1",
-         COLORS["local"])
-    note(d, 72.0, ylim["D"][1] / 2.05, f"initial sign:\n{n_sign_d}/20 seeds end above 1", INK)
-    note(d, 72.0, ylim["D"][1] / 3.85, "exact path and initial profile:\nrate 0.03 in C and D\n(same runs), drawn in C",
-         MUTE)
+    # ── no in-panel statements (2026-09-23) ──────────────────────────────
+    # The A spread (within 6 % after 1,024 updates), the B and D seed counts,
+    # the C control range (0.94-1.09, every seed below NMSE 2) and the C/D
+    # identity of the exact-path and initial-profile runs are asserted above
+    # and stated in the caption.
+    worst_c = max(float(data[("C", r)][0].max()) for r in DRAWN["C"])
+    assert worst_c < 2.0, worst_c                    # "no seed exceeds NMSE 2" in C
+    print(f"[C] every seed of every rule stays at or below {worst_c:.3f}")
 
     # ── one shared key ───────────────────────────────────────────────────
     handles = []
@@ -360,7 +354,7 @@ def build(path: Path = OUT):
         if dash is not None:
             h.set_dashes(dash)
         handles.append(h)
-    handles.append(Line2D([], [], color=FLOOR_GREY, lw=LW_REF, label="noise-only NMSE (value printed)"))
+    handles.append(Line2D([], [], color=FLOOR_GREY, lw=LW_REF, label="noise-only NMSE"))
     cap_h = Line2D([], [], color=MUTE, lw=LW_REF, label=f"original {CAP:,}-update cap")
     cap_h.set_dashes(CAP_DASH)
     handles.append(cap_h)

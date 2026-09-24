@@ -74,6 +74,12 @@ Second pass (checker report mixed_wave_reports.json, S31):
   and B strips stop at the first data row so no key text sits on a rule.
 * A's count axis starts at -0.9 and its split-half axis at -0.035 so the
   n = 1 marker and the 0.011 record clear the spine.
+
+2026-09-23 clarity pass (review_20260923/si_pass): no panel titles, no n/CI
+tags, no CI callout on C's top row, D's key reduced to two glyph entries, and
+no counts restated in B's axis labels; all of it is in the legend text.  The
+freed title bands leave the canvas (axes boxes unchanged).  Build with the
+dendritic-modeling .venv interpreter (matplotlib 3.10.9) to reproduce the PDF.
 """
 from __future__ import annotations
 
@@ -99,7 +105,6 @@ from figure_canvas import (  # noqa: E402
     LW_REF,
     MARKER_MS,
     PT_BASE,
-    PT_EMPH,
     SEED_ALPHA,
     SEED_MS,
     Margins,
@@ -319,7 +324,7 @@ def panel_cohort(ax1, ax2, functional, records):
     ax1.set_ylim(*ylim)
     ax1.set_xlim(-0.9, 20)                   # the n = 1 marker clears the spine (~3 pt)
     ax1.set_xticks([0, 10, 20], ["0", "10", "20"])
-    ax1.set_xlabel("partners")
+    ax1.set_xlabel("Partners")
     data_grid(ax1, [10, 20], N_TARGETS - 0.4, -0.5)
     ax1.legend(loc="upper left", fontsize=PT_BASE, frameon=False, handlelength=1.0,
                handletextpad=0.4, borderaxespad=0.2, labelspacing=0.25, borderpad=0.0)
@@ -335,7 +340,7 @@ def panel_cohort(ax1, ax2, functional, records):
     ax2.set_ylim(*ylim)
     ax2.set_xlim(-0.035, 0.63)               # the smallest (0.011) and largest (0.570) records clear the frame (~3 pt)
     ax2.set_xticks([0, 0.3, 0.6], ["0", "0.3", "0.6"])
-    ax2.set_xlabel("split-half r")
+    ax2.set_xlabel("Split-half r")
     data_grid(ax2, [0.3, 0.6], N_TARGETS - 0.4, -0.5)
     ax2.legend(loc="upper left", fontsize=PT_BASE, frameon=False, handlelength=1.0,
                handletextpad=0.4, borderaxespad=0.2, labelspacing=0.25, borderpad=0.0)
@@ -419,9 +424,9 @@ def panel_support(ax_m, ax_s, support, matrix):
     ax_s.set_xlim(0.85, 2.15)
     ax_s.set_xticks([1.0, 1.5, 2.0], ["1", "1.5", "2"])
     data_grid(ax_s, [1.0, 1.5, 2.0], N_SCANS - 0.4, -0.5)
-    ones = int(support.one_site_routes.sum())
-    ax_s.set_xlabel(f"inputs per route\n(1 in {ones} of {N_SCANS} scans)")
-    ax_s.set_ylabel(f"mapped inputs, {N_SCANS} scans", rotation=270, labelpad=9.0)
+    # the 6-of-13 one-coordinate count and the 13 scans are in the legend text
+    ax_s.set_xlabel("Inputs per route")
+    ax_s.set_ylabel("Mapped inputs", rotation=270, labelpad=9.0)
     # the key's glyphs hang 4.5 pt left of the strip (x < 0.85: no data column,
     # left of the x = 1 rule, clear of the matrix frame), its text over the headroom
     anchor = transforms.offset_copy(ax_s.transAxes, fig=ax_s.figure, x=-8.0, y=-1.4,
@@ -529,11 +534,8 @@ def panel_reconstruction(ax):
         whisker_h(ax, y, lo, hi, color, dashed=oracle)
         mean_marker(ax, m, y, color, marker, ms=MARKER_MS * (0.85 if oracle else 1.0))
         labels.append(row_label(ax, y, label, color, marker))
-    # the top row's interval is narrower than its marker, which covers its bar
-    ax.annotate(f"CI {top[4]:.3f}–{top[5]:.3f}",
-                xy=(top[2].min(), 0), xycoords="data", xytext=(-8.0, 0.0),
-                textcoords="offset points", ha="right", va="center", fontsize=PT_BASE,
-                color=MUTE)
+    # the top row's interval (0.964-0.986) is narrower than its marker; the
+    # legend text gives it, so it is not printed on the row
     handles = [
         Line2D([], [], color=INK, lw=LW_ERR, marker="o", ms=MARKER_MS * 0.8,
                markerfacecolor=INK, markeredgecolor="white", markeredgewidth=LW_HAIR,
@@ -546,8 +548,7 @@ def panel_reconstruction(ax):
               handlelength=2.2, columnspacing=1.2, handletextpad=0.5, borderaxespad=0.15,
               borderpad=0.0, labelspacing=0.25)
     ax.set_xticks([0, 0.5, 1.0], ["0", "0.5", "1"])
-    ax.set_xlabel("update reconstruction (1 = exact)")
-    tag(ax, f"n = {N_TARGETS} targets; mean [95 % CI]", dy=2.0)
+    ax.set_xlabel("Update reconstruction (1 = exact)")
     return labels
 
 
@@ -581,8 +582,7 @@ def panel_calibration(ax, audit):
     records = ax.errorbar(clipped[pos], resid[pos], yerr=Z95 * se[pos], fmt="o",
                           ms=SEED_MS, color=INK, markeredgecolor="none", ecolor=INK,
                           elinewidth=LW_HAIR, alpha=0.5, capsize=0.0, zorder=2.5,
-                          label=f"record: mean and ±{Z95} SE whisker from\n"
-                                f"{N_SIMULATED:,} simulated datasets (n = {n_pos} of {N_RECORDS})")
+                          label="partner–scan record")
     # the two clipped records sit at x = 0 exactly (no dodge); their residuals
     # differ, so the squares stack
     x_neg = clipped[negative]
@@ -598,23 +598,20 @@ def panel_calibration(ax, audit):
     ax.set_yticks([-0.01, -0.005, 0.0, 0.005, 0.01], ["−0.01", "−0.005", "0", "0.005", "0.01"])
     ax.set_xlim(-0.02, 0.60)
     ax.set_xticks([0, 0.2, 0.4, 0.6], ["0", "0.2", "0.4", "0.6"])
-    ax.set_xlabel("calibration target (split-half r)")
-    ax.set_ylabel("simulated − calibration target\n(split-half r)")
+    ax.set_xlabel("Split-half r (calibration target)")   # the clipped target r+ (test-guarded phrase)
+    ax.set_ylabel("Simulated − calibration target\n(split-half r)")
     ax.grid(True, axis="y", zorder=0, linewidth=LW_HAIR, alpha=0.9, color=COLORS["grid"])
+    # a compact symbol key; the whisker definition, the 1,000 simulated
+    # datasets, the two raw negative values, the zero rule and the 5-of-125
+    # exceedance count are stated in the legend text
     handles = [
         records,
         Line2D([], [], linestyle="none", marker="s", ms=SEED_MS + 0.6, markerfacecolor="white",
-               markeredgecolor=INK, markeredgewidth=LW_ERR,
-               label=f"negative measured r, set to 0 (n = {int(negative.sum())} of {N_RECORDS};\n"
-                     f"raw −{abs(raw_negative[0]):.3f} and −{abs(raw_negative[1]):.3f})"),
-        Line2D([], [], color=MUTE, lw=LW_REF, dashes=DASHES,
-               label="simulated mean = calibration target"),
+               markeredgecolor=INK, markeredgewidth=LW_ERR, label="measured r < 0"),
     ]
     key = ax.legend(handles=handles, loc="upper left", ncol=1, frameon=False,
                     fontsize=PT_BASE, handlelength=1.8, handletextpad=0.5,
                     borderaxespad=0.2, borderpad=0.0, labelspacing=0.25)
-    tag(ax, f"{beyond} of {N_RECORDS} beyond ±{Z95} SE; largest |difference| {largest:.4f}",
-        dy=2.0)
     return dict(beyond=beyond, largest=largest, se=(float(se.min()), float(se.max())),
                 n_pos=n_pos, key=key, lim=lim)
 
@@ -634,12 +631,15 @@ def calibration_headroom(ax, key, lim, *, clearance_pt=4.0):
 
 
 # ── the canvas ───────────────────────────────────────────────────────────
-CANVAS_H_PT = 403.0
-ROW_PT = [140.0, 165.0]
+# 2026-09-23: without titles the row-0 lock keeps 5.0 pt of its slot and the
+# row-1 lock 3.2 pt (letter bands), so these slots give the axes boxes they
+# had with titles (131.2 and 162.2 pt); the row gutter drops from 52 pt now
+# that no title sits in it and B's axis label is one line
+ROW_PT = [131.2 + 5.0, 162.2 + 3.2]
 HGUTTER_PT = 16.0
-VGUTTER_PT = 52.0
+VGUTTER_PT = 39.0
 MARGINS = Margins(left=14.0, right=8.0, top=16.0, bottom=30.0)
-TITLE_PAD = 11.0
+CANVAS_H_PT = MARGINS.top + sum(ROW_PT) + VGUTTER_PT + MARGINS.bottom   # 386.6 (403.0 before)
 
 
 def build(path: Path = OUT):
@@ -653,12 +653,11 @@ def build(path: Path = OUT):
 
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 2, row_weights=ROW_PT, hgutter_pt=HGUTTER_PT,
                       vgutter_pt=VGUTTER_PT, margins=MARGINS)
-    ax_a = cv.panel("A", 0, 0, 6, title="Measured cohort")
-    ax_b = cv.panel("B", 0, 6, 6, title="Inputs reached per route")
-    ax_d = cv.panel("C", 1, 0, 6, title="Fixed-profile fidelity: update reconstruction")
-    ax_e = cv.panel("D", 1, 6, 6, title="Reliability calibration: simulated − target")
-    for ax in (ax_a, ax_b, ax_d, ax_e):
-        ax.set_title(ax.get_title(), fontsize=PT_EMPH, color=INK, pad=TITLE_PAD, fontweight="normal")
+    # 2026-09-23 clarity pass: no panel titles (their content is in the legend text)
+    ax_a = cv.panel("A", 0, 0, 6)
+    ax_b = cv.panel("B", 0, 6, 6)
+    ax_d = cv.panel("C", 1, 0, 6)
+    ax_e = cv.panel("D", 1, 6, 6)
 
     # A: two sub-axes on one target axis (counts | reliability records)
     ax_a1, ax_a2 = sub_axes(cv, ax_a, [(0.0, 0.47), (0.55, 0.45)])

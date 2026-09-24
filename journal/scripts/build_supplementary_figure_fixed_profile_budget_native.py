@@ -40,6 +40,14 @@ frozen_S16.json and the "cannot" list of frozen_drafts.json), panel by panel:
         companion zoom subpanel (letter-less, same row) resolves the sixteen
         exact seeds that overplot at the floor, as open circles at 20x.
 
+2026-09-23 clarity pass (analysis/figure_visual_review_20260910/review_20260923/
+si_pass/ledger/fixed_profile_budget.md): every word that belongs in the legend
+left the artwork -- the D-F headline titles, the in-panel seed counts, the
+E sign-count note, the "zero deficit", "unchanged error" and "noise-only"
+reference labels and the zoom's window note; A-C keep short condition labels,
+the shared key keeps compact entries, axis labels are in sentence case.  The
+counts those notes printed are still asserted here.  No data mark changed.
+
 Colour meanings on this sheet (one meaning per hue): dark red (``bp``) exact
 path, amber (``local``) unit broadcast, blue (``additive``) initial profile,
 ink dotted initial sign -- in A-D and F; violet (``oracle``) rates selected
@@ -213,8 +221,8 @@ def style_step_axis(ax, ylim, floor):
                   ["0.02", "0.05", "0.1", "0.2", "0.5", "1", "2"] if ylim[0] < 0.03
                   else ["0.05", "0.1", "0.2", "0.5", "1", "2"])
     ax.yaxis.set_minor_locator(NullLocator())
-    ax.set_xlabel("training update")
-    ax.set_ylabel("test NMSE")
+    ax.set_xlabel("Training update")
+    ax.set_ylabel("Test NMSE")
     reference(ax, x=CAP)
     reference(ax, y=floor)
 
@@ -337,11 +345,10 @@ def panel_terminal(ax, outcomes, cond, idx, floor):
     ax.set_xticks(range(len(D_COLS)), [c[2] for c in D_COLS])
     ax.tick_params(axis="x", length=0)
     ax.set_yticks([0.022, 0.024, 0.026], ["0.022", "0.024", "0.026"])
-    ax.set_ylabel("test NMSE at 16,384 updates")
+    ax.set_ylabel("Test NMSE at 16,384 updates")
     # the floor value cannot be printed on the rule (seeds straddle it in every
-    # column); the shared key names the rule and the caption gives 0.0225
-    ax.text(0.0, 1.0, f"n = {N_SEEDS} seeds per condition", transform=ax.transAxes,
-            ha="left", va="top", fontsize=PT_BASE, color=INK, zorder=6)
+    # column); the shared key names the rule and the caption gives 0.0225.
+    # The seed count (20 per condition) is stated in the caption.
 
 
 # ── E: task-by-credit contrast over budget ────────────────────────────────
@@ -401,15 +408,11 @@ def panel_contrast(ax, fs, pairs, contrasts, idx):
     ax.set_xticks(BUDGETS, ["1,024", "4,096", "8,192", "16,384"])
     ax.xaxis.set_minor_locator(NullLocator())
     ax.set_yticks([0.0, 0.2, 0.4, 0.6, 0.8, 1.0], ["0.0", "0.2", "0.4", "0.6", "0.8", "1.0"])
-    ax.set_xlabel("maximum training updates")
-    ax.set_ylabel("quartic − pairwise credit deficit")
+    ax.set_xlabel("Maximum training updates")
+    ax.set_ylabel("Quartic − pairwise credit deficit")
+    # the zero rule is unlabelled (it is the 0.0 tick); the all-seeds-positive
+    # count asserted above is stated in the caption
     reference(ax, y=0.0)
-    ax.annotate("zero deficit", xy=(1.0, 0.0), xycoords=("axes fraction", "data"),
-                xytext=(-1.5, 2.2), textcoords="offset points", ha="right", va="bottom",
-                fontsize=PT_BASE, color=MUTE)
-    ax.text(0.02, 0.60, f"positive in {N_SEEDS}/{N_SEEDS} seeds\nat every budget",
-            transform=ax.transAxes, ha="left", va="top", fontsize=PT_BASE, color=INK,
-            linespacing=1.1, zorder=6)
     handles = []
     for view, state in E_SERIES:
         color = SELECTED if view == "selected_rate" else COMMON
@@ -476,24 +479,14 @@ def panel_seeds(ax, seeds, floor, dist):
     ax.set_yticks(ticks, labels)
     ax.xaxis.set_minor_locator(NullLocator())
     ax.yaxis.set_minor_locator(NullLocator())
-    ax.set_xlabel("test NMSE at 1,024 updates")
-    ax.set_ylabel("test NMSE at 16,384 updates")
+    ax.set_xlabel("Test NMSE at 1,024 updates")
+    ax.set_ylabel("Test NMSE at 16,384 updates")
     ax.plot(F_LIM, F_LIM, color=MUTE, lw=LW_REF, zorder=1.1, solid_capstyle="butt")
     reference(ax, x=floor)
     reference(ax, y=floor)
-    # texts sit where no seed, rug tick or rule runs: the top-left corner
-    # right of the vertical floor guide (x > 0.05) and above every profile
-    # seed's x (0.72), and the strip under the diagonal between the exact
-    # cluster and the three stalled seeds (0.2 < x < 0.5, 0.06 < y < 0.13)
-    ax.text(0.10, 0.97, f"n = {N_SEEDS} seeds per rule", transform=ax.transAxes,
-            ha="left", va="top", fontsize=PT_BASE, color=INK, zorder=6)
-    ax.text(0.2, 0.128, f"{stalled}/{N_SEEDS} exact seeds\nstalled at 1,024", ha="left", va="top",
-            fontsize=PT_BASE, color=RULE_COLOR["exact"], linespacing=1.1, zorder=6)
-    ax.text(0.062, 0.56, "unchanged error", ha="left", va="center", fontsize=PT_BASE,
-            color=MUTE, zorder=6)
-    ax.annotate("", xy=(0.31, 0.31), xycoords="data", xytext=(0.17, 0.46), textcoords="data",
-                arrowprops=dict(arrowstyle="-", color=MUTE, lw=LW_HAIR, shrinkA=0, shrinkB=0),
-                zorder=5)
+    # no in-panel text: the seed count, the three exact seeds above 0.5 at
+    # 1,024 updates (asserted above) and the meaning of the diagonal are
+    # stated in the caption
     print(f"[F] exact seeds at 1,024: {ex.min():.4f}-{ex.max():.4f} ({stalled} stalled above 0.5), "
           f"at 16,384: {ey.min():.4f}-{ey.max():.4f}; profile seeds {px.min():.3f}-{px.max():.3f} "
           f"and {py.min():.3f}-{py.max():.3f}")
@@ -521,14 +514,10 @@ def panel_zoom(ax, seeds, floor):
     ticks = [0.044, 0.046, 0.048, 0.050]
     ax.set_xticks(ticks, ["0.044", "0.046", "0.048", "0.050"])
     ax.set_yticks(ticks, ["0.044", "0.046", "0.048", "0.050"])
-    ax.set_xlabel("test NMSE at 1,024 updates")
-    ax.set_ylabel("test NMSE at 16,384 updates")
-    ax.text(0.04, 0.97, f"{n_in}/{N_SEEDS} exact seeds\nwithin {ZOOM[0]:.3f}–{ZOOM[1]:.3f}",
-            transform=ax.transAxes, ha="left", va="top", fontsize=PT_BASE,
-            color=RULE_COLOR["exact"], linespacing=1.1, zorder=6)
-    ax.annotate(f"noise-only {floor:g}", xy=(1.0, floor), xycoords=("axes fraction", "data"),
-                xytext=(-1.5, 2.2), textcoords="offset points", ha="right", va="bottom",
-                fontsize=PT_BASE, color=MUTE)
+    ax.set_xlabel("Test NMSE at 1,024 updates")
+    ax.set_ylabel("Test NMSE at 16,384 updates")
+    # the in-window count (16 of 20 exact seeds, asserted above), the zoom and
+    # the floor value are stated in the caption
     print(f"[F zoom] {n_in}/{N_SEEDS} exact seeds inside {ZOOM}")
 
 
@@ -562,13 +551,15 @@ def build(path: Path = OUT):
 
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 3, hgutter_pt=HGUTTER_PT, vgutter_pt=VGUTTER_PT,
                       margins=MARGINS, letter_clearance=True)
-    ax_a = cv.panel("A", 0, 0, 6, grid="y", title="Pairwise: rates selected per rule")
-    ax_b = cv.panel("B", 0, 6, 6, grid="y", title=f"Pairwise: common rate {COMMON_RATE:g}")
-    ax_c = cv.panel("C", 1, 0, 6, grid="y", title="Quartic: selected rates and common rate")
-    ax_d = cv.panel("D", 1, 6, 6, grid="y", title="Pairwise at 16,384 updates: every seed")
-    ax_e = cv.panel("E", 2, 0, 4, grid="y", title="Credit deficit over budget")
-    ax_f = cv.panel("F", 2, 4, 4, grid="none", title="Quartic seeds, two budgets")
-    ax_z = cv.panel("F_zoom", 2, 8, 4, letter="", grid="none", title="Exact seeds at the floor, 20×")
+    # A-C share one axis design, so each keeps a short condition label; D-F
+    # carry none (their content is named by the axis labels and the caption)
+    ax_a = cv.panel("A", 0, 0, 6, grid="y", title="Pairwise, selected rates")
+    ax_b = cv.panel("B", 0, 6, 6, grid="y", title=f"Pairwise, common rate {COMMON_RATE:g}")
+    ax_c = cv.panel("C", 1, 0, 6, grid="y", title="Quartic, selected and common rates")
+    ax_d = cv.panel("D", 1, 6, 6, grid="y")
+    ax_e = cv.panel("E", 2, 0, 4, grid="y")
+    ax_f = cv.panel("F", 2, 4, 4, grid="none")
+    ax_z = cv.panel("F_zoom", 2, 8, 4, letter="", grid="none")
     for name in ("A", "B", "C", "D", "E", "F", "F_zoom"):
         cv.declare_reserve(name, **RESERVE)
 
@@ -591,8 +582,8 @@ def build(path: Path = OUT):
     handles.append(Line2D([], [], color=MUTE, lw=0, marker="|", ms=7.0, markeredgewidth=LW_REF,
                           label="1,024-update cap"))
     handles.append(Line2D([], [], color=MUTE, lw=LW_REF, label="noise-only NMSE"))
-    handles.append(Line2D([], [], color=INK, lw=LW_DATA, label="thick (C): rates selected per rule"))
-    handles.append(Line2D([], [], color=INK, lw=LW_THIN, label=f"thin (C): common rate {COMMON_RATE:g}"))
+    handles.append(Line2D([], [], color=INK, lw=LW_DATA, label="selected rates (C)"))
+    handles.append(Line2D([], [], color=INK, lw=LW_THIN, label="common rate (C)"))
     cv.fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.53, 0.0), ncol=4,
                   frameon=False, fontsize=PT_BASE, handlelength=2.4, columnspacing=1.6,
                   handletextpad=0.6, borderaxespad=0.5, labelspacing=0.35)

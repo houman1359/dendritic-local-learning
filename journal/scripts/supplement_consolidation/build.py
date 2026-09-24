@@ -28,12 +28,12 @@ from matplotlib import font_manager
 J=Path(__file__).resolve().parents[2]; HERE=Path(__file__).resolve().parent
 sys.path.insert(0,str(HERE));sys.path.insert(0,str(J/'scripts'))
 from specification import (FIGURES, REMOVED_SHARED_REGIONS, SHARED_LEGENDS, WHOLE_CROPS,
- PANEL_BOUNDS, PANEL_REDACTIONS, PANEL_PATCHES, PANEL_TEXT, NATIVE_LEGENDS,
+ PANEL_BOUNDS, PANEL_REDACTIONS, PANEL_PATCHES, PANEL_TEXT, PANEL_TEXT_EDITS, NATIVE_LEGENDS,
  EXPLICIT_NUMERICAL_SOURCES, NUMERICAL_SOURCE_OVERRIDES, EXTRA_ASSETS, CAPTION_APPEND, ALIAS_EXTRA,
  ALIAS_BLACKLIST, PANEL_CONTENT, PANEL_REASONS, SOURCE_DATA_DIRS,
  ASSET_PATH_OVERRIDES, SCALE_EXEMPTIONS, CONSOLIDATED_FIGURE_NUMBERS)
 from tex_sources import expanded_tex
-from letter_relocation import relocate_letters
+from letter_relocation import native_regions, relocate_letters
 import journal_style as JS
 OUT=J/'figures/supplementary/curated'; CFG=J/'configs/supplement_consolidation'; TEX=J/'supplementary/curated'
 REG=json.loads((HERE/'original_assets.json').read_text())
@@ -51,6 +51,7 @@ ROW_COUNTS={
  'mechanistic_chain':(3,), 'input_coverage_depth':(3,1), 'branch_conflict_controls':(2,2),
  'ancestry_coefficients':(1,2), 'physical_optimizer':(2,1),
  'anatomy_capacity_controls':(2,2), 'inhibitory_spatial_controls':(1,2,2),
+ 'physical_calibration':(2,2), 'coarse_energy':(2,2),   # review pass 2026-09-23
 }
 
 
@@ -63,9 +64,58 @@ def column_widths(rows):
  return widths
 
 
+BOOK_FONT=font_manager.findfont(font_manager.FontProperties(family=JS.SANS_FAMILY))
+
+
+def apply_text_edits(sp, edits):
+ """Review pass 2026-09-23: declared text edits on a frozen source page.
+
+ ('remove', text) deletes every line whose text is ``text``; ('replace', old,
+ new[, align[, (dx, dy)]]) re-sets such a line in place, in the sources' own Nimbus Sans
+ at the same size, colour and rotation, centred on the old line (or starting
+ where it started, for key entries).  Each character goes through a tiny
+ central redaction box, so no neighbouring glyph is touched, and an edit that
+ finds no line fails loudly instead of silently doing nothing.
+ """
+ font=fitz.Font(fontfile=BOOK_FONT)
+ lines=[]
+ for block in sp.get_text('rawdict')['blocks']:
+  for line in block.get('lines',[]):
+   text=' '.join(''.join(ch['c'] for s in line['spans'] for ch in s['chars']).split())
+   if text:lines.append((text,line))
+ inserts=[]
+ for edit in edits:
+  kind,old=edit[0],' '.join(edit[1].split())
+  hits=[line for text,line in lines if text==old]
+  if not hits:raise ValueError(f'text edit found no line {old!r}')
+  for line in hits:
+   for span in line['spans']:
+    for ch in span['chars']:
+     x0,y0,x1,y1=ch['bbox'];cx,cy=(x0+x1)/2,(y0+y1)/2
+     sp.add_redact_annot(fitz.Rect(cx-.35,cy-.35,cx+.35,cy+.35),fill=None)
+   if kind=='replace':
+    first=line['spans'][0];dx,dy=line['dir']
+    rotate={(1,0):0,(0,-1):90,(-1,0):180,(0,1):270}[(round(dx),round(dy))]
+    c=first['color'];rgb=(((c>>16)&255)/255,((c>>8)&255)/255,(c&255)/255)
+    ox,oy=first['origin']
+    if (edit[3] if len(edit)>3 else 'center')=='center':
+     bb=fitz.Rect(line['bbox']);width=font.text_length(edit[2],fontsize=first['size'])
+     if rotate==0:ox=(bb.x0+bb.x1)/2-width/2
+     elif rotate==90:oy=(bb.y0+bb.y1)/2+width/2
+    if len(edit)>4:ox,oy=ox+edit[4][0],oy+edit[4][1]   # declared shift, e.g. into a vacated line
+    inserts.append(((ox,oy),edit[2],first['size'],rgb,rotate))
+   elif kind!='remove':raise ValueError(kind)
+ sp.apply_redactions(images=0,graphics=0,text=0)
+ if inserts:sp.insert_font(fontname='ReflowAxis',fontfile=BOOK_FONT)
+ for origin,text,size,rgb,rotate in inserts:
+  sp.insert_text(origin,text,fontname='ReflowAxis',fontsize=size,color=rgb,rotate=rotate)
+
+
 def prepared_panel(key, oldletter):
  """Remove only declared lettering/masks; retain the scientific vector art."""
  source=fitz.open(J/REG[key]['path']);sp=source[0];masks=[]
+ edits=PANEL_TEXT_EDITS.get((key,oldletter),[])
+ if edits:apply_text_edits(sp,edits)
  for letter in REG[key]['letters']:
   sp.add_redact_annot(fitz.Rect(letter['bbox']),fill=None)
  for rr in REMOVED_SHARED_REGIONS.get(key,[])+PANEL_REDACTIONS.get((key,oldletter),[]):
@@ -322,7 +372,8 @@ def main():
   if args.only is None or args.only==ident:
    source_metadata=json.loads(output.metadata.get('keywords') or '{}')
    # review pass 2026-09-23: every panel letter above-left of all its ink
-   relocations=relocate_letters(output[0],panelmap,bold)
+   relocations=relocate_letters(output[0],panelmap,bold,
+                                regions=native_regions(source_metadata) if whole else None)
    if relocations:output.subset_fonts()   # the re-set letters embed one bold font; keep only its glyphs
    output.set_metadata({'title':title or re.sub(r'\\textbf\{([^}]+)\}.*',r'\1',originals[groups[0][0]],flags=re.S),'author':'Safaai, Richards and Sabatini','creator':'supplement_consolidation/build.py; native vector-panel reflow','keywords':json.dumps({'schema':'native-vector-reflow/1','id':ident,'figure':f'S{number}','paste_scale':round(scale,4),'panels':panelmap,'source_layout':source_metadata if whole else None,'letter_layout':letter_layout,**({'letter_relocations':relocations} if relocations else {})},separators=(',',':'))})
    output.save(dest,garbage=4,deflate=True,no_new_id=True)

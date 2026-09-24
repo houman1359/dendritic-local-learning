@@ -55,6 +55,15 @@ frozen_S19.json, the "cannot" list of frozen_drafts.json), panel by panel:
   its eligibility-weighted capture in D) is blue (``additive``).  Line
   style and marker repeat the rule identity (solid circle, dashed square,
   dotted triangle).  No colour carries a second meaning anywhere.
+
+2026-09-23 clarity pass (analysis/figure_visual_review_20260910/review_20260923/
+si_pass/ledger/conductance_precision.md): the statistics notes (the A key's
+title and seed entry, the D key's title), the budget and zero-rule labels,
+D's headline title, its "= 1 by construction" label and its marker-width note
+left the artwork for the legend; A, B, C keep short condition labels and the
+axis labels are in sentence case.  The marker-width count behind the legend's
+"mostly within the symbols" is still measured and asserted (3 of 4).  No data
+mark changed.
 """
 from __future__ import annotations
 
@@ -231,14 +240,11 @@ def panel_learning(ax, source, curves, panel, task, *, show_y):
               f"{rows.loc[BUDGET, 'mean']:.4g} at {BUDGET}, {rows.loc[16384, 'mean']:.4g} "
               f"[{rows.loc[16384, 'ci_low']:.3g}, {rows.loc[16384, 'ci_high']:.3g}] at 16,384; "
               f"seeds {per_seed.min().min():.2e}-{per_seed.max().max():.2e}")
-    # the budget rule, named
+    # the budget rule (named in the caption, not on the panel)
     ax.set_xlim(*XLIM)
     ax.set_ylim(*YLIM_LOG)
     ax.plot([BUDGET, BUDGET], list(YLIM_LOG), color=MUTE, lw=LW_REF, dashes=DOTTED, zorder=1.0,
             solid_capstyle="butt")
-    ax.annotate("4,096-update budget", xy=(BUDGET, YLIM_LOG[1]), xycoords="data",
-                xytext=(-3.0, -1.5), textcoords="offset points", ha="right", va="top",
-                fontsize=PT_BASE, color=MUTE)
     ax.set_xscale("log")
     ax.set_xlim(*XLIM)
     ax.set_xticks([PIP_X, 64, 256, 1024, 4096, 16384],
@@ -246,9 +252,9 @@ def panel_learning(ax, source, curves, panel, task, *, show_y):
     ax.set_xticks([2048, 8192, 12288], minor=True)
     ax.xaxis.set_minor_formatter(NullFormatter())
     ax.set_yticks([-8, -6, -4, -2, 0], ["−8", "−6", "−4", "−2", "0"])
-    ax.set_xlabel("training update")
+    ax.set_xlabel("Training update")
     if show_y:
-        ax.set_ylabel("log10 test NMSE")
+        ax.set_ylabel("Log10 test NMSE")
     else:
         ax.tick_params(axis="y", labelleft=False)
     return endpoint
@@ -270,15 +276,13 @@ def axis_break_x(ax, lo, hi, *, size_pt=2.2):
 
 
 def rule_key(ax):
+    """The three rules only: what the marks and thin lines summarize (means,
+    95 % intervals, twenty seed trajectories per rule) is in the caption."""
     handles = [Line2D([], [], color=c, lw=LW_DATA, dashes=d if d else (None, None), marker=m,
                       ms=MARKER_MS * 0.78, markeredgecolor="white", markeredgewidth=LW_HAIR, label=lab)
                for _, lab, c, d, m in RULES]
-    handles.append(Line2D([], [], color=MUTE, lw=LW_HAIR, alpha=0.7, label="single seeds (20 per rule)"))
-    leg = ax.legend(handles=handles, loc="lower left", frameon=False, fontsize=PT_BASE,
-                    handlelength=2.4, handletextpad=0.6, labelspacing=0.35, borderaxespad=0.4,
-                    title="means, 95 % CI whiskers", title_fontsize=PT_BASE, alignment="left")
-    leg.get_title().set_color(MUTE)
-    return leg
+    return ax.legend(handles=handles, loc="lower left", frameon=False, fontsize=PT_BASE,
+                     handlelength=2.4, handletextpad=0.6, labelspacing=0.35, borderaxespad=0.4)
 
 
 # ── C: the paired endpoint gaps ──────────────────────────────────────────
@@ -315,15 +319,14 @@ def panel_gap(ax, source, seed_contrasts, endpoints, optimizer, *, ylim, yticks,
                 ecolor=color, elinewidth=LW_ERR, capsize=ERR_CAPSIZE, capthick=LW_ERR, zorder=4.0)
     ax.set_xlim(-0.6, 0.6)
     ax.set_ylim(*ylim)
+    # the zero rule is unlabelled: the caption names it
     ax.plot([-0.6, 0.6], [0.0, 0.0], color=MUTE, lw=LW_REF, dashes=DASHED, zorder=1.0,
             solid_capstyle="butt")
-    ax.annotate("no gap", xy=(0.6, 0.0), xycoords="data", xytext=(-1.5, 2.5),
-                textcoords="offset points", ha="right", va="bottom", fontsize=PT_BASE, color=MUTE)
     ax.set_xticks([0.0], ["20/20 seeds > 0"])
     ax.tick_params(axis="x", length=0)
     ax.set_yticks(yticks, [f"{t:g}" for t in yticks])
     if show_y:
-        ax.set_ylabel("initial profile − exact,\ngated-task test NMSE × 1000")
+        ax.set_ylabel("Initial profile − exact,\ngated-task test NMSE × 1000")
     print(f"[C] {optimizer}: gap {row['mean']:.6f} [{row.ci_low:.6f}, {row.ci_high:.6f}], "
           f"{int(row.n_positive)}/{int(row.n)} seeds > 0, seeds {seeds.min():.2e}-{seeds.max():.2e}, "
           f"best steps {int(ep.best_step.min())}-{int(ep.best_step.max())}")
@@ -367,33 +370,27 @@ def panel_capture(ax, source, endpoints):
     ax.set_ylim(*D_YLIM)
     ax.set_xticks([0.0, 1.0], ["ungated", "gated conflict"])
     ax.set_yticks([0.90, 0.95, 1.00], ["0.90", "0.95", "1.00"])
-    ax.set_ylabel("captured squared energy")
-    ax.annotate("= 1 by construction", xy=(xs["ungated_independent"] + D_METRICS[0][4], 1.0),
-                xycoords="data", xytext=(0.0, 5.0), textcoords="offset points", ha="center",
-                va="bottom", fontsize=PT_BASE, color=COLORS["bp"])
+    ax.set_ylabel("Captured squared energy")
+    # the ungated rank-one capture is 1 by construction (asserted above) and
+    # the seed count is twenty per mark: both are stated in the caption
     handles = [Line2D([], [], linestyle="none", marker=m, ms=MARKER_MS, color=c,
                       markeredgecolor="white", markeredgewidth=LW_HAIR, label=lab)
                for _, lab, c, m, _ in D_METRICS]
     ax.legend(handles=handles, loc="lower left", frameon=False, fontsize=PT_BASE,
-              handletextpad=0.6, labelspacing=0.5, borderaxespad=0.4,
-              title="20 seeds per mean", title_fontsize=PT_BASE,
-              alignment="left").get_title().set_color(MUTE)
+              handletextpad=0.6, labelspacing=0.5, borderaxespad=0.4)
     return halves
 
 
 def narrow_note(ax, halves):
     """How many of D's four 95 % intervals are hidden inside their marker,
-    measured against the FINAL axes box, and printed on the panel (top
-    right, clear of the ungated fans at x <= 0.24 and the gated fans at
-    y <= 0.978)."""
+    measured against the FINAL axes box.  No longer printed on the panel
+    (2026-09-23): the count backs the caption's "mostly within the symbols"
+    and is asserted so a layout change cannot silently falsify it."""
     h_pt = ax.get_window_extent().height * 72.0 / ax.figure.dpi
     radius = 0.5 * MARKER_MS / h_pt * (D_YLIM[1] - D_YLIM[0])   # marker radius, data units
     narrow = int(sum(half < radius for half in halves))
     print(f"[D] marker radius {radius:.2e}; {narrow} of {len(halves)} intervals narrower than it")
     assert narrow == 3, narrow
-    ax.annotate(f"95 % CI within the marker\nfor {narrow} of {len(halves)} means", xy=(1.0, 1.0),
-                xycoords=("axes fraction", "data"), xytext=(-2.0, 0.0), textcoords="offset points",
-                ha="right", va="center", fontsize=PT_BASE, color=MUTE, linespacing=1.1)
     return narrow
 
 
@@ -417,9 +414,11 @@ def build(path: Path = OUT, *, png=False):
                       vgutter_pt=VGUTTER_PT, margins=MARGINS)
     ax_a = cv.panel("A", 0, 0, 6, grid="y", title=TASKS[0][2])
     ax_b = cv.panel("B", 0, 6, 6, grid="y", title=TASKS[1][2])
+    # A/B and the two C facets keep short condition labels (task; optimizer);
+    # D carries no title
     ax_c = cv.panel("C", 1, 0, 3, grid="y", title="Adam")
-    ax_c2 = cv.panel("C_sgd", 1, 3, 3, letter="", grid="y", title="SGD, own y scale")
-    ax_d = cv.panel("D", 1, 6, 6, grid="y", title="Path-field capture at exact-rule states")
+    ax_c2 = cv.panel("C_sgd", 1, 3, 3, letter="", grid="y", title="SGD")
+    ax_d = cv.panel("D", 1, 6, 6, grid="y")
 
     end_a = panel_learning(ax_a, source, curves, "A", "ungated_independent", show_y=True)
     end_b = panel_learning(ax_b, source, curves, "B", "gated_conflict", show_y=False)

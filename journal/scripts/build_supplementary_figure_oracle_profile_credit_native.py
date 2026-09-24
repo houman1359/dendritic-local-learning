@@ -35,11 +35,12 @@ frozen_S13.json), panel by panel:
   point; the positive-seed count of every strip is printed with its
   denominator; the axis label says ``input-reassigned - compatible`` so the
   word ``shuffled`` keeps its one meaning (the shuffled-profiles rule).
+  (2026-09-23: the Adam quartic interval is given in the caption, no longer
+  printed beside the point.)
 * D: ordinal update axis with all six checkpoints (0, 1, 16, 64, 256, 1,024)
   labelled and no minor ticks; y axis tight to the drawn values (the seed fan
   reaches -0.24); the exact path, 1.0 in all 120 records by construction, is
-  a labelled dashed reference and not a series; title says the panel is the
-  oracle-compatible arm.
+  a dashed reference and not a series (named in the caption, 2026-09-23).
 * E, F: one common log NMSE axis; the three tested rates are three
   categorical positions with no minor ticks and leading-zero labels; every
   point carries its 20-seed fan and a 95 % whole-seed bootstrap whisker;
@@ -53,6 +54,9 @@ frozen_S13.json), panel by panel:
   / diamond / dotted; two shuffled profiles blue / cross / long dash); the
   exact-path hue is the main-text ``bp`` red-brown, as the cross-figure
   review asked; the optimizer is 'Adam' everywhere; one shared key.
+* 2026-09-23 clarity pass: panel titles reduced to the optimizer that tells
+  A/B and E/F apart (none on C, D); headline and definition text moved to
+  the caption; axis labels in sentence case.
 """
 from __future__ import annotations
 
@@ -216,7 +220,7 @@ def panel_final_nmse(ax, end, cond, optimizer, floors):
     ax.set_xlim(-0.55, len(FAMILIES) - 0.45)
     ax.set_xticks(range(len(FAMILIES)), [lab for _, lab in FAMILIES])
     ax.tick_params(axis="x", length=0)
-    ax.set_ylabel("test NMSE")
+    ax.set_ylabel("Test NMSE")
 
 
 # ── C: paired exact-credit cost of reassigning the leaf inputs ───────────
@@ -248,11 +252,9 @@ def panel_assignment(ax, replay, contrasts):
                         textcoords="offset points", ha="center", va="top",
                         fontsize=PT_BASE, color=MUTE)
             if fam == "quartet" and opt == "adam":
-                # the interval is narrower than the marker: print it under the point
+                # the interval is narrower than the marker; its bounds are
+                # given in the caption rather than printed beside the point
                 assert hi - lo < 0.012
-                ax.annotate(f"[{lo:.3f}, {hi:.3f}]", xy=(x + 0.2, min(vals)), xycoords="data",
-                            xytext=(0.0, -4.0), textcoords="offset points", ha="right",
-                            va="top", fontsize=PT_BASE, color=MUTE)
                 assert abs(lo - 0.507) < 5e-4 and abs(hi - 0.517) < 5e-4
             printed.append(f"{flab}/{olab} {m:.4f} [{lo:.4f}, {hi:.4f}] {npos}/{N_SEEDS} > 0 "
                            f"seeds {vals.min():.3f}-{vals.max():.3f}")
@@ -272,7 +274,7 @@ def panel_assignment(ax, replay, contrasts):
         ax.annotate(flab, xy=(xc, 0.0), xycoords=("data", "axes fraction"),
                     xytext=(0.0, -13.5), textcoords="offset points", ha="center", va="top",
                     fontsize=PT_BASE, color=INK, annotation_clip=False)
-    ax.set_ylabel("input-reassigned − compatible\ntest NMSE (exact credit)")
+    ax.set_ylabel("Input-reassigned − compatible\ntest NMSE (exact credit)")
 
 
 # ── D: gradient alignment at each rule's own state (Adam, compatible) ────
@@ -316,18 +318,16 @@ def panel_alignment(ax, traj, grad):
         lines.append(f"{key} " + np.array2string(ms_, precision=4))
     print(f"[D] seed-mean range {seed_lo:.4f}-{seed_hi:.4f}; " + "; ".join(lines))
     ax.set_xlim(-0.55, len(STEPS) - 0.45)
+    # the exact-path reference (cosine 1 by definition; named in the caption)
     ax.plot([-0.55, len(STEPS) - 0.45], [1.0, 1.0], color=RULE["exact"][2], lw=LW_REF,
             dashes=(2.6, 2.0), zorder=1.0)
-    ax.annotate("exact path = 1 by definition", xy=(len(STEPS) - 0.45, 1.0), xycoords="data",
-                xytext=(0.0, 2.2), textcoords="offset points", ha="right", va="bottom",
-                fontsize=PT_BASE, color=RULE["exact"][2], annotation_clip=False)
     lo_lim = -0.28
     assert lo_lim < seed_lo and seed_hi <= 1.0
     ax.set_ylim(lo_lim, 1.03)
     ax.set_yticks([-0.25, 0.0, 0.25, 0.5, 0.75, 1.0], ["−0.25", "0", "0.25", "0.5", "0.75", "1"])
     ax.set_xticks(xs, [f"{s:,}" for s in STEPS])
-    ax.set_xlabel("training update")
-    ax.set_ylabel("population-gradient\ncosine")
+    ax.set_xlabel("Training update")
+    ax.set_ylabel("Population-gradient\ncosine")
 
 
 # ── E, F: every tested learning rate, averaged over assignments and families
@@ -373,8 +373,8 @@ def panel_rates(ax, runs, sens, fit, optimizer):
     ax.set_xlim(-0.55, len(RATES) - 0.45)
     ax.set_xticks(range(len(RATES)), [f"{r:g}" for r in RATES])
     ax.tick_params(axis="x", length=0)
-    ax.set_xlabel("learning rate")
-    ax.set_ylabel("mean test NMSE")
+    ax.set_xlabel("Learning rate")
+    ax.set_ylabel("Mean test NMSE")
 
 
 # ── the canvas ───────────────────────────────────────────────────────────
@@ -429,20 +429,20 @@ def build(path: Path = OUT):
 
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 3, row_weights=ROW_PT, hgutter_pt=HGUTTER_PT,
                       vgutter_pt=VGUTTER_PT, margins=MARGINS, letter_clearance=True)
-    ax_a = cv.panel("A", 0, 0, 6, grid="y", title="Adam, compatible trees: final test error")
-    ax_b = cv.panel("B", 0, 6, 6, grid="y", title="SGD, compatible trees: final test error")
-    ax_c = cv.panel("C", 1, 0, 6, grid="y", title="Exact credit: input assignment matters")
-    ax_d = cv.panel("D", 1, 6, 6, grid="y", title="Adam, compatible trees: gradient alignment")
-    ax_e = cv.panel("E", 2, 0, 6, grid="y", title="Adam: all three learning rates")
-    ax_f = cv.panel("F", 2, 6, 6, grid="y", title="SGD: all three learning rates")
+    # panel titles only name the optimizer, the one condition that tells the
+    # otherwise identical A/B and E/F apart; C and D carry none
+    ax_a = cv.panel("A", 0, 0, 6, grid="y", title="Adam")
+    ax_b = cv.panel("B", 0, 6, 6, grid="y", title="SGD")
+    ax_c = cv.panel("C", 1, 0, 6, grid="y")
+    ax_d = cv.panel("D", 1, 6, 6, grid="y")
+    ax_e = cv.panel("E", 2, 0, 6, grid="y", title="Adam")
+    ax_f = cv.panel("F", 2, 6, 6, grid="y", title="SGD")
     # one declared reserve on every panel, wide enough to cover the widest
     # measured y decoration (D's two-line label + '−0.25'), so the column lock
     # gives both module columns one axes width by construction
     for name in "ABCDEF":
         cv.declare_reserve(name, left=22.0, right=8.0)
     cv.declare_reserve("C", bottom=14.0)      # the family names under the optimizer ticks
-    ax_d.set_title(ax_d.get_title(), fontsize=ax_d.title.get_fontsize(), color=INK, pad=11.0,
-                   fontweight="normal")      # room for the reference label above the axis
 
     panel_final_nmse(ax_a, end, cond, "adam", floors)
     panel_final_nmse(ax_b, end, cond, "sgd", floors)
