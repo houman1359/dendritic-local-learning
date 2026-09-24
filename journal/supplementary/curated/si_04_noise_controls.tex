@@ -1,15 +1,12 @@
 \subsection{Noise sensitivity with inherited learning rates}
 \label{sec:noise_sensitivity}
 
-For a homogeneous multilinear polynomial $f=\sum_{|U|=d}c_U\chi_U$
-under independent symmetric binary inputs, orthogonality gives
-$\operatorname{Var}(f)=\sum_Uc_U^2$ and
-$\E\|\nabla_xf\|^2=\sum_U|U|c_U^2=d\operatorname{Var}(f)$.
-Matching pairwise and quartic derivative spectra therefore forces unequal
-target variances, one and one-half. Identical absolute label noise is not
-identical relative noise. We tested this alternative explanation directly.
+Matching pairwise and quartic derivative spectra forces unequal target
+variances, one and one-half (Section~\ref{sec:degree_relative_noise}). Identical
+absolute label noise therefore gives different relative noise. We tested
+this alternative explanation directly.
 
-An internally specified post-review protocol used twenty additional paired
+An internally specified protocol used twenty additional paired
 seed blocks, disjoint from the original bridge cohort. Both targets retained
 the same seven-unit tree, leaf permutation, initial coefficients, input
 matrices, standardized noise, calibration examples and minibatch indices
