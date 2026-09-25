@@ -905,7 +905,8 @@ def boundary_order(ax, crossings: pd.DataFrame, seeds: pd.DataFrame,
     # QA 2026-09-09: the plan's verbatim strip label is 131 pt at 7 pt and
     # the axes are 93.2 pt, so it is set on two right-aligned lines inside a
     # strip deepened from 0.14 to 0.20 data units (20.5 pt) to hold them.
-    # Review pass 2026-09-23: the strip's meaning is stated in the legend.
+    ax.text(D_XLIM[1] - .10, 1.191, 'No crossing\nin tested range',
+            fontsize=PT_BASE, color=MUTE, ha='right', va='center', zorder=6)
 
     for i, b in enumerate(BRANCHES):
         column = seeds[seeds.branches.eq(b)].first_at_or_below_chance_accuracy_dose

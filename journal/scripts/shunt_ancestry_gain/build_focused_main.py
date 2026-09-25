@@ -1461,9 +1461,15 @@ def build(emit_main=True):
     panel_interventions(a)
     panel_gain_dictionary(b, gains)
 
-    # Review pass 2026-09-23: the two regime titles (`Permissive normalized
-    # model` over C-E, `Physical calibration` over F-H) sat in the letter
-    # band above D and G; legend C-H names the regimes.
+    # Put regime headings on the row-letter baseline, outside the data axes.
+    # Axes-relative titles would alter the reserve lock and split the gutter.
+    canvas.align_letters()
+    for ax, heading in [(d, 'Normalized model'), (g, 'Physical calibration')]:
+        letter = next(item['art'] for item in canvas._letters if item['ax'] is ax)
+        box = ax.get_position()
+        canvas.fig.text((box.x0 + box.x1) / 2, letter.get_position()[1], heading,
+                        ha='center', va='baseline', fontsize=PT_BASE,
+                        color=COLORS['ink'])
     style_direct_color_labels(canvas.fig)
     output = J / "figures/components/focused_main_08.pdf"
     findings = canvas.save(output, name="focused_main_08", dpi=400)

@@ -28,7 +28,7 @@ def epoch_axis(ax, maximum, *, label_space=False):
     ax.xaxis.set_major_formatter(FixedFormatter(['0', '180', '600', f'{maximum:,}']))
     ax.xaxis.set_minor_locator(NullLocator())
     ax.spines['bottom'].set_bounds(0, maximum)
-    ax.set_xlabel('Epoch')
+    ax.set_xlabel('Epoch (log after 180)', fontsize=PT_BASE)
     ax.axvline(180, color=COLORS['mute'], lw=LW_REF, ls=(0, (3, 3)), zorder=.5)
 
 
@@ -114,7 +114,8 @@ def paired_curve(ax, paired, metric, panel, rows):
     lo = min(0., float(p.ci95_low.min())); hi = max(0., float(p.ci95_high.max()))
     padding = max((hi-lo)*.12, .001)
     ax.set_ylim(lo-padding, hi+padding)
-    ax.set_ylabel('Exact − shared soma (pp)' if metric == 'test_accuracy' else 'Exact − shared soma (nats)')
+    ax.set_ylabel('Exact − shared soma (pp)' if metric == 'test_accuracy'
+                  else 'Test cross-entropy difference\nexact − shared soma (nats)', fontsize=PT_BASE)
     ax.axhline(0, color=COLORS['mute'], lw=LW_REF, ls=(0, (3, 3)), zorder=.5)
     ax.fill_between(p.epoch, p.ci95_low, p.ci95_high, color=COLORS['mute'], alpha=.15, lw=0, zorder=1)
     ax.plot(p.epoch, p['mean'], color=COLORS['bp'], lw=LW_DATA, zorder=2)
@@ -123,7 +124,9 @@ def paired_curve(ax, paired, metric, panel, rows):
             mfc=COLORS['bp'], mec='white', mew=LW_HAIR, zorder=3)
     if metric == 'test_accuracy':
         last = p.iloc[-1]
-        ax.annotate(f"{last['mean']:+.2f} pp", xy=(maximum, last['mean']),
+        label = (f"{last['mean']:+.2f} pp\n"
+                 f"95% CI {last.ci95_low:.2f}–{last.ci95_high:.2f}")
+        ax.annotate(label, xy=(maximum, last['mean']),
                     xytext=(.98, .36), textcoords='axes fraction',
                     ha='right', va='bottom', fontsize=PT_BASE, color=COLORS['bp'],
                     arrowprops=dict(arrowstyle='-', color=COLORS['mute'], lw=LW_HAIR,

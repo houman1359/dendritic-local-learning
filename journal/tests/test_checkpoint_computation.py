@@ -135,3 +135,32 @@ def test_consolidated_extension_export_preserves_cohorts_rates_and_intervals():
     reference=plot[plot.record.eq('extension reference')]
     assert len(reference)==1 and reference.iloc[0].study=='proxy'
     assert reference.iloc[0].policy=='common' and reference.iloc[0].arm=='resistance'
+
+
+def test_main_target_control_preserves_paired_seeds_rates_and_uncertainty():
+    """The target comparison must change neither its rate nor its seed cohort."""
+    plot=pd.read_csv(J/'source_data/curated_publication/figure_06_plotted.csv')
+    means=plot[plot.record.eq('target control mean')]
+    seeds=plot[plot.record.eq('target control seed')]
+    assert len(means)==4 and len(seeds)==80
+    assert set(means.panel)==set(seeds.panel)=={'C'}
+    assert set(means.rule)==set(seeds.rule)=={'resistance','derivative'}
+    assert means.rate.eq(.03).all() and seeds.rate.eq(.03).all()
+    primary=plot[plot.panel.eq('C') & plot.record.eq('seed outcome')]
+    ix=np.random.default_rng(2026092103).integers(20,size=(10000,20))
+    for target,name in [('interaction','inhibitory_rescue_common_endpoints.csv'),
+                        ('separable','nonlinear_separable_endpoints.csv')]:
+        source=pd.read_csv(J/'source_data/curated_publication'/name)
+        for rule in ['resistance','derivative']:
+            expected=source[source.rule.eq(rule)].sort_values('seed')
+            actual=seeds[seeds.target.eq(target)&seeds.rule.eq(rule)].sort_values('seed')
+            assert len(expected)==len(actual)==20
+            assert list(actual.seed)==list(expected.seed)
+            assert set(actual.seed)==set(primary[primary.rule.eq(rule)].seed)
+            np.testing.assert_allclose(actual[['value','rate']],expected[['test_nmse','rate']],rtol=1e-12)
+            values=expected.test_nmse.to_numpy()
+            lo,hi=np.quantile(values[ix].mean(1),[.025,.975])
+            mean=means[means.target.eq(target)&means.rule.eq(rule)]
+            assert len(mean)==1 and mean.iloc[0]['n']==20
+            np.testing.assert_allclose(mean[['mean','ci_low','ci_high']].iloc[0],
+                                       [values.mean(),lo,hi],rtol=1e-12)

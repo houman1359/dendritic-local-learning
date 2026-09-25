@@ -34,7 +34,7 @@ ROWS = []
 SCOPE = {
     'main_6A': 'Sixteen-neuron [4,2] model and terminal signal factors; schematic.',
     'main_6B': 'Original separable-target cohort: all five assignment rules under distractor stress, selected rates.',
-    'main_6C': 'Twenty new paired rescue seeds: original-bound nonlinear interaction task, separately selected Adam rates, two predefined primary contrasts.',
+    'main_6C': 'Twenty paired rescue seeds: selected-rate nonlinear interaction task and two primary contrasts; lower group retains the same nonlinear parents and compares interaction versus separable targets at common Adam rate 0.03, without new training.',
     'main_6D': 'Same twenty rescue seeds and their original selected states: interaction components of target and mean resistance/augmented predictions, averaging sign-aligned contexts and irrelevant inputs.',
     'main_6E': 'Two independent twenty-seed cohorts: approximate sensitivity at common rate 0.03, then cue-to-inhibition routing at selected rates with terminal cue contacts removed. Means and intervals; full seed values remain in Source Data.',
 }
@@ -42,7 +42,9 @@ SOURCES = {
     'main_6A': [],
     'main_6B': ['source_data/curated_publication/inhibitory_selection_summary.csv'],
     'main_6C': ['source_data/curated_publication/inhibitory_rescue_endpoints.csv',
-               'source_data/curated_publication/inhibitory_rescue_contrasts.csv'],
+               'source_data/curated_publication/inhibitory_rescue_contrasts.csv',
+               'source_data/curated_publication/inhibitory_rescue_common_endpoints.csv',
+               'source_data/curated_publication/nonlinear_separable_endpoints.csv'],
     'main_6D': ['source_data/checkpoint_computation/population_surfaces.csv',
                'source_data/checkpoint_computation/protocol.json'],
     'main_6E': ['source_data/optional_extensions/endpoints.csv', 'source_data/optional_extensions/summary.csv'],
@@ -115,14 +117,19 @@ def task_panel(ax):
     sel, edge = C['resistance'], COLORS['edge']
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
-    soma = (0.235, 0.14)
+    soma = (0.235, 0.23)
     px = [0.065, 0.175, 0.285, 0.395]
-    py, ty = 0.58, 0.88
+    py, ty = 0.56, 0.81
     for b, x in enumerate(px):
         col = sel if b == 1 else edge
+        ax.text(x, .975, f'b={b}', fontsize=PT, color=col,
+                ha='center', va='center')
         for off in (-0.032, 0.032):
             ax.plot([x + off, x], [ty, py], color=col, lw=LW_EDGE, zorder=2)
             ax.scatter([x + off], [ty], s=11, color=exc, lw=0, zorder=4)
+        if b == 1:
+            for off, feature in [(-.032, '11'), (.032, '12')]:
+                chain(ax, x+off-.018, .88, [('z', 0), (feature, -1)], color=ink)
         ax.plot([x, soma[0]], [py, soma[1]], color=col, lw=LW_EDGE, zorder=2)
         ax.scatter([x], [py], s=20, facecolor='white', edgecolor=col, lw=LW_EDGE, zorder=4)
         if b != 1:
@@ -135,12 +142,15 @@ def task_panel(ax):
     ax.plot([0.032, px[0] + 0.03 - 0.012], [0.665, py + 0.075], color=inh, lw=LW_HAIR,
             ls=DOT, zorder=1)
     ax.text(0.02, 0.585, 'cue', fontsize=PT, color=inh, ha='center', va='top')
-    ax.text(px[1] - 0.02, 0.975, 'selected', fontsize=PT, color=sel, ha='center', va='center')
     # beside branch 3's stem, clear of the branch line and between key rows
     ax.text(0.35, 0.385, 'inhibited', fontsize=PT, color=inh, ha='left', va='center')
     ax.annotate('', xy=(0.43, soma[1]), xytext=(0.265, soma[1]),
                 arrowprops=dict(arrowstyle='->', lw=LW_EDGE, color=ink, shrinkA=0, shrinkB=0))
-    ax.text(0.445, soma[1], 'ŷ', fontsize=PT, color=ink, ha='left', va='center')
+    chain(ax, .445, soma[1], [('V', 0), ('u', -1)], color=ink)
+    ax.text(.5, .125, '16 somata → affine readout → ŷ', fontsize=PT,
+            color=ink, ha='center', va='center')
+    ax.text(.5, .025, 'Use the cued pair; ignore the other three.', fontsize=PT,
+            color=ink, ha='center', va='center')
     # delivery key
     x0 = 0.52
     ax.text(x0, 0.975, 'Terminal signals', fontsize=PT, color=ink,
@@ -153,8 +163,7 @@ def task_panel(ax):
         y = 0.80 - 0.17 * k          # review pass 2026-09-23: rows fill the column
         ax.text(x0, y, name, fontsize=PT, color=C[rule], ha='left', va='center')
         chain(ax, 0.82, y, formula, color=ink)
-    # Review pass 2026-09-23: the definitions of h, f'_p and kappa, the input
-    # encoding and the population size are stated in the legend.
+    # Full conductance definitions and input encoding remain in the caption.
 
 
 # ── B: stress curves with direct end labels ────────────────────────────────
@@ -324,8 +333,40 @@ def primary_rescue_panel(ax, rescue, contrasts, log_ticks):
         ROWS.extend(dict(panel='C', record='seed outcome', rule=rule, seed=int(r.seed),
                          value=float(r.test_nmse), metric='test_nmse',
                          condition='selected rates') for r in g.itertuples())
-    ax.set_yticks(range(5), ['Exact', 'Broadcast', 'Resistance h', 'Augmented hf′', 'Shuffled f′'])
-    ax.set_ylim(4.55, -.55)
+    ax.text(.015, -.8, 'Interaction, selected rates', transform=ax.get_yaxis_transform(),
+            fontsize=PT, ha='left', va='center')
+    ax.axhline(4.65, color=COLORS['edge'], lw=LW_HAIR)
+    ax.text(.015, 5.3, 'Same parents, rate 0.03', transform=ax.get_yaxis_transform(),
+            fontsize=PT, ha='left', va='center')
+    tables = [('interaction', 'inhibitory_rescue_common_endpoints.csv', True, -.2),
+              ('separable', 'nonlinear_separable_endpoints.csv', False, .2)]
+    for target, name, filled, offset in tables:
+        control = pd.read_csv(D/name)
+        for y, rule in [(6.3, 'resistance'), (7.3, 'derivative')]:
+            g = control[control.rule.eq(rule)].sort_values('seed')
+            original = frame[frame.rule.eq(rule)].sort_values('seed')
+            assert len(g)==20 and list(g.seed)==list(original.seed)
+            assert g.rate.eq(.03).all()
+            m, lo, hi = boot(g.test_nmse.to_numpy())
+            color = C[rule]
+            ax.errorbar(m, y+offset, xerr=[[m-lo],[hi-m]], fmt='o', ms=4,
+                        mfc=color if filled else 'white', mec=color, mew=LW_HAIR,
+                        ecolor=color, capsize=2, lw=LW_ERR, zorder=4)
+            ROWS.append(dict(panel='C', record='target control mean', target=target,
+                rule=rule, rate=.03, condition='common rate 0.03', metric='test_nmse',
+                mean=m, ci_low=lo, ci_high=hi, n=20))
+            ROWS.extend(dict(panel='C', record='target control seed', target=target,
+                rule=rule, rate=float(r.rate), condition='common rate 0.03',
+                metric='test_nmse', seed=int(r.seed), value=float(r.test_nmse))
+                for r in g.itertuples())
+    handles = [Line2D([],[],marker='o',ms=3.5,mfc=COLORS['ink'] if filled else 'white',
+                     mec=COLORS['ink'],mew=LW_HAIR,lw=0) for filled in [True,False]]
+    ax.legend(handles, ['Interaction','No interaction'], loc='lower left',
+              bbox_to_anchor=(0,-.005), ncol=2, fontsize=PT, frameon=False,
+              handletextpad=.35, columnspacing=.8, borderaxespad=0)
+    ax.set_yticks([0,1,2,3,4,6.3,7.3], ['Exact','Broadcast','Resistance h','Augmented hf′',
+                 'Shuffled f′','Resistance h','Augmented hf′'])
+    ax.set_ylim(8.85, -1.35)
     for r in contrasts[contrasts.primary.eq(True)].itertuples():
         ROWS.append(dict(panel='C', record='primary contrast', rule=r.left,
                          comparison=f'{r.left} minus {r.right}', mean=float(r.mean),
@@ -339,7 +380,7 @@ def build(log_ticks):
     summary = pd.read_csv(D/'inhibitory_selection_summary.csv')
     rescue = pd.read_csv(D/'inhibitory_rescue_endpoints.csv')
     contrasts = pd.read_csv(D/'inhibitory_rescue_contrasts.csv')
-    c = NativeCanvas(490/72, 3, row_weights=[114, 108, 144], hgutter_pt=30, vgutter_pt=38,
+    c = NativeCanvas(490/72, 3, row_weights=[114, 140, 144], hgutter_pt=30, vgutter_pt=38,
                      margins=Margins(left=38, right=29, top=24, bottom=44))
     task_panel(c.panel('A', 0, 0, 6, schematic=True, lock=False))
     stress_panel(c.panel('B', 0, 6, 6, grid='none'), summary, log_ticks)

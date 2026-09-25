@@ -272,8 +272,8 @@ def f4_targets_panel(ax):
     # header, footers, teacher badges or operator key (all in the legend).
     cells = f.split(2, axis='x', gap_pt=6.0)
     y0, hh = 0.0, 1.0
-    spec = [('Pairwise', None, 'pairwise'),
-            ('Quartic', None, 'quartic')]
+    spec = [('Pairwise target', None, 'pairwise'),
+            ('Quartic target', None, 'quartic')]
     for cell, (title, foot, kind) in zip(cells, spec):
         cell = (cell[0], y0, cell[2], hh)
         core = f4_card(f, cell, title, foot)
@@ -621,9 +621,12 @@ def f4_deficit(ax, contrast, seeds, rows):
     # 1.116 seed, so a third of the old axis carried nothing.
     # Review pass 2026-09-23: unlabelled zero rule; the legend ties the
     # axis to D_int.
-    out = forest_rows(ax, entries, value_label='Interaction deficit', reference=0.0,
+    out = forest_rows(ax, entries, value_label='Interaction deficit D', reference=0.0,
                       reference_label=None, color='ink',
                       xlim=(-.06, 1.22), tag='')
+    ax.annotate('int', xy=(1., .5), xycoords=ax.xaxis.label,
+                xytext=(.3, -1.6), textcoords='offset points',
+                fontsize=7.0, color=COLORS['ink'], ha='left', va='center')
     ax.set_ylabel('Training updates', fontsize=8, color=COLORS['ink'])
     # the row labels occupy the forest gutter, so the axis title sits past it
     ax.yaxis.labelpad = float(out.get('gutter_pt', 26.0)) + 2.0
@@ -745,7 +748,7 @@ def f4_energy(ax, eigen, diag, rows, ramp):
                 for k, m in zip(kk, ref))
     ax.set_xlabel('Best fitted directions k', fontsize=PT_LABEL,
                   color=COLORS['ink'])
-    ax.set_ylabel('Energy captured', fontsize=PT_LABEL, color=COLORS['ink'])
+    ax.set_ylabel('Path-field energy captured', fontsize=PT_LABEL, color=COLORS['ink'])
     ax.xaxis.set_major_locator(FixedLocator([uni_x, 1, 2, 3, 4, 5, 6]))
     ax.set_xticklabels(['Uniform', '1', '2', '3', '4', '5', '6'])
     ax.yaxis.set_major_locator(FixedLocator([0, .5, 1]))
@@ -910,7 +913,7 @@ def f4_shuffle(ax, contrast, endpoints, rows, ramp):
 
 
 FIG4_CAPTION = r'''\caption{\textbf{Higher-order interactions expose limits of fixed credit profiles despite matched input sensitivities.}
-\textbf{A}, Pairwise and quartic targets combine products of two or four inputs on compatible seven-unit scalar trees. Junction badges mark interactions ($\times$, product; $+$, sum); both targets share the tree, initial weights and examples; $y,\delta_0$ denote student output and error. Units are multi-affine, not conductance-based; both tasks use squared-error loss.
+\textbf{A}, Pairwise and quartic targets combine products of two or four inputs on compatible seven-unit scalar trees. Junction badges mark target construction ($\times$, product; $+$, sum); both targets share the tree, initial weights and examples; $y,\delta_0$ denote student output and error. Student units have trainable multi-affine coefficients, not conductances; both tasks use squared-error loss.
 \textbf{B}, Credit over six nonsomatic sites: exact per-site path derivatives $\bm q(x)$, one shared error (unit broadcast) and a profile fixed from 256 initialization examples (calibrated broadcast). Title colours key \textbf{C} and \textbf{D}. Marker size represents mean absolute calibrated weights, 0.133--0.386; signs are mixed. Other elements are schematic.
 \textbf{C,D}, Held-out normalized mean squared error (NMSE) against updates for pairwise and quartic targets at rule-specific rates; \textbf{D} includes all twenty exact trajectories. Dashed lines indicate label-noise floors and the 1,024-update primary checkpoint.
 \textbf{E}, Noise-control comparison of the interaction deficit $D_{\rm int}$: quartic-minus-pairwise difference in calibrated-minus-exact clean-domain NMSE at 16,384 updates for fixed-absolute noise, no noise and variance-matched relative noise, which share initialization, inputs and standardized noise within seeds. Diamonds, inherited selected rates; circles, inherited common Adam rate 0.003; dots, paired seed differences; whiskers, 95\% bootstrap intervals. Rates were inherited from the original comparison, not retuned for each noise condition.
@@ -2044,9 +2047,9 @@ F6_CAPTION = r'''\caption{\textbf{Serial computation benefits distributed gain c
 \textbf{B}, Nuisance gains multiply the class signal in global, coarse and fine groups, reported by inhibitory sensors with fidelity $\alpha$. Strips show nested, flat equal-resolution, or local ratios ($\div$) using matched sensors.
 \textbf{C}, Serial-minus-grouped-point accuracy at fixed D3 under exact BP. Colors distinguish gain-support families; pale dots, ten paired differences at full fidelity. Open marker, analytic local-ratio tie. LocalCA counterpart: Supplementary Fig.~S24C.
 \textbf{D}, Original 180-epoch three-tier comparison: exact BP (black), exact-path LocalCA (red-brown), shared-soma LocalCA (amber), additive integration, grouped/reversed resource controls and a point-network reference. BP and LocalCA use different optimizer recipes. Resource controls are offset horizontally; most intervals are smaller than symbols.
-\textbf{E,F}, Validation-selected accuracy and best validation loss for six conditions rerun on H200 GPUs with the same ten seeds and unchanged recipes and stopping rule. Dotted lines, autograd-broadcast variants under the BP (black) or LocalCA (amber) recipe; dashed black, exact BP; thin grey, D1 reference; other conditions use D3. All D3 accuracy endpoints nearly coincide; styles are shared across panels. Open circles in \textbf{F}, D1 stopping epochs. Epoch axes are linear through 180, then logarithmic; \textbf{F}'s ordinate is logarithmic. Stopped states are carried forward, retaining ten seeds per mean.
-\textbf{G,H}, Paired exact-path-minus-shared-soma LocalCA accuracy and cross-entropy; positive accuracy and negative cross-entropy differences favour exact paths. Markers identify the original 180-epoch budget, the earlier follow-up budget of 600 epochs, and the final comparison; vertical dashed lines mark the original budget.
-Means use ten paired seeds. Bars/bands are descriptive 95\% seed-bootstrap intervals, paired for differences and pointwise for curves. All sixty extended fits reached ordinary validation early stopping. Source Data: \texttt{source\_data/curated\_publication/figure\_07\_plotted.csv}.}'''
+\textbf{E,F}, Validation-selected accuracy and best validation loss for six conditions completed on H200 GPUs with the original ten seeds and unchanged recipes and stopping rule; stopped fits were retained, others resumed or restarted (Methods). Dotted lines, autograd-broadcast variants under the BP (black) or LocalCA (amber) recipe; dashed black, exact BP; thin grey, D1 reference; other conditions use D3. All D3 accuracy endpoints nearly coincide; styles are shared across panels. Open circles in \textbf{F}, D1 stopping epochs. Epoch axes are linear through 180, then logarithmic; \textbf{F}'s ordinate is logarithmic. Stopped states are carried forward, retaining ten seeds per mean.
+\textbf{G,H}, Paired exact-path-minus-shared-soma LocalCA test accuracy and test cross-entropy; positive accuracy and negative cross-entropy differences favour exact paths. Markers identify the original 180-epoch budget, the earlier follow-up budget of 600 epochs, and the final comparison; vertical dashed lines mark the original budget.
+Means use ten paired seeds. Bars/bands are descriptive 95\% seed-bootstrap intervals, paired for differences and pointwise for curves. All sixty fits reached validation-based early stopping. Source Data: \texttt{source\_data/curated\_publication/figure\_07\_plotted.csv}.}'''
 
 
 def figure6():

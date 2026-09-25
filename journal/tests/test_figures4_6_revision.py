@@ -159,7 +159,7 @@ def test_figure6_moves_generator_to_text_and_limits_the_loss_claim(displays):
     assert not any('Cross-entropy' in ax.get_title() for ax in canvas.fig.axes)
     assert ('positive accuracy and negative cross-entropy differences favour '
             'exact paths') in source
-    assert 'All sixty extended fits reached ordinary validation early stopping.' in source
+    assert 'All sixty fits reached validation-based early stopping.' in source
     # The full stopping extension replaces the obsolete 600-epoch endpoints.
     # Compare the plotted contrast with the released paired-seed analysis.
     expected = pd.read_csv(ROOT / 'source_data/physical_depth_stopping_extension/paired_trajectory_summary.csv',

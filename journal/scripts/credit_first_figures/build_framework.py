@@ -666,8 +666,8 @@ def deliveries(ax):
         x_pt += w_pt + gap_pt
     # Review pass 2026-09-23: the two prose footers moved to the legend;
     # card 3 keeps its path-gain equation.
-    specs = (("Strict scalar", False, []),
-             ("Per neuron", True, []),
+    specs = (("Strict scalar", False, ["Across neurons"]),
+             ("Per neuron", True, ["Within each neuron"]),
              ("Exact path", False, None))
     tree_w_pt = 69.0      # 8 terminals: >= 8.5 pt pitch keeps the alpha tags
     for i, (cell, (title, hero, footer)) in enumerate(zip(cells, specs)):
@@ -1440,7 +1440,7 @@ def main():
                 + [eq["high_pp"] for eq in equivalence] + [1.0])
     f_limits = (np.floor(lower) - 0.25, np.ceil(upper) + 0.25)
     out_f = cohort_forest(canvas, f_, cohorts, "exact",
-                          value_label="Exact path − per neuron (pp)",
+                          value_label="Accuracy difference (pp)",
                           xlim=f_limits,
                           xticks=np.arange(np.ceil(f_limits[0]), np.floor(f_limits[1]) + 1),
                           tag_sides=("left", "left", "left", "left"))
@@ -1455,7 +1455,8 @@ def main():
                 xycoords=("axes fraction", "data"), xytext=(-6, 0),
                 textcoords="offset points", fontsize=PT_BASE, color=MUTE,
                 ha="right", va="center")
-    # Review pass 2026-09-23: "Exact − per neuron" is the axis label now.
+    f_.text(.02, .98, 'Exact − per neuron', transform=f_.transAxes,
+            fontsize=PT_BASE, color=MUTE, ha='left', va='bottom')
     # The margin is confined to the separate exact-minus-BP comparison.
     margin = equivalence[0]["margin_pp"]
     tint_patch(f_, ("rect", -margin, cifar_y - 0.02, 2 * margin, 0.65),

@@ -71,14 +71,17 @@ def test_conductance_caption_defines_gate_and_population_keys():
     assert "hard distal gate" in mechanism
     assert r"\ContinuedFloat" not in population
     assert r"\label{fig:conductancepopulation}" in population
-    assert "Terminal delivery" in population
-    assert "fixed across examples at current parameters but changing during learning" in population
+    assert "Terminal signals" in population
+    assert "fixed across examples at given parameters but changes with learning" in population
     assert "Both predefined comparisons favor augmentation" in population
     assert "Holm-adjusted sign-flip" in population
     assert "Each cohort has twenty paired seeds" in population
     assert "share rescue seeds" in population
-    assert "Upper group, parent-sensitivity cohort" in population
-    assert "Lower group, independent routing cohort" in population
+    assert "Upper: independent parent-sensitivity cohort" in population
+    assert "Lower: independent routing cohort" in population
+    assert "Uniform routing removes forward context information" in population
+    assert "same nonlinear parents" in population
+    assert "affects the voltage estimate for backward sensitivity only" in population
     for letter in "ABCDE":
         assert r"\textbf{" + letter in population
 

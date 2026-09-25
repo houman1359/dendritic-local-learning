@@ -49,7 +49,7 @@ def test_tasks_are_defined_before_population_outcomes():
     gate = source.index("input resistance relative to its uninhibited value")
     result = source.index("Resistance gating improved ordinary-test NMSE")
     assert target < interaction < severity < gate < result
-    assert "parent nonlinearity and target changed together" in source
+    assert "Changing parents and target together prevented attributing this failure to either alone" in source
 
 
 def test_capture_and_context_cancellation_are_different_definitions():

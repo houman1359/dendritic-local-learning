@@ -1,9 +1,9 @@
 {
   "figure": "Figure 6",
   "output": "figures/main/figure_06.pdf",
-  "output_sha256": "0a38b621a470f4cc51330bd860093e2fa42ad9a0bcfeb7e2cee82d16967230fd",
+  "output_sha256": "3a94010a254353e464045d4919beae25bae900336cecadd506c01ed37eb160ea",
   "plotted_table": "source_data/curated_publication/figure_06_plotted.csv",
-  "plotted_table_sha256": "1767c3ee2ebf757b00edb2bc6d6b684a8aae391e78a381da3ec38367c45c2dc5",
+  "plotted_table_sha256": "1059e5bc742652bf12e0e5030e36b92bd37bc19147512fa27300fc916b35b33d",
   "panel_sources": {
     "main_6A": {
       "sources": [],
@@ -18,9 +18,11 @@
     "main_6C": {
       "sources": [
         "source_data/curated_publication/inhibitory_rescue_endpoints.csv",
-        "source_data/curated_publication/inhibitory_rescue_contrasts.csv"
+        "source_data/curated_publication/inhibitory_rescue_contrasts.csv",
+        "source_data/curated_publication/inhibitory_rescue_common_endpoints.csv",
+        "source_data/curated_publication/nonlinear_separable_endpoints.csv"
       ],
-      "scope": "Twenty new paired rescue seeds: original-bound nonlinear interaction task, separately selected Adam rates, two predefined primary contrasts."
+      "scope": "Twenty paired rescue seeds: selected-rate nonlinear interaction task and two primary contrasts; lower group retains the same nonlinear parents and compares interaction versus separable targets at common Adam rate 0.03, without new training."
     },
     "main_6D": {
       "sources": [
@@ -40,15 +42,17 @@
   "source_sha256": {
     "source_data/checkpoint_computation/population_surfaces.csv": "753a7e2aeac06beb570f0cb2df995c690c3208e9b1a5e864e27d075bf4cd3938",
     "source_data/checkpoint_computation/protocol.json": "d7e0c5a4467381f4fa89095385ee5fdc1b32d53c1527d0251a7765795dec64e2",
+    "source_data/curated_publication/inhibitory_rescue_common_endpoints.csv": "53e6394e2b24002321ef3739396a77ed3dfe9256cf0dc5593a7a0df08997c7cb",
     "source_data/curated_publication/inhibitory_rescue_contrasts.csv": "afba1c9b6ee7fcebe9fcc1a808e6455fbdba695342fa13cd0e10e9ae577cef1f",
     "source_data/curated_publication/inhibitory_rescue_endpoints.csv": "a172ebed83cd40f1f962fd5bd2a98db317955c4c63f435988a99888317b92b55",
     "source_data/curated_publication/inhibitory_selection_summary.csv": "f320b15d3c354e349d9aac340c2d068ae7878a9d4faa3a4ef22be80ec2e1693c",
+    "source_data/curated_publication/nonlinear_separable_endpoints.csv": "c00b3518494410e18af97f28a642173dc47972331653d24bd8a77e769574dd7a",
     "source_data/optional_extensions/endpoints.csv": "82a46f0eb868538ea48ff0ff514d7e2541bcb9b877e6afc200658e650a0ab1f1",
     "source_data/optional_extensions/summary.csv": "0c15c3534fda404c62b71f345d21b9d511d0d88e83ea6d16e2b9bad2e1fc9310"
   },
   "builders_sha256": {
-    "scripts/review_completion/population_figure.py": "c18cf5eb630cb1f23e3ed4368fb94a971172349508de2649fb4d864ea49af178",
-    "scripts/review_completion/promoted_panels.py": "ac90cf203cb75ea550576db2f6465246591608e5824766e8f19a4ebe36fe799a",
+    "scripts/review_completion/population_figure.py": "a38a63452d081d0f5eef108f6195b34d99c6c38ec72a982e45e15bddb47f5526",
+    "scripts/review_completion/promoted_panels.py": "84c280e8e88f92a1ec4be347d9a588e46ffc70c93f2a37ea5f0f3c810e4da2e5",
     "scripts/review_completion/checkpoint_computation.py": "ab82a5cf6cd94352fd9b2a10d9660c4059a8536fda4b0b3ab46c94f0f466094c",
     "scripts/conductance_local_gate/figure.py": "0447a345957434f17a83839fbe5f8d1d2e46d481dccbec068eaa92ba33e67b89",
     "scripts/figure_canvas.py": "7f2983ff0c52a30dd5ba9bdeccc6fda940b4366ad872cbf0755fec5daa1dd7aa",

@@ -129,10 +129,10 @@ def extension_summary(ax, panel, rows):
     horizontal_nmse(ax)
     groups = [
         ('proxy', 'common', 'Approximate parent sensitivity', [
-            ('derivative', 'Parent slope', 'additive'),
+            ('derivative', 'Exact slope, hf′', 'additive'),
             ('bins2', '2 voltage bins', 'additive'),
             ('bins4', '4 voltage bins', 'additive'),
-            ('noise05', 'Noisy voltage', 'additive'),
+            ('noise05', 'Noisy V estimate', 'additive'),
             ('shuffle_bins4', 'Shuffled bins', 'highlight'),
             ('shuffle_noise05', 'Shuffled noisy', 'highlight')]),
         ('routing', 'selected', 'Cue-to-inhibition routing', [

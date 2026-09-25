@@ -39,7 +39,7 @@
       "figure": 6,
       "source": "scripts/review_completion/population_figure.py",
       "path": "source_data/curated_publication/figure_06_plotted.csv",
-      "sha256": "1767c3ee2ebf757b00edb2bc6d6b684a8aae391e78a381da3ec38367c45c2dc5",
+      "sha256": "1059e5bc742652bf12e0e5030e36b92bd37bc19147512fa27300fc916b35b33d",
       "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
     },
     {

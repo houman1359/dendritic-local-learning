@@ -89,7 +89,7 @@ def test_morphology_endpoint_and_alignment_scope(captions):
     assert "same-seed stopping extension" in cap
     assert "All sixty extended fits reached the unchanged validation-stopping criterion" in cap
     assert "temporary LocalCA accuracy reversal" in cap
-    assert "small exact-path advantage and lower cross-entropy at ordinary stopping" in cap
+    assert "small exact-path advantage and lower cross-entropy at validation-based early stopping" in cap
 
 
 def test_s24_palette_matches_s22_arm_roles():

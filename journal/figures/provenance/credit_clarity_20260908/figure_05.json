@@ -67,8 +67,8 @@
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
     "scripts/figure_canvas.py": "7f2983ff0c52a30dd5ba9bdeccc6fda940b4366ad872cbf0755fec5daa1dd7aa",
     "scripts/native_schematics.py": "68530ec60f85e496b9b0ba7a7ad53510dce2fae91cc38231046c1175e1cb7aeb",
-    "scripts/review_completion/population_figure.py": "c18cf5eb630cb1f23e3ed4368fb94a971172349508de2649fb4d864ea49af178",
-    "scripts/review_completion/promoted_panels.py": "ac90cf203cb75ea550576db2f6465246591608e5824766e8f19a4ebe36fe799a",
+    "scripts/review_completion/population_figure.py": "a38a63452d081d0f5eef108f6195b34d99c6c38ec72a982e45e15bddb47f5526",
+    "scripts/review_completion/promoted_panels.py": "84c280e8e88f92a1ec4be347d9a588e46ffc70c93f2a37ea5f0f3c810e4da2e5",
     "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a",
     "scripts/credit_first_figures/focused_provenance.py": "b7ade95b88e7d10a43bab01716dee6211bc2f09735b605d489c0012a147ecea7"
   },
